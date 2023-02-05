@@ -10,11 +10,11 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <p>Vite + React + TypeScript + Airbnb + Husky = 🔥</p>
         <p>
-          <button className="rainbow-button" type="button" onClick={() => setCount((prevCount) => prevCount + 1)}>
+          <button className="bg-slate-500 p-4" type="button" onClick={() => setCount((prevCount) => prevCount + 1)}>
             count is: {count}
           </button>
         </p>
-        <p>
+        <p> 
           <a
             className="App-link"
             href="https://vitejs.dev/guide/features.html"
