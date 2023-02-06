@@ -1,5 +1,4 @@
-export default function DownSvg(props: { classes: string }) {
-  const { classes } = props;
+export default function DownSvg({ classes }: { classes: string }) {
   return (
     <div className="pointer-events-none h-6 w-6">
       <svg id="down-svg" role="img" aria-label="Move Down" height="100%" width="100%" viewBox="0 0 16 16">

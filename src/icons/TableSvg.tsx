@@ -1,5 +1,4 @@
-export default function TableSvg(props: { classes: string }) {
-  const { classes } = props;
+export default function TableSvg({ classes }: { classes: string }) {
   return (
     <div className="pointer-events-none m-1 h-6 w-6">
       <svg id="table-svg" role="img" aria-label="Table" height="100%" width="100%" viewBox="0 0 16 16">

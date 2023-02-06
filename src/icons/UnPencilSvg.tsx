@@ -1,5 +1,4 @@
-export default function UnPencilSvg(props: { classes: string }) {
-  const { classes } = props;
+export default function UnPencilSvg({ classes }: { classes: string }) {
   return (
     <div className="pointer-events-none m-1 h-6 w-6">
       <svg id="unPencil-svg" role="img" aria-label="Cancel Writing" height="100%" width="100%" viewBox="0 0 16 16">

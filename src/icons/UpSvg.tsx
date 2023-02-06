@@ -1,5 +1,4 @@
-export default function UpSvg(props: { classes: string }) {
-  const { classes } = props;
+export default function UpSvg({ classes }: { classes: string }) {
   return (
     <div className="pointer-events-none h-6 w-6">
       <svg id="up-svg" role="img" aria-label="Move Up" height="100%" width="100%" viewBox="0 0 16 16  ">
