@@ -4,10 +4,11 @@ import './App.css';
 
 function App() {
   const [count, setCount] = useState(0);
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <img src={logo} className="App-logo" aria-label="logo" />
         <p>Vite + React + TypeScript + Airbnb + Husky = 🔥</p>
         <p>
           <button className="bg-slate-500 p-4" type="button" onClick={() => setCount((prevCount) => prevCount + 1)}>
