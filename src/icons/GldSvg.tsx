@@ -1,7 +1,7 @@
 export default function GldSvg() {
   return (
     <div className=" h-12 w-12">
-      <svg id="gld-svg" className="gld-svg" aria-label="GLD" height="100%" width="100%" viewBox="0 0 16 16">
+      <svg id="gld-svg" className="gld-svg" role="img" aria-label="GLD" height="100%" width="100%" viewBox="0 0 16 16">
         <g>
           <path
             style={{ fill: '#ffffff', strokeWidth: '0.333333' }}

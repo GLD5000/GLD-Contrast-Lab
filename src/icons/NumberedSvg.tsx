@@ -2,7 +2,7 @@ export default function NumberedSvg(props: { classes: string }) {
   const { classes } = props;
   return (
     <div className="pointer-events-none m-1 h-6 w-6">
-      <svg id="numbered-svg" aria-label="Numbered" height="100%" width="100%" viewBox="0 0 16 16">
+      <svg id="numbered-svg" role="img" aria-label="Numbered" height="100%" width="100%" viewBox="0 0 16 16">
         <path
           d="M 2.9024007,6.1045699 H 3.7617751 V 3.1384258 L 2.8268799,3.3259257 V 2.8467593 L 3.7565668,2.6592594 h 0.5260414 v 3.4453105 h 0.8593745 v 0.442708 h -2.239582 z"
           className={classes}
