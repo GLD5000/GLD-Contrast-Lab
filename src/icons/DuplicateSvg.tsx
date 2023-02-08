@@ -1,4 +1,4 @@
-export default function DuplicateSvg({ classes }: { classes: string }) {
+export default function DuplicateSvg({ classes = 'stroke-1 fill-neutral-700 stroke-current' }) {
   return (
     <div className="pointer-events-none m-1 h-6 w-6">
       <svg id="duplicate-svg" role="img" aria-label="copy" height="100%" width="100%" viewBox="0 0 16 16">

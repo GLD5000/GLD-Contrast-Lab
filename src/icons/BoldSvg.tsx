@@ -1,4 +1,4 @@
-export default function BoldSvg({ classes }: { classes: string }) {
+export default function BoldSvg({ classes = 'stroke-current fill-none stroke-1' }) {
   return (
     <div className="pointer-events-none m-1 h-6 w-6">
       <svg id="bold-svg" role="img" aria-label="Bold" height="100%" width="100%" viewBox="0 0 16 16">
