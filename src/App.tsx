@@ -1,58 +1,18 @@
-import { useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Header from './sections/Header';
+import Body from './sections/Body';
+import Footer from './sections/Footer';
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" aria-label="logo" />
-        <p>Vite + React + TypeScript + Airbnb + Husky = 🔥</p>
-        <p>
-          <button className="bg-slate-500 p-4" type="button" onClick={() => setCount((prevCount) => prevCount + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-          {' | '}
-          <a className="App-link" href="https://github.com/typicode/husky" target="_blank" rel="noopener noreferrer">
-            Husky Docs
-          </a>
-          {' | '}
-          <a className="App-link" href="https://github.com/airbnb/javascript" target="_blank" rel="noopener noreferrer">
-            Airbnb JS Style Guide
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://github.com/airbnb/javascript/tree/master/react"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Airbnb React Style Guide
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://github.com/alessandropisu/vite-react-ts-minimal-template"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Template repository
-          </a>
-        </p>
-      </header>
-    </div>
+    <section
+      id="page-container"
+      className="flex h-screen flex-col overflow-y-auto overflow-x-hidden border-zinc-600 bg-neutral-900 text-zinc-100"
+    >
+      <Header title="DevTemplate" />
+      <Body />
+      <Footer />
+    </section>
   );
 }
 
