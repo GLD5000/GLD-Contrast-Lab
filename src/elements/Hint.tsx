@@ -4,7 +4,11 @@ import { getFlagMap, wrapText } from '../utilities/ParserLookupsBasic';
 
 const flagMap = getFlagMap();
 
-function Hint({ content }: { content: ReactElement | string | undefined | Array<ReactElement | string | undefined> }) {
+export default function Hint({
+  content,
+}: {
+  content: ReactElement | string | undefined | Array<ReactElement | string | undefined>;
+}) {
   if (typeof content !== 'string') return null;
   let hintContent = markdownParserFull({ text: content, indexIn: 0, flagMap, wrapText });
   if (typeof hintContent === 'string') {
@@ -17,5 +21,3 @@ function Hint({ content }: { content: ReactElement | string | undefined | Array<
     </div>
   );
 }
-
-export default Hint;
