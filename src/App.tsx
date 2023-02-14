@@ -7,7 +7,7 @@ function App() {
   return (
     <section
       id="page-container"
-      className="flex h-screen flex-col overflow-y-auto overflow-x-hidden border-zinc-600 bg-neutral-900 text-zinc-100"
+      className=" flex h-screen snap-mandatory snap-always flex-col overflow-y-auto overflow-x-hidden border-zinc-600 bg-neutral-900 text-zinc-100"
     >
       <Header title="DevTemplate" />
       <Body />

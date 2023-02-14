@@ -28,7 +28,7 @@ export default function Button({
       id={id}
       name={name}
       onClick={clickHandler}
-      className={`border-2 py-1 px-2 transition delay-100 duration-200 ease-in-out active:bg-slate-300 ${activeClasses} ${className} ${
+      className={`border-2 py-1 px-2 transition delay-100 duration-200 ease-in-out ${activeClasses} ${className} ${
         backgroundColor && backgroundColor
       } ${conditionalClasses && conditionalClasses}`}
     >
