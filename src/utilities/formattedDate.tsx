@@ -15,7 +15,7 @@ if (import.meta.vitest) {
 
   describe('#formattedDate', () => {
     it('Date has correct format', () => {
-      expect(formattedDate()).toMatch(/[^/]+/g);
+      expect(formattedDate()).toMatch(/^\d\d\/\d\d\/\d\d\d\d[ ]\d\d:\d\d$/);
     });
   });
 }
