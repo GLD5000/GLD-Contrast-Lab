@@ -4,4 +4,3 @@
 /node_modules
 /build
 vite.config.ts
-setup.ts
