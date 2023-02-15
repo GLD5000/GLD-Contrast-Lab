@@ -39,11 +39,11 @@ function Table({
   const tableArray = parseDataToArray(data);
   return (
     <section className=" my-3 flex h-fit w-full justify-center overflow-x-auto">
-      <table className="border-collapse border-2 border-neutral-400 p-2 text-center text-neutral-200">
-        <thead className=" bg-neutral-600 text-lg">
+      <table className="border-collapse border-2 p-2 text-center dark:border-neutral-400 dark:text-neutral-200">
+        <thead className=" text-lg dark:bg-neutral-600">
           <Tr key="0" row={tableArray[0]} rowIndex={0} />
         </thead>
-        <tbody className=" bg-neutral-900">{tableArray.map((row, rowIndex) => rowHandler(row, rowIndex))}</tbody>
+        <tbody className=" dark:bg-neutral-900">{tableArray.map((row, rowIndex) => rowHandler(row, rowIndex))}</tbody>
       </table>
     </section>
   );
