@@ -15,9 +15,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": [
-      "vitest/importMeta"
-    ]
+    "types": ["vitest/importMeta", "@testing-library/jest-dom"]
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
