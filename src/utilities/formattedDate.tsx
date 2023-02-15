@@ -9,3 +9,13 @@ export default function formattedDate() {
 
   return date;
 }
+
+if (import.meta.vitest) {
+  const { describe, expect, it } = import.meta.vitest;
+
+  describe('#formattedDate', () => {
+    it('Date has correct format', () => {
+      expect(formattedDate()).toMatch(/[^/]+/g);
+    });
+  });
+}
