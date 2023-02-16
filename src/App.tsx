@@ -18,14 +18,13 @@ function App() {
   return (
     <section
       id="page-container"
-      className={
-        `${colourTheme} flex h-screen snap-mandatory snap-always flex-col overflow-y-auto` +
-        ` overflow-x-hidden border-zinc-600 bg-neutral-900 text-zinc-100`
-      }
+      className={`${colourTheme} flex h-screen flex-col overflow-x-hidden overflow-y-scroll`}
     >
-      <Header title="DevTemplate" toggleColourTheme={toggleColourTheme} colourTheme={colourTheme} />
-      <Body />
-      <Footer />
+      <div className=" border-borderLight text-textLight dark:border-borderLight dark:bg-neutral-900 dark:text-textDark">
+        <Header title="DevTemplate" toggleColourTheme={toggleColourTheme} colourTheme={colourTheme} />
+        <Body />
+        <Footer />
+      </div>
     </section>
   );
 }
