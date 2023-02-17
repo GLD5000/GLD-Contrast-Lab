@@ -11,7 +11,8 @@
     "compile": "tsc",
     "preview": "vite preview",
     "prepare": "husky install",
-    "test": "vitest --coverage --ui"
+    "test": "vitest --coverage --ui",
+    "test:once": "vitest --run"
 
   },
   "lint-staged": {
