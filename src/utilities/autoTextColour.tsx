@@ -1,28 +1,28 @@
 const colourspace = {
-  convertHexToSrgbArray(hexIn: string) {
-    function getSrgbArrayFromHexArray(hex: string) {
-      function hexDigitsToDecimal(digits: Array<string>) {
-        const converted = parseInt(`0x${digits[0]}${digits[1] || digits[0]}`, 10);
-        return converted / 255;
-      }
-      function splitHexString(string: string) {
-        return string.length === 7
-          ? [
-              [string[1], string[2]],
-              [string[3], string[4]],
-              [string[5], string[6]],
-            ]
-          : [
-              [string[1], string[1]],
-              [string[2], string[2]],
-              [string[3], string[3]],
-            ];
-      }
+  splitHexString(string: string) {
+    return string.length === 7
+      ? [
+          [string[1], string[2]],
+          [string[3], string[4]],
+          [string[5], string[6]],
+        ]
+      : [
+          [string[1], string[1]],
+          [string[2], string[2]],
+          [string[3], string[3]],
+        ];
+  },
+  hexDigitsToDecimal(digits: Array<string>) {
+    const converted = parseInt(`${digits[0]}${digits[1] || digits[0]}`, 16);
+    return converted / 255;
+  },
+  getSrgbArrayFromHexString(hex: string) {
+    const splitHex = colourspace.splitHexString(hex);
+    return splitHex.map((digits) => colourspace.hexDigitsToDecimal(digits));
+  },
 
-      const splitHex = splitHexString(hex);
-      return splitHex.map((digits) => hexDigitsToDecimal(digits));
-    }
-    const srgbArray = getSrgbArrayFromHexArray(hexIn);
+  convertHexToSrgbArray(hexIn: string) {
+    const srgbArray = colourspace.getSrgbArrayFromHexString(hexIn);
     return srgbArray;
   },
   convertSrgbToHslArray(srgbArray: Array<number>) {
@@ -146,4 +146,50 @@ const colourspace = {
 
 export default function autoTextColour(hex: string) {
   return colourspace.autoTextColourFromHex(hex);
+}
+
+if (import.meta.vitest) {
+  const { describe, expect, it } = import.meta.vitest;
+
+  describe('#splitHexString', () => {
+    it('Split white hex', () => {
+      console.log(colourspace.splitHexString('#fff'), '#000');
+
+      expect(colourspace.splitHexString('#fff')).toStrictEqual([
+        ['f', 'f'],
+        ['f', 'f'],
+        ['f', 'f'],
+      ]);
+    });
+  });
+  describe('#hexDigitsToDecimal', () => {
+    it('white hex digits', () => {
+      console.log(colourspace.hexDigitsToDecimal(['f', 'f']), '[ "f", "f" ]');
+
+      expect(colourspace.hexDigitsToDecimal(['f', 'f'])).toBe(1);
+    });
+  });
+
+  describe('#convertHexToSrgbArray', () => {
+    it('works for black', () => {
+      console.log(colourspace.convertHexToSrgbArray('#000'), '#000');
+
+      expect(colourspace.convertHexToSrgbArray('#000')).toStrictEqual([0, 0, 0]);
+    });
+  });
+
+  describe('#convertHexToSrgbArray', () => {
+    it('works for blue', () => {
+      console.log(colourspace.convertHexToSrgbArray('#0000Ff'), '#0000Ff');
+
+      expect(colourspace.convertHexToSrgbArray('#0000Ff')).toStrictEqual([0, 0, 1]);
+    });
+  });
+
+  describe('#convertHexToSrgbArray', () => {
+    it('works for white', () => {
+      console.log(colourspace.convertHexToSrgbArray('#FFFFFF'), '#FFFFFF');
+      expect(colourspace.convertHexToSrgbArray('#ffffff')).toStrictEqual([1, 1, 1]);
+    });
+  });
 }
