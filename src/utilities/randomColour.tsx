@@ -123,7 +123,7 @@ if (import.meta.vitest) {
     const input = [0, 100, 50];
     const output = '#ff0000';
     describe(`#${testFunc}`, () => {
-      it(`works for ${input}`, () => {
+      it(`Works for ${input}`, () => {
         expect(randomColour[testFunc](input)).toStrictEqual(output);
       });
     });
@@ -134,7 +134,7 @@ if (import.meta.vitest) {
     const input = [0, 0, 0];
     const output = '#000000';
     describe(`#${testFunc}`, () => {
-      it(`works for ${input}`, () => {
+      it(`Works for ${input}`, () => {
         expect(randomColour[testFunc](input)).toStrictEqual(output);
       });
     });
@@ -145,7 +145,7 @@ if (import.meta.vitest) {
     const input = [220, 100, 50];
     const output = '#0055ff';
     describe(`#${testFunc}`, () => {
-      it(`works for ${input}`, () => {
+      it(`Works for ${input}`, () => {
         expect(randomColour[testFunc](input)).toStrictEqual(output);
       });
     });
@@ -156,7 +156,7 @@ if (import.meta.vitest) {
     const input = [260, 100, 50];
     const output = '#5500ff';
     describe(`#${testFunc}`, () => {
-      it(`works for ${input}`, () => {
+      it(`Works for ${input}`, () => {
         expect(randomColour[testFunc](input)).toStrictEqual(output);
       });
     });
@@ -167,7 +167,7 @@ if (import.meta.vitest) {
     const input = [320, 100, 50];
     const output = '#ff00aa';
     describe(`#${testFunc}`, () => {
-      it(`works for ${input}`, () => {
+      it(`Works for ${input}`, () => {
         expect(randomColour[testFunc](input)).toStrictEqual(output);
       });
     });
@@ -178,7 +178,7 @@ if (import.meta.vitest) {
     const input = [60, 100, 50];
     const output = '#ffff00';
     describe(`#${testFunc}`, () => {
-      it(`works for ${input}`, () => {
+      it(`Works for ${input}`, () => {
         expect(randomColour[testFunc](input)).toStrictEqual(output);
       });
     });
@@ -189,7 +189,7 @@ if (import.meta.vitest) {
     const input = [122, 100, 50];
     const output = '#00ff08';
     describe(`#${testFunc}`, () => {
-      it(`works for ${input}`, () => {
+      it(`Works for ${input}`, () => {
         expect(randomColour[testFunc](input)).toStrictEqual(output);
       });
     });
