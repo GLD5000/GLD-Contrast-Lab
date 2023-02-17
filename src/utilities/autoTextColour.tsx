@@ -20,33 +20,36 @@ const colourspace = {
     const splitHex = colourspace.splitHexString(hex);
     return splitHex.map((digits) => colourspace.hexDigitsToDecimal(digits));
   },
-
   convertHexToSrgbArray(hexIn: string) {
     const srgbArray = colourspace.getSrgbArrayFromHexString(hexIn);
     return srgbArray;
   },
-  convertSrgbToHslArray(srgbArray: Array<number>) {
-    const [red, green, blue] = srgbArray;
+  constrainSrgbArray(arrayIn: Array<number>) {
+    return arrayIn.map((x) => Math.min(1, Math.max(0, x)));
+  },
 
-    const cmin = Math.min(red, green, blue);
-    const cmax = Math.max(red, green, blue);
-    const delta = cmax - cmin;
+  convertSrgbToHslArray(srgbArray: Array<number>) {
+    const [red, green, blue] = colourspace.constrainSrgbArray(srgbArray);
+
+    const cMin = Math.min(red, green, blue);
+    const cMax = Math.max(red, green, blue);
+    const delta = cMax - cMin;
     let hue = 0;
     let sat = 0;
     let lum = 0;
-
+    console.log(cMin, cMax, delta);
     if (delta === 0) hue = 0;
-    else if (cmax === red) hue = ((green - blue) / delta) % 6;
-    else if (cmax === green) hue = (blue - red) / delta + 2;
+    else if (cMax === red) hue = ((green - blue) / delta) % 6;
+    else if (cMax === green) hue = (blue - red) / delta + 2;
     else hue = (red - green) / delta + 4;
 
     hue *= 60;
 
-    if (hue < 0) hue += 360;
-
-    lum = (cmax + cmin) / 2;
-    sat = delta === 0 ? 0 : delta / (1 - Math.abs(2 * lum - 1));
+    lum = (cMax + cMin) / 2;
+    sat = Math.max(0, Math.min(1, delta === 0 ? 0 : delta / (1 - Math.abs(2 * lum - 1))));
+    console.log(`sat ${sat}`);
     sat = +(sat * 100);
+    console.log(`sat ${sat}`);
     lum = +(lum * 100);
     const hslArray = [hue, sat, lum];
 
@@ -153,8 +156,6 @@ if (import.meta.vitest) {
 
   describe('#splitHexString', () => {
     it('Split white hex', () => {
-      console.log(colourspace.splitHexString('#fff'), '#000');
-
       expect(colourspace.splitHexString('#fff')).toStrictEqual([
         ['f', 'f'],
         ['f', 'f'],
@@ -164,32 +165,261 @@ if (import.meta.vitest) {
   });
   describe('#hexDigitsToDecimal', () => {
     it('white hex digits', () => {
-      console.log(colourspace.hexDigitsToDecimal(['f', 'f']), '[ "f", "f" ]');
-
       expect(colourspace.hexDigitsToDecimal(['f', 'f'])).toBe(1);
+    });
+  });
+  describe('#hexDigitsToDecimal', () => {
+    it('white hex digits', () => {
+      expect(colourspace.hexDigitsToDecimal(['f'])).toBe(1);
     });
   });
 
   describe('#convertHexToSrgbArray', () => {
     it('works for black', () => {
-      console.log(colourspace.convertHexToSrgbArray('#000'), '#000');
-
       expect(colourspace.convertHexToSrgbArray('#000')).toStrictEqual([0, 0, 0]);
     });
   });
 
   describe('#convertHexToSrgbArray', () => {
     it('works for blue', () => {
-      console.log(colourspace.convertHexToSrgbArray('#0000Ff'), '#0000Ff');
-
       expect(colourspace.convertHexToSrgbArray('#0000Ff')).toStrictEqual([0, 0, 1]);
     });
   });
 
   describe('#convertHexToSrgbArray', () => {
     it('works for white', () => {
-      console.log(colourspace.convertHexToSrgbArray('#FFFFFF'), '#FFFFFF');
       expect(colourspace.convertHexToSrgbArray('#ffffff')).toStrictEqual([1, 1, 1]);
     });
   });
+
+  (() => {
+    const testFunc = 'convertSrgbToHslArray';
+    const input = [1, 1, 1];
+    const output = [0, 0, 100];
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(colourspace[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertSrgbToHslArray';
+    const input = [0, 0, 0];
+    const output = [0, 0, 0];
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(colourspace[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertSrgbToHslArray';
+    const input = [1, 0, 0];
+    const output = [0, 100, 50];
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(colourspace[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertSrgbToHslArray';
+    const input = [1.1, 0, 0];
+    const output = [0, 100, 50];
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(colourspace[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertSrgbToHslArray';
+    const input = [0.1, 0.1, 0.1];
+    const output = [0, 0, 10];
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(colourspace[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertSrgbToHslArray';
+    const input = [0.1, 0, 0];
+    const output = [0, 100, 5];
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(colourspace[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertSrgbToHslArray';
+    const input = [0, 0, 1];
+    const output = [240, 100, 50];
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(colourspace[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertHslArrayToHex';
+    const input = [0, 100, 50];
+    const output = '#ff0000';
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(colourspace[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertHslArrayToHex';
+    const input = [0, 0, 0];
+    const output = '#000000';
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(colourspace[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertHslArrayToHex';
+    const input = [220, 100, 50];
+    const output = '#0055ff';
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(colourspace[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertHslArrayToHex';
+    const input = [260, 100, 50];
+    const output = '#5500ff';
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(colourspace[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertHslArrayToHex';
+    const input = [320, 100, 50];
+    const output = '#ff00aa';
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(colourspace[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertSrgbToHex';
+    const input = [0, 0, 0];
+    const output = '#000000';
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(colourspace[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertSrgbToHex';
+    const input = [0, 1, 0];
+    const output = '#00ff00';
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(colourspace[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertSrgbToHex';
+    const input = [1, 1, 0];
+    const output = '#ffff00';
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(colourspace[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertSrgbToLuminance';
+    const input = [1, 1, 1];
+    const output = 1;
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(colourspace[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertSrgbToLuminance';
+    const input = [0, 0, 0];
+    const output = 0;
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(colourspace[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertHexToLuminance';
+    const input = '#fff';
+    const output = 1;
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(colourspace[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'backgroundLuminanceToTextColour';
+    const input = 1;
+    const output = '#000000';
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(colourspace[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'autoTextColourFromHex';
+    const input = '#000000';
+    const output = '#ffffff';
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(colourspace[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'autoTextColour';
+    const input = '#000000';
+    const output = '#ffffff';
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(autoTextColour(input)).toStrictEqual(output);
+      });
+    });
+  })();
 }
