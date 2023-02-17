@@ -16,15 +16,12 @@ function App() {
   }
 
   return (
-    <section
-      id="page-container"
-      className={`${colourTheme} flex h-screen flex-col overflow-x-hidden overflow-y-scroll`}
-    >
-      <div className=" border-borderLight text-textLight dark:border-borderLight dark:bg-neutral-900 dark:text-textDark">
+    <section id="theme-wrapper" className={`${colourTheme} `}>
+      <section className="flex h-screen flex-col overflow-x-hidden overflow-y-scroll border-borderLight text-textLight dark:border-borderLight dark:bg-neutral-900 dark:text-textDark">
         <Header title="DevTemplate" toggleColourTheme={toggleColourTheme} colourTheme={colourTheme} />
         <Body />
         <Footer />
-      </div>
+      </section>
     </section>
   );
 }
