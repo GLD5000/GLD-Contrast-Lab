@@ -14,9 +14,9 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
-    reporters: ['html'],
+    reporters: ['default', 'html'], //add 'html' for ui 
     coverage: {
-      reporter: ['text', 'json', 'html'],
+      reporter: ['text', 'json'],
     },
   },
   plugins: [react()],

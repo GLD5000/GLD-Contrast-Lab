@@ -11,7 +11,7 @@
     "compile": "tsc",
     "preview": "vite preview",
     "prepare": "husky install",
-    "test": "vitest --ui"
+    "test": "vitest --coverage --ui"
   },
   "dependencies": {
     "react": "^18.2.0",
