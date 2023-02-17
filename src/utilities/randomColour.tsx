@@ -17,9 +17,20 @@ const randomColour = {
   // convertHslToColourObject(hue: number, sat: number, lum: number, name: string) {
   //   return { name, hue, sat, lum };
   // },
+  constrainNumber(inputNumber = 0, min = 0, max = 100) {
+    return Math.min(max, Math.max(min, inputNumber));
+  },
+  constrainHslArray(arrayInput: Array<number>) {
+    return arrayInput.map((x, i) => {
+      if (i === 0) return randomColour.constrainNumber(x, 0, 360);
+      return randomColour.constrainNumber(x);
+    });
+  },
+
   convertHslArrayToHex(hslArray: Array<number>) {
-    const [hue] = hslArray;
-    let [, sat, lum] = hslArray;
+    const constrainedArray = randomColour.constrainHslArray(hslArray);
+    const [hue] = constrainedArray;
+    let [, sat, lum] = constrainedArray;
 
     sat /= 100;
     lum /= 100;
