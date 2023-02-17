@@ -12,6 +12,10 @@
     "preview": "vite preview",
     "prepare": "husky install",
     "test": "vitest --coverage --ui"
+
+  },
+  "lint-staged": {
+    "*.tsx": ["prettier --write", "eslint --fix"]
   },
   "dependencies": {
     "react": "^18.2.0",
