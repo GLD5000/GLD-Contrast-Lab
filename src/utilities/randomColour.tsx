@@ -135,7 +135,7 @@ if (import.meta.vitest) {
     const output = '#0055ff';
     describe(`#${testFunc}`, () => {
       it(`works for ${input}`, () => {
-        expect((randomColour[testFunc](input))).toStrictEqual(output);
+        expect(((randomColour[testFunc](input)))).toStrictEqual(output);
       });
     });
   })();
@@ -146,7 +146,7 @@ if (import.meta.vitest) {
     const output = '#5500ff';
     describe(`#${testFunc}`, () => {
       it(`works for ${input}`, () => {
-        expect((randomColour[testFunc](input))).toStrictEqual(output);
+        expect(randomColour[testFunc](input)).toStrictEqual(output);
       });
     });
   })();
