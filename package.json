@@ -14,6 +14,11 @@
     "test": "vitest --coverage --ui"
 
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
     "*": ["prettier \"src/**/*.{js,jsx,ts,tsx,css,scss}\" --write", "eslint src --ext .js,.jsx,.ts,.tsx --fix"]
   },
