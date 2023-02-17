@@ -14,9 +14,9 @@ const randomColour = {
     const lum = randomColour.randomIntegerInRange(70, 90);
     return [hue, sat, lum];
   },
-  convertHslToColourObject(hue: number, sat: number, lum: number, name: string) {
-    return { name, hue, sat, lum };
-  },
+  // convertHslToColourObject(hue: number, sat: number, lum: number, name: string) {
+  //   return { name, hue, sat, lum };
+  // },
   convertHslArrayToHex(hslArray: Array<number>) {
     const [hue] = hslArray;
     let [, sat, lum] = hslArray;
@@ -78,4 +78,109 @@ const randomColour = {
 export default function getRandomColour() {
   const randomHex = randomColour.makeRandomHex();
   return randomHex;
+}
+
+if (import.meta.vitest) {
+  const { describe, expect, it } = import.meta.vitest;
+
+  (() => {
+    const testFunc = 'makeRandomHsl';
+    describe(`#${testFunc}`, () => {
+      it(`Get random hsl array`, () => {
+        expect(randomColour[testFunc]()[0]).toBeLessThanOrEqual(360);
+        expect(randomColour[testFunc]()[0]).toBeGreaterThanOrEqual(0);
+        expect(randomColour[testFunc]()[1]).toBeLessThanOrEqual(100);
+        expect(randomColour[testFunc]()[1]).toBeGreaterThanOrEqual(0);
+        expect(randomColour[testFunc]()[2]).toBeLessThanOrEqual(100);
+        expect(randomColour[testFunc]()[2]).toBeGreaterThanOrEqual(0);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'getRandomColour';
+    const output = /^#[0-9a-f]{6}$/;
+    describe(`#${testFunc}`, () => {
+      it(`gets random colour`, () => {
+        expect(getRandomColour()).toMatch(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertHslArrayToHex';
+    const input = [0, 100, 50];
+    const output = '#ff0000';
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(randomColour[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertHslArrayToHex';
+    const input = [0, 0, 0];
+    const output = '#000000';
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(randomColour[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertHslArrayToHex';
+    const input = [220, 100, 50];
+    const output = '#0055ff';
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(randomColour[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertHslArrayToHex';
+    const input = [260, 100, 50];
+    const output = '#5500ff';
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(randomColour[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertHslArrayToHex';
+    const input = [320, 100, 50];
+    const output = '#ff00aa';
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(randomColour[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertHslArrayToHex';
+    const input = [60, 100, 50];
+    const output = '#ffff00';
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(randomColour[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
+
+  (() => {
+    const testFunc = 'convertHslArrayToHex';
+    const input = [122, 100, 50];
+    const output = '#00ff08';
+    describe(`#${testFunc}`, () => {
+      it(`works for ${input}`, () => {
+        expect(randomColour[testFunc](input)).toStrictEqual(output);
+      });
+    });
+  })();
 }
