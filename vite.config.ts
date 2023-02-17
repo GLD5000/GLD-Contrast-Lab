@@ -16,7 +16,7 @@ export default defineConfig({
     setupFiles: './src/test/setup.ts',
     reporters: ['default', 'html'], //add 'html' for ui 
     coverage: {
-      reporter: ['text', 'json'],
+      reporter: ['text'],
     },
   },
   plugins: [react()],
