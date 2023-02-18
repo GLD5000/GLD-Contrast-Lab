@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
-import markdownParserFull from '../utilities/markdownParser';
-import { getFlagMap, wrapText } from '../utilities/ParserLookupsBasic';
+import markdownParserFull from '../utilities/markdown/markdownParser';
+import { getFlagMap, wrapText } from '../utilities/markdown/ParserLookupsBasic';
 
 const flagMap = getFlagMap();
 

@@ -1,5 +1,5 @@
-import { recursiveParser } from '../utilities/markdownParser';
-import { getFlagMap, wrapText } from '../utilities/ParserLookupsBasic';
+import { recursiveParser } from '../utilities/markdown/markdownParser';
+import { getFlagMap, wrapText } from '../utilities/markdown/ParserLookupsBasic';
 
 let index = 0;
 const flagMap = getFlagMap(['h6', 'h5', 'h4', 'h3', 'h2', 'h1', 'link', 'bold', 'italic']);

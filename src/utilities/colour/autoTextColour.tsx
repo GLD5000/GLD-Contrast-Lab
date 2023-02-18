@@ -1,4 +1,4 @@
-const colourspace = {
+const colourSpace = {
   splitHexString(string: string) {
     return string.length === 7
       ? [
@@ -17,11 +17,11 @@ const colourspace = {
     return converted / 255;
   },
   getSrgbArrayFromHexString(hex: string) {
-    const splitHex = colourspace.splitHexString(hex);
-    return splitHex.map((digits) => colourspace.hexDigitsToDecimal(digits));
+    const splitHex = colourSpace.splitHexString(hex);
+    return splitHex.map((digits) => colourSpace.hexDigitsToDecimal(digits));
   },
   convertHexToSrgbArray(hexIn: string) {
-    const srgbArray = colourspace.getSrgbArrayFromHexString(hexIn);
+    const srgbArray = colourSpace.getSrgbArrayFromHexString(hexIn);
     return srgbArray;
   },
   constrainSrgbArray(arrayIn: Array<number>) {
@@ -29,7 +29,7 @@ const colourspace = {
   },
 
   convertSrgbToHslArray(srgbArray: Array<number>) {
-    const [red, green, blue] = colourspace.constrainSrgbArray(srgbArray);
+    const [red, green, blue] = colourSpace.constrainSrgbArray(srgbArray);
 
     const cMin = Math.min(red, green, blue);
     const cMax = Math.max(red, green, blue);
@@ -141,14 +141,14 @@ const colourspace = {
     return textColour;
   },
   autoTextColourFromHex(hex: string) {
-    const backgroundLuminance = colourspace.convertHexToLuminance(hex);
-    const textColour = colourspace.backgroundLuminanceToTextColour(backgroundLuminance);
+    const backgroundLuminance = colourSpace.convertHexToLuminance(hex);
+    const textColour = colourSpace.backgroundLuminanceToTextColour(backgroundLuminance);
     return textColour;
   },
 };
 
 export default function autoTextColour(hex: string) {
-  return colourspace.autoTextColourFromHex(hex);
+  return colourSpace.autoTextColourFromHex(hex);
 }
 
 if (import.meta.vitest) {
@@ -156,7 +156,7 @@ if (import.meta.vitest) {
 
   describe('#splitHexString', () => {
     it('Split white hex', () => {
-      expect(colourspace.splitHexString('#fff')).toStrictEqual([
+      expect(colourSpace.splitHexString('#fff')).toStrictEqual([
         ['f', 'f'],
         ['f', 'f'],
         ['f', 'f'],
@@ -165,30 +165,30 @@ if (import.meta.vitest) {
   });
   describe('#hexDigitsToDecimal', () => {
     it('white hex digits', () => {
-      expect(colourspace.hexDigitsToDecimal(['f', 'f'])).toBe(1);
+      expect(colourSpace.hexDigitsToDecimal(['f', 'f'])).toBe(1);
     });
   });
   describe('#hexDigitsToDecimal', () => {
     it('white hex digits', () => {
-      expect(colourspace.hexDigitsToDecimal(['f'])).toBe(1);
+      expect(colourSpace.hexDigitsToDecimal(['f'])).toBe(1);
     });
   });
 
   describe('#convertHexToSrgbArray', () => {
     it('Works for black', () => {
-      expect(colourspace.convertHexToSrgbArray('#000')).toStrictEqual([0, 0, 0]);
+      expect(colourSpace.convertHexToSrgbArray('#000')).toStrictEqual([0, 0, 0]);
     });
   });
 
   describe('#convertHexToSrgbArray', () => {
     it('Works for blue', () => {
-      expect(colourspace.convertHexToSrgbArray('#0000Ff')).toStrictEqual([0, 0, 1]);
+      expect(colourSpace.convertHexToSrgbArray('#0000Ff')).toStrictEqual([0, 0, 1]);
     });
   });
 
   describe('#convertHexToSrgbArray', () => {
     it('Works for white', () => {
-      expect(colourspace.convertHexToSrgbArray('#ffffff')).toStrictEqual([1, 1, 1]);
+      expect(colourSpace.convertHexToSrgbArray('#ffffff')).toStrictEqual([1, 1, 1]);
     });
   });
 
@@ -198,7 +198,7 @@ if (import.meta.vitest) {
     const output = [0, 0, 100];
     describe(`#${testFunc}`, () => {
       it(`Works for ${input}`, () => {
-        expect(colourspace[testFunc](input)).toStrictEqual(output);
+        expect(colourSpace[testFunc](input)).toStrictEqual(output);
       });
     });
   })();
@@ -209,7 +209,7 @@ if (import.meta.vitest) {
     const output = [0, 0, 0];
     describe(`#${testFunc}`, () => {
       it(`Works for ${input}`, () => {
-        expect(colourspace[testFunc](input)).toStrictEqual(output);
+        expect(colourSpace[testFunc](input)).toStrictEqual(output);
       });
     });
   })();
@@ -220,7 +220,7 @@ if (import.meta.vitest) {
     const output = [0, 100, 50];
     describe(`#${testFunc}`, () => {
       it(`Works for ${input}`, () => {
-        expect(colourspace[testFunc](input)).toStrictEqual(output);
+        expect(colourSpace[testFunc](input)).toStrictEqual(output);
       });
     });
   })();
@@ -231,7 +231,7 @@ if (import.meta.vitest) {
     const output = [0, 100, 50];
     describe(`#${testFunc}`, () => {
       it(`Works for ${input}`, () => {
-        expect(colourspace[testFunc](input)).toStrictEqual(output);
+        expect(colourSpace[testFunc](input)).toStrictEqual(output);
       });
     });
   })();
@@ -242,7 +242,7 @@ if (import.meta.vitest) {
     const output = [0, 0, 10];
     describe(`#${testFunc}`, () => {
       it(`Works for ${input}`, () => {
-        expect(colourspace[testFunc](input)).toStrictEqual(output);
+        expect(colourSpace[testFunc](input)).toStrictEqual(output);
       });
     });
   })();
@@ -253,7 +253,7 @@ if (import.meta.vitest) {
     const output = [0, 100, 5];
     describe(`#${testFunc}`, () => {
       it(`Works for ${input}`, () => {
-        expect(colourspace[testFunc](input)).toStrictEqual(output);
+        expect(colourSpace[testFunc](input)).toStrictEqual(output);
       });
     });
   })();
@@ -264,7 +264,7 @@ if (import.meta.vitest) {
     const output = [240, 100, 50];
     describe(`#${testFunc}`, () => {
       it(`Works for ${input}`, () => {
-        expect(colourspace[testFunc](input)).toStrictEqual(output);
+        expect(colourSpace[testFunc](input)).toStrictEqual(output);
       });
     });
   })();
@@ -275,7 +275,7 @@ if (import.meta.vitest) {
     const output = '#ff0000';
     describe(`#${testFunc}`, () => {
       it(`Works for ${input}`, () => {
-        expect(colourspace[testFunc](input)).toStrictEqual(output);
+        expect(colourSpace[testFunc](input)).toStrictEqual(output);
       });
     });
   })();
@@ -286,7 +286,7 @@ if (import.meta.vitest) {
     const output = '#000000';
     describe(`#${testFunc}`, () => {
       it(`Works for ${input}`, () => {
-        expect(colourspace[testFunc](input)).toStrictEqual(output);
+        expect(colourSpace[testFunc](input)).toStrictEqual(output);
       });
     });
   })();
@@ -297,7 +297,7 @@ if (import.meta.vitest) {
     const output = '#0055ff';
     describe(`#${testFunc}`, () => {
       it(`Works for ${input}`, () => {
-        expect(colourspace[testFunc](input)).toStrictEqual(output);
+        expect(colourSpace[testFunc](input)).toStrictEqual(output);
       });
     });
   })();
@@ -308,7 +308,7 @@ if (import.meta.vitest) {
     const output = '#5500ff';
     describe(`#${testFunc}`, () => {
       it(`Works for ${input}`, () => {
-        expect(colourspace[testFunc](input)).toStrictEqual(output);
+        expect(colourSpace[testFunc](input)).toStrictEqual(output);
       });
     });
   })();
@@ -319,7 +319,7 @@ if (import.meta.vitest) {
     const output = '#ff00aa';
     describe(`#${testFunc}`, () => {
       it(`Works for ${input}`, () => {
-        expect(colourspace[testFunc](input)).toStrictEqual(output);
+        expect(colourSpace[testFunc](input)).toStrictEqual(output);
       });
     });
   })();
@@ -330,7 +330,7 @@ if (import.meta.vitest) {
     const output = '#000000';
     describe(`#${testFunc}`, () => {
       it(`Works for ${input}`, () => {
-        expect(colourspace[testFunc](input)).toStrictEqual(output);
+        expect(colourSpace[testFunc](input)).toStrictEqual(output);
       });
     });
   })();
@@ -341,7 +341,7 @@ if (import.meta.vitest) {
     const output = '#00ff00';
     describe(`#${testFunc}`, () => {
       it(`Works for ${input}`, () => {
-        expect(colourspace[testFunc](input)).toStrictEqual(output);
+        expect(colourSpace[testFunc](input)).toStrictEqual(output);
       });
     });
   })();
@@ -352,7 +352,7 @@ if (import.meta.vitest) {
     const output = '#ffff00';
     describe(`#${testFunc}`, () => {
       it(`Works for ${input}`, () => {
-        expect(colourspace[testFunc](input)).toStrictEqual(output);
+        expect(colourSpace[testFunc](input)).toStrictEqual(output);
       });
     });
   })();
@@ -363,7 +363,7 @@ if (import.meta.vitest) {
     const output = 1;
     describe(`#${testFunc}`, () => {
       it(`Works for ${input}`, () => {
-        expect(colourspace[testFunc](input)).toStrictEqual(output);
+        expect(colourSpace[testFunc](input)).toStrictEqual(output);
       });
     });
   })();
@@ -374,7 +374,7 @@ if (import.meta.vitest) {
     const output = 0;
     describe(`#${testFunc}`, () => {
       it(`Works for ${input}`, () => {
-        expect(colourspace[testFunc](input)).toStrictEqual(output);
+        expect(colourSpace[testFunc](input)).toStrictEqual(output);
       });
     });
   })();
@@ -385,7 +385,7 @@ if (import.meta.vitest) {
     const output = 1;
     describe(`#${testFunc}`, () => {
       it(`Works for ${input}`, () => {
-        expect(colourspace[testFunc](input)).toStrictEqual(output);
+        expect(colourSpace[testFunc](input)).toStrictEqual(output);
       });
     });
   })();
@@ -396,7 +396,7 @@ if (import.meta.vitest) {
     const output = '#000000';
     describe(`#${testFunc}`, () => {
       it(`Works for ${input}`, () => {
-        expect(colourspace[testFunc](input)).toStrictEqual(output);
+        expect(colourSpace[testFunc](input)).toStrictEqual(output);
       });
     });
   })();
@@ -407,7 +407,7 @@ if (import.meta.vitest) {
     const output = '#ffffff';
     describe(`#${testFunc}`, () => {
       it(`Works for ${input}`, () => {
-        expect(colourspace[testFunc](input)).toStrictEqual(output);
+        expect(colourSpace[testFunc](input)).toStrictEqual(output);
       });
     });
   })();

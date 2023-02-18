@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 
-import Ol from '../elements/Ol';
-import Ul from '../elements/Ul';
+import Ol from '../../elements/Ol';
+import Ul from '../../elements/Ul';
 
 export function markParagraphs(string: string) {
   if (typeof string !== 'string') return string;

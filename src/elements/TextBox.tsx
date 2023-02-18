@@ -1,5 +1,5 @@
-import markdownParserFull from '../utilities/markdownParser';
-import { flagMap, wrapText } from '../utilities/ParserLookups';
+import markdownParserFull from '../utilities/markdown/markdownParser';
+import { flagMap, wrapText } from '../utilities/markdown/ParserLookups';
 
 function TextBox({ text }: { text: string }) {
   const returnArray = markdownParserFull({ text, indexIn: 0, flagMap, wrapText });

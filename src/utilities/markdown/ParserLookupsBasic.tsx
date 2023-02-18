@@ -1,17 +1,17 @@
 import { ReactElement } from 'react';
 
-import Link from '../elements/Link';
-import Bold from '../elements/Bold';
-import Italic from '../elements/Italic';
-import H1 from '../elements/H1';
-import H2 from '../elements/H2';
-import H3 from '../elements/H3';
-import H4 from '../elements/H4';
-import H5 from '../elements/H5';
-import H6 from '../elements/H6';
-import Li from '../elements/Li';
-import Span from '../elements/Span';
-import CodeSpan from '../elements/CodeSpan';
+import Link from '../../elements/Link';
+import Bold from '../../elements/Bold';
+import Italic from '../../elements/Italic';
+import H1 from '../../elements/H1';
+import H2 from '../../elements/H2';
+import H3 from '../../elements/H3';
+import H4 from '../../elements/H4';
+import H5 from '../../elements/H5';
+import H6 from '../../elements/H6';
+import Li from '../../elements/Li';
+import Span from '../../elements/Span';
+import CodeSpan from '../../elements/CodeSpan';
 
 const lineEndRegex = /PpPpEEE(\r\n)?/;
 
