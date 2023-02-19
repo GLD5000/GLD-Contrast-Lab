@@ -1,7 +1,7 @@
 {
-  "name": "vite-react-ts-minimal-template",
+  "name": "gld5000-vite-vitest-react-ts-tw-lint-staged-husky",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -12,6 +12,7 @@
     "preview": "vite preview",
     "prepare": "husky install",
     "test": "vitest --coverage --ui",
+    "test:noUI": "vitest --coverage",
     "test:once": "vitest --run"
 
   },
