@@ -1,4 +1,4 @@
-import hexToSrgb from './colourSpaceConverter';
+import hexToSrgb from './colourSpace';
 
 const luminance = {
   modifyColourValue(value: number) {
