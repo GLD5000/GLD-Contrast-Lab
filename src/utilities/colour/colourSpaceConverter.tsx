@@ -110,8 +110,8 @@ export const colourSpace = {
     return this.convertHslArrayToHex(this.convertSrgbToHslArray(srgbArray));
   },
 };
-export default function getColourSpace() {
-  return colourSpace;
+export default function hexToSrgb(hex: string) {
+  return colourSpace.convertHexToSrgbArray(hex);
 }
 if (import.meta.vitest) {
   const { describe, expect, it } = import.meta.vitest;
@@ -119,6 +119,15 @@ if (import.meta.vitest) {
   describe('#splitHexString', () => {
     it('Split white hex', () => {
       expect(colourSpace.splitHexString('#fff')).toStrictEqual([
+        ['f', 'f'],
+        ['f', 'f'],
+        ['f', 'f'],
+      ]);
+    });
+  });
+  describe('#splitHexString', () => {
+    it('Split white hex', () => {
+      expect(colourSpace.splitHexString('#ffffff')).toStrictEqual([
         ['f', 'f'],
         ['f', 'f'],
         ['f', 'f'],
@@ -138,6 +147,12 @@ if (import.meta.vitest) {
 
   describe('#convertHexToSrgbArray', () => {
     it('Works for black', () => {
+      expect(hexToSrgb('#000')).toStrictEqual([0, 0, 0]);
+    });
+  });
+
+  describe('#convertHexToSrgbArray', () => {
+    it('Works for black', () => {
       expect(colourSpace.convertHexToSrgbArray('#000')).toStrictEqual([0, 0, 0]);
     });
   });
@@ -151,6 +166,11 @@ if (import.meta.vitest) {
   describe('#convertHexToSrgbArray', () => {
     it('Works for white', () => {
       expect(colourSpace.convertHexToSrgbArray('#ffffff')).toStrictEqual([1, 1, 1]);
+    });
+  });
+  describe('#hexToSrgb', () => {
+    it('Works for white', () => {
+      expect(hexToSrgb('#ffffff')).toStrictEqual([1, 1, 1]);
     });
   });
 
