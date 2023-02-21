@@ -1,3 +1,5 @@
+import hexToLuminance from './luminance';
+
 export const contrast = {
   getContrastRatio(args: Array<number>) {
     const maxLum = Math.max(...args);
@@ -47,6 +49,12 @@ export const contrast = {
 };
 export default function getContrastRatio(luminanceArray: Array<number>) {
   return contrast.getContrastRatio(luminanceArray);
+}
+
+export function getContrastRatioFromHex(hexA: string, hexB: string) {
+  const lumA = hexToLuminance(hexA);
+  const lumB = hexToLuminance(hexB);
+  return getContrastRatio([lumA, lumB]);
 }
 
 if (import.meta.vitest) {

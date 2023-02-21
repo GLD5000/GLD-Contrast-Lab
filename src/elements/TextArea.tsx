@@ -1,3 +1,5 @@
+import { FormEvent } from 'react';
+
 export default function TextArea({
   id = 'textArea',
   placeholder = 'Copy or write text in here...',
@@ -11,7 +13,7 @@ export default function TextArea({
   name: string;
   className: string;
   value: string;
-  onInput: () => void;
+  onInput: (e: FormEvent<HTMLTextAreaElement>) => void;
 }) {
   return (
     <textarea
