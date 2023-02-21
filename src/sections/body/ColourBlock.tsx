@@ -3,16 +3,32 @@ import H2 from '../../elements/H2';
 import P from '../../elements/P';
 import { getContrastRatioFromHex, contrast } from '../../utilities/colour/contrastRatio';
 
+function getContent(
+  backgroundColour: string,
+  textColour: string,
+  clicked: boolean,
+  contrastRatio: number,
+  contrastRating: string,
+  autoColour: boolean,
+) {
+  if (contrastRatio < 3) return null;
+  if (autoColour) return <P content={backgroundColour} />;
+
+  return <H2 content={clicked ? contrastRatio : contrastRating} />;
+}
+
 export default function ColourBlock({
   backgroundColour = '#b0b0b0',
   textColour = '#000000',
   clicked = false,
   setClicked = () => {},
+  autoColour,
 }: {
   backgroundColour: string;
   textColour: string;
   clicked: boolean;
   setClicked: Dispatch<SetStateAction<boolean>>;
+  autoColour: boolean;
 }) {
   function handleClick() {
     setClicked((click) => !click);
@@ -24,17 +40,15 @@ export default function ColourBlock({
   };
   const contrastRatio = Number(getContrastRatioFromHex(backgroundColour, textColour).toFixed(2));
   const contrastRating = contrast.makeContrastRating(contrastRatio);
-  if (contrastRatio < 4.5) return null;
+  const returnContent = getContent(backgroundColour, textColour, clicked, contrastRatio, contrastRating, autoColour);
   return (
     <button
       type="button"
       onClick={handleClick}
-      className="m-1 grid aspect-square h-36 content-center rounded-xl border text-center text-lg text-current"
+      className="m-1 grid aspect-square h-24 content-center rounded-full border-2 text-center text-lg text-current"
       style={style}
     >
-      <P content={backgroundColour} />
-      <H2 content={clicked ? contrastRatio : contrastRating} />
-      <P content={textColour} />
+      {returnContent}
     </button>
   );
 }
