@@ -1,11 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
-import H2 from '../../elements/H2';
+import H3 from '../../elements/H3';
 import P from '../../elements/P';
-import { getContrastRatioFromHex, contrast } from '../../utilities/colour/contrastRatio';
 
 function getContent(
   backgroundColour: string,
-  textColour: string,
   clicked: boolean,
   contrastRatio: number,
   contrastRating: string,
@@ -14,7 +12,7 @@ function getContent(
   if (contrastRatio < 3) return null;
   if (autoColour) return <P content={backgroundColour} />;
 
-  return <H2 content={clicked ? contrastRatio : contrastRating} />;
+  return <H3 content={clicked ? contrastRatio : contrastRating} />;
 }
 
 export default function ColourBlock({
@@ -23,29 +21,32 @@ export default function ColourBlock({
   clicked = false,
   setClicked = () => {},
   autoColour,
+  contrastRating,
+  contrastRatio,
 }: {
   backgroundColour: string;
   textColour: string;
   clicked: boolean;
   setClicked: Dispatch<SetStateAction<boolean>>;
   autoColour: boolean;
+  contrastRating: string;
+  contrastRatio: number;
 }) {
+  if (!backgroundColour || !textColour) return null;
   function handleClick() {
     setClicked((click) => !click);
   }
   const style: { [elemName: string]: string } = {
     backgroundColor: backgroundColour,
     color: textColour,
-    borderColor: textColour,
+    borderColor: autoColour || contrastRatio < 3 ? 'transparent' : textColour,
   };
-  const contrastRatio = Number(getContrastRatioFromHex(backgroundColour, textColour).toFixed(2));
-  const contrastRating = contrast.makeContrastRating(contrastRatio);
-  const returnContent = getContent(backgroundColour, textColour, clicked, contrastRatio, contrastRating, autoColour);
+  const returnContent = getContent(backgroundColour, clicked, contrastRatio, contrastRating, autoColour);
   return (
     <button
       type="button"
       onClick={handleClick}
-      className="m-1 grid aspect-square h-24 content-center rounded-full border-2 text-center text-lg text-current"
+      className="text-m m-1 grid aspect-square h-20 content-center rounded-full border-4 text-center text-current"
       style={style}
     >
       {returnContent}

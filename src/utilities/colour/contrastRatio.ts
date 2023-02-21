@@ -1,10 +1,16 @@
 import hexToLuminance from './luminance';
 
 export const contrast = {
-  getContrastRatio(args: Array<number>) {
+  getContrastRatioFloat(args: Array<number>) {
     const maxLum = Math.max(...args);
     const minLum = Math.min(...args);
     return (maxLum + 0.05) / (minLum + 0.05);
+  },
+  getContrastRatio2Dp(args: Array<number>) {
+    const maxLum = Math.max(...args);
+    const minLum = Math.min(...args);
+    const ratio = (maxLum + 0.05) / (minLum + 0.05);
+    return Math.floor(ratio * 100) / 100;
   },
   makeContrastRatingString(ratio: number) {
     let rating = 'unrated';
@@ -48,7 +54,7 @@ export const contrast = {
   },
 };
 export default function getContrastRatio(luminanceArray: Array<number>) {
-  return contrast.getContrastRatio(luminanceArray);
+  return contrast.getContrastRatio2Dp(luminanceArray);
 }
 
 export function getContrastRatioFromHex(hexA: string, hexB: string) {
@@ -88,7 +94,7 @@ if (import.meta.vitest) {
 
   describe(`#getContrastRatio`, () => {
     it(`Works for getContrastRatio`, () => {
-      expect(getContrastRatio([0.1, 0.15])).toStrictEqual(1.3333333333333333);
+      expect(getContrastRatio([0.1, 0.15])).toStrictEqual(1.33);
     });
   });
   describe(`#luminanceAboveCutoff`, () => {
