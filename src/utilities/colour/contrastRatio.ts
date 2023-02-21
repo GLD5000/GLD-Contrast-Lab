@@ -91,6 +91,14 @@ if (import.meta.vitest) {
       });
     });
   })();
+  (() => {
+    const testFunc = 'getContrastRatioFloat';
+    describe(`#${testFunc}`, () => {
+      it(`Works for range`, () => {
+        expect(contrast[testFunc]([0.1, 0.15]).toFixed(2)).toStrictEqual('1.33');
+      });
+    });
+  })();
 
   describe(`#getContrastRatio`, () => {
     it(`Works for getContrastRatio`, () => {
