@@ -99,6 +99,14 @@ if (import.meta.vitest) {
       });
     });
   })();
+  (() => {
+    const testFunc = 'getContrastRatioFromHex';
+    describe(`#${testFunc}`, () => {
+      it(`Works for range`, () => {
+        expect(getContrastRatioFromHex('#000000', '#ffffff').toFixed(2)).toStrictEqual('21.00');
+      });
+    });
+  })();
 
   describe(`#getContrastRatio`, () => {
     it(`Works for getContrastRatio`, () => {
