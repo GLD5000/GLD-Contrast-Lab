@@ -30,7 +30,7 @@ export default function Body() {
   const textArray: Array<string> = processText(text);
   return (
     <main id="body-container" className=" grid  flex-grow  justify-items-center  pt-2  align-middle">
-      <section className="grid h-fit w-body min-w-body max-w-body grid-cols-2 gap-8">
+      <section className="grid h-fit w-body min-w-body max-w-body grid-cols-2 justify-items-center gap-8 align-middle">
         <TextArea
           id="code-input"
           placeholder="Copy or write text in here..."
