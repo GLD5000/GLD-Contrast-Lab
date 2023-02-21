@@ -64,7 +64,7 @@ function itemHandler(item: string) {
 export default function Link({
   content,
 }: {
-  content: ReactElement | string | undefined | Array<ReactElement | string | undefined>;
+  content: ReactElement | string | number | undefined | Array<ReactElement | string | number | undefined>;
 }): ReactElement | null {
   if (typeof content !== 'string') return null;
   const returnObject = itemHandler(content);

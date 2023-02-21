@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 export default function H1({
   content,
 }: {
-  content: ReactElement | string | undefined | Array<ReactElement | string | undefined>;
+  content: ReactElement | string | number | number | undefined | Array<ReactElement | string | number | undefined>;
 }) {
   return <h1 className="p-2">{content}</h1>;
 }

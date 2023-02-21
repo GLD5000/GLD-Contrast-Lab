@@ -10,7 +10,7 @@ export default function Li({
   type = 'bullet',
 }: {
   type: string;
-  content: ReactElement | string | undefined | Array<ReactElement | string | undefined>;
+  content: ReactElement | string | number | undefined | Array<ReactElement | string | number | undefined>;
 }) {
   const style: { [elemName: string]: string } = styles[type];
 

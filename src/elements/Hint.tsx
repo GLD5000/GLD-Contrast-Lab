@@ -7,7 +7,7 @@ const flagMap = getFlagMap();
 export default function Hint({
   content,
 }: {
-  content: ReactElement | string | undefined | Array<ReactElement | string | undefined>;
+  content: ReactElement | string | number | undefined | Array<ReactElement | string | number | undefined>;
 }) {
   if (typeof content !== 'string') return null;
   let hintContent = markdownParserFull({ text: content, indexIn: 0, flagMap, wrapText });

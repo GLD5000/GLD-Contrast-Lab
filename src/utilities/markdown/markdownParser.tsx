@@ -130,7 +130,9 @@ function findObjectType(wrappedObject: ReactElement | Array<ReactElement>) {
   return 'nonList';
 }
 
-function wrapLists(arrayOfObjects: ReactElement | string | undefined | Array<ReactElement | string | undefined>) {
+function wrapLists(
+  arrayOfObjects: ReactElement | string | number | undefined | Array<ReactElement | string | number | undefined>,
+) {
   const returnArray: Array<ReactElement> = [];
 
   let listItemArray: Array<ReactElement> = [];
@@ -210,10 +212,10 @@ export function recursiveParser({
   flagMap: Map<RegExp | string, { closingFlag: RegExp | string; type: string }>;
   wrapText: (args: {
     index: number;
-    content: ReactElement | string | undefined | Array<ReactElement | string | undefined>;
+    content: ReactElement | string | number | undefined | Array<ReactElement | string | number | undefined>;
     type: string;
   }) => ReactElement;
-}): Array<ReactElement | string | undefined> | ReactElement | string | undefined {
+}): Array<ReactElement | string | number | undefined> | ReactElement | string | number | undefined {
   let index = indexIn;
   const {
     type,
@@ -234,7 +236,7 @@ export function recursiveParser({
   index += 1;
 
   const wrappedFlaggedText = wrapText({ index, content: processedflaggedText, type });
-  const returnArray: Array<ReactElement | string | undefined> = [];
+  const returnArray: Array<ReactElement | string | number | undefined> = [];
   if (beforeFlag !== undefined) returnArray.push(beforeFlag);
   returnArray.push(wrappedFlaggedText);
   if (afterFlag !== undefined) {
@@ -259,7 +261,7 @@ export default function markdownParserFull({
   flagMap: Map<RegExp | string, { closingFlag: RegExp | string; type: string }>;
   wrapText: (args: {
     index: number;
-    content: ReactElement | string | undefined | Array<ReactElement | string | undefined>;
+    content: ReactElement | string | number | undefined | Array<ReactElement | string | number | undefined>;
     type: string;
   }) => ReactElement;
 }) {

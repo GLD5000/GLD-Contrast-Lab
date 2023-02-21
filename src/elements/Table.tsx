@@ -30,7 +30,7 @@ function Table({
   content = '',
   parse = false,
 }: {
-  content: ReactElement | string | undefined | Array<ReactElement | string | undefined>;
+  content: ReactElement | string | number | undefined | Array<ReactElement | string | number | undefined>;
   parse: boolean;
 }) {
   if (!content || typeof content !== 'string') return null;

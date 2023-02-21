@@ -74,7 +74,7 @@ export function wrapText({
   type,
 }: {
   index: number;
-  content: ReactElement | string | undefined | Array<ReactElement | string | undefined>;
+  content: ReactElement | string | number | undefined | Array<ReactElement | string | number | undefined>;
   type: string;
 }) {
   const newKey = `x${index}`;

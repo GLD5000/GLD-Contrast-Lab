@@ -10,7 +10,7 @@ export default function CodeBox({
   content,
   parse = false,
 }: {
-  content: ReactElement | string | undefined | Array<ReactElement | string | undefined>;
+  content: ReactElement | string | number | undefined | Array<ReactElement | string | number | undefined>;
   parse: boolean;
 }) {
   const [copyButtonMessage, setCopyButtonMessage] = useState('Copy');
