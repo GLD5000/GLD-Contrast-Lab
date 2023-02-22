@@ -49,17 +49,20 @@ export default function Body() {
   return (
     <main id="body-container" className=" grid  flex-grow  justify-items-center  pt-2  align-middle">
       <section className="flex h-fit w-body min-w-body max-w-body flex-row flex-wrap justify-center gap-8 p-8 ">
-        <TextArea
-          id="code-input"
-          placeholder="Copy or write text in here..."
-          name="codeInput"
-          className=" shrink-0 resize-y overflow-auto rounded border border-inherit bg-inherit text-inherit placeholder:text-gray-300"
-          value={text}
-          onInput={(e: FormEvent<HTMLTextAreaElement>): void => {
-            const { value: targetValue } = e.currentTarget;
-            setText(targetValue);
-          }}
-        />
+        <label className="flex flex-col ">
+          Colours to compare:
+          <TextArea
+            id="code-input"
+            placeholder="Copy or write text in here..."
+            name="codeInput"
+            className=" shrink-0 grow resize-y overflow-auto rounded border border-inherit bg-inherit text-inherit placeholder:text-gray-300"
+            value={text}
+            onInput={(e: FormEvent<HTMLTextAreaElement>): void => {
+              const { value: targetValue } = e.currentTarget;
+              setText(targetValue);
+            }}
+          />
+        </label>
 
         <ColourBlocks textArray={textArray} />
       </section>
