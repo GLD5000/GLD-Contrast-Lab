@@ -14,8 +14,8 @@ export const contrast = {
   },
   makeContrastRatingString(ratio: number) {
     let rating = 'unrated';
-
-    if (ratio < 4.5) rating = 'Low';
+    if (ratio < 3) rating = 'Poor';
+    if (ratio >= 3 && ratio < 4.5) rating = 'Low';
     if (ratio === 4.5) rating = 'AA';
     if (ratio > 4.5 && ratio < 7) rating = 'AA+';
     if (ratio === 7) rating = 'AAA';
@@ -25,8 +25,8 @@ export const contrast = {
   },
   makeContrastRating(ratio: number) {
     let rating = 'unrated';
-
-    if (ratio < 4.5) rating = 'Low';
+    if (ratio < 3) rating = 'Poor';
+    if (ratio >= 3 && ratio < 4.5) rating = 'Low';
     if (ratio === 4.5) rating = 'AA';
     if (ratio > 4.5 && ratio < 7) rating = 'AA+';
     if (ratio === 7) rating = 'AAA';
@@ -34,6 +34,16 @@ export const contrast = {
 
     return rating;
   },
+  makeContrastSuitability(ratio: number) {
+    let rating = 'unrated';
+    if (ratio < 3) rating = 'None';
+    if (ratio >= 3 && ratio < 4.5) rating = 'Non-Txt';
+    if (ratio >= 4.5 && ratio < 7) rating = 'Lg-Txt';
+    if (ratio >= 7) rating = 'Any';
+
+    return rating;
+  },
+
   luminanceAboveCutoff(luminance: number) {
     const luminanceCutoff = 0.1791287847;
     return luminance > luminanceCutoff;

@@ -43,11 +43,12 @@ function createColourBlockArrays(
 }
 
 function getColourBlocks(textArray: Array<string>, clicked: boolean, setClicked: Dispatch<SetStateAction<boolean>>) {
-  return createColourBlockArrays(textArray, clicked, setClicked);
+  const returnArrays = createColourBlockArrays(textArray, clicked, setClicked);
+  return <div className=" w-fit self-center overflow-clip rounded-lg border-2 border-current">{returnArrays}</div>;
 }
 export default function ColourBlocks({ textArray }: { textArray: Array<string> }) {
   const [clicked, setClicked] = useState(false);
   if (textArray[0] === undefined) return null;
   const colourBlocks = getColourBlocks(textArray, clicked, setClicked);
-  return <div className=" overflow-clip rounded-lg border-2 border-current">{colourBlocks}</div>;
+  return colourBlocks;
 }

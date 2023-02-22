@@ -9,8 +9,9 @@ function getContent(
   contrastRating: string,
   autoColour: boolean,
 ) {
-  if (contrastRatio < 3) return null;
-  if (autoColour) return <P content={backgroundColour.slice(1)} />;
+  // if (contrastRatio < 3) return null;
+  if (autoColour)
+    return <P className="underline decoration-current underline-offset-2" content={backgroundColour.slice(1)} />;
 
   return <H3 content={clicked ? contrastRatio : contrastRating} />;
 }
