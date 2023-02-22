@@ -10,7 +10,7 @@ function getContent(
   autoColour: boolean,
 ) {
   if (contrastRatio < 3) return null;
-  if (autoColour) return <P content={backgroundColour} />;
+  if (autoColour) return <P content={backgroundColour.slice(1)} />;
 
   return <H3 content={clicked ? contrastRatio : contrastRating} />;
 }
@@ -46,7 +46,7 @@ export default function ColourBlock({
     <button
       type="button"
       onClick={handleClick}
-      className="text-m m-1 grid aspect-square h-20 content-center rounded-full border-4 text-center text-current"
+      className="text-m m-1 grid aspect-square w-20 min-w-fit content-center rounded-full border-4 text-center text-current"
       style={style}
     >
       {returnContent}
