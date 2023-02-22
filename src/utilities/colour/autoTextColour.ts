@@ -1,6 +1,6 @@
 import hexToLuminance from './luminance';
 
-const autoTextColour = {
+export const autoTextColour = {
   backgroundLuminanceToTextColour(backgroundLuminance: number) {
     function luminanceAboveCutoff(luminance: number) {
       const luminanceCutoff = 0.1791287847;
@@ -20,41 +20,4 @@ const autoTextColour = {
 
 export default function autoTextColourFromHex(hex: string) {
   return autoTextColour.autoTextColourFromHex(hex);
-}
-
-if (import.meta.vitest) {
-  const { describe, expect, it } = import.meta.vitest;
-
-  (() => {
-    const testFunc = 'backgroundLuminanceToTextColour';
-    const input = 1;
-    const output = '#000000';
-    describe(`#${testFunc}`, () => {
-      it(`Works for ${input}`, () => {
-        expect(autoTextColour[testFunc](input)).toStrictEqual(output);
-      });
-    });
-  })();
-
-  (() => {
-    const testFunc = 'autoTextColourFromHex';
-    const input = '#000000';
-    const output = '#ffffff';
-    describe(`#${testFunc}`, () => {
-      it(`Works for ${input}`, () => {
-        expect(autoTextColour[testFunc](input)).toStrictEqual(output);
-      });
-    });
-  })();
-
-  (() => {
-    const testFunc = 'autoTextColour';
-    const input = '#000000';
-    const output = '#ffffff';
-    describe(`#${testFunc}`, () => {
-      it(`Works for ${input}`, () => {
-        expect(autoTextColourFromHex(input)).toStrictEqual(output);
-      });
-    });
-  })();
 }
