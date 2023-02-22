@@ -15,7 +15,7 @@ import P from '../../elements/P';
 import CodeBox from '../../elements/CodeBox';
 import Table from '../../elements/Table';
 import Hint from '../../elements/Hint';
-import Span from '../../elements/Span';
+import InlineQuote from '../../elements/InlineQuote';
 import CodeSpan from '../../elements/CodeSpan';
 
 const lineEndRegex = /PpPpEEE(\r\n)?/;
@@ -80,8 +80,8 @@ export function wrapText({
   const newKey = `x${index}`;
   const typeHandler: { [elemName: string]: ReactElement } = {
     link: <Link key={`l${newKey}`} content={content} />,
-    singleQuote: <Span key={`span${newKey}`} content={content} type="single" />,
-    doubleQuote: <Span key={`span${newKey}`} content={content} type="double" />,
+    singleQuote: <InlineQuote key={`span${newKey}`} content={content} type="single" />,
+    doubleQuote: <InlineQuote key={`span${newKey}`} content={content} type="double" />,
     codeSpan: <CodeSpan key={`codeSpan${newKey}`} content={content} />,
     bold: <Bold key={`bo${newKey}`} content={content} />,
     italic: <Italic key={`it${newKey}`} content={content} />,

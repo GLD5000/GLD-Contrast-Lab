@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import H3 from '../../elements/H3';
-import P from '../../elements/P';
+import Span from '../../elements/Span';
 
 function getContent(
   backgroundColour: string,
@@ -11,8 +11,7 @@ function getContent(
 ) {
   // if (contrastRatio < 3) return null;
   if (autoColour)
-    return <P className="underline decoration-current underline-offset-2" content={backgroundColour.slice(1)} />;
-
+    return <Span className="underline decoration-current underline-offset-2" content={backgroundColour.slice(1)} />;
   return <H3 content={clicked ? contrastRatio : contrastRating} />;
 }
 

@@ -2,11 +2,10 @@ import { ReactElement } from 'react';
 
 export default function Span({
   content,
-  type,
+  className,
 }: {
-  type: string;
+  className: string | undefined;
   content: ReactElement | string | number | undefined | Array<ReactElement | string | number | undefined>;
 }) {
-  const string = type === 'double' ? `"${content}"` : content;
-  return <span className="mx-1 bg-slate-200 p-1 text-neutral-900">{string}</span>;
+  return <span className={className}>{content}</span>;
 }
