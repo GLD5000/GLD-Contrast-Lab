@@ -47,8 +47,8 @@
    "jsx-a11y/label-has-associated-control": [
     2,
     {
-      "controlComponents": ["InputSelect", "SectionTitle", "InputTitle", "InputText"],
-      "depth": 3
+      "controlComponents": ["InputSelect", "SectionTitle", "InputTitle", "InputText", "TextArea"],
+      "depth": 5
     }
   ],
   "no-console": "off"
