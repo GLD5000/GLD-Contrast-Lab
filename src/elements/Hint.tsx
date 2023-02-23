@@ -12,7 +12,6 @@ export default function Hint({
   if (typeof content !== 'string') return null;
   let hintContent = markdownParserFull({ text: content, indexIn: 0, flagMap, wrapText });
   if (typeof hintContent === 'string') {
-    console.log(hintContent);
     hintContent = hintContent.replaceAll(/(PpPpSSS)|(PpPpEEE)/g, '');
   }
   return (

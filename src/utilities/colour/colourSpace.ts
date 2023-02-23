@@ -16,9 +16,26 @@ export const colourSpace = {
     const converted = parseInt(`${digits[0]}${digits[1] || digits[0]}`, 16);
     return converted / 255;
   },
+  hexDigitsToInteger(digits: Array<string>) {
+    const converted = parseInt(`${digits[0]}${digits[1] || digits[0]}`, 16);
+    return converted;
+  },
+  decimalToHex(decimal: number) {
+    const hex = Math.round(decimal * 255).toString(16);
+    return hex.length === 2 ? hex : `0${hex}`;
+  },
+  integerToHex(integer: number) {
+    const hex = integer.toString(16);
+    return hex.length === 2 ? hex : `0${hex}`;
+  },
+
   getSrgbArrayFromHexString(hex: string) {
     const splitHex = colourSpace.splitHexString(hex);
     return splitHex.map((digits) => colourSpace.hexDigitsToDecimal(digits));
+  },
+  getRgbArrayFromHexString(hex: string) {
+    const splitHex = colourSpace.splitHexString(hex);
+    return splitHex.map((digits) => colourSpace.hexDigitsToInteger(digits));
   },
   convertHexToSrgbArray(hexIn: string) {
     const srgbArray = colourSpace.getSrgbArrayFromHexString(hexIn);
@@ -37,7 +54,6 @@ export const colourSpace = {
     let hue = 0;
     let sat = 0;
     let lum = 0;
-    console.log(cMin, cMax, delta);
     if (delta === 0) hue = 0;
     else if (cMax === red) hue = ((green - blue) / delta) % 6;
     else if (cMax === green) hue = (blue - red) / delta + 2;
@@ -47,15 +63,13 @@ export const colourSpace = {
 
     lum = (cMax + cMin) / 2;
     sat = Math.max(0, Math.min(1, delta === 0 ? 0 : delta / (1 - Math.abs(2 * lum - 1))));
-    console.log(`sat ${sat}`);
     sat = +(sat * 100);
-    console.log(`sat ${sat}`);
     lum = +(lum * 100);
     const hslArray = [hue, sat, lum];
 
     return hslArray;
   },
-  convertHslArrayToHex(hslArray: Array<number>) {
+  convertHslArrayToSrgb(hslArray: Array<number>) {
     const constrainedArray = colourSpace.constrainHslArray(hslArray);
     const [hue] = constrainedArray;
     let [, sat, lum] = constrainedArray;
@@ -95,20 +109,21 @@ export const colourSpace = {
       green = 0;
       blue = x;
     }
-    // Having obtained RGB, convert channels to hex
-    let hexRed = Math.round((red + lightness) * 255).toString(16);
-    let hexGreen = Math.round((green + lightness) * 255).toString(16);
-    let hexBlue = Math.round((blue + lightness) * 255).toString(16);
+    red += lightness;
+    green += lightness;
+    blue += lightness;
 
-    // Prepend 0s, if necessary
-    if (hexRed.length === 1) hexRed = `0${hexRed}`;
-    if (hexGreen.length === 1) hexGreen = `0${hexGreen}`;
-    if (hexBlue.length === 1) hexBlue = `0${hexBlue}`;
-    const hex = `#${hexRed}${hexGreen}${hexBlue}`;
-    return hex;
+    return [red, green, blue];
+  },
+
+  convertHslArrayToHex(hslArray: Array<number>) {
+    return colourSpace.convertSrgbToHex(colourSpace.convertHslArrayToSrgb(hslArray));
   },
   convertSrgbToHex(srgbArray: Array<number>) {
-    return this.convertHslArrayToHex(this.convertSrgbToHslArray(srgbArray));
+    return srgbArray.reduce((acc, curr) => `${acc}${colourSpace.decimalToHex(curr)}`, '#');
+  },
+  convertRgbToHex(srgbArray: Array<number>) {
+    return srgbArray.reduce((acc, curr) => `${acc}${colourSpace.integerToHex(curr)}`, '#');
   },
 
   constrainNumber(inputNumber = 0, min = 0, max = 100) {
