@@ -25,6 +25,9 @@ import setToTargetContrast from '../../utilities/colour/autoContrast';
   describe(`#setToTargetContrast`, () => {
     it(`Works for setToTargetContrast `, () => {
       expect(setToTargetContrast('#ff0fff', 5, 'down').resultingContrastRatio).toBe(5);
+      // expect(setToTargetContrast('#ff0fff', 10, 'down').resultingHex[5]).toBe('0');
+      // expect(setToTargetContrast('#ff0fff', 10, 'down').resultingContrastRatio).toBe(10);
+      // expect(setToTargetContrast('#ff0fff', 15, 'down').resultingContrastRatio).toBe(15);
     });
   });
 })();
