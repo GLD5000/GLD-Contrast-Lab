@@ -25,9 +25,8 @@ import setToTargetContrast from '../../utilities/colour/autoContrast';
   describe(`#setToTargetContrast`, () => {
     it(`Works for setToTargetContrast `, () => {
       expect(setToTargetContrast('#ff0fff', 5, 'down').resultingContrastRatio).toBe(5);
-      // expect(setToTargetContrast('#ff0fff', 10, 'down').resultingHex[5]).toBe('0');
-      // expect(setToTargetContrast('#ff0fff', 10, 'down').resultingContrastRatio).toBe(10);
-      // expect(setToTargetContrast('#ff0fff', 15, 'down').resultingContrastRatio).toBe(15);
+      expect(setToTargetContrast('#ff0fff', 10, 'down').resultingHex[5]).toBe('0');
+      expect(setToTargetContrast('#ff0fff', 10, 'down').resultingHex).toBe('#000000');
     });
   });
 })();
@@ -35,7 +34,18 @@ import setToTargetContrast from '../../utilities/colour/autoContrast';
 (() => {
   describe(`#setToTargetContrast`, () => {
     it(`Works for setToTargetContrast `, () => {
+      expect(setToTargetContrast('#a3e635 ', 5, 'up').resultingHex).toBe('#ffffff');
       expect(setToTargetContrast('#010101', 5, 'up').resultingContrastRatio).toBe(5);
+      expect(setToTargetContrast('#010101', 10, 'up').resultingContrastRatio).toBe(10);
+      expect(setToTargetContrast('#010101', 15, 'up').resultingContrastRatio).toBe(15);
+      expect(setToTargetContrast('#010101', 20, 'up').resultingContrastRatio).toBe(20);
+    });
+  });
+})();
+(() => {
+  describe(`#setToTargetContrast`, () => {
+    it(`Works for setToTargetContrast '#a3e635 ', 3, 'up' `, () => {
+      expect(setToTargetContrast('#a3e635 ', 3, 'up').resultingContrastRatio).toBe(3);
     });
   });
 })();
