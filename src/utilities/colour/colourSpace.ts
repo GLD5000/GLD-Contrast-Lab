@@ -60,6 +60,8 @@ export const colourSpace = {
     else hue = (red - green) / delta + 4;
 
     hue *= 60;
+    if (hue < 0) hue += 360;
+    if (hue > 360) hue -= 360;
 
     lum = (cMax + cMin) / 2;
     sat = Math.max(0, Math.min(1, delta === 0 ? 0 : delta / (1 - Math.abs(2 * lum - 1))));

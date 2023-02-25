@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import setToTargetContrast from '../../utilities/colour/autoContrast';
+import setToTargetContrast, { autoContrast } from '../../utilities/colour/autoContrast';
+import { colourSpace } from '../../utilities/colour/colourSpace';
+import { luminance } from '../../utilities/colour/luminance';
 
 (() => {
   const output = '#ffffff';
@@ -49,3 +51,82 @@ import setToTargetContrast from '../../utilities/colour/autoContrast';
     });
   });
 })();
+(() => {
+  describe(`#setToTargetContrast`, () => {
+    it(`Works for setToTargetContrast '#a3e635 ', 3, 'down' `, () => {
+      expect(setToTargetContrast('#a3e635 ', 3, 'down').resultingContrastRatio).toBe(3);
+    });
+  });
+})();
+(() => {
+  const hex = '#779955';
+  const ratio = 3.22;
+  const direction = 'up';
+  describe(`#setToTargetContrast`, () => {
+    it(`Works for setToTargetContrast ${hex}, ${ratio}, ${direction} `, () => {
+      expect(setToTargetContrast(hex, ratio, direction).resultingContrastRatio).toBe(ratio);
+    });
+  });
+})();
+
+// Test down under
+(() => {
+  const direction = 'down';
+  const resultingContrastRatio = 5;
+  const targetContrast = 5.12;
+  const resultingHex = '#6f6f6f';
+  const resultingSrgb = colourSpace.getSrgbArrayFromHexString(resultingHex);
+  const originalLuminance = 1;
+  // const originalSrgb = [1, 1, 1];
+  describe(`#setToTargetContrast`, () => {
+    it(`Works for autoContrast.adjustResults ${resultingHex}, ${targetContrast}, ${direction} `, () => {
+      expect(
+        autoContrast.adjustResults({
+          direction,
+          resultingContrastRatio,
+          targetContrast,
+          resultingHex,
+          resultingSrgb,
+          originalLuminance,
+          // originalSrgb,
+        }).resultingContrastRatio,
+      ).toBe(targetContrast);
+    });
+  });
+})();
+// test up over
+(() => {
+  const direction = 'up';
+  const resultingContrastRatio = 2.22;
+  const targetContrast = 2;
+  const resultingHex = '#b2e57f';
+  const resultingSrgb = colourSpace.getSrgbArrayFromHexString(resultingHex);
+  const originalLuminance = luminance.convertHexToLuminance('#779955');
+  // const originalSrgb = colourSpace.convertHexToSrgbArray('#779955');
+  describe(`#setToTargetContrast`, () => {
+    it(`Works for autoContrast.adjustResults ${resultingHex}, ${targetContrast}, ${direction} `, () => {
+      expect(
+        autoContrast.adjustResults({
+          direction,
+          resultingContrastRatio,
+          targetContrast,
+          resultingHex,
+          resultingSrgb,
+          originalLuminance,
+          // originalSrgb,
+        }).resultingContrastRatio,
+      ).toBe(targetContrast);
+    });
+  });
+})();
+
+// (() => {
+//   const hex = '#779955';
+//   const ratio = 2.22;
+//   const direction = 'up';
+//   describe(`#setToTargetContrast`, () => {
+//     it(`Works for setToTargetContrast ${hex}, ${ratio}, ${direction} `, () => {
+//       expect(setToTargetContrast(hex, ratio, direction).resultingHex).toBe(ratio);
+//     });
+//   });
+// })();
