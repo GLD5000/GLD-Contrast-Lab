@@ -71,13 +71,13 @@ export const autoContrast = {
       run += 1;
       // const newHsl = autoContrast.decrementLuminance(hsl);
       // const hsl = colourSpace.convertSrgbToHslArray(assignableResultingSrgb);
-      const newRatio = autoContrast.getLinearRatio(targetContrast, assignableResultingContrastRatio);
       // const newHsl = autoContrast.multiplyLuminance(hsl, newRatio);
       // console.log(hsl);
       // console.log(newHsl);
       // assignableResultingSrgb = colourSpace.convertHslArrayToSrgb(newHsl);
-      console.log(newRatio);
 
+      const newRatio = autoContrast.getLinearRatio(targetContrast, assignableResultingContrastRatio);
+      console.log(newRatio);
       const resultingLuminance = luminance.convertSrgbToLuminance(resultingSrgb);
       const newTargetContrast = newRatio;
       console.log('new target ratio: ', newTargetContrast);
