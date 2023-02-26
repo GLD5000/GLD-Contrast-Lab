@@ -120,13 +120,35 @@ import { luminance } from '../../utilities/colour/luminance';
   });
 })();
 
-// (() => {
-//   const hex = '#779955';
-//   const ratio = 2.22;
-//   const direction = 'up';
-//   describe(`#setToTargetContrast`, () => {
-//     it(`Works for setToTargetContrast ${hex}, ${ratio}, ${direction} `, () => {
-//       expect(setToTargetContrast(hex, ratio, direction).resultingHex).toBe(ratio);
-//     });
-//   });
-// })();
+(() => {
+  const hex = '#779955';
+  const ratio = 2.22;
+  const direction = 'up';
+  describe(`#setToTargetContrast`, () => {
+    it(`Works for setToTargetContrast ${hex}, ${ratio}, ${direction} `, () => {
+      expect(setToTargetContrast(hex, ratio, direction).resultingContrastRatio).toBe(ratio);
+    });
+  });
+})();
+
+(() => {
+  const hex = '#770955';
+  const ratio = 2.22;
+  const direction = 'up';
+  describe(`#setToTargetContrast`, () => {
+    it(`Works for setToTargetContrast ${hex}, ${ratio}, ${direction} `, () => {
+      expect(setToTargetContrast(hex, ratio, direction).resultingContrastRatio).toBe(ratio);
+    });
+  });
+})();
+
+(() => {
+  const hex = '#a709a5';
+  const ratio = 2.22;
+  const direction = 'down';
+  describe(`#setToTargetContrast`, () => {
+    it(`Works for setToTargetContrast ${hex}, ${ratio}, ${direction} `, () => {
+      expect(setToTargetContrast(hex, ratio, direction).resultingContrastRatio).toBe(ratio);
+    });
+  });
+})();

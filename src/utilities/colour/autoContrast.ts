@@ -76,19 +76,12 @@ export const autoContrast = {
       // console.log(newHsl);
       // assignableResultingSrgb = colourSpace.convertHslArrayToSrgb(newHsl);
 
-      const newRatio = autoContrast.getLinearRatio(targetContrast, assignableResultingContrastRatio);
-      console.log(newRatio);
-      const resultingLuminance = luminance.convertSrgbToLuminance(resultingSrgb);
-      const newTargetContrast = newRatio;
-      console.log('new target ratio: ', newTargetContrast);
-      const newTargetLuminance = getTargetLuminance(direction, resultingLuminance, newTargetContrast);
-      console.log('new target luminance', newTargetLuminance);
-      const newOriginalLinearLum = autoContrast.luminanceToLinear(resultingLuminance);
-      const newTargetLinearLum = autoContrast.luminanceToLinear(newTargetLuminance);
-      const newLinearRatio = autoContrast.getLinearRatio(newTargetLinearLum, newOriginalLinearLum);
-      console.log('newLinearRatio', newLinearRatio);
-      const newAssignableResultingSrgb = autoContrast.multiplySrgbRatio(resultingSrgb, newLinearRatio);
-      console.log('newAssignableResultingSrgb', newAssignableResultingSrgb);
+      const newAssignableResultingSrgb = getNewSrgb(
+        targetContrast,
+        assignableResultingContrastRatio,
+        resultingSrgb,
+        direction,
+      );
       // assignableResultingSrgb = autoContrast.multiplySrgbRatio(assignableResultingSrgb, newRatio);
       // console.log(assignableResultingSrgb);
       ({ resultingContrastRatio: assignableResultingContrastRatio, resultingHex: assignableResultingHex } =
@@ -197,22 +190,41 @@ export const autoContrast = {
   },
 };
 
+function getNewSrgb(
+  targetContrast: number,
+  assignableResultingContrastRatio: number,
+  resultingSrgb: number[],
+  direction: string,
+) {
+  const newRatio = autoContrast.getLinearRatio(targetContrast, assignableResultingContrastRatio);
+  console.log(newRatio);
+  const resultingLuminance = luminance.convertSrgbToLuminance(resultingSrgb);
+  const newTargetContrast = newRatio;
+  console.log('new target ratio: ', newTargetContrast);
+  const newTargetLuminance = getTargetLuminance(direction, resultingLuminance, newTargetContrast);
+  console.log('new target luminance', newTargetLuminance);
+  const newOriginalLinearLum = autoContrast.luminanceToLinear(resultingLuminance);
+  const newTargetLinearLum = autoContrast.luminanceToLinear(newTargetLuminance);
+  const newLinearRatio = autoContrast.getLinearRatio(newTargetLinearLum, newOriginalLinearLum);
+  console.log('newLinearRatio', newLinearRatio);
+  const newAssignableResultingSrgb = autoContrast.multiplySrgbRatio(resultingSrgb, newLinearRatio);
+  console.log('newAssignableResultingSrgb', newAssignableResultingSrgb);
+  return newAssignableResultingSrgb;
+}
+
 export default function setToTargetContrast(
   originalHex: string,
   targetContrast: number,
   direction = 'up',
 ): { resultingHex: string; resultingContrastRatio: number } {
   const originalSrgb = colourSpace.convertHexToSrgbArray(originalHex);
-  const originalLuminance = luminance.convertSrgbToLuminance(originalSrgb);
-  const targetLuminance = getTargetLuminance(direction, originalLuminance, targetContrast);
+  const { targetLuminance, originalLuminance } = getLuminances(originalSrgb, direction, targetContrast);
 
-  if (targetLuminance === 1 || targetLuminance === 0 || Math.min(...originalSrgb) === Math.max(...originalSrgb))
-    return autoContrast.setToTargetLuminanceGreyScale(targetLuminance, originalLuminance);
+  const isGreyscale =
+    targetLuminance === 1 || targetLuminance === 0 || Math.min(...originalSrgb) === Math.max(...originalSrgb);
+  if (isGreyscale) return autoContrast.setToTargetLuminanceGreyScale(targetLuminance, originalLuminance);
 
-  const originalLinearLum = autoContrast.luminanceToLinear(originalLuminance);
-  const targetLinearLum = autoContrast.luminanceToLinear(targetLuminance);
-  const linearRatio = autoContrast.getLinearRatio(targetLinearLum, originalLinearLum);
-  const resultingSrgb = autoContrast.multiplySrgbRatio(originalSrgb, linearRatio);
+  const resultingSrgb = getResultingSrgb(originalLuminance, targetLuminance, originalSrgb);
   const { resultingContrastRatio, resultingHex } = autoContrast.getResults(resultingSrgb, originalLuminance);
 
   if (resultingHex === '#000000' || resultingHex === '#ffffff' || resultingContrastRatio === targetContrast)
@@ -228,6 +240,25 @@ export default function setToTargetContrast(
     // originalSrgb,
   });
 }
+function getResultingSrgb(originalLuminance: number, targetLuminance: number, originalSrgb: number[]) {
+  const linearRatio = getLinearRatio(originalLuminance, targetLuminance);
+  const resultingSrgb = autoContrast.multiplySrgbRatio(originalSrgb, linearRatio);
+  return resultingSrgb;
+}
+
+function getLinearRatio(originalLuminance: number, targetLuminance: number) {
+  const originalLinearLum = autoContrast.luminanceToLinear(originalLuminance);
+  const targetLinearLum = autoContrast.luminanceToLinear(targetLuminance);
+  const linearRatio = autoContrast.getLinearRatio(targetLinearLum, originalLinearLum);
+  return linearRatio;
+}
+
+function getLuminances(originalSrgb: number[], direction: string, targetContrast: number) {
+  const originalLuminance = luminance.convertSrgbToLuminance(originalSrgb);
+  const targetLuminance = getTargetLuminance(direction, originalLuminance, targetContrast);
+  return { targetLuminance, originalLuminance };
+}
+
 function getTargetLuminance(direction: string, originalLuminance: number, targetContrast: number) {
   return direction === 'up'
     ? autoContrast.getIncreasedLuminance(originalLuminance, targetContrast)
