@@ -235,6 +235,9 @@ export const autoContrast = {
 
     return { targetLuminance, currentLuminance, matching: targetLuminance.toFixed(6) === currentLuminance.toFixed(6) };
   },
+  contrast2dpFloor(input: number) {
+    return 0.01 * Math.floor(input * 100);
+  },
   adjustLuminanceB(
     targetContrast: number,
     originalLuminance: number,
@@ -256,7 +259,7 @@ export const autoContrast = {
     }
     const { resultingContrastRatio, resultingHex } = autoContrast.getResults(currentSrgb, originalLuminance);
     const isEqualContrast =
-      resultingContrastRatio === targetContrast || resultingContrastRatio === targetContrast - 0.01;
+      autoContrast.contrast2dpFloor(resultingContrastRatio) === autoContrast.contrast2dpFloor(targetContrast);
     console.log('isEqualContrast:', isEqualContrast);
     console.log('loopLimiter:', loopLimiter);
     return { resultingContrastRatio, resultingHex };
@@ -289,7 +292,7 @@ export default function setToTargetContrast(
   targetContrast: number,
   direction = 'up',
 ): { resultingHex: string; resultingContrastRatio: number } {
-  const bufferedTargetContrast = targetContrast + 0.01;
+  const bufferedTargetContrast = targetContrast + 0.005;
   const originalSrgb = colourSpace.convertHexToSrgbArray(originalHex);
   const { targetLuminance, originalLuminance } = autoContrast.getLuminances(
     originalSrgb,

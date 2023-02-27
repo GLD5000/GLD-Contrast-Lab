@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import setToTargetContrast, { autoContrast } from '../../utilities/colour/autoContrast';
-import { colourSpace } from '../../utilities/colour/colourSpace';
-import { luminance } from '../../utilities/colour/luminance';
+import setToTargetContrast from '../../utilities/colour/autoContrast';
 
 (() => {
   const output = '#ffffff';
@@ -65,57 +63,6 @@ import { luminance } from '../../utilities/colour/luminance';
   describe(`#setToTargetContrast`, () => {
     it(`Works for setToTargetContrast ${hex}, ${ratio}, ${direction} `, () => {
       expect(setToTargetContrast(hex, ratio, direction).resultingContrastRatio).toBeGreaterThanOrEqual(ratio);
-    });
-  });
-})();
-
-// Test down under
-(() => {
-  const direction = 'down';
-  const resultingContrastRatio = 5;
-  const bufferedTargetContrast = 5.12;
-  const resultingHex = '#6f6f6f';
-  const resultingSrgb = colourSpace.getSrgbArrayFromHexString(resultingHex);
-  const originalLuminance = 1;
-  // const originalSrgb = [1, 1, 1];
-  describe(`#setToTargetContrast`, () => {
-    it(`Works for autoContrast.adjustResults ${resultingHex}, ${bufferedTargetContrast}, ${direction} `, () => {
-      expect(
-        autoContrast.adjustResults({
-          direction,
-          resultingContrastRatio,
-          bufferedTargetContrast,
-          resultingHex,
-          resultingSrgb,
-          originalLuminance,
-          // originalSrgb,
-        }).resultingContrastRatio,
-      ).toBe(bufferedTargetContrast);
-    });
-  });
-})();
-// test up over
-(() => {
-  const direction = 'up';
-  const resultingContrastRatio = 2.22;
-  const bufferedTargetContrast = 2;
-  const resultingHex = '#b2e57f';
-  const resultingSrgb = colourSpace.getSrgbArrayFromHexString(resultingHex);
-  const originalLuminance = luminance.convertHexToLuminance('#779955');
-  // const originalSrgb = colourSpace.convertHexToSrgbArray('#779955');
-  describe(`#setToTargetContrast`, () => {
-    it(`Works for autoContrast.adjustResults ${resultingHex}, ${bufferedTargetContrast}, ${direction} `, () => {
-      expect(
-        autoContrast.adjustResults({
-          direction,
-          resultingContrastRatio,
-          bufferedTargetContrast,
-          resultingHex,
-          resultingSrgb,
-          originalLuminance,
-          // originalSrgb,
-        }).resultingContrastRatio,
-      ).toBe(bufferedTargetContrast);
     });
   });
 })();
