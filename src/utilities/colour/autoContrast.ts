@@ -242,8 +242,8 @@ export const autoContrast = {
     resultingSrgb: number[],
   ) {
     let loopLimiter = 0;
-    const loopLimit = 20;
-    const decimalPlaces = 9;
+    const loopLimit = 28;
+    const decimalPlaces = 4;
     let currentSrgb = resultingSrgb;
     let currentLuminance = luminance.convertSrgbToLuminance(currentSrgb);
     let equal = false;
@@ -258,6 +258,7 @@ export const autoContrast = {
     const isEqualContrast =
       resultingContrastRatio === targetContrast || resultingContrastRatio === targetContrast - 0.01;
     console.log('isEqualContrast:', isEqualContrast);
+    console.log('loopLimiter:', loopLimiter);
     return { resultingContrastRatio, resultingHex };
   },
 };
