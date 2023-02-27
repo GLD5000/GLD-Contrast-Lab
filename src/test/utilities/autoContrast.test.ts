@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import setToTargetContrast from '../../utilities/colour/autoContrast';
+import { colourSpace } from '../../utilities/colour/colourSpace';
 
 (() => {
   const output = '#ffffff';
@@ -99,3 +100,57 @@ import setToTargetContrast from '../../utilities/colour/autoContrast';
     });
   });
 })();
+
+for (let i = 0; i < 100; i += 1) {
+  const hue = 3 * i;
+  const sat = 100;
+  const lum = 40;
+
+  const hex = colourSpace.convertHslArrayToHex([hue, sat, lum]);
+  (() => {
+    const ratio = Math.floor(Math.random() * 3 + 1 * 100) / 100;
+    // const ratio = 2.22;
+    const direction = 'up';
+    describe(`#setToTargetContrast`, () => {
+      it(`Works for setToTargetContrast ${hex}, ${ratio}, ${direction} `, () => {
+        expect(setToTargetContrast(hex, ratio, direction).resultingContrastRatio.toFixed(2)).toBe(ratio.toFixed(2));
+      });
+    });
+  })();
+}
+
+for (let i = 0; i < 100; i += 1) {
+  const hue = 3 * i + 30;
+  const sat = 100;
+  const lum = 80;
+
+  const hex = colourSpace.convertHslArrayToHex([hue, sat, lum]);
+  (() => {
+    const ratio = Math.floor(Math.random() * 3 + 1 * 100) / 100;
+    // const ratio = 5.62;
+    const direction = 'down';
+    describe(`#setToTargetContrast`, () => {
+      it(`Works for setToTargetContrast ${hex}, ${ratio}, ${direction} `, () => {
+        expect(setToTargetContrast(hex, ratio, direction).resultingContrastRatio.toFixed(2)).toBe(ratio.toFixed(2));
+      });
+    });
+  })();
+}
+
+for (let i = 0; i < 4; i += 1) {
+  const hue = 120 * i;
+  const sat = 100;
+  const lum = 50;
+
+  const hex = colourSpace.convertHslArrayToHex([hue, sat, lum]);
+  (() => {
+    const ratio = Math.floor(Math.random() * 3 + 1 * 100) / 100;
+    // const ratio = 5.62;
+    const direction = 'down';
+    describe(`#setToTargetContrast`, () => {
+      it(`Works for setToTargetContrast ${hex}, ${ratio}, ${direction} `, () => {
+        expect(setToTargetContrast(hex, ratio, direction).resultingContrastRatio.toFixed(2)).toBe(ratio.toFixed(2));
+      });
+    });
+  })();
+}

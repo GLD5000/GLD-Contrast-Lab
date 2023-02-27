@@ -35,6 +35,7 @@ export const autoContrast = {
   },
   multiplyLuminanceSrgb(array: Array<number>, factor: number) {
     const hslArray = colourSpace.convertSrgbToHslArray(array);
+    console.log('hue:', hslArray[0]);
     hslArray[2] = Math.max(0, Math.min(100, hslArray[2] * factor));
     return colourSpace.convertHslArrayToSrgb(hslArray);
   },
