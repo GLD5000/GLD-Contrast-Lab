@@ -8,20 +8,29 @@ export const luminance = {
     const srgbValue = value / 255;
     return srgbValue <= 0.04045 ? srgbValue / 12.92 : ((srgbValue + 0.055) / 1.055) ** 2.4;
   },
-  sumColourValues(R: number, G: number, B: number) {
+  sumColourValues(rgbArray: number[]) {
+    const [R, G, B] = rgbArray;
     const redMult = 0.2126;
     const greenMult = 0.7152;
     const blueMult = 0.0722;
     return redMult * R + greenMult * G + blueMult * B;
   },
+  getLuminanceWeighting(srgbValue: number[]) {
+    const greenMult = 0.7152;
+    const maxValue = srgbValue.reduce((acc, curr) => acc + curr) * greenMult;
+    const currentValue = luminance.sumColourValues(srgbValue);
+    const weightingRatio = currentValue / maxValue;
+    return weightingRatio;
+  },
+
   convertSrgbToLuminance(args: Array<number>) {
     const [R, G, B] = args.map(luminance.modifyColourValue);
-    const summed = luminance.sumColourValues(R, G, B);
+    const summed = luminance.sumColourValues([R, G, B]);
     return summed;
   },
   convertRgbToLuminance(args: Array<number>) {
     const [R, G, B] = args.map(luminance.modifyColourValueRgb);
-    const summed = luminance.sumColourValues(R, G, B);
+    const summed = luminance.sumColourValues([R, G, B]);
     return summed;
   },
   constrainDecimal(value: number) {
