@@ -23,13 +23,13 @@ export const autoContrast = {
 
     return 1 - (1 - unweightedRatio) * weighting;
   },
-  setToTargetLuminanceGreyScale(targetLuminance: number, originalLuminance: number) {
+  setToTargetLuminanceGreyScale(targetLuminance: number, originalLuminance: number, targetCr: number) {
     const resultingSrgb = luminance.convertLuminanceToSrgb(targetLuminance);
     const resultingHex = colourSpace.convertSrgbToHex(resultingSrgb);
     const resultingLuminance = luminance.convertSrgbToLuminance(resultingSrgb);
     const resultingContrastRatio = contrast.getContrastRatio2Dp([originalLuminance, resultingLuminance]);
-    // console.log(resultingHex, resultingContrastRatio);
-    return { resultingHex, resultingContrastRatio };
+    if (targetCr === resultingContrastRatio) return { resultingHex, resultingContrastRatio };
+    return autoContrast.adjustLuminanceFine(targetCr, originalLuminance, targetLuminance, resultingSrgb);
   },
   decrementLuminance(array: Array<number>) {
     const copyArray = [...array];
@@ -267,20 +267,22 @@ export const autoContrast = {
     // console.log('weighting', weighting);
     let loopLimiter = 0;
     const loopLimit = 10;
-    const decimalPlaces = 7;
     let currentSrgb = resultingSrgb;
     let currentLuminance = luminance.convertSrgbToLuminance(currentSrgb);
+    let currentContrast = contrast.getContrastRatio2Dp([originalLuminance, currentLuminance]);
+
     let equal = false;
     while (loopLimiter < loopLimit && equal === false) {
       loopLimiter += 1;
       const ratio = autoContrast.luminancesToLinearRatio(currentLuminance, targetLuminance, weighting);
       currentSrgb = autoContrast.multiplyLuminanceSrgb(currentSrgb, ratio);
       currentLuminance = luminance.convertSrgbToLuminance(currentSrgb);
-      equal = targetLuminance.toFixed(decimalPlaces) === currentLuminance.toFixed(decimalPlaces);
+      currentContrast = contrast.getContrastRatio2Dp([originalLuminance, currentLuminance]);
+
+      equal = currentContrast === targetContrast;
     }
     let { resultingContrastRatio, resultingHex } = autoContrast.getResults(currentSrgb, originalLuminance);
-    const isEqualContrast =
-      autoContrast.contrast2dpFloor(resultingContrastRatio) === autoContrast.contrast2dpFloor(targetContrast);
+    const isEqualContrast = autoContrast.contrast2dpFloor(resultingContrastRatio) === targetContrast;
     console.log('isEqualContrast:', isEqualContrast);
     console.log('loopLimiter:', loopLimiter);
     console.log({ resultingContrastRatio, resultingHex });
@@ -313,10 +315,11 @@ export const autoContrast = {
     let equal = false;
     let directionUp = currentContrast < targetContrast;
     const startIncrement = 2;
-    let changesOfDirection = 0;
+    let changesOfDirection = 3;
     let outOfBounds = 0;
+    let changesMultipier = 1 / changesOfDirection;
+
     while (loopLimiter < loopLimit && equal === false && outOfBounds < 5) {
-      const changesMultipier = 1 / Math.max(1, changesOfDirection);
       const increment = directionUp ? changesMultipier * startIncrement : changesMultipier * startIncrement * -1;
       loopLimiter += 1;
       currentSrgb = autoContrast.adjustLuminanceSrgb(currentSrgb, increment);
@@ -324,9 +327,11 @@ export const autoContrast = {
       currentContrast = contrast.getContrastRatio2Dp([originalLuminance, currentLuminance]);
       console.log('currentContrast:', currentContrast);
       equal = currentContrast === targetContrast;
+      changesOfDirection = Math.max(1, changesOfDirection - 1);
+      changesMultipier = 1 / Math.max(1, changesOfDirection);
       if (directionUp !== currentContrast < targetContrast) {
         directionUp = !directionUp;
-        changesOfDirection += 1;
+        changesOfDirection += 2;
       }
       const inBounds = autoContrast.srgbIsWithinLimit(currentSrgb);
       if (inBounds) {
@@ -380,13 +385,16 @@ export default function setToTargetContrast(
 
   const isGreyscale =
     targetLuminance === 1 || targetLuminance === 0 || Math.min(...originalSrgb) === Math.max(...originalSrgb);
-  if (isGreyscale) return autoContrast.setToTargetLuminanceGreyScale(targetLuminance, originalLuminance);
+  if (isGreyscale)
+    return autoContrast.setToTargetLuminanceGreyScale(targetLuminance, originalLuminance, targetContrast);
 
   const resultingSrgb = autoContrast.getResultingSrgb(originalLuminance, targetLuminance, originalSrgb);
   const { resultingContrastRatio, resultingHex } = autoContrast.getResults(resultingSrgb, originalLuminance);
 
-  if (resultingHex === '#000000' || resultingHex === '#ffffff' || resultingContrastRatio === bufferedTargetContrast)
+  if (resultingHex === '#000000' || resultingHex === '#ffffff' || resultingContrastRatio === bufferedTargetContrast) {
+    console.log(resultingContrastRatio, bufferedTargetContrast);
     return { resultingHex, resultingContrastRatio };
+  }
   return autoContrast.adjustLuminanceB(bufferedTargetContrast, originalLuminance, targetLuminance, resultingSrgb);
   // return autoContrast.adjustResults({
   // direction,
