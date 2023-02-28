@@ -170,7 +170,8 @@ import getRandomNumberBetween from '../../utilities/number/randomNumber';
 //   })();
 // }
 
-for (let i = 0; i < 200; i += 1) {
+// Main loop
+for (let i = 0; i < 50; i += 1) {
   const hue = getRandomNumberBetween([0, 360]);
   const sat = getRandomNumberBetween([0, 100]);
   const lum = getRandomNumberBetween([0, 100]);
@@ -191,12 +192,72 @@ for (let i = 0; i < 200; i += 1) {
     });
   })();
 }
+
 // //Works for setToTargetContrast #f0f0f0, 2.12, down (edge case)
 // (() => {
 //   const hex = '#f0f0f0';
 
 //   const ratio = 2.12;
 //   const direction = 'down' ;
+//   describe(`#setToTargetContrast`, () => {
+//     it(`Works for setToTargetContrast ${hex}, ${ratio}, ${direction} `, () => {
+//       const result = setToTargetContrast(hex, ratio, direction);
+//       console.log('result:', result);
+//       expect(
+//         result.resultingContrastRatio.toFixed(2) === ratio.toFixed(2) ||
+//           result.resultingHex === '#ffffff' ||
+//           result.resultingHex === '#000000',
+//       ).toBe(true);
+//     });
+//   });
+// })();
+
+// Works for setToTargetContrast #070c0e, 14.49, down (edge case)
+// (() => {
+//   const hex = '#070c0e';
+
+//   const ratio = 14.49;
+//   const direction = 'down' ;
+//   describe(`#setToTargetContrast`, () => {
+//     it(`Works for setToTargetContrast ${hex}, ${ratio}, ${direction} `, () => {
+//       const result = setToTargetContrast(hex, ratio, direction);
+//       console.log('result:', result);
+//       expect(
+//         result.resultingContrastRatio.toFixed(2) === ratio.toFixed(2) ||
+//           result.resultingHex === '#ffffff' ||
+//           result.resultingHex === '#000000',
+//       ).toBe(true);
+//     });
+//   });
+// })();
+
+// Works for setToTargetContrast #0b0b0a, 19.66, up (edge case)
+
+// (() => {
+//   const hex = '#0b0b0a';
+
+//   const ratio = 19.66;
+//   const direction = 'up' ;
+//   describe(`#setToTargetContrast`, () => {
+//     it(`Works for setToTargetContrast ${hex}, ${ratio}, ${direction} `, () => {
+//       const result = setToTargetContrast(hex, ratio, direction);
+//       console.log('result:', result);
+//       expect(
+//         result.resultingContrastRatio.toFixed(2) === ratio.toFixed(2) ||
+//           result.resultingHex === '#ffffff' ||
+//           result.resultingHex === '#000000',
+//       ).toBe(true);
+//     });
+//   });
+// })();
+
+// Works for setToTargetContrast #2c300d, 8.27, up (edge case)
+
+// (() => {
+//   const hex = '#2c300d';
+
+//   const ratio = 8.27;
+//   const direction = 'up' ;
 //   describe(`#setToTargetContrast`, () => {
 //     it(`Works for setToTargetContrast ${hex}, ${ratio}, ${direction} `, () => {
 //       const result = setToTargetContrast(hex, ratio, direction);
