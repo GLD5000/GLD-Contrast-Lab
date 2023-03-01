@@ -78,19 +78,19 @@ export default function SvgButton({
      cursor-pointer rounded border-2 border-solid whitespace-pre-wrap hover:transition
     ${color && color} ${backgroundColor && backgroundColor} ${buttonClasses} ${activeClasses}`,
 }: {
-  color: string;
-  backgroundColor: string;
-  text: string;
+  color: string | undefined;
+  backgroundColor: string | undefined;
+  text: string | undefined;
   clickFunction: (e: MouseEvent<HTMLButtonElement>) => void;
-  id: string;
-  name: string;
-  className: string;
-  activeClasses: string;
-  type: string;
+  id: string | undefined;
+  name: string | undefined;
+  className: string | undefined;
+  activeClasses: string | undefined;
+  type: string | undefined;
   showText: boolean;
   reverse: boolean;
-  buttonClasses: string;
-  svgClasses: string;
+  buttonClasses: string | undefined;
+  svgClasses: string | undefined;
 }) {
   const svg = getSvg(type, svgClasses);
   const content = getContent(reverse, showText, text, svg);

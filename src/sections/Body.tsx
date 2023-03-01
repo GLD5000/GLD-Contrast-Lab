@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import InputTabs from '../elements/InputTabs';
 import ColourBlocks from './body/ColourBlocks';
 import TextInput from './body/TextInput';
+import Banner from './header/Banner';
 
 function processHexString(hex: string) {
   if (hex[0] !== '#' || hex.length < 2 || hex.slice(1).search(/#|[^0-9a-fA-F]/) > -1) return '';
@@ -36,7 +37,7 @@ function processText(text: string, limit: number) {
 }
 function getTab(tab: string, setText: Dispatch<SetStateAction<string>>, text: string, textArray: string[]) {
   if (tab === 'add-colours') {
-    return <TextInput text={text} setText={setText} />;
+    return <TextInput text={text} setText={setText} textArray={textArray} />;
   }
   if (tab === 'compare-matrix') {
     return <ColourBlocks textArray={textArray} />;
@@ -45,7 +46,8 @@ function getTab(tab: string, setText: Dispatch<SetStateAction<string>>, text: st
   return null;
 }
 export default function Body() {
-  const [tab, setTab] = useState('none');
+  const [tab, setTab] = useState('add-colours');
+  const [showBanner, setShowBanner] = useState(true);
 
   const [text, setText] = useState(
     '#fafafa\r#f4f4f5\r#e4e4e7\r#d4d4d8\r#a1a1aa\r#71717a\r#52525b\r#3f3f46\r#27272a\r#18181b',
@@ -54,8 +56,9 @@ export default function Body() {
   const textArray: Array<string> = processText(text, limit);
   const returnSection = getTab(tab, setText, text, textArray);
   return (
-    <main id="body-container" className=" grid  flex-grow justify-items-center  pt-2  align-middle ">
-      <section className="flex h-full w-body min-w-body max-w-body flex-col gap-8 bg-neutral-100 p-12 dark:bg-neutral-800 ">
+    <main id="body-container" className=" grid w-screen  flex-grow justify-items-center  pt-2  align-middle ">
+      <section className="flex h-full w-body min-w-body max-w-body flex-col gap-8 bg-neutral-100 dark:bg-neutral-800 ">
+        {showBanner && <Banner setShowBanner={setShowBanner} />}
         <InputTabs tab={tab} setTab={setTab} />
         {returnSection}
       </section>

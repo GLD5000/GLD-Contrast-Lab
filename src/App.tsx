@@ -18,7 +18,7 @@ function App() {
   return (
     <section id="theme-wrapper" className={`${colourTheme} `}>
       <section className="flex h-screen flex-col overflow-x-hidden overflow-y-scroll border-borderLight text-textLight dark:border-borderLight dark:bg-neutral-900 dark:text-textDark ">
-        <Header title="DevTemplate" toggleColourTheme={toggleColourTheme} colourTheme={colourTheme} />
+        <Header title="Contrast Checker" toggleColourTheme={toggleColourTheme} colourTheme={colourTheme} />
         <Body />
         <Footer />
       </section>
