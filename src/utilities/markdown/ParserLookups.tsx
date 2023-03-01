@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 
-import Link from '../../elements/Link';
+import LinkMarkdown from '../../elements/LinkMarkdown';
 import Bold from '../../elements/Bold';
 import Italic from '../../elements/Italic';
 import BlockQuote from '../../elements/BlockQuote';
@@ -79,7 +79,7 @@ export function wrapText({
 }) {
   const newKey = `x${index}`;
   const typeHandler: { [elemName: string]: ReactElement } = {
-    link: <Link key={`l${newKey}`} content={content} />,
+    link: <LinkMarkdown key={`l${newKey}`} content={content} />,
     singleQuote: <InlineQuote key={`span${newKey}`} content={content} type="single" />,
     doubleQuote: <InlineQuote key={`span${newKey}`} content={content} type="double" />,
     codeSpan: <CodeSpan key={`codeSpan${newKey}`} content={content} />,

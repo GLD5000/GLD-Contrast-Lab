@@ -154,7 +154,7 @@ function wrapLists(
           const list = wasOrderedList ? (
             <Ol key={`${key}-Ol`} content={listItemArray} />
           ) : (
-            <Ul key={`${key}-Ul`} content={listItemArray} />
+            <Ul key={`${key}-Ul`} content={listItemArray} className="list-[square] pl-4" />
           );
           returnArray.push(list);
           listType = type;
@@ -167,7 +167,7 @@ function wrapLists(
         if (listType !== type && listItemArray.length > 0) {
           const key = index;
 
-          returnArray.push(<Ul key={`Ol${key}`} content={listItemArray} />);
+          returnArray.push(<Ul key={`Ol${key}`} content={listItemArray} className="list-[square] pl-4" />);
           listItemArray = [];
         }
         listType = type;
@@ -192,7 +192,7 @@ function wrapLists(
           listType === 'O' ? (
             <Ol key={`Ol&${key}`} content={listItemArray} />
           ) : (
-            <Ul key={`Ul&${key}`} content={listItemArray} />
+            <Ul key={`Ul&${key}`} content={listItemArray} className="list-[square] pl-4" />
           );
         returnArray.push(list);
         listItemArray = [];
