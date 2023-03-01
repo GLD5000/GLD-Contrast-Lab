@@ -28,8 +28,8 @@ export const autoContrast = {
     const resultingHex = colourSpace.convertSrgbToHex(resultingSrgb);
     const resultingLuminance = luminance.convertSrgbToLuminance(resultingSrgb);
     const resultingContrastRatio = contrast.getContrastRatio2Dp([originalLuminance, resultingLuminance]);
-    if (targetCr === resultingContrastRatio || resultingHex === '#000000' || resultingHex === '#ffffff')
-      return { resultingHex, resultingContrastRatio };
+    const resultsAreGood = autoContrast.testResults(resultingHex, resultingContrastRatio, targetCr);
+    if (resultsAreGood) return { resultingHex, resultingContrastRatio };
     return autoContrast.adjustLuminanceFine(targetCr, originalLuminance, resultingSrgb);
   },
   multiplyLuminanceSrgb(array: Array<number>, factor: number) {
@@ -105,8 +105,8 @@ export const autoContrast = {
       equal = currentContrast === targetContrast;
     }
     let { resultingContrastRatio, resultingHex } = autoContrast.getResults(currentSrgb, originalLuminance);
-    const isEqualContrast = resultingContrastRatio === targetContrast;
-    if (isEqualContrast) return { resultingContrastRatio, resultingHex };
+    const resultsAreGood = autoContrast.testResults(resultingHex, resultingContrastRatio, targetContrast);
+    if (resultsAreGood) return { resultingContrastRatio, resultingHex };
     ({ resultingContrastRatio, resultingHex } = autoContrast.adjustLuminanceFine(
       targetContrast,
       originalLuminance,
@@ -155,7 +155,13 @@ export const autoContrast = {
     }
     if (loopLimiter > 15) console.log('loopLimiter:', loopLimiter);
     const { resultingContrastRatio, resultingHex } = autoContrast.getResults(currentSrgb, originalLuminance);
-    return { resultingContrastRatio, resultingHex };
+    const resultsAreGood = autoContrast.testResults(resultingHex, resultingContrastRatio, targetContrast);
+    if (resultsAreGood) return { resultingContrastRatio, resultingHex };
+    return { resultingContrastRatio, resultingHex, resultsAreGood };
+  },
+  testResults(hex: string, contrastA: number, contrastB: number) {
+    const boolean = hex === '#000000' || hex === '#ffffff' || contrastA === contrastB;
+    return boolean;
   },
 };
 
@@ -179,8 +185,8 @@ export default function setToTargetContrast(
 
   const resultingSrgb = autoContrast.getResultingSrgb(originalLuminance, targetLuminance, originalSrgb);
   const { resultingContrastRatio, resultingHex } = autoContrast.getResults(resultingSrgb, originalLuminance);
-
-  if (resultingHex === '#000000' || resultingHex === '#ffffff' || resultingContrastRatio === bufferedTargetContrast) {
+  const resultsAreGood = autoContrast.testResults(resultingHex, resultingContrastRatio, targetContrast);
+  if (resultsAreGood) {
     return { resultingHex, resultingContrastRatio };
   }
   return autoContrast.adjustLuminanceWeighted(
