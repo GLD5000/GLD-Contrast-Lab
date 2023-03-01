@@ -1,7 +1,7 @@
 import { MouseEvent } from 'react';
 
 export default function TabButton({
-  backgroundColor,
+  backgroundColor = undefined,
   text = 'Add',
   clickFunction,
   id,
@@ -11,7 +11,7 @@ export default function TabButton({
   conditionalClasses,
   currentTab,
 }: {
-  backgroundColor: string;
+  backgroundColor: string | undefined;
   text: string;
   clickFunction: (e: MouseEvent<HTMLButtonElement>) => void;
   id: string;
@@ -31,7 +31,7 @@ export default function TabButton({
       id={id}
       name={name}
       onClick={clickHandler}
-      className={`rounded-none border-2 border-transparent py-1 px-2 transition delay-100 duration-200 ease-in-out active:bg-slate-300 ${activeClasses} ${className} ${
+      className={`rounded-none border-2 border-transparent py-1 px-2  hover:transition active:bg-slate-300 ${activeClasses} ${className} ${
         backgroundColor && backgroundColor
       } ${active && conditionalClasses}`}
     >

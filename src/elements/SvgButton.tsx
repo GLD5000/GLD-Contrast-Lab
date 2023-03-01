@@ -75,7 +75,7 @@ export default function SvgButton({
    items-center 
    hover:border-current
    grid     
-     cursor-pointer rounded border-2 border-solid whitespace-pre-wrap transition delay-100 duration-200 ease-in-out
+     cursor-pointer rounded border-2 border-solid whitespace-pre-wrap hover:transition
     ${color && color} ${backgroundColor && backgroundColor} ${buttonClasses} ${activeClasses}`,
 }: {
   color: string;

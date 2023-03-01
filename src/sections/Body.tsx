@@ -1,6 +1,7 @@
-import { FormEvent, useState } from 'react';
-import TextArea from '../elements/TextArea';
+import { Dispatch, SetStateAction, useState } from 'react';
+import InputTabs from '../elements/InputTabs';
 import ColourBlocks from './body/ColourBlocks';
+import TextInput from './body/TextInput';
 
 function processHexString(hex: string) {
   if (hex[0] !== '#' || hex.length < 2 || hex.slice(1).search(/#|[^0-9a-fA-F]/) > -1) return '';
@@ -33,38 +34,30 @@ function processText(text: string, limit: number) {
   if (backgroundColours.length > limit) return backgroundColours.slice(0, limit);
   return backgroundColours;
 }
+function getTab(tab: string, setText: Dispatch<SetStateAction<string>>, text: string, textArray: string[]) {
+  if (tab === 'add-colours') {
+    return <TextInput text={text} setText={setText} />;
+  }
+  if (tab === 'compare-matrix') {
+    return <ColourBlocks textArray={textArray} />;
+  }
+
+  return null;
+}
 export default function Body() {
-  const [text, setText] = useState(`#fafafa
-  #f4f4f5
-  #e4e4e7
-  #d4d4d8
-  #a1a1aa
-  #71717a
-  #52525b
-  #3f3f46
-  #27272a
-  #18181b`);
+  const [tab, setTab] = useState('none');
+
+  const [text, setText] = useState(
+    '#fafafa\r#f4f4f5\r#e4e4e7\r#d4d4d8\r#a1a1aa\r#71717a\r#52525b\r#3f3f46\r#27272a\r#18181b',
+  );
   const limit = 12;
   const textArray: Array<string> = processText(text, limit);
+  const returnSection = getTab(tab, setText, text, textArray);
   return (
-    <main id="body-container" className=" grid  flex-grow  justify-items-center  pt-2  align-middle">
-      <section className="flex h-fit w-body min-w-body max-w-body flex-col justify-center gap-8 p-12 ">
-        <label className="flex flex-col ">
-          Colours to compare:
-          <TextArea
-            id="code-input"
-            placeholder="Copy or write text in here..."
-            name="codeInput"
-            className=" h-64 shrink-0 grow resize-y overflow-auto rounded border border-inherit bg-inherit text-inherit placeholder:text-gray-300"
-            value={text}
-            onInput={(e: FormEvent<HTMLTextAreaElement>): void => {
-              const { value: targetValue } = e.currentTarget;
-              setText(targetValue);
-            }}
-          />
-        </label>
-
-        <ColourBlocks textArray={textArray} />
+    <main id="body-container" className=" grid  flex-grow justify-items-center  pt-2  align-middle ">
+      <section className="flex h-full w-body min-w-body max-w-body flex-col gap-8 bg-neutral-100 p-12 dark:bg-neutral-800 ">
+        <InputTabs tab={tab} setTab={setTab} />
+        {returnSection}
       </section>
     </main>
   );

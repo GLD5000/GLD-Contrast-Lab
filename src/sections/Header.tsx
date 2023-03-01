@@ -23,12 +23,12 @@ export default function Header({
           <div className="relative flex h-16 flex-wrap items-center justify-center gap-4 py-2">
             <Button
               backgroundColor=""
-              text={colourTheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              text={colourTheme === 'dark' ? 'Light Mode' : 'Dark Mode'}
               clickFunction={toggleColourTheme}
               id="colour-theme-button"
               name="Dark Mode Button"
               className="text-xs"
-              activeClasses=""
+              activeClasses="dark:hover:bg-neutral-100 dark:hover:text-neutral-900 hover:text-neutral-50 hover:bg-neutral-800"
               conditionalClasses=""
             />
           </div>

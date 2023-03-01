@@ -54,7 +54,7 @@ export default function CodeBox({
         showText
         reverse={false}
         buttonClasses="border-transparent sticky left-0"
-        className=" sticky left-0 bottom-0 flex w-full items-center  justify-center rounded-none border-2 border-transparent text-neutral-200 transition delay-100 duration-200 ease-in-out hover:border-2 hover:border-current active:bg-slate-600 dark:bg-neutral-900"
+        className=" sticky left-0 bottom-0 flex w-full items-center  justify-center rounded-none border-2 border-transparent text-neutral-200 hover:border-2 hover:border-current hover:transition active:bg-slate-600 dark:bg-neutral-900"
         // marginLeft='auto'
         svgClasses="stroke-1 fill-neutral-900 stroke-neutral-200"
         color=""
