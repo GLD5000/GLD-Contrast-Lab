@@ -116,26 +116,15 @@ function processHexString(hex: string) {
   return modifiedHex;
 }
 
-function hexReducer(
-  acc: { processedText: string; processedArray: string[] },
-  curr: string,
-  index: number,
-  array: string[],
-) {
+function hexReducer(acc: { processedText: string; processedArray: string[] }, curr: string) {
   const processedHex = processHexString(curr);
   if (processedHex.length === 7 && processedHex[0] === '#') {
     acc.processedArray.push(processedHex);
-    sortConditionally();
     return acc;
   }
 
   acc.processedText += acc.processedText.length > 0 ? ` ${curr}` : curr;
-  sortConditionally();
   return acc;
-
-  function sortConditionally() {
-    if (index === array.length - 1) acc.processedArray.sort();
-  }
 }
 
 function processText(text: string | undefined) {

@@ -40,7 +40,7 @@ function createColourBlockArrays(
   clicked: boolean,
   setClicked: Dispatch<SetStateAction<boolean>>,
 ) {
-  return [...coloursArray].map((backgroundColour, index, array) => {
+  return [...coloursArray].sort().map((backgroundColour, index, array) => {
     const { keyA, rowArray } = getBlockRow(backgroundColour, index, array, clicked, setClicked);
     return (
       <div
