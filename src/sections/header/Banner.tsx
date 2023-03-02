@@ -26,8 +26,8 @@ export default function Banner({ setShowBanner }: { setShowBanner: Dispatch<SetS
           type="delete"
           showText={false}
           reverse={false}
-          buttonClasses="p2 items-center rounded hover:transition border-transparent hover:border-current self-start text-current"
-          svgClasses={undefined}
+          buttonClasses="p2 relative aspect-square h-12 items-center rounded hover:transition border-transparent hover:border-current self-start text-current"
+          svgClasses="stroke-current fill-none stroke-2 h-full w-full"
         />
       </div>
     </section>

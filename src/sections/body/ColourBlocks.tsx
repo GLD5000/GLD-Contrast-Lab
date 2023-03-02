@@ -46,7 +46,7 @@ function createColourBlockArrays(
       <div
         key={`${backgroundColour}-${keyA}`}
         style={{ backgroundColor: backgroundColour }}
-        className="flex flex-row flex-wrap rounded-none"
+        className="flex flex-row flex-wrap rounded-none p-8"
       >
         {rowArray}
       </div>

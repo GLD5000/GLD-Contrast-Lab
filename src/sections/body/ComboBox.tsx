@@ -14,7 +14,7 @@ export default function ComboBox() {
 
   const list = getList();
   return (
-    <div className="self-center text-2xl">
+    <div className="self-center p-8 text-2xl">
       <label htmlFor="code-input">
         Colours <Span className="text-neutral-500" content="(separate with spaces or linebreaks)" />
       </label>

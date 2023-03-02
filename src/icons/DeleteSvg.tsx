@@ -1,6 +1,6 @@
 export default function DeleteSvg({ classes = 'stroke-current fill-none stroke-1' }) {
   return (
-    <div className="pointer-events-none m-1 h-6 w-6">
+    <div className="pointer-events-none h-full w-full p-1">
       <svg id="add-svg" role="img" aria-label="Add Section" height="100%" width="100%" viewBox="0 0 16 16">
         <path
           d="M 2,2
