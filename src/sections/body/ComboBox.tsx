@@ -14,9 +14,9 @@ export default function ComboBox() {
 
   const list = getList(colourSet);
   return (
-    <div>
+    <div className="self-center text-2xl">
       {limit}
-      <label className="self-center text-2xl" htmlFor="code-input">
+      <label htmlFor="code-input">
         Colours <Span className="text-neutral-500" content="(separate with spaces or linebreaks)" />
       </label>
       <div className="flex flex-row flex-wrap gap-2">
