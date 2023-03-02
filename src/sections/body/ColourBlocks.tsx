@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import ColourBlock from './ColourBlock';
 import autoTextColourFromHex from '../../utilities/colour/autoTextColour';
 import { getContrastRatioFromHex, contrast } from '../../utilities/colour/contrastRatio';
+import { useColourInputContext } from '../../contexts/ColourInputProvider';
 
 function getBlockRow(
   backgroundColour: string,
@@ -35,11 +36,11 @@ function getBlockRow(
 }
 
 function createColourBlockArrays(
-  coloursArray: Array<string>,
+  coloursArray: Set<string>,
   clicked: boolean,
   setClicked: Dispatch<SetStateAction<boolean>>,
 ) {
-  return coloursArray.map((backgroundColour, index, array) => {
+  return [...coloursArray].map((backgroundColour, index, array) => {
     const { keyA, rowArray } = getBlockRow(backgroundColour, index, array, clicked, setClicked);
     return (
       <div
@@ -53,13 +54,14 @@ function createColourBlockArrays(
   });
 }
 
-function getColourBlocks(textArray: Array<string>, clicked: boolean, setClicked: Dispatch<SetStateAction<boolean>>) {
-  const returnArrays = createColourBlockArrays(textArray, clicked, setClicked);
+function getColourBlocks(colourSet: Set<string>, clicked: boolean, setClicked: Dispatch<SetStateAction<boolean>>) {
+  const returnArrays = createColourBlockArrays(colourSet, clicked, setClicked);
   return <div className=" w-fit self-center overflow-clip rounded-xl ">{returnArrays}</div>;
 }
-export default function ColourBlocks({ textArray }: { textArray: Array<string> }) {
+export default function ColourBlocks() {
+  const { colourSet } = useColourInputContext();
   const [clicked, setClicked] = useState(false);
-  if (textArray[0] === undefined) return null;
-  const colourBlocks = getColourBlocks(textArray, clicked, setClicked);
+  if ([...colourSet][0] === undefined) return null;
+  const colourBlocks = getColourBlocks(colourSet, clicked, setClicked);
   return colourBlocks;
 }
