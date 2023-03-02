@@ -31,6 +31,9 @@ module.exports = {
         backgroundDark: '#1B1B1B',
         backgroundLight: '#343434',
       },
+      boxShadow: {
+        'bottom': '1px 3px 0px -2px rgba(0, 0, 0, 1)',
+      }
     },
   },
   plugins: [],
