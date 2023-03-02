@@ -12,7 +12,7 @@ export default function TextArea({
   placeholder: string;
   name: string;
   className: string;
-  value: string;
+  value: string | undefined;
   onInput: (e: FormEvent<HTMLTextAreaElement>) => void;
 }) {
   return (
@@ -21,9 +21,7 @@ export default function TextArea({
       placeholder={placeholder}
       name={name}
       className={className}
-      //   rows={7}
-      // cols='70'
-      onInput={onInput}
+      onChange={onInput}
       value={value}
       wrap="hard"
     />

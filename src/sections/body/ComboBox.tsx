@@ -5,17 +5,16 @@ import Span from '../../elements/Span';
 import TextArea from '../../elements/TextArea';
 import InlineList from './InlineList';
 
-function getList(colours: Set<string>) {
-  return <InlineList listSet={colours} />;
+function getList() {
+  return <InlineList />;
 }
 
 export default function ComboBox() {
-  const { textInput, colourSet, limit, dispatchColourInput } = useColourInputContext();
+  const { textInput, dispatchColourInput } = useColourInputContext();
 
-  const list = getList(colourSet);
+  const list = getList();
   return (
     <div className="self-center text-2xl">
-      {limit}
       <label htmlFor="code-input">
         Colours <Span className="text-neutral-500" content="(separate with spaces or linebreaks)" />
       </label>
@@ -29,6 +28,7 @@ export default function ComboBox() {
           value={textInput}
           onInput={(e: FormEvent<HTMLTextAreaElement>): void => {
             const { value: targetValue } = e.currentTarget;
+            console.log(targetValue);
             dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: targetValue } });
           }}
         />

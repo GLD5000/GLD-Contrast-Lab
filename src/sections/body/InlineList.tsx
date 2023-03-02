@@ -1,18 +1,28 @@
-import { MouseEvent } from 'react';
+import { MouseEvent, Dispatch } from 'react';
+import { useColourInputContext } from '../../contexts/ColourInputProvider';
 import SpicyLi from '../../elements/SpicyLi';
 import Ul from '../../elements/Ul';
 import autoTextColourFromHex from '../../utilities/colour/autoTextColour';
 
-function getContent(listArray: string[]) {
+function getContent(
+  listArray: string[],
+  dispatchColourInput: Dispatch<{
+    type: string;
+    payload: Partial<{
+      textInput: string | undefined;
+      colourSet: Set<string>;
+      limit: number;
+      tag: string;
+    }>;
+  }>,
+) {
   return listArray.map((name, index) => {
     const uniqueKey = `${name}-${index}`;
     // add clickHandler
     function clickHandler(e: MouseEvent<HTMLButtonElement>) {
-      console.log('e:', e);
+      const hex = e.currentTarget.id.split('-')[0];
+      dispatchColourInput({ type: 'CLOSE_TAG', payload: { tag: hex } });
     }
-    // add close button
-    // Close button updates array
-    // change list to set
     return (
       <SpicyLi
         key={uniqueKey}
@@ -26,8 +36,9 @@ function getContent(listArray: string[]) {
   });
 }
 
-export default function InlineList({ listSet }: { listSet: Set<string> }) {
-  const content = getContent([...listSet]);
+export default function InlineList() {
+  const { colourSet, dispatchColourInput } = useColourInputContext();
+  const content = getContent([...colourSet], dispatchColourInput);
   const className = 'list-none flex flex-row flex-wrap ';
   return <Ul content={content} className={className} />;
 }

@@ -20,8 +20,8 @@ export default function SpicyLi({
       <SvgButton
         text={undefined}
         clickFunction={clickFunction}
-        id={`close-btn-${id}`}
-        name={`close-btn-${id}`}
+        id={`${id}-close-btn`}
+        name={`${id}-close-btn`}
         className=""
         type="delete"
         showText={false}

@@ -1,84 +1,95 @@
-import { createContext, ReactNode, useContext, useReducer, Dispatch } from 'react';
+import { createContext, ReactNode, useContext, useReducer, Dispatch, useEffect } from 'react';
 
 const initialiserA: {
-  textInput: string;
+  textInput: string | undefined;
   colourSet: Set<string>;
-  limit: number;
+
   dispatchColourInput: Dispatch<{
     type: string;
     payload: Partial<{
-      textInput: string;
+      textInput: string | undefined;
       colourSet: Set<string>;
-      limit: number;
     }>;
   }>;
 } = {
   textInput: '',
   colourSet: new Set(''),
-  limit: 14,
   dispatchColourInput: () => undefined,
 };
 
 const initialiserB: {
-  textInput: string;
+  textInput: string | undefined;
   colourSet: Set<string>;
-  limit: number;
 } = {
   textInput: '',
   colourSet: new Set(''),
-  limit: 14,
 };
 
 function useData() {
   //    '#fafafa\r#f4f4f5\r#e4e4e7\r#d4d4d8\r#a1a1aa\r#71717a\r#52525b\r#3f3f46\r#27272a\r#18181b',
 
-  const [{ textInput, colourSet, limit }, dispatchColourInput] = useReducer(tagReducer, initialiserB);
-  // dispatchColourInput({ type: 'INIT', payload: '' });
+  const [{ textInput, colourSet }, dispatchColourInput] = useReducer(tagReducer, initialiserB);
+
+  useEffect(() => {
+    dispatchColourInput({ type: 'INIT', payload: {} });
+  }, []);
+
   return {
     textInput,
     colourSet,
-    limit,
+
     dispatchColourInput,
   };
   function tagReducer(
-    state: { textInput: string; colourSet: Set<string>; limit: number },
-    action: { type: string; payload: Partial<{ textInput: string; colourSet: Set<string>; limit: number }> },
-  ): { textInput: string; colourSet: Set<string>; limit: number } {
+    state: { textInput: string | undefined; colourSet: Set<string> },
+    action: {
+      type: string;
+      payload: Partial<{
+        textInput: string | undefined | undefined;
+        colourSet: Set<string>;
+
+        tag: string;
+      }>;
+    },
+  ): { textInput: string | undefined; colourSet: Set<string> } {
     switch (action.type) {
       case 'INIT': {
+        const { processedText, processedArray } = processText(
+          '#fafafa\r#f4f4f5\r#e4e4e7\r#d4d4d8\r#a1a1aa\r#71717a\r#52525b\r#3f3f46\r#27272a\r#18181b',
+        );
         const returnValue = {
-          textInput: '',
-          colourSet: processText(
-            '#fafafa\r#f4f4f5\r#e4e4e7\r#d4d4d8\r#a1a1aa\r#71717a\r#52525b\r#3f3f46\r#27272a\r#18181b',
-            14,
-          ),
-          limit: 14,
+          textInput: processedText,
+          colourSet: new Set(processedArray),
         };
-        console.log('returnValue:', returnValue);
         return returnValue;
       }
       case 'UPDATE_TEXT': {
-        if (action.payload.textInput) {
-          const returnValue = { ...state, textInput: action.payload.textInput };
-          console.log('returnValue:', returnValue);
-          return returnValue;
-        }
-        return state;
-      }
-      case 'CLEAR_TAGS': {
-        const newSet = new Set(...state.colourSet);
-        colourSet.clear();
-        const returnValue = { ...state, colourSet: newSet };
-        console.log('returnValue:', returnValue);
+        const { processedText, processedArray } = processText(action.payload.textInput);
+        const returnValue = {
+          textInput: processedText,
+          colourSet: new Set([...state.colourSet, ...processedArray]),
+        };
         return returnValue;
       }
+      case 'CLEAR_TAGS': {
+        const newSet = new Set(state.colourSet);
+        colourSet.clear();
+        const returnValue = { ...state, colourSet: newSet };
+        return returnValue;
+      }
+      case 'CLOSE_TAG': {
+        const newSet = new Set(state.colourSet);
+        if (typeof action.payload.tag === 'string' && newSet.has(action.payload.tag)) newSet.delete(action.payload.tag);
+        const returnValue = { ...state, colourSet: newSet };
+        return returnValue;
+      }
+
       case 'TOGGLE_TAG':
       default: {
-        const newSet = new Set(...state.colourSet);
-        if (typeof action.payload === 'string' && colourSet.has(action.payload)) colourSet.delete(action.payload);
-        if (typeof action.payload === 'string' && !colourSet.has(action.payload)) colourSet.add(action.payload);
+        const newSet = new Set(state.colourSet);
+        if (typeof action.payload.tag === 'string' && newSet.has(action.payload.tag)) newSet.delete(action.payload.tag);
+        if (typeof action.payload.tag === 'string' && !newSet.has(action.payload.tag)) newSet.add(action.payload.tag);
         const returnValue = { ...state, colourSet: newSet };
-        console.log('returnValue:', returnValue);
         return returnValue;
       }
     }
@@ -92,9 +103,8 @@ export default function ColourInputProvider({ children }: { children: ReactNode 
   return <ColourInput.Provider value={data}>{children}</ColourInput.Provider>;
 }
 
-// processText(text, limit, setColourSet);
 function processHexString(hex: string) {
-  if (hex[0] !== '#' || hex.length < 2 || hex.slice(1).search(/#|[^0-9a-fA-F]/) > -1) return '';
+  if (hex[0] !== '#' || hex.length < 2 || hex.slice(1).search(/#|[^0-9a-fA-F]/) > -1) return hex;
   let modifiedHex = hex.length > 7 ? hex.slice(0, 7) : hex;
   if (hex.length < 5) {
     const characters = hex.slice(1);
@@ -106,23 +116,48 @@ function processHexString(hex: string) {
   return modifiedHex;
 }
 
-function hexReducer(acc: Array<string>, curr: string) {
+function hexReducer(
+  acc: { processedText: string; processedArray: string[] },
+  curr: string,
+  index: number,
+  array: string[],
+) {
   const processedHex = processHexString(curr);
-  if (processedHex.length === 7) acc.push(processedHex);
+  if (processedHex.length === 7 && processedHex[0] === '#') {
+    acc.processedArray.push(processedHex);
+    sortConditionally();
+    return acc;
+  }
+
+  acc.processedText += acc.processedText.length > 0 ? ` ${curr}` : curr;
+  sortConditionally();
   return acc;
+
+  function sortConditionally() {
+    if (index === array.length - 1) acc.processedArray.sort();
+  }
 }
 
-function limitArray(inputArray: string[], limit: number) {
-  return inputArray.length > limit ? inputArray.slice(0, limit) : inputArray;
-}
-
-function processText(text: string, limit: number) {
-  const backgroundColoursArray = limitArray(
-    text
-      .split(/[ \r\n,]+/)
-      .reduce(hexReducer, [])
-      .sort(),
-    limit,
-  );
-  return new Set(backgroundColoursArray);
+function processText(text: string | undefined) {
+  if (text === undefined || text.search(/[ \r\n,]+/) === -1) {
+    console.log(text);
+    return { processedText: text, processedArray: [] };
+  }
+  const shouldSkipLastElement = text[text.length - 1].search(/[ \r\n,]/) === -1;
+  console.log('shouldSkipLastElement:', shouldSkipLastElement);
+  const splitText = text.split(/[ \r\n,]+/);
+  if (shouldSkipLastElement) {
+    const slicedArray = splitText.slice(0, -1);
+    const { processedText, processedArray } = slicedArray.reduce(hexReducer, {
+      processedText: '',
+      processedArray: [],
+    });
+    const suffixedText =
+      processedText.length > 0 ? `${processedText} ${splitText.at(-1)}` : `${processedText}${splitText.at(-1)}`;
+    return { processedText: suffixedText, processedArray };
+  }
+  return splitText.reduce(hexReducer, {
+    processedText: '',
+    processedArray: [],
+  });
 }
