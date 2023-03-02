@@ -58,8 +58,6 @@ function getContent(reverse: boolean, showText: boolean, text: string, svg: Reac
 }
 
 export default function SvgButton({
-  color = 'current',
-  backgroundColor = 'transparent',
   text = 'Add',
   clickFunction,
   id,
@@ -67,25 +65,20 @@ export default function SvgButton({
   type = 'up',
   showText = true,
   reverse = false,
-  activeClasses = `active:bg-slate-600 `,
   buttonClasses = `grid-cols-frAutoFr w-full h-full 
   `,
   svgClasses = 'stroke-current fill-none stroke-1',
   className = `px-2 py-1
-   items-center 
    hover:border-current
    grid     
-     cursor-pointer rounded border-2 border-solid whitespace-pre-wrap hover:transition
-    ${color && color} ${backgroundColor && backgroundColor} ${buttonClasses} ${activeClasses}`,
+      rounded border-2 border-solid whitespace-pre-wrap hover:transition
+    `,
 }: {
-  color: string | undefined;
-  backgroundColor: string | undefined;
   text: string | undefined;
   clickFunction: (e: MouseEvent<HTMLButtonElement>) => void;
   id: string | undefined;
   name: string | undefined;
   className: string | undefined;
-  activeClasses: string | undefined;
   type: string | undefined;
   showText: boolean;
   reverse: boolean;
@@ -101,7 +94,7 @@ export default function SvgButton({
       id={id}
       name={name}
       onClick={clickFunction}
-      className={className.replaceAll(/[\s]+/g, ' ')}
+      className={`cursor-pointer items-center ${className.replaceAll(/[\s]+/g, ' ')} ${buttonClasses}`}
       aria-label={name}
     >
       {content}

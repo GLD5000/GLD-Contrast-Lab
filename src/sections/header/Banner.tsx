@@ -18,18 +18,15 @@ export default function Banner({ setShowBanner }: { setShowBanner: Dispatch<SetS
         />
 
         <SvgButton
-          color="text-current"
-          backgroundColor={undefined}
           text="Close"
           clickFunction={handleBannerClick}
           id="close-banner"
           name="close-banner"
           className={undefined}
-          activeClasses={undefined}
           type="delete"
           showText={false}
           reverse={false}
-          buttonClasses="p2 items-center rounded hover:transition border-transparent hover:border-current self-start"
+          buttonClasses="p2 items-center rounded hover:transition border-transparent hover:border-current self-start text-current"
           svgClasses={undefined}
         />
       </div>

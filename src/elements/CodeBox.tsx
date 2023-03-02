@@ -57,11 +57,8 @@ export default function CodeBox({
         className=" sticky left-0 bottom-0 flex w-full items-center  justify-center rounded-none border-2 border-transparent text-neutral-200 hover:border-2 hover:border-current hover:transition active:bg-slate-600 dark:bg-neutral-900"
         // marginLeft='auto'
         svgClasses="stroke-1 fill-neutral-900 stroke-neutral-200"
-        color=""
-        backgroundColor=""
         id=""
         name=""
-        activeClasses=""
       />
     </code>
   );
