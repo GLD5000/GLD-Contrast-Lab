@@ -3,6 +3,7 @@ import ColourBlock from './ColourBlock';
 import autoTextColourFromHex from '../../utilities/colour/autoTextColour';
 import { getContrastRatioFromHex, contrast } from '../../utilities/colour/contrastRatio';
 import { useColourInputContext } from '../../contexts/ColourInputProvider';
+import Button from '../../elements/Button';
 
 function getBlockRow(
   backgroundColour: string,
@@ -56,7 +57,24 @@ function createColourBlockArrays(
 
 function getColourBlocks(colourSet: Set<string>, clicked: boolean, setClicked: Dispatch<SetStateAction<boolean>>) {
   const returnArrays = createColourBlockArrays(colourSet, clicked, setClicked);
-  return <div className=" w-fit self-center overflow-clip rounded-xl ">{returnArrays}</div>;
+  const buttonLabel = clicked ? 'Contrast Ratio' : 'Contrast Rating';
+  return (
+    <div className=" w-fit self-center overflow-clip rounded-xl ">
+      <Button
+        backgroundColor=""
+        text={buttonLabel}
+        clickFunction={() => {
+          setClicked((click) => !click);
+        }}
+        id=""
+        name=""
+        className=""
+        activeClasses=""
+        conditionalClasses=""
+      />
+      {returnArrays}
+    </div>
+  );
 }
 export default function ColourBlocks() {
   const { colourSet } = useColourInputContext();
