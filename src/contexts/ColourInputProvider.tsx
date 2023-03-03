@@ -55,7 +55,7 @@ function useData() {
     switch (action.type) {
       case 'INIT': {
         const { processedText, processedArray } = processText(
-          '#fafafa\r#f4f4f5\r#e4e4e7\r#d4d4d8\r#a1a1aa\r#71717a\r#52525b\r#3f3f46\r#27272a\r#18181b ',
+          '#fff1f2\r#ffe4e6\r#fecdd3\r#fda4af\r#fb7185\r#f43f5e\r#e11d48\r#be123c\r#9f1239\r#881337\r',
         );
         const returnValue = {
           textInput: processedText,
