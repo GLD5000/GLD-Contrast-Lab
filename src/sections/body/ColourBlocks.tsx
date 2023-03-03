@@ -64,7 +64,7 @@ function getColourBlocks(
   const ratioLabel = showRatio ? 'Contrast Ratio' : 'Contrast Rating';
   const ratingRatio = showRatio ? 'Ratios' : 'Ratings';
   const poorLabel = showPoor ? `All ${ratingRatio}` : `Usable ${ratingRatio}`;
-  const limitLabel = `${limit} Colours`;
+  const limitLabel = `Up to ${limit} Colours`;
   function handleClickRatio() {
     dispatchColourBlocks({ showRatio: !showRatio });
   }
@@ -84,15 +84,14 @@ function getColourBlocks(
   return (
     <div className=" grid w-full  justify-center self-center overflow-auto  rounded-none">
       <div className="flex flex-row flex-wrap justify-center">
-        <button type="button" onClick={handleClickLimit} className="m-2 rounded border border-current p-2 text-current">
-          {limitLabel}
-        </button>
-
         <button type="button" onClick={handleClickRatio} className="m-2 rounded border border-current p-2 text-current">
           {ratioLabel}
         </button>
         <button type="button" onClick={handleClickPoor} className="m-2 rounded border border-current p-2 text-current">
           {poorLabel}
+        </button>
+        <button type="button" onClick={handleClickLimit} className="m-2 rounded border border-current p-2 text-current">
+          {limitLabel}
         </button>
       </div>
       <div className="flex h-fit w-fit gap-2 overflow-hidden rounded-xl">{returnArrays}</div>

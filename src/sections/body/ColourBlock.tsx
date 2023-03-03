@@ -9,7 +9,6 @@ function getContent(
   contrastRating: string,
   autoColour: boolean,
 ) {
-  // if (contrastRatio < 3) return null;
   if (autoColour)
     return <Span className="underline decoration-current underline-offset-2" content={backgroundColour.slice(1)} />;
   return <H3 content={showRatio ? contrastRatio : contrastRating} />;
@@ -29,14 +28,16 @@ export default function ColourBlock({
   contrastRatio: number;
 }) {
   const { showRatio, showPoor, dispatchColourBlocks } = useColourBlocksContext();
+  const poorContrast = contrastRatio < 3;
   if (!backgroundColour || !textColour) return null;
   function handleClick() {
-    dispatchColourBlocks({ showRatio: !showRatio });
+    const dispatchObject = poorContrast ? { showPoor: !showPoor } : { showRatio: !showRatio };
+    dispatchColourBlocks(dispatchObject);
   }
   const style: { [elemName: string]: string } = {
     backgroundColor: backgroundColour,
-    color: contrastRatio < 3 && showPoor === false ? 'transparent' : textColour,
-    borderColor: autoColour || contrastRatio < 3 ? 'transparent' : textColour,
+    color: poorContrast && showPoor === false ? 'transparent' : textColour,
+    borderColor: autoColour || poorContrast ? 'transparent' : textColour,
   };
   const returnContent = getContent(backgroundColour, showRatio, contrastRatio, contrastRating, autoColour);
   return (
