@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import ColourBlocksProvider from '../contexts/ColourBlocksProvider';
 import ColourInputProvider from '../contexts/ColourInputProvider';
 import InputTabs from '../elements/InputTabs';
 import ColourBlocks from './body/ColourBlocks';
@@ -10,7 +11,11 @@ function getTab(tab: string) {
     return <ComboBox />;
   }
   if (tab === 'compare-matrix') {
-    return <ColourBlocks />;
+    return (
+      <ColourBlocksProvider>
+        <ColourBlocks />
+      </ColourBlocksProvider>
+    );
   }
 
   return null;
