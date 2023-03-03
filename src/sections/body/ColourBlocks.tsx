@@ -28,25 +28,29 @@ function getBlockRow(backgroundColour: string, index: number, array: string[]) {
   return { keyA, rowArray };
 }
 
-function createColourBlockArrays(coloursArray: Set<string>) {
-  return [...coloursArray].sort().map((backgroundColour, index, array) => {
-    const { keyA, rowArray } = getBlockRow(backgroundColour, index, array);
-    return (
-      <div
-        key={`${backgroundColour}-${keyA}`}
-        style={{ backgroundColor: backgroundColour }}
-        className=" flex flex-col rounded-none p-4"
-      >
-        {rowArray}
-      </div>
-    );
-  });
+function createColourBlockArrays(coloursArray: Set<string>, limit: number) {
+  return [...coloursArray]
+    .sort()
+    .slice(0, limit)
+    .map((backgroundColour, index, array) => {
+      const { keyA, rowArray } = getBlockRow(backgroundColour, index, array);
+      return (
+        <div
+          key={`${backgroundColour}-${keyA}`}
+          style={{ backgroundColor: backgroundColour }}
+          className=" flex flex-col rounded-none p-4"
+        >
+          {rowArray}
+        </div>
+      );
+    });
 }
 
 function getColourBlocks(
   colourSet: Set<string>,
   showRatio: boolean,
   showPoor: boolean,
+  limit: number,
   dispatchColourBlocks: Dispatch<
     Partial<{
       showRatio: boolean;
@@ -56,21 +60,34 @@ function getColourBlocks(
     }>
   >,
 ) {
-  const returnArrays = createColourBlockArrays(colourSet);
+  const returnArrays = createColourBlockArrays(colourSet, limit);
   const ratioLabel = showRatio ? 'Contrast Ratio' : 'Contrast Rating';
   const ratingRatio = showRatio ? 'Ratios' : 'Ratings';
   const poorLabel = showPoor ? `All ${ratingRatio}` : `Usable ${ratingRatio}`;
-
+  const limitLabel = `${limit} Colours`;
   function handleClickRatio() {
     dispatchColourBlocks({ showRatio: !showRatio });
   }
   function handleClickPoor() {
     dispatchColourBlocks({ showPoor: !showPoor });
   }
-
+  function handleClickLimit() {
+    const nextLimit: { [elemName: number]: number } = {
+      4: 8,
+      8: 12,
+      12: 16,
+      16: 20,
+      20: 4,
+    };
+    dispatchColourBlocks({ limit: nextLimit[limit] });
+  }
   return (
     <div className=" grid w-full  justify-center self-center overflow-auto  rounded-none">
       <div className="flex flex-row flex-wrap justify-center">
+        <button type="button" onClick={handleClickLimit} className="m-2 rounded border border-current p-2 text-current">
+          {limitLabel}
+        </button>
+
         <button type="button" onClick={handleClickRatio} className="m-2 rounded border border-current p-2 text-current">
           {ratioLabel}
         </button>
@@ -83,10 +100,10 @@ function getColourBlocks(
   );
 }
 export default function ColourBlocks() {
-  const { showRatio, showPoor, dispatchColourBlocks } = useColourBlocksContext();
+  const { showRatio, showPoor, limit, dispatchColourBlocks } = useColourBlocksContext();
 
   const { colourSet } = useColourInputContext();
   if ([...colourSet][0] === undefined) return null;
-  const colourBlocks = getColourBlocks(colourSet, showRatio, showPoor, dispatchColourBlocks);
+  const colourBlocks = getColourBlocks(colourSet, showRatio, showPoor, limit, dispatchColourBlocks);
   return colourBlocks;
 }

@@ -17,7 +17,7 @@ const initialiserA: {
 } = {
   showRatio: false,
   showPoor: false,
-  limit: 10,
+  limit: 8,
   visibleSet: new Set(''),
   dispatchColourBlocks: () => undefined,
 };
@@ -30,7 +30,7 @@ const initialiserB: {
 } = {
   showRatio: false,
   showPoor: false,
-  limit: 10,
+  limit: 8,
   visibleSet: new Set(''),
 };
 

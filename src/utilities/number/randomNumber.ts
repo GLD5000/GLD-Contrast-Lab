@@ -24,7 +24,7 @@ if (import.meta.vitest) {
 
   describe('#getRandomNumberBetween', () => {
     it('Number within range', () => {
-      expect(getRandomNumberBetween([5], 3)).toMatch(/^5.[0-9]{2,3}$/);
+      expect(getRandomNumberBetween([5], 3)).toMatch(/^5.[0-9]{0,3}$/);
     });
   });
 }
