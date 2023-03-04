@@ -24,7 +24,7 @@ export default function ComboBox() {
           id="code-input"
           placeholder="Copy or write text in here..."
           name="codeInput"
-          className="shrink-0 grow resize-y overflow-auto rounded bg-inherit text-inherit placeholder:text-gray-300"
+          className="shrink-0 grow resize-y overflow-auto rounded bg-inherit text-inherit placeholder:text-gray-500 dark:placeholder:text-gray-300"
           value={textInput}
           onInput={(e: FormEvent<HTMLTextAreaElement>): void => {
             const { value: targetValue } = e.currentTarget;
