@@ -28,7 +28,7 @@ function getContent(
         key={uniqueKey}
         id={uniqueKey}
         content={name}
-        className="m-2 flex h-fit w-fit flex-row items-center justify-between gap-1 rounded border-2 border-neutral-900 px-1 text-center text-lg dark:border-neutral-200"
+        className="m-2 flex h-fit w-fit flex-row items-center justify-between gap-1 rounded border-2 border-neutral-900 py-1 px-2 text-center text-base dark:border-neutral-200"
         style={{ backgroundColor: name, color: autoTextColourFromHex(name) }}
         clickFunction={clickHandler}
       />
