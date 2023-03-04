@@ -25,7 +25,7 @@ export default function ComboBox() {
         <button
           type="button"
           onClick={handleClickClearTags}
-          className="m-2 rounded border border-current bg-pink-300 px-2 text-black"
+          className="m-2 rounded border border-current bg-pink-300 px-2 py-1 text-lg text-black"
         >
           Clear All
         </button>
