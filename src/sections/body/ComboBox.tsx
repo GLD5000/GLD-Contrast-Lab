@@ -14,11 +14,11 @@ export default function ComboBox() {
 
   const list = getList();
   return (
-    <div className="self-center p-8 text-2xl">
+    <div className="w-full self-center p-8 text-xl">
       <label htmlFor="code-input">
         Colours <Span className="text-neutral-500" content="(separate with spaces or linebreaks)" />
       </label>
-      <div className="flex flex-row flex-wrap gap-2 bg-white dark:bg-neutral-900">
+      <div className="flex w-full flex-row flex-wrap gap-2 bg-white dark:bg-neutral-900">
         {list}
         <TextArea
           id="code-input"
