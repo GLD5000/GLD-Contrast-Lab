@@ -24,7 +24,7 @@ export default function Header({
             clickFunction={toggleColourTheme}
             id="colour-theme-button"
             name="Dark Mode Button"
-            className="text-xs"
+            className="rounded text-xs"
             activeClasses="dark:hover:bg-neutral-100 dark:hover:text-neutral-900 hover:text-neutral-50 hover:bg-neutral-800"
             conditionalClasses=""
           />

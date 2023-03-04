@@ -94,7 +94,7 @@ function getColourBlocks(
           {limitLabel}
         </button>
       </div>
-      <div className="flex h-fit w-fit gap-2 overflow-hidden rounded-xl">{returnArrays}</div>
+      <div className="flex h-fit w-fit gap-2 overflow-hidden rounded">{returnArrays}</div>
     </div>
   );
 }

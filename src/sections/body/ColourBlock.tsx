@@ -44,7 +44,7 @@ export default function ColourBlock({
     <button
       type="button"
       onClick={handleClick}
-      className="text-m m-1 grid aspect-square w-20 min-w-fit content-center rounded-full border-4 text-center text-current"
+      className="text-m m-1 grid aspect-square w-20 min-w-fit content-center rounded-full border-2 text-center text-current"
       style={style}
     >
       {returnContent}

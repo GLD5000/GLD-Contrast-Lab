@@ -26,7 +26,7 @@ export default function SpicyLi({
         type="delete"
         showText={false}
         reverse={false}
-        buttonClasses="  relative h-6 rounded-inherit hover:transition aspect-square hover:bg-neutral-400 hover:text-white text-current items-center"
+        buttonClasses="  h-6 rounded-inherit hover:transition aspect-square hover:bg-neutral-400 hover:text-white text-current items-center"
         svgClasses="stroke-current fill-none stroke-2 h-full w-full"
       />
     </li>
