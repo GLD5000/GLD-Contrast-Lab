@@ -73,8 +73,8 @@ function useData() {
       }
       case 'CLEAR_TAGS': {
         const newSet = new Set(state.colourSet);
-        colourSet.clear();
-        const returnValue = { ...state, colourSet: newSet };
+        newSet.clear();
+        const returnValue = { ...state, colourSet: newSet, textInput: '' };
         return returnValue;
       }
       case 'CLOSE_TAG': {
@@ -133,7 +133,6 @@ function processText(text: string | undefined) {
     return { processedText: text, processedArray: [] };
   }
   const shouldSkipLastElement = text[text.length - 1].search(/[ \r\n,]/) === -1;
-  console.log('shouldSkipLastElement:', shouldSkipLastElement);
   const splitText = text.split(/[ \r\n,]+/);
   if (shouldSkipLastElement) {
     const slicedArray = splitText.slice(0, -1);

@@ -38,6 +38,7 @@ function getContent(
 
 export default function InlineList() {
   const { colourSet, dispatchColourInput } = useColourInputContext();
+  if (colourSet.size === 0) return null;
   const content = getContent([...colourSet], dispatchColourInput);
   const className = 'list-none flex flex-row flex-wrap ';
   return <Ul content={content} className={className} />;
