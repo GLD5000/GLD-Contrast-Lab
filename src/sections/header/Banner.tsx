@@ -9,12 +9,12 @@ export default function Banner({ setShowBanner }: { setShowBanner: Dispatch<SetS
 
   return (
     <section className="flex flex-col items-center bg-neutral-100 dark:bg-neutral-800">
-      <div className=" flex w-body min-w-body max-w-body flex-row flex-wrap items-center justify-between rounded-none border-2  border-x-transparent border-y-pink-200 bg-neutral-600 text-white  dark:border-y-blue-700 dark:bg-transparent ">
+      <div className=" flex w-body min-w-body max-w-body flex-row flex-wrap items-center justify-between rounded-none border-2  border-x-transparent border-y-pink-200 bg-neutral-600 text-white dark:border-y-blue-700  dark:bg-neutral-400 dark:text-neutral-900 ">
         <h2 className=" m-2 text-current">Hi There! This project is part of the GLD Portfolio...</h2>
         <Link
           content="See more projects"
           link="https://gld-portfolio.vercel.app/"
-          className="block rounded border-2 border-transparent bg-pink-200 px-2 text-lg text-black hover:bg-white hover:transition dark:bg-blue-700 dark:text-white dark:hover:border-current"
+          className="m-4 block rounded border-2 border-transparent bg-pink-200 p-2 text-lg text-black hover:bg-white hover:transition dark:bg-blue-700 dark:text-white dark:hover:border-current"
         />
 
         <SvgButton
