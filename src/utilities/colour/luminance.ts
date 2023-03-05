@@ -59,6 +59,12 @@ export const luminance = {
     const luminanceResult = this.convertSrgbToLuminance(srgbArray);
     return luminanceResult;
   },
+  convertHexToLuminancePercent(hex: string) {
+    const srgbArray = hexToSrgb(hex);
+    const luminanceResult = this.convertSrgbToLuminance(srgbArray);
+    const percentage = `${(luminanceResult * 100).toFixed(1)}%`;
+    return percentage;
+  },
 };
 
 export default function hexToLuminance(hex: string) {

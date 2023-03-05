@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useContext, useReducer, Dispatch } from 'react';
 
 const initialiserA: {
+  colourMode: string;
   showRatio: boolean;
   showPoor: boolean;
   limit: number;
@@ -8,6 +9,7 @@ const initialiserA: {
 
   dispatchColourBlocks: Dispatch<
     Partial<{
+      colourMode: string;
       showRatio: boolean;
       showPoor: boolean;
       limit: number;
@@ -15,6 +17,7 @@ const initialiserA: {
     }>
   >;
 } = {
+  colourMode: 'hex',
   showRatio: false,
   showPoor: false,
   limit: 12,
@@ -23,11 +26,13 @@ const initialiserA: {
 };
 
 const initialiserB: {
+  colourMode: string;
   showRatio: boolean;
   showPoor: boolean;
   limit: number;
   visibleSet: Set<string>;
 } = {
+  colourMode: 'hex',
   showRatio: false,
   showPoor: false,
   limit: 12,
@@ -35,15 +40,28 @@ const initialiserB: {
 };
 
 function useData() {
-  const [{ showRatio, showPoor, limit, visibleSet }, dispatchColourBlocks] = useReducer(
+  const [{ colourMode, showRatio, showPoor, limit, visibleSet }, dispatchColourBlocks] = useReducer(
     (
-      state: { showRatio: boolean; showPoor: boolean; limit: number; visibleSet: Set<string> },
-      action: Partial<{ showRatio: boolean; showPoor: boolean; limit: number; visibleSet: Set<string> }>,
+      state: {
+        colourMode: string;
+        showRatio: boolean;
+        showPoor: boolean;
+        limit: number;
+        visibleSet: Set<string>;
+      },
+      action: Partial<{
+        colourMode: string;
+        showRatio: boolean;
+        showPoor: boolean;
+        limit: number;
+        visibleSet: Set<string>;
+      }>,
     ) => ({ ...state, ...action }),
     initialiserB,
   );
 
   return {
+    colourMode,
     showRatio,
     showPoor,
     limit,

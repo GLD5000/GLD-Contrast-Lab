@@ -29,17 +29,23 @@ export const colourSpace = {
     return hex.length === 2 ? hex : `0${hex}`;
   },
 
-  getSrgbArrayFromHexString(hex: string) {
+  convertHexToSrgbArray(hex: string) {
     const splitHex = colourSpace.splitHexString(hex);
     return splitHex.map((digits) => colourSpace.hexDigitsToDecimal(digits));
   },
-  getRgbArrayFromHexString(hex: string) {
+  convertHextoRgb(hex: string) {
     const splitHex = colourSpace.splitHexString(hex);
     return splitHex.map((digits) => colourSpace.hexDigitsToInteger(digits));
   },
-  convertHexToSrgbArray(hexIn: string) {
-    const srgbArray = colourSpace.getSrgbArrayFromHexString(hexIn);
-    return srgbArray;
+  convertHextoRgbString(hex: string) {
+    const splitHex = colourSpace.splitHexString(hex);
+    const rgbArray = splitHex.map((digits) => colourSpace.hexDigitsToInteger(digits));
+    return `rgb\r${rgbArray.join(',')}`;
+  },
+  convertHexToHslString(hex: string) {
+    const srgb = colourSpace.convertHexToSrgbArray(hex);
+    const hslArray = colourSpace.convertSrgbToHslArray(srgb).map((x) => x.toFixed(0));
+    return `hsl\r${hslArray.join(',')}`;
   },
   constrainSrgbArray(arrayIn: Array<number>) {
     return arrayIn.map((x) => Math.min(1, Math.max(0, x)));

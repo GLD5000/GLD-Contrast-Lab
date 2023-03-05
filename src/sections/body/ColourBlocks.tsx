@@ -38,7 +38,7 @@ function createColourBlockArrays(coloursArray: Set<string>, limit: number) {
         <div
           key={`${backgroundColour}-${keyA}`}
           style={{ backgroundColor: backgroundColour }}
-          className=" flex flex-col rounded border-2 border-current p-2"
+          className=" grid rounded border-2 border-current p-2"
         >
           {rowArray}
         </div>
@@ -48,11 +48,13 @@ function createColourBlockArrays(coloursArray: Set<string>, limit: number) {
 
 function getColourBlocks(
   colourSet: Set<string>,
+  colourMode: string,
   showRatio: boolean,
   showPoor: boolean,
   limit: number,
   dispatchColourBlocks: Dispatch<
     Partial<{
+      colourMode: string;
       showRatio: boolean;
       showPoor: boolean;
       limit: number;
@@ -61,10 +63,22 @@ function getColourBlocks(
   >,
 ) {
   const returnArrays = createColourBlockArrays(colourSet, limit);
+  const colourModeLabel = `Mode: ${colourMode}`;
   const ratioLabel = showRatio ? 'Contrast Ratio' : 'Contrast Rating';
   const ratingRatio = showRatio ? 'Ratios' : 'Ratings';
   const poorLabel = showPoor ? `All ${ratingRatio}` : `Usable ${ratingRatio}`;
   const limitLabel = `Up to ${limit} Colours`;
+  function handleClickColourMode() {
+    const nextMode: { [elemName: string]: string } = {
+      hex: 'luminance',
+      luminance: 'hsl',
+      hsl: 'rgb',
+      rgb: 'hex',
+    };
+
+    dispatchColourBlocks({ colourMode: nextMode[colourMode] });
+  }
+
   function handleClickRatio() {
     dispatchColourBlocks({ showRatio: !showRatio });
   }
@@ -82,8 +96,16 @@ function getColourBlocks(
     dispatchColourBlocks({ limit: nextLimit[limit] });
   }
   return (
-    <div className=" grid w-full  justify-center self-center overflow-auto  rounded-none">
-      <div className="flex flex-row flex-wrap justify-center">
+    <div className=" grid w-full  items-center justify-center self-center overflow-auto rounded-none">
+      <div className="sticky left-0 grid w-body min-w-body max-w-body grid-cols-4 justify-center p-4">
+        <button
+          type="button"
+          onClick={handleClickColourMode}
+          className="m-2 rounded border border-current p-2 text-current"
+        >
+          {colourModeLabel}
+        </button>
+
         <button type="button" onClick={handleClickRatio} className="m-2 rounded border border-current p-2 text-current">
           {ratioLabel}
         </button>
@@ -94,15 +116,17 @@ function getColourBlocks(
           {limitLabel}
         </button>
       </div>
-      <div className="flex h-fit w-fit gap-2 overflow-hidden rounded">{returnArrays}</div>
+      <div className="grid w-fit auto-cols-min grid-flow-col grid-rows-1 gap-2 justify-self-center overflow-auto rounded p-4">
+        {returnArrays}
+      </div>
     </div>
   );
 }
 export default function ColourBlocks() {
-  const { showRatio, showPoor, limit, dispatchColourBlocks } = useColourBlocksContext();
+  const { showRatio, showPoor, limit, colourMode, dispatchColourBlocks } = useColourBlocksContext();
 
   const { colourSet } = useColourInputContext();
   if ([...colourSet][0] === undefined) return null;
-  const colourBlocks = getColourBlocks(colourSet, showRatio, showPoor, limit, dispatchColourBlocks);
+  const colourBlocks = getColourBlocks(colourSet, colourMode, showRatio, showPoor, limit, dispatchColourBlocks);
   return colourBlocks;
 }
