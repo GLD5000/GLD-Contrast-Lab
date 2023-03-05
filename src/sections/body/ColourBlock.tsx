@@ -1,14 +1,14 @@
 import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
 import H3 from '../../elements/H3';
-import Span from '../../elements/Span';
+import P from '../../elements/P';
 import { colourSpace } from '../../utilities/colour/colourSpace';
 import { luminance } from '../../utilities/colour/luminance';
 
 function getColourString(hexCode: string, mode: string) {
-  if (mode === 'hex') return `hex\r${hexCode.slice(1)}`;
+  if (mode === 'hex') return `hex\r\n${hexCode.slice(1)}`;
 
   const colourStringCallbacks: { [elemName: string]: string } = {
-    luminance: `luminance\r${luminance.convertHexToLuminancePercent(hexCode)}`,
+    luminance: `luminance\r\n${luminance.convertHexToLuminancePercent(hexCode)}`,
     hsl: colourSpace.convertHexToHslString(hexCode),
     rgb: colourSpace.convertHextoRgbString(hexCode),
   };
@@ -21,7 +21,8 @@ function getContent(
   autoColour: boolean,
   colourString: string,
 ) {
-  if (autoColour) return <Span className="underline decoration-current underline-offset-2" content={colourString} />;
+  if (autoColour)
+    return <P className="whitespace-pre-wrap underline decoration-current underline-offset-2" content={colourString} />;
   return <H3 content={showRatio ? contrastRatio : contrastRating} />;
 }
 
@@ -63,7 +64,9 @@ export default function ColourBlock({
     color: poorContrast && showPoor === false ? 'transparent' : textColour,
     borderColor: autoColour || poorContrast ? 'transparent' : textColour,
   };
-  const colourString = autoColour ? getColourString(backgroundColour, colourMode) : `hex\r${backgroundColour.slice(1)}`;
+  const colourString = autoColour
+    ? getColourString(backgroundColour, colourMode)
+    : `hex\r\n${backgroundColour.slice(1)}`;
   const returnContent = getContent(showRatio, contrastRatio, contrastRating, autoColour, colourString);
   return (
     <button

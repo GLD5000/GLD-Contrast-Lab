@@ -4,6 +4,7 @@ import autoTextColourFromHex from '../../utilities/colour/autoTextColour';
 import { getContrastRatioFromHex, contrast } from '../../utilities/colour/contrastRatio';
 import { useColourInputContext } from '../../contexts/ColourInputProvider';
 import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
+import { luminance } from '../../utilities/colour/luminance';
 
 function getBlockRow(backgroundColour: string, index: number, array: string[]) {
   const keyA = `${backgroundColour}${index}`;
@@ -28,22 +29,27 @@ function getBlockRow(backgroundColour: string, index: number, array: string[]) {
   return { keyA, rowArray };
 }
 
+function sortByLuminance(acc: Array<Array<string>>, curr: string) {
+  // Build sparse array based on  Math.round(lum * 100)
+  const luminanceInteger = Math.round(1000 * luminance.convertHexToLuminance(curr));
+  acc[luminanceInteger] = acc[luminanceInteger] === undefined ? [curr] : [...acc[luminanceInteger], curr];
+  return acc;
+}
+
 function createColourBlockArrays(coloursArray: Set<string>, limit: number) {
-  return [...coloursArray]
-    .sort()
-    .slice(0, limit)
-    .map((backgroundColour, index, array) => {
-      const { keyA, rowArray } = getBlockRow(backgroundColour, index, array);
-      return (
-        <div
-          key={`${backgroundColour}-${keyA}`}
-          style={{ backgroundColor: backgroundColour }}
-          className=" grid rounded border-2 border-current p-2"
-        >
-          {rowArray}
-        </div>
-      );
-    });
+  const lumSort = [...coloursArray].reduce(sortByLuminance, []).flatMap((x) => x);
+  return lumSort.slice(0, limit).map((backgroundColour, index, array) => {
+    const { keyA, rowArray } = getBlockRow(backgroundColour, index, array);
+    return (
+      <div
+        key={`${backgroundColour}-${keyA}`}
+        style={{ backgroundColor: backgroundColour }}
+        className=" grid rounded border-2 border-current p-2"
+      >
+        {rowArray}
+      </div>
+    );
+  });
 }
 
 function getColourBlocks(
