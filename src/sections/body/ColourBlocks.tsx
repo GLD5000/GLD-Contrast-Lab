@@ -44,7 +44,7 @@ function createColourBlockArrays(coloursArray: Set<string>, limit: number) {
       <div
         key={`${backgroundColour}-${keyA}`}
         style={{ backgroundColor: backgroundColour }}
-        className=" grid rounded border-2 border-current p-2"
+        className=" grid gap-2 rounded border-2 border-current p-2"
       >
         {rowArray}
       </div>
