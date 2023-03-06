@@ -16,7 +16,7 @@ export default function SpicyLi({
 }) {
   return (
     <li id={id} className={className} style={style}>
-      {content}
+      <span className="mx-auto">{content}</span>
       <SvgButton
         svgWrapperClasses="pointer-events-none h-6 w-6"
         text={undefined}
@@ -27,7 +27,7 @@ export default function SpicyLi({
         type="delete"
         showText={false}
         reverse={false}
-        buttonClasses="  h-6 rounded-full hover:transition aspect-square hover:bg-neutral-400 hover:text-white text-current items-center"
+        buttonClasses="  h-6 rounded-full hover:transition aspect-square hover:bg-[#767676] hover:text-white text-current items-center"
         svgClasses="stroke-current fill-none stroke-2 h-full w-full"
       />
     </li>

@@ -3,6 +3,7 @@ import { useColourInputContext } from '../../contexts/ColourInputProvider';
 
 import Span from '../../elements/Span';
 import TextArea from '../../elements/TextArea';
+import DeleteSvg from '../../icons/DeleteSvg';
 import InlineList from './InlineList';
 
 function getList() {
@@ -29,9 +30,12 @@ export default function ComboBox() {
         <button
           type="button"
           onClick={handleClickClearTags}
-          className="m-2 ml-auto rounded border border-current bg-pink-300 px-2 py-1 text-sm text-black"
+          className="m-2 ml-auto flex flex-row items-center justify-between gap-2 rounded border border-current p-1 text-sm text-pink-700 hover:bg-pink-700 hover:text-black dark:text-pink-300 dark:hover:bg-pink-300 dark:hover:text-black"
         >
           Clear All
+          <div className=" aspect-square w-6">
+            <DeleteSvg />
+          </div>
         </button>
       </div>
       <div className="m-2 flex flex-row flex-wrap gap-2">

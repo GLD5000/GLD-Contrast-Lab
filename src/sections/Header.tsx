@@ -38,7 +38,7 @@ export default function Header({
             id="colour-theme-button"
             name="Dark Mode Button"
             className="rounded text-xs"
-            buttonClasses="w-fit h-fit flex flex-col overflow-hidden border border-transparent hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black hover:transition py-1 px-2"
+            buttonClasses="w-fit h-fit flex flex-col overflow-hidden hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black hover:transition py-1 px-2"
             svgClasses="stroke-current fill-current stroke-2 dark:hover:fill-none"
           />
         </div>

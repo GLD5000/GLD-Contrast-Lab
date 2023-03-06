@@ -14,7 +14,7 @@ export default function Banner({ setShowBanner }: { setShowBanner: Dispatch<SetS
         <Link
           content="See more projects"
           link="https://gld-portfolio.vercel.app/"
-          className="mx-auto my-2  block rounded-lg border-2 border-transparent bg-pink-200 p-3 text-lg text-black  hover:bg-white hover:transition dark:bg-blue-700 dark:text-white dark:hover:border-current"
+          className="mx-auto my-2  block rounded-lg border border-transparent bg-pink-200 p-3 text-lg text-black  hover:bg-white hover:transition dark:bg-blue-700 dark:text-white dark:hover:border-current"
         />
 
         <SvgButton
@@ -23,7 +23,7 @@ export default function Banner({ setShowBanner }: { setShowBanner: Dispatch<SetS
           clickFunction={handleBannerClick}
           id="close-banner"
           name="close-banner"
-          className=" grid whitespace-pre-wrap rounded border-2 border-solid hover:border-current hover:transition"
+          className=" grid whitespace-pre-wrap rounded border border-solid hover:border-current hover:transition"
           type="delete"
           showText={false}
           reverse={false}
