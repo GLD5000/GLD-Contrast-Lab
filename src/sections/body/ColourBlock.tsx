@@ -57,7 +57,10 @@ export default function ColourBlock({
   }
 
   function handleClick() {
-    if (autoColour) handleClickColourMode();
+    if (autoColour) {
+      handleClickColourMode();
+      return;
+    }
     const dispatchObject = poorContrast ? { showPoor: !showPoor } : { showRatio: !showRatio };
     dispatchColourBlocks(dispatchObject);
   }
