@@ -4,11 +4,19 @@ import ColourInputProvider from '../contexts/ColourInputProvider';
 import InputTabs from '../elements/InputTabs';
 import ColourBlocks from './body/ColourBlocks';
 import ComboBox from './body/ComboBox';
+import InfoTable from './body/InfoTable';
 import Banner from './header/Banner';
 
 function getTab(tab: string) {
   if (tab === 'add-colours') {
-    return <ComboBox />;
+    return (
+      <>
+        <ComboBox />
+        <ColourBlocksProvider>
+          <InfoTable />
+        </ColourBlocksProvider>
+      </>
+    );
   }
   if (tab === 'compare-matrix') {
     return (
@@ -17,6 +25,13 @@ function getTab(tab: string) {
       </ColourBlocksProvider>
     );
   }
+  // if (tab === 'colour-info') {
+  //   return (
+  //     <ColourBlocksProvider>
+  //       <InfoTable />
+  //     </ColourBlocksProvider>
+  //   );
+  // }
 
   return null;
 }

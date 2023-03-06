@@ -17,7 +17,7 @@ export default function ComboBox() {
 
   const list = getList();
   return (
-    <div className="grid w-full items-center gap-4 self-center p-8 text-xl">
+    <div className="grid w-full max-w-[1200px] items-center gap-4 self-center p-8 text-xl">
       <div className="flex flex-row flex-wrap items-center p-2">
         <label htmlFor="colour-input">
           Colours <Span className="text-neutral-500" content="(separate with spaces or linebreaks)" />
@@ -30,13 +30,13 @@ export default function ComboBox() {
           Clear All
         </button>
       </div>
-      <div className="m-2 flex flex-row flex-wrap gap-2 bg-white p-2 dark:bg-neutral-900">
+      <div className="m-2 flex flex-row flex-wrap gap-2">
         {list}
         <TextArea
           id="colour-input"
-          placeholder="Copy or write text in here..."
+          placeholder="Paste or write colours in here e.g.:      #fafafa"
           name="codeInput"
-          className="shrink-0 grow resize-y overflow-auto rounded bg-inherit text-inherit placeholder:text-gray-500 dark:placeholder:text-gray-300"
+          className="shrink-0 grow resize-none overflow-auto rounded bg-inherit text-inherit placeholder:text-gray-500 dark:placeholder:text-gray-300"
           value={textInput}
           onInput={(e: FormEvent<HTMLTextAreaElement>): void => {
             const { value: targetValue } = e.currentTarget;

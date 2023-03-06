@@ -40,12 +40,26 @@ export const colourSpace = {
   convertHextoRgbString(hex: string) {
     const splitHex = colourSpace.splitHexString(hex);
     const rgbArray = splitHex.map((digits) => colourSpace.hexDigitsToInteger(digits));
-    return `rgb\r\n${rgbArray.join(',')}`;
+    return `rgb(${rgbArray.join(', ')})`;
   },
   convertHexToHslString(hex: string) {
     const srgb = colourSpace.convertHexToSrgbArray(hex);
-    const hslArray = colourSpace.convertSrgbToHslArray(srgb).map((x) => x.toFixed(0));
-    return `hsl\r\n${hslArray.join(',')}`;
+    const hslArray = colourSpace
+      .convertSrgbToHslArray(srgb)
+      .map((x, i) => (i === 0 ? x.toFixed(0) : `${x.toFixed(0)}%`));
+    return `hsl(${hslArray.join(', ')})`;
+  },
+  convertHextoRgbStringLb(hex: string) {
+    const splitHex = colourSpace.splitHexString(hex);
+    const rgbArray = splitHex.map((digits) => colourSpace.hexDigitsToInteger(digits));
+    return `rgb\r\n${rgbArray.join(', ')}`;
+  },
+  convertHexToHslStringLb(hex: string) {
+    const srgb = colourSpace.convertHexToSrgbArray(hex);
+    const hslArray = colourSpace
+      .convertSrgbToHslArray(srgb)
+      .map((x, i) => (i === 0 ? x.toFixed(0) : `${x.toFixed(0)}%`));
+    return `hsl\r\n${hslArray.join(', ')}`;
   },
   constrainSrgbArray(arrayIn: Array<number>) {
     return arrayIn.map((x) => Math.min(1, Math.max(0, x)));

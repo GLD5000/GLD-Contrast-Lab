@@ -9,12 +9,12 @@ export default function Banner({ setShowBanner }: { setShowBanner: Dispatch<SetS
 
   return (
     <section className="flex flex-col items-center bg-neutral-100 dark:bg-neutral-800">
-      <div className=" flex w-body min-w-body max-w-body flex-row flex-wrap items-center justify-between rounded-none border-2  border-x-transparent border-y-pink-200 bg-neutral-600 text-white dark:border-y-blue-700  dark:bg-neutral-400 dark:text-neutral-900 ">
-        <h2 className=" m-2 text-current">Hi There! This project is part of the GLD Portfolio...</h2>
+      <div className=" relative grid w-body min-w-body max-w-body content-center rounded-none border-4 border-pink-200   bg-neutral-600 text-center text-white dark:border-blue-700  dark:bg-neutral-400 dark:text-neutral-900 ">
+        <h1 className=" m-2 p-2 text-current">Hi There! This project is part of the GLD Portfolio...</h1>
         <Link
           content="See more projects"
           link="https://gld-portfolio.vercel.app/"
-          className="m-4 block rounded border-2 border-transparent bg-pink-200 p-2 text-lg text-black hover:bg-white hover:transition dark:bg-blue-700 dark:text-white dark:hover:border-current"
+          className="mx-auto my-5 block rounded-lg border-2 border-transparent bg-pink-200 p-3 text-lg text-black  hover:bg-white hover:transition dark:bg-blue-700 dark:text-white dark:hover:border-current"
         />
 
         <SvgButton
@@ -26,7 +26,7 @@ export default function Banner({ setShowBanner }: { setShowBanner: Dispatch<SetS
           type="delete"
           showText={false}
           reverse={false}
-          buttonClasses=" relative aspect-square h-8 items-center rounded hover:transition border-transparent hover:border-current self-start text-current"
+          buttonClasses=" absolute right-0 aspect-square h-8 items-center rounded hover:transition border-transparent hover:border-current self-start text-current"
           svgClasses="stroke-current fill-none stroke-2 h-full w-full"
         />
       </div>
