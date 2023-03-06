@@ -10,19 +10,21 @@ import Banner from './header/Banner';
 function getTab(tab: string) {
   if (tab === 'add-colours') {
     return (
-      <>
+      <div className=" bg-neutral-100 dark:bg-neutral-800">
         <ComboBox />
         <ColourBlocksProvider>
           <InfoTable />
         </ColourBlocksProvider>
-      </>
+      </div>
     );
   }
   if (tab === 'compare-matrix') {
     return (
-      <ColourBlocksProvider>
-        <ColourBlocks />
-      </ColourBlocksProvider>
+      <div className=" bg-neutral-100 dark:bg-neutral-800">
+        <ColourBlocksProvider>
+          <ColourBlocks />
+        </ColourBlocksProvider>
+      </div>
     );
   }
   // if (tab === 'colour-info') {
@@ -43,7 +45,7 @@ export default function Body() {
   return (
     <ColourInputProvider>
       <main id="body-container" className=" grid w-screen  flex-grow justify-items-center  pt-2  align-middle ">
-        <section className="flex h-full w-body min-w-body max-w-body flex-col gap-8 bg-neutral-100 dark:bg-neutral-800 ">
+        <section className="flex h-full w-body min-w-body max-w-body flex-col ">
           {showBanner && <Banner setShowBanner={setShowBanner} />}
           <InputTabs tab={tab} setTab={setTab} />
           {returnSection}

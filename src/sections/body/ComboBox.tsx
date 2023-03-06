@@ -17,26 +17,26 @@ export default function ComboBox() {
 
   const list = getList();
   return (
-    <div className="grid w-full max-w-[1200px] items-center gap-4 self-center p-8 text-xl">
+    <div className="mx-auto grid w-full max-w-[1200px] items-center self-center p-8">
       <div className="flex flex-row flex-wrap items-center p-2">
         <label htmlFor="colour-input">
-          Colours <Span className="text-neutral-500" content="(separate with spaces or linebreaks)" />
+          <b className="text-lg">Colours</b>{' '}
+          <Span className="text-base text-neutral-500" content="(separate with spaces or linebreaks)" />
         </label>
         <button
           type="button"
           onClick={handleClickClearTags}
-          className="m-2 rounded border border-current bg-pink-300 px-2 py-1 text-lg text-black"
+          className="m-2 ml-auto rounded border border-current bg-pink-300 px-2 py-1 text-sm text-black"
         >
           Clear All
         </button>
       </div>
       <div className="m-2 flex flex-row flex-wrap gap-2">
-        {list}
         <TextArea
           id="colour-input"
           placeholder="Paste or write colours in here e.g.:      #fafafa"
           name="codeInput"
-          className="shrink-0 grow resize-none overflow-auto rounded bg-inherit text-inherit placeholder:text-gray-500 dark:placeholder:text-gray-300"
+          className="w-full shrink-0 grow resize-none overflow-auto rounded border bg-inherit p-2 text-base placeholder:text-gray-500 dark:placeholder:text-gray-300"
           value={textInput}
           onInput={(e: FormEvent<HTMLTextAreaElement>): void => {
             const { value: targetValue } = e.currentTarget;
@@ -44,6 +44,7 @@ export default function ComboBox() {
             dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: targetValue } });
           }}
         />
+        {list}
       </div>
     </div>
   );

@@ -69,7 +69,7 @@ function getColourBlocks(
   >,
 ) {
   const returnArrays = createColourBlockArrays(colourSet, limit);
-  const colourModeLabel = `Mode: ${colourMode}`;
+  const colourModeLabel = `${colourMode}`;
   const ratioLabel = showRatio ? 'Contrast Ratio' : 'Contrast Rating';
   const ratingRatio = showRatio ? 'Ratios' : 'Ratings';
   const poorLabel = showPoor ? `All ${ratingRatio}` : `Usable ${ratingRatio}`;
@@ -103,39 +103,44 @@ function getColourBlocks(
   }
   return (
     <div className=" grid w-full  items-center justify-center self-center overflow-auto rounded-none">
-      <div className="sticky left-0 flex w-body min-w-body max-w-body flex-row flex-wrap  justify-center p-4">
-        <button
-          type="button"
-          onClick={handleClickColourMode}
-          className="m-2 shrink-0 grow basis-0 rounded border border-current p-2 text-current"
-        >
-          {colourModeLabel}
-        </button>
-
-        <button
-          type="button"
-          onClick={handleClickRatio}
-          className="m-2 shrink-0 grow basis-0 rounded border border-current p-2 text-current"
-        >
-          {ratioLabel}
-        </button>
-        <button
-          type="button"
-          onClick={handleClickPoor}
-          className="m-2 shrink-0 grow basis-0 rounded border border-current p-2 text-current"
-        >
-          {poorLabel}
-        </button>
-        <button
-          type="button"
-          onClick={handleClickLimit}
-          className="m-2 shrink-0 grow basis-0 rounded border border-current p-2 text-current"
-        >
-          {limitLabel}
-        </button>
-      </div>
-      <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 gap-2 overflow-auto rounded p-4">
+      <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 gap-2 overflow-auto rounded p-2">
         {returnArrays}
+      </div>
+
+      <div className="sticky left-0 flex w-body min-w-body max-w-body flex-row flex-wrap items-center justify-center gap-4  p-2">
+        <div className="w-fit rounded bg-neutral-200 py-2 px-4 dark:bg-neutral-700">
+          <b className="text-lg">Show:</b>
+
+          <button
+            type="button"
+            onClick={handleClickColourMode}
+            className="m-2 w-40 shrink-0 rounded p-2 text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
+          >
+            {colourModeLabel}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleClickRatio}
+            className="m-2 w-40 shrink-0 rounded p-2 text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
+          >
+            {ratioLabel}
+          </button>
+          <button
+            type="button"
+            onClick={handleClickPoor}
+            className="m-2 w-40 shrink-0 rounded p-2 text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
+          >
+            {poorLabel}
+          </button>
+          <button
+            type="button"
+            onClick={handleClickLimit}
+            className="m-2 w-40 shrink-0 rounded p-2 text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
+          >
+            {limitLabel}
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -144,7 +149,7 @@ export default function ColourBlocks() {
   const { showRatio, showPoor, limit, colourMode, dispatchColourBlocks } = useColourBlocksContext();
 
   const { colourSet } = useColourInputContext();
-  if ([...colourSet][0] === undefined) return null;
+  if ([...colourSet][0] === undefined) return <b className="m-auto text-xl">Nothing to show yet!</b>;
   const colourBlocks = getColourBlocks(colourSet, colourMode, showRatio, showPoor, limit, dispatchColourBlocks);
   return colourBlocks;
 }

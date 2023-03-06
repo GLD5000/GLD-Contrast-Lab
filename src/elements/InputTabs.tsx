@@ -14,52 +14,54 @@ export default function InputTabs({ tab, setTab }: { tab: string; setTab: Dispat
   }
 
   return (
-    <div className="text:current sticky top-16 z-50 flex w-full flex-row flex-wrap  gap-1 rounded-none pb-2 text-lg dark:bg-neutral-800">
-      <TabButton
-        name="About"
-        id="help"
-        key="help"
-        text="About"
-        clickFunction={handleClick}
-        className=" min-w-max grow basis-0 rounded-none border-2 border-transparent bg-neutral-100 py-1 px-2 text-current  hover:transition active:bg-slate-300"
-        inactiveClasses="  hover:bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-700"
-        currentTab={tab}
-        activeClasses=" shadow-current shadow-bottom dark:bg-neutral-800 bg-neutral-50"
-      />
+    <div className="sticky top-16 z-50 w-full bg-white dark:bg-neutral-800">
+      <div className="text:current  flex w-fit flex-row flex-wrap  gap-1 rounded-none text-base dark:bg-neutral-800">
+        <TabButton
+          name="About"
+          id="help"
+          key="help"
+          text="About"
+          clickFunction={handleClick}
+          className=" min-w-[10rem] grow basis-0 rounded-none border-2 border-transparent bg-neutral-100 py-1 px-2 text-current  hover:transition active:bg-slate-300"
+          inactiveClasses="  hover:bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-700"
+          currentTab={tab}
+          activeClasses=" shadow-current shadow-bottom dark:bg-neutral-800 bg-neutral-50"
+        />
 
-      <TabButton
-        name="Add Colours"
-        id="add-colours"
-        key="add-colours"
-        text="Add Colours"
-        clickFunction={handleClick}
-        className=" min-w-max grow basis-0 rounded-none border-2 border-transparent bg-neutral-100 py-1 px-2 text-current  hover:transition active:bg-slate-300"
-        inactiveClasses="  hover:bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-700"
-        currentTab={tab}
-        activeClasses=" shadow-current shadow-bottom dark:bg-neutral-800 bg-neutral-50"
-      />
-      <TabButton
-        name="Comparison Matrix"
-        id="compare-matrix"
-        key="compare-matrix"
-        text="Comparison Matrix"
-        clickFunction={handleClick}
-        className=" min-w-max grow basis-0 rounded-none border-2 border-transparent bg-neutral-100 py-1 px-2 text-current  hover:transition active:bg-slate-300"
-        inactiveClasses="  hover:bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-700"
-        currentTab={tab}
-        activeClasses=" shadow-current shadow-bottom dark:bg-neutral-800 bg-neutral-50"
-      />
-      {/* <TabButton
+        <TabButton
+          name="Add Colours"
+          id="add-colours"
+          key="add-colours"
+          text="Add Colours"
+          clickFunction={handleClick}
+          className=" min-w-[10rem] grow basis-0 rounded-none border-2 border-transparent bg-neutral-100 py-1 px-2 text-current  hover:transition active:bg-slate-300"
+          inactiveClasses="  hover:bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-700"
+          currentTab={tab}
+          activeClasses=" shadow-current shadow-bottom dark:bg-neutral-800 bg-neutral-50"
+        />
+        <TabButton
+          name="Comparison Matrix"
+          id="compare-matrix"
+          key="compare-matrix"
+          text="Comparison Matrix"
+          clickFunction={handleClick}
+          className=" min-w-[12rem] grow basis-0 rounded-none border-2 border-transparent bg-neutral-100 py-1 px-2 text-current  hover:transition active:bg-slate-300"
+          inactiveClasses="  hover:bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-700"
+          currentTab={tab}
+          activeClasses=" shadow-current shadow-bottom dark:bg-neutral-800 bg-neutral-50"
+        />
+        {/* <TabButton
         name="Colour Info"
         id="colour-info"
         key="colour-info"
         text="Colour Info"
         clickFunction={handleClick}
-        className=" grow basis-0 min-w-max rounded-none border-2 border-transparent bg-neutral-100 py-1 px-2 text-current  hover:transition active:bg-slate-300"
+        className=" grow basis-0 min-w-[10rem] rounded-none border-2 border-transparent bg-neutral-100 py-1 px-2 text-current  hover:transition active:bg-slate-300"
         inactiveClasses="  hover:bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-700"
         currentTab={tab}
         activeClasses=" shadow-current shadow-bottom dark:bg-neutral-800 bg-neutral-50"
       /> */}
+      </div>
     </div>
   );
 }

@@ -12,7 +12,7 @@ function sortByLuminance(acc: Array<Array<string>>, curr: string) {
 }
 
 function tableReducer(acc: Array<Array<ReactElement>>, curr: string): Array<Array<ReactElement>> {
-  const classNames = 'block grow shrink-0 basis-0 w-full min-w-[12rem] p-4  ';
+  const classNames = 'block grow shrink-0 basis-0 w-full min-w-[8rem] p-4 text-xs rounded-none';
   const luminanceFloat = luminance.convertHexToLuminance(curr);
   const currP = (
     <span key={`${curr}-currP`} className={`${classNames}`}>
@@ -49,28 +49,28 @@ function tableReducer(acc: Array<Array<ReactElement>>, curr: string): Array<Arra
   return acc;
 }
 function getTable(colourArray: string[]) {
-  const classNames = 'block basis-0 shrink-0 grow min-w-max w-full min-w-fit p-4 text-xl';
+  const classNames = 'block basis-0 shrink-0 grow min-w-max w-full min-w-[8rem] p-2 text-sm rounded-none ';
 
   const dataTable = colourArray.reduce(tableReducer, [
     [
-      <span key="Hex" className={`${classNames}`}>
+      <b key="Hex" className={`${classNames}`}>
         Hex
-      </span>,
-      <span key="HSL" className={`${classNames}`}>
+      </b>,
+      <b key="HSL" className={`${classNames}`}>
         HSL
-      </span>,
-      <span key="RGB" className={`${classNames}`}>
+      </b>,
+      <b key="RGB" className={`${classNames}`}>
         RGB
-      </span>,
-      <span key="Luminance" className={`${classNames}`}>
+      </b>,
+      <b key="Luminance" className={`${classNames}`}>
         Luminance
-      </span>,
-      <span key="Black" className={`${classNames}`}>
+      </b>,
+      <b key="Black" className={`${classNames}`}>
         Contrast Ratio Black
-      </span>,
-      <span key="White" className={`${classNames}`}>
+      </b>,
+      <b key="White" className={`${classNames}`}>
         Contrast Ratio White
-      </span>,
+      </b>,
     ],
   ]);
 
@@ -80,7 +80,7 @@ function getTable(colourArray: string[]) {
 
     const key = `${i}row`;
     return (
-      <div key={key} style={style} className="flex w-full  grow flex-row gap-2 ">
+      <div key={key} style={style} className="flex w-full  grow flex-row gap-2 rounded-none">
         {x}
       </div>
     );
@@ -95,8 +95,8 @@ export default function InfoTable() {
 
   const tableMarkDown = getTable(lumSort);
   return (
-    <div className="relative flex w-full overflow-x-auto px-8">
-      <div className="w-min-[100%] relative mx-auto flex min-w-max shrink-0 grow  flex-col gap-0 border border-neutral-400 p-4 text-center text-neutral-800 dark:text-neutral-50">
+    <div className="relative m-2 flex w-full overflow-x-auto px-8">
+      <div className="w-min-[100%] relative mx-auto flex min-w-max shrink-0 grow  flex-col gap-0 overflow-clip rounded border-0 border-neutral-400 bg-white text-center text-neutral-800 dark:bg-neutral-700 dark:text-neutral-50">
         {tableMarkDown}
       </div>
     </div>

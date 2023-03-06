@@ -1,6 +1,4 @@
 import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
-import H3 from '../../elements/H3';
-import P from '../../elements/P';
 import { colourSpace } from '../../utilities/colour/colourSpace';
 import { luminance } from '../../utilities/colour/luminance';
 
@@ -23,9 +21,9 @@ function getContent(
 ) {
   if (autoColour)
     return (
-      <P className="m-0 whitespace-pre-wrap underline decoration-current underline-offset-2" content={colourString} />
+      <p className="m-0 whitespace-pre-wrap text-sm underline decoration-current underline-offset-2">{colourString}</p>
     );
-  return <H3 content={showRatio ? contrastRatio : contrastRating} />;
+  return <b className="text-sm">{showRatio ? contrastRatio : contrastRating}</b>;
 }
 
 export default function ColourBlock({
@@ -77,7 +75,7 @@ export default function ColourBlock({
     <button
       type="button"
       onClick={handleClick}
-      className={`text-m grid aspect-square h-24 w-24 items-center  overflow-clip border-2 text-center text-current ${
+      className={`text-m grid aspect-square h-20  items-center  overflow-clip border-2 text-center text-current ${
         !autoColour && 'rounded-full'
       } background-transparent`}
       style={style}
