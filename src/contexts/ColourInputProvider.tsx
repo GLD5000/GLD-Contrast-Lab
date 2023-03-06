@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useContext, useReducer, Dispatch, useEffect } from 'react';
+import { colourSpace } from '../utilities/colour/colourSpace';
 
 const initialiserA: {
   textInput: string | undefined;
@@ -103,21 +104,41 @@ export default function ColourInputProvider({ children }: { children: ReactNode 
   return <ColourInput.Provider value={data}>{children}</ColourInput.Provider>;
 }
 
-function processHexString(hex: string) {
-  if (hex[0] !== '#' || hex.length < 2 || hex.slice(1).search(/#|[^0-9a-fA-F]/) > -1) return hex;
-  let modifiedHex = hex.length > 7 ? hex.slice(0, 7) : hex;
-  if (hex.length < 5) {
-    const characters = hex.slice(1);
-    modifiedHex = `#${characters.repeat(6 / characters.length)}`;
-  }
-  if (hex.length > 4 && hex.length < 7) {
-    modifiedHex = `#${hex[1].repeat(6)}`;
+function processHexString(value: string) {
+  if (value[0] !== '#' || value.length < 2 || value.slice(1).search(/#|[^0-9a-fA-F]/) > -1) return value;
+  let modifiedHex = value.length > 7 ? value.slice(0, 7) : value;
+  if (value.length < 7) {
+    const characters = value.slice(1);
+    modifiedHex = modifiedHex.padEnd(7, characters);
   }
   return modifiedHex;
 }
 
+function processRgbString(value: string) {
+  const cleanedUpValue = value.toLowerCase().replaceAll(/[()rgb]/g, '');
+  if (cleanedUpValue.search(/^[\d]{1,3},[\d]{1,3},[\d]{1,3}$/) === -1) return value;
+  const rgbArray = cleanedUpValue.split(',').map((x) => parseInt(x, 10));
+  const hex = colourSpace.convertRgbToHex(rgbArray);
+  return hex;
+}
+
+function processHslString(value: string) {
+  const cleanedUpValue = value.toLowerCase().replaceAll(/[()hsl%]/g, '');
+  if (cleanedUpValue.search(/^[\d]{1,3},[\d]{1,3},[\d]{1,3}$/) === -1) return value;
+  const hslArray = cleanedUpValue.split(',').map((x) => parseInt(x, 10));
+  const hex = colourSpace.convertHslArrayToHex(hslArray);
+  return hex;
+}
+
+function processColourString(stringIn: string) {
+  if (stringIn.includes('#')) return processHexString(stringIn);
+  if (stringIn.toLowerCase().includes('hsl')) return processHslString(stringIn);
+  if (stringIn.toLowerCase().includes('rgb')) return processRgbString(stringIn);
+  return stringIn;
+}
+
 function hexReducer(acc: { processedText: string; processedArray: string[] }, curr: string) {
-  const processedHex = processHexString(curr);
+  const processedHex = processColourString(curr);
   if (processedHex.length === 7 && processedHex[0] === '#') {
     acc.processedArray.push(processedHex);
     return acc;
@@ -128,12 +149,12 @@ function hexReducer(acc: { processedText: string; processedArray: string[] }, cu
 }
 
 function processText(text: string | undefined) {
-  if (text === undefined || text.search(/[ \r\n,]+/) === -1) {
+  if (text === undefined || text.search(/[ \r\n]+/) === -1) {
     console.log(text);
     return { processedText: text, processedArray: [] };
   }
-  const shouldSkipLastElement = text[text.length - 1].search(/[ \r\n,]/) === -1;
-  const splitText = text.split(/[ \r\n,]+/);
+  const shouldSkipLastElement = text[text.length - 1].search(/[ \r\n]/) === -1;
+  const splitText = text.split(/[ \r\n]+/);
   if (shouldSkipLastElement) {
     const slicedArray = splitText.slice(0, -1);
     const { processedText, processedArray } = slicedArray.reduce(hexReducer, {
