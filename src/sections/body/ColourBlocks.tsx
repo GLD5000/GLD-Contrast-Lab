@@ -1,10 +1,10 @@
-import { Dispatch } from 'react';
 import ColourBlock from './ColourBlock';
 import autoTextColourFromHex from '../../utilities/colour/autoTextColour';
 import { getContrastRatioFromHex, contrast } from '../../utilities/colour/contrastRatio';
 import { useColourInputContext } from '../../contexts/ColourInputProvider';
 import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
 import { luminance } from '../../utilities/colour/luminance';
+import ShowButtons from './ShowButtons';
 
 function getBlockRow(backgroundColour: string, index: number, array: string[]) {
   const keyA = `${backgroundColour}${index}`;
@@ -44,7 +44,7 @@ function createColourBlockArrays(coloursArray: Set<string>, limit: number) {
       <div
         key={`${backgroundColour}-${keyA}`}
         style={{ backgroundColor: backgroundColour }}
-        className=" grid gap-2 rounded border-2 border-current p-2"
+        className=" grid gap-1 rounded border-2 border-current p-2"
       >
         {rowArray}
       </div>
@@ -52,104 +52,22 @@ function createColourBlockArrays(coloursArray: Set<string>, limit: number) {
   });
 }
 
-function getColourBlocks(
-  colourSet: Set<string>,
-  colourMode: string,
-  showRatio: boolean,
-  showPoor: boolean,
-  limit: number,
-  dispatchColourBlocks: Dispatch<
-    Partial<{
-      colourMode: string;
-      showRatio: boolean;
-      showPoor: boolean;
-      limit: number;
-      visibleSet: Set<string>;
-    }>
-  >,
-) {
+function getColourBlocks(colourSet: Set<string>, limit: number) {
   const returnArrays = createColourBlockArrays(colourSet, limit);
-  const colourModeLabel = `${colourMode}`;
-  const ratioLabel = showRatio ? 'Contrast Ratio' : 'Contrast Rating';
-  const ratingRatio = showRatio ? 'Ratios' : 'Ratings';
-  const poorLabel = showPoor ? `All ${ratingRatio}` : `Usable ${ratingRatio}`;
-  const limitLabel = `Up to ${limit} Colours`;
-  function handleClickColourMode() {
-    const nextMode: { [elemName: string]: string } = {
-      hex: 'luminance',
-      luminance: 'hsl',
-      hsl: 'rgb',
-      rgb: 'hex',
-    };
-
-    dispatchColourBlocks({ colourMode: nextMode[colourMode] });
-  }
-
-  function handleClickRatio() {
-    dispatchColourBlocks({ showRatio: !showRatio });
-  }
-  function handleClickPoor() {
-    dispatchColourBlocks({ showPoor: !showPoor });
-  }
-  function handleClickLimit() {
-    const nextLimit: { [elemName: number]: number } = {
-      4: 8,
-      8: 12,
-      12: 16,
-      16: 20,
-      20: 4,
-    };
-    dispatchColourBlocks({ limit: nextLimit[limit] });
-  }
   return (
-    <div className=" grid w-full  items-center justify-center self-center overflow-auto rounded-none">
-      <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 gap-2 overflow-auto rounded p-2">
+    <div className=" mt-8 grid  w-full items-center justify-center gap-4 self-center overflow-auto rounded-none">
+      <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 gap-1 overflow-auto rounded">
         {returnArrays}
       </div>
-
-      <div className="sticky left-0 flex w-body min-w-body max-w-body flex-row flex-wrap items-center justify-center gap-4  p-2">
-        <div className="w-fit rounded bg-neutral-200 py-2 px-4 dark:bg-neutral-700">
-          <b className="text-lg">Show:</b>
-
-          <button
-            type="button"
-            onClick={handleClickColourMode}
-            className="m-2 w-40 shrink-0 rounded p-2 text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
-          >
-            {colourModeLabel}
-          </button>
-
-          <button
-            type="button"
-            onClick={handleClickRatio}
-            className="m-2 w-40 shrink-0 rounded p-2 text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
-          >
-            {ratioLabel}
-          </button>
-          <button
-            type="button"
-            onClick={handleClickPoor}
-            className="m-2 w-40 shrink-0 rounded p-2 text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
-          >
-            {poorLabel}
-          </button>
-          <button
-            type="button"
-            onClick={handleClickLimit}
-            className="m-2 w-40 shrink-0 rounded p-2 text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
-          >
-            {limitLabel}
-          </button>
-        </div>
-      </div>
+      <ShowButtons />
     </div>
   );
 }
 export default function ColourBlocks() {
-  const { showRatio, showPoor, limit, colourMode, dispatchColourBlocks } = useColourBlocksContext();
+  const { limit } = useColourBlocksContext();
 
   const { colourSet } = useColourInputContext();
   if ([...colourSet][0] === undefined) return <b className="m-auto text-xl">Nothing to show yet!</b>;
-  const colourBlocks = getColourBlocks(colourSet, colourMode, showRatio, showPoor, limit, dispatchColourBlocks);
+  const colourBlocks = getColourBlocks(colourSet, limit);
   return colourBlocks;
 }

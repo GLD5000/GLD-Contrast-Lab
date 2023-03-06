@@ -28,7 +28,7 @@ function getContent(
         key={uniqueKey}
         id={uniqueKey}
         content={name}
-        className="m-2 flex h-fit w-fit flex-row items-center justify-between gap-1 rounded border-2 border-neutral-900 p-1 text-center text-sm dark:border-neutral-200"
+        className="flex h-fit w-24 flex-row items-center justify-between gap-1 rounded border-2 border-neutral-900 p-1 text-center text-sm dark:border-neutral-200"
         style={{ backgroundColor: name, color: autoTextColourFromHex(name) }}
         clickFunction={clickHandler}
       />
@@ -40,6 +40,6 @@ export default function InlineList() {
   const { colourSet, dispatchColourInput } = useColourInputContext();
   if (colourSet.size === 0) return null;
   const content = getContent([...colourSet], dispatchColourInput);
-  const className = 'list-none flex flex-row flex-wrap ';
+  const className = 'list-none flex flex-row flex-wrap gap-2 mx-auto';
   return <Ul content={content} className={className} />;
 }

@@ -8,7 +8,7 @@ export default function SunSvg({ classes = ' fill-current stroke-current stroke-
         style={{
           strokeLinecap: 'round',
         }}
-        className="stroke-current stroke-2"
+        className="fill-none stroke-current stroke-2"
       />
       <path
         d="m 16.075465,4.0002373 a 12,12 0 0 1 10.357407,6.0705827 12,12 0 0 1 -0.08473,12.005027 12,12 0 0 1 -10.44206,5.923785 L 16,16 Z"
