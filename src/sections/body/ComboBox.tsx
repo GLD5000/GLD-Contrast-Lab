@@ -30,7 +30,7 @@ export default function ComboBox() {
         <button
           type="button"
           onClick={handleClickClearTags}
-          className="m-2 ml-auto flex flex-row items-center justify-between gap-2 rounded border border-current p-1 text-sm text-pink-700 hover:bg-pink-700 hover:text-black dark:text-pink-300 dark:hover:bg-pink-300 dark:hover:text-black"
+          className="m-2 ml-auto flex flex-row items-center justify-between gap-2 rounded border border-current p-1 text-sm text-pink-700 hover:bg-pink-700 hover:text-white dark:text-pink-300 dark:hover:bg-pink-300 dark:hover:text-black"
         >
           Clear All
           <div className=" aspect-square w-6">
