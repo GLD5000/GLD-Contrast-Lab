@@ -9,8 +9,8 @@ export default function Banner({ setShowBanner }: { setShowBanner: Dispatch<SetS
 
   return (
     <section className="flex flex-col items-center bg-neutral-100 dark:bg-neutral-800">
-      <div className=" relative grid w-body min-w-body max-w-body content-center rounded-none bg-neutral-600 p-2 text-center  text-white dark:bg-neutral-400 dark:text-neutral-900 ">
-        <h1 className=" m-2 p-2 text-current">Hi There! This project is part of the GLD Portfolio...</h1>
+      <div className=" relative grid w-body min-w-body max-w-body content-center rounded-none bg-neutral-600 text-center  text-white dark:bg-neutral-400 dark:text-neutral-900 ">
+        <h2 className=" mr-auto px-2 text-current">Hello! I am GLD, I make tools for developers!</h2>
         <Link
           content="See more projects"
           link="https://gld-portfolio.vercel.app/"
