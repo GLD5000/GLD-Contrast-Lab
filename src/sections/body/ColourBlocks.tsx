@@ -56,10 +56,10 @@ function getColourBlocks(colourSet: Set<string>, limit: number) {
   const returnArrays = createColourBlockArrays(colourSet, limit);
   return (
     <div className=" mt-8 grid  w-full items-center justify-center gap-4 self-center overflow-auto rounded-none">
+      <ShowButtons />
       <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 gap-1 overflow-auto rounded">
         {returnArrays}
       </div>
-      <ShowButtons />
     </div>
   );
 }

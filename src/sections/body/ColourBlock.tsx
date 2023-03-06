@@ -6,7 +6,7 @@ function getColourString(hexCode: string, mode: string) {
   if (mode === 'hex') return `hex\r\n${hexCode.slice(1)}`;
 
   const colourStringCallbacks: { [elemName: string]: string } = {
-    luminance: `luminance\r\n${luminance.convertHexToLuminancePercent(hexCode)}`,
+    luminance: `lum\r\n${luminance.convertHexToLuminancePercent(hexCode)}`,
     hsl: colourSpace.convertHexToHslStringLb(hexCode),
     rgb: colourSpace.convertHextoRgbStringLb(hexCode),
   };
@@ -21,7 +21,7 @@ function getContent(
 ) {
   if (autoColour)
     return (
-      <p className="m-0 whitespace-pre-wrap text-sm underline decoration-current underline-offset-2">{colourString}</p>
+      <p className="m-0 whitespace-pre-wrap text-xs underline decoration-current underline-offset-2">{colourString}</p>
     );
   return <b className="text-sm">{showRatio ? contrastRatio : contrastRating}</b>;
 }
@@ -76,7 +76,7 @@ export default function ColourBlock({
       type="button"
       tabIndex={-1}
       onClick={handleClick}
-      className={` text-m grid aspect-square h-20  items-center  overflow-clip border-2 text-center text-current ${
+      className={` text-m grid aspect-square w-16  items-center  overflow-clip border-2 text-center text-current ${
         !autoColour && 'rounded-full'
       } background-transparent`}
       style={style}
