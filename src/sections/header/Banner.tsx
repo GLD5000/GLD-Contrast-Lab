@@ -18,6 +18,7 @@ export default function Banner({ setShowBanner }: { setShowBanner: Dispatch<SetS
         />
 
         <SvgButton
+          svgWrapperClasses="pointer-events-none h-6 w-6"
           text="Close"
           clickFunction={handleBannerClick}
           id="close-banner"

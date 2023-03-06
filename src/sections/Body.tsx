@@ -37,7 +37,7 @@ function getTab(tab: string) {
 }
 export default function Body() {
   const [tab, setTab] = useState('add-colours');
-  const [showBanner, setShowBanner] = useState(true);
+  const [showBanner, setShowBanner] = useState(false);
 
   const returnSection = getTab(tab);
   return (

@@ -18,6 +18,7 @@ export default function SpicyLi({
     <li id={id} className={className} style={style}>
       {content}
       <SvgButton
+        svgWrapperClasses="pointer-events-none h-6 w-6"
         text={undefined}
         clickFunction={clickFunction}
         id={`${id}-close-btn`}

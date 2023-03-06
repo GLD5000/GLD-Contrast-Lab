@@ -47,6 +47,7 @@ export default function CodeBox({
       )}
       <pre className="p-2">{`${codeBody}`}</pre>
       <SvgButton
+        svgWrapperClasses="pointer-events-none h-6 w-6"
         type="duplicate"
         key={`${1}copyCode`}
         text={copyButtonMessage}
