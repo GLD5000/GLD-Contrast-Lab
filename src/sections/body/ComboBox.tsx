@@ -21,7 +21,10 @@ export default function ComboBox() {
       <div className="flex flex-row flex-wrap items-center p-2">
         <label htmlFor="colour-input">
           <b className="text-lg">Colours</b>{' '}
-          <Span className="text-base text-neutral-500" content="(separate with spaces or linebreaks)" />
+          <Span
+            className="text-base text-neutral-700 dark:text-neutral-400"
+            content="(separate with spaces or linebreaks)"
+          />
         </label>
         <button
           type="button"
@@ -36,7 +39,7 @@ export default function ComboBox() {
           id="colour-input"
           placeholder="Paste or write colours in here e.g.:      #fafafa"
           name="codeInput"
-          className="w-full shrink-0 grow resize-none overflow-auto rounded border bg-inherit p-2 text-base placeholder:text-gray-500 dark:placeholder:text-gray-300"
+          className="w-full shrink-0 grow resize-none overflow-auto rounded border bg-inherit p-2 text-base placeholder:text-gray-600 dark:placeholder:text-gray-300"
           value={textInput}
           onInput={(e: FormEvent<HTMLTextAreaElement>): void => {
             const { value: targetValue } = e.currentTarget;
