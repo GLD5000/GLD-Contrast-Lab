@@ -74,8 +74,9 @@ export default function ColourBlock({
   return (
     <button
       type="button"
+      tabIndex={-1}
       onClick={handleClick}
-      className={`text-m grid aspect-square h-20  items-center  overflow-clip border-2 text-center text-current ${
+      className={` text-m grid aspect-square h-20  items-center  overflow-clip border-2 text-center text-current ${
         !autoColour && 'rounded-full'
       } background-transparent`}
       style={style}
