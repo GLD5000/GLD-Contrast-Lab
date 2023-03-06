@@ -103,26 +103,38 @@ function getColourBlocks(
   }
   return (
     <div className=" grid w-full  items-center justify-center self-center overflow-auto rounded-none">
-      <div className="sticky left-0 grid w-body min-w-body max-w-body grid-cols-4 justify-center p-4">
+      <div className="sticky left-0 flex w-body min-w-body max-w-body flex-row flex-wrap  justify-center p-4">
         <button
           type="button"
           onClick={handleClickColourMode}
-          className="m-2 rounded border border-current p-2 text-current"
+          className="m-2 shrink-0 grow basis-0 rounded border border-current p-2 text-current"
         >
           {colourModeLabel}
         </button>
 
-        <button type="button" onClick={handleClickRatio} className="m-2 rounded border border-current p-2 text-current">
+        <button
+          type="button"
+          onClick={handleClickRatio}
+          className="m-2 shrink-0 grow basis-0 rounded border border-current p-2 text-current"
+        >
           {ratioLabel}
         </button>
-        <button type="button" onClick={handleClickPoor} className="m-2 rounded border border-current p-2 text-current">
+        <button
+          type="button"
+          onClick={handleClickPoor}
+          className="m-2 shrink-0 grow basis-0 rounded border border-current p-2 text-current"
+        >
           {poorLabel}
         </button>
-        <button type="button" onClick={handleClickLimit} className="m-2 rounded border border-current p-2 text-current">
+        <button
+          type="button"
+          onClick={handleClickLimit}
+          className="m-2 shrink-0 grow basis-0 rounded border border-current p-2 text-current"
+        >
           {limitLabel}
         </button>
       </div>
-      <div className="grid w-fit auto-cols-min grid-flow-col grid-rows-1 gap-2 justify-self-center overflow-auto rounded p-4">
+      <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 gap-2 overflow-auto rounded p-4">
         {returnArrays}
       </div>
     </div>
