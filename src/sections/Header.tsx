@@ -1,4 +1,4 @@
-import Button from '../elements/Button';
+import SvgButton from '../elements/SvgButton';
 import GldSvg from '../icons/GldSvg';
 
 export default function Header({
@@ -15,10 +15,10 @@ export default function Header({
       <nav className=" col-start-2 flex w-body min-w-body max-w-body flex-wrap items-center justify-between align-middle  ">
         <div className="flex h-16 flex-wrap items-center gap-4 p-2">
           <GldSvg />
-          <h1>{title}</h1>
+          <h2>{title}</h2>
         </div>
         <div className="relative flex h-16 flex-wrap items-center justify-center gap-4 py-2">
-          <Button
+          {/* <Button
             backgroundColor=""
             text={colourTheme === 'dark' ? 'Light Mode' : 'Dark Mode'}
             clickFunction={toggleColourTheme}
@@ -27,6 +27,19 @@ export default function Header({
             className="rounded text-xs"
             activeClasses="dark:hover:bg-neutral-100 dark:hover:text-neutral-900 hover:text-neutral-50 hover:bg-neutral-800"
             conditionalClasses=""
+          /> */}
+          <SvgButton
+            svgWrapperClasses="pointer-events-none h-6 w-6"
+            text={colourTheme === 'dark' ? 'Light' : 'Dark'}
+            clickFunction={toggleColourTheme}
+            type={colourTheme === 'dark' ? 'sun' : 'moon'}
+            showText
+            reverse={false}
+            id="colour-theme-button"
+            name="Dark Mode Button"
+            className="rounded text-xs"
+            buttonClasses="w-fit h-fit flex flex-col overflow-hidden border border-transparent hover:border-current hover:transition py-1 px-2"
+            svgClasses="stroke-current fill-current stroke-2"
           />
         </div>
       </nav>
