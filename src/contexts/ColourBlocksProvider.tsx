@@ -1,10 +1,11 @@
-import { createContext, ReactNode, useContext, useReducer, Dispatch } from 'react';
+import { createContext, ReactNode, useContext, useReducer, Dispatch, useEffect } from 'react';
+import { useColourInputContext } from './ColourInputProvider';
 
 const initialiserA: {
   colourMode: string;
   showRatio: boolean;
   showPoor: boolean;
-  limit: number;
+  limit: boolean;
   visibleSet: Set<string>;
 
   dispatchColourBlocks: Dispatch<
@@ -12,7 +13,7 @@ const initialiserA: {
       colourMode: string;
       showRatio: boolean;
       showPoor: boolean;
-      limit: number;
+      limit: boolean;
       visibleSet: Set<string>;
     }>
   >;
@@ -20,7 +21,7 @@ const initialiserA: {
   colourMode: 'hex',
   showRatio: false,
   showPoor: false,
-  limit: 12,
+  limit: false,
   visibleSet: new Set(''),
   dispatchColourBlocks: () => undefined,
 };
@@ -29,36 +30,47 @@ const initialiserB: {
   colourMode: string;
   showRatio: boolean;
   showPoor: boolean;
-  limit: number;
+  limit: boolean;
   visibleSet: Set<string>;
 } = {
   colourMode: 'hex',
   showRatio: false,
   showPoor: false,
-  limit: 12,
+  limit: false,
   visibleSet: new Set(''),
 };
 
 function useData() {
+  const { colourSet } = useColourInputContext();
   const [{ colourMode, showRatio, showPoor, limit, visibleSet }, dispatchColourBlocks] = useReducer(
     (
       state: {
         colourMode: string;
         showRatio: boolean;
         showPoor: boolean;
-        limit: number;
+        limit: boolean;
         visibleSet: Set<string>;
       },
       action: Partial<{
         colourMode: string;
         showRatio: boolean;
         showPoor: boolean;
-        limit: number;
+        limit: boolean;
         visibleSet: Set<string>;
       }>,
     ) => ({ ...state, ...action }),
     initialiserB,
   );
+
+  useEffect(() => {
+    let mounted = true;
+    if (mounted) {
+      dispatchColourBlocks({ visibleSet: new Set(colourSet) });
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [colourSet]);
 
   return {
     colourMode,

@@ -1,7 +1,6 @@
 import ColourBlock from './ColourBlock';
 import autoTextColourFromHex from '../../utilities/colour/autoTextColour';
 import { getContrastRatioFromHex, contrast } from '../../utilities/colour/contrastRatio';
-import { useColourInputContext } from '../../contexts/ColourInputProvider';
 import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
 import { luminance } from '../../utilities/colour/luminance';
 import ShowButtons from './ShowButtons';
@@ -36,9 +35,9 @@ function sortByLuminance(acc: Array<Array<string>>, curr: string) {
   return acc;
 }
 
-function createColourBlockArrays(coloursArray: Set<string>, limit: number) {
+function createColourBlockArrays(coloursArray: Set<string>) {
   const lumSort = [...coloursArray].reduce(sortByLuminance, []).flatMap((x) => x);
-  return lumSort.slice(0, limit).map((backgroundColour, index, array) => {
+  return lumSort.map((backgroundColour, index, array) => {
     const { keyA, rowArray } = getBlockRow(backgroundColour, index, array);
     return (
       <div
@@ -52,8 +51,14 @@ function createColourBlockArrays(coloursArray: Set<string>, limit: number) {
   });
 }
 
-function getColourBlocks(colourSet: Set<string>, limit: number) {
-  const returnArrays = createColourBlockArrays(colourSet, limit);
+function getColourBlocks(colourSet: Set<string>) {
+  const returnArrays =
+    colourSet.size > 0 ? (
+      createColourBlockArrays(colourSet)
+    ) : (
+      <b className="w-90 m-auto text-center text-xl">Add Colours</b>
+    );
+
   return (
     <div className=" mt-8 grid  w-full items-center justify-center gap-4 self-center overflow-auto rounded-none">
       <ShowButtons />
@@ -64,10 +69,8 @@ function getColourBlocks(colourSet: Set<string>, limit: number) {
   );
 }
 export default function ColourBlocks() {
-  const { limit } = useColourBlocksContext();
+  const { visibleSet } = useColourBlocksContext();
 
-  const { colourSet } = useColourInputContext();
-  if ([...colourSet][0] === undefined) return <b className="m-auto text-xl">Nothing to show yet!</b>;
-  const colourBlocks = getColourBlocks(colourSet, limit);
+  const colourBlocks = getColourBlocks(visibleSet);
   return colourBlocks;
 }

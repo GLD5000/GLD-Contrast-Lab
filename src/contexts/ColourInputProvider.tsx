@@ -115,7 +115,7 @@ function processHexString(value: string) {
 }
 
 function processRgbString(value: string) {
-  const cleanedUpValue = value.toLowerCase().replaceAll(/[()rgb]/g, '');
+  const cleanedUpValue = value.toLowerCase().replaceAll(/[ ()rgb]/g, '');
   if (cleanedUpValue.search(/^[\d]{1,3},[\d]{1,3},[\d]{1,3}$/) === -1) return value;
   const rgbArray = cleanedUpValue.split(',').map((x) => parseInt(x, 10));
   const hex = colourSpace.convertRgbToHex(rgbArray);
@@ -123,7 +123,7 @@ function processRgbString(value: string) {
 }
 
 function processHslString(value: string) {
-  const cleanedUpValue = value.toLowerCase().replaceAll(/[()hsl%]/g, '');
+  const cleanedUpValue = value.toLowerCase().replaceAll(/[ ()hsl%]/g, '');
   if (cleanedUpValue.search(/^[\d]{1,3},[\d]{1,3},[\d]{1,3}$/) === -1) return value;
   const hslArray = cleanedUpValue.split(',').map((x) => parseInt(x, 10));
   const hex = colourSpace.convertHslArrayToHex(hslArray);
@@ -149,12 +149,11 @@ function hexReducer(acc: { processedText: string; processedArray: string[] }, cu
 }
 
 function processText(text: string | undefined) {
-  if (text === undefined || text.search(/[ \r\n]+/) === -1) {
-    console.log(text);
+  if (text === undefined || text.search(/\s/) === -1) {
     return { processedText: text, processedArray: [] };
   }
-  const shouldSkipLastElement = text[text.length - 1].search(/[ \r\n]/) === -1;
-  const splitText = text.split(/[ \r\n]+/);
+  const shouldSkipLastElement = text[text.length - 1].search(/\s/) === -1;
+  const splitText = text.replaceAll(', ', ',').split(/\s/);
   if (shouldSkipLastElement) {
     const slicedArray = splitText.slice(0, -1);
     const { processedText, processedArray } = slicedArray.reduce(hexReducer, {

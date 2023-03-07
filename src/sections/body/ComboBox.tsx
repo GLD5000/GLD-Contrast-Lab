@@ -24,7 +24,7 @@ export default function ComboBox() {
           <b className="text-lg">Colours</b>{' '}
           <Span
             className="text-base text-neutral-700 dark:text-neutral-400"
-            content="(separate with spaces or linebreaks)"
+            content="(separated with spaces or linebreaks)"
           />
         </label>
         <button
@@ -41,13 +41,12 @@ export default function ComboBox() {
       <div className="m-2 flex flex-row flex-wrap gap-2">
         <TextArea
           id="colour-input"
-          placeholder="Paste or write colours in here e.g.:      #fafafa"
+          placeholder="Enter colours here e.g.:      #fafafa  /  rgb(120,120,120)  /  hsl(200,50%,50%)"
           name="codeInput"
           className="w-full shrink-0 grow resize-none overflow-auto rounded border bg-inherit p-2 text-base placeholder:text-gray-600 dark:placeholder:text-gray-300"
           value={textInput}
           onInput={(e: FormEvent<HTMLTextAreaElement>): void => {
             const { value: targetValue } = e.currentTarget;
-            console.log(targetValue);
             dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: targetValue } });
           }}
         />
