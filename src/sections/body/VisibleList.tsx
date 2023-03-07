@@ -51,6 +51,6 @@ export default function VisibleList() {
 
   if (visibleSet.size === 0) return null;
   const content = getContent(visibleSet, dispatchColourBlocks);
-  const className = 'list-none flex flex-row flex-wrap gap-2 mx-auto';
+  const className = 'list-none flex flex-row flex-wrap gap-2 mx-auto justify-around max-w-screen';
   return <Ul content={content} className={className} />;
 }
