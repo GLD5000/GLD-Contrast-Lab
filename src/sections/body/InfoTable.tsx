@@ -123,7 +123,7 @@ export default function InfoTable() {
 
   const tableMarkDown = getTable(lumSort);
   return (
-    <div className="relative m-2 w-full overflow-x-auto px-8 pb-4">
+    <div className="relative w-full overflow-x-auto px-8 pb-4">
       <div className="relative mx-auto flex w-fit grow  flex-col gap-0 overflow-clip rounded border border-neutral-900 bg-white text-center text-neutral-800 dark:border-neutral-300 dark:bg-neutral-700 dark:text-neutral-50">
         {tableMarkDown}
       </div>
