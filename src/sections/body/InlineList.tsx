@@ -40,6 +40,6 @@ export default function InlineList() {
   const { colourSet, dispatchColourInput } = useColourInputContext();
   if (colourSet.size === 0) return null;
   const content = getContent([...colourSet], dispatchColourInput);
-  const className = 'list-none flex flex-row flex-wrap gap-2 mx-auto';
+  const className = 'list-none flex flex-row flex-wrap gap-2 mx-auto justify-around';
   return <Ul content={content} className={className} />;
 }
