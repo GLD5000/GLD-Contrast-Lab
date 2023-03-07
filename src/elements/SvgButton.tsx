@@ -20,6 +20,7 @@ import TableSvg from '../icons/TableSvg';
 import HintSvg from '../icons/HintSvg';
 import MoonSvg from '../icons/MoonSvg';
 import SunSvg from '../icons/SunSvg';
+import TickSvg from '../icons/TickSvg';
 
 // import CollapseSvg from '../icons/Collapse'
 // import ExpandSvg from '../icons/Expand'
@@ -45,6 +46,7 @@ function getSvg(type: string, svgClasses: string, svgWrapperClasses: string): Re
     hint: <HintSvg classes={svgClasses} />,
     moon: <MoonSvg classes={svgClasses} />,
     sun: <SunSvg classes={svgClasses} />,
+    tick: <TickSvg classes={svgClasses} />,
   };
   return <div className={svgWrapperClasses}>{svgLookup[type]}</div>;
 }

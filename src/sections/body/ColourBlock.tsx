@@ -19,11 +19,8 @@ function getContent(
   autoColour: boolean,
   colourString: string,
 ) {
-  if (autoColour)
-    return (
-      <p className="m-0 whitespace-pre-wrap text-xs underline decoration-current underline-offset-2">{colourString}</p>
-    );
-  return <b className="text-sm">{showRatio ? contrastRatio : contrastRating}</b>;
+  if (autoColour) return <b className=" whitespace-pre-wrap text-xs ">{colourString}</b>;
+  return <p className="m-0 text-xs">{showRatio ? contrastRatio : contrastRating}</p>;
 }
 
 export default function ColourBlock({
@@ -71,12 +68,13 @@ export default function ColourBlock({
     ? getColourString(backgroundColour, colourMode)
     : `hex\r\n${backgroundColour.slice(1)}`;
   const returnContent = getContent(showRatio, contrastRatio, contrastRating, autoColour, colourString);
+  const border = autoColour ? 'border-none' : 'border-2';
   return (
     <button
       type="button"
       tabIndex={-1}
       onClick={handleClick}
-      className={` text-m grid aspect-square w-16  items-center  overflow-clip border-2 text-center text-current ${
+      className={` text-m grid aspect-square w-16  items-center  overflow-clip ${border} text-center text-current ${
         !autoColour && 'rounded-full'
       } background-transparent`}
       style={style}

@@ -34,8 +34,8 @@ export default function ToggleButton({
   };
   function getSvg(value: string): { [elemName: string]: ReactElement } {
     const svgLookup: { [elemName: string]: { [elemName: string]: ReactElement } } = {
-      tick: { true: <TickSvg />, false: <UnTickSvg fill={backgroundColorIn} /> },
-      flick: { true: <TickSvg />, false: <UnTickSvg fill={backgroundColorIn} /> },
+      tick: { true: <TickSvg classes="" />, false: <UnTickSvg fill={backgroundColorIn} /> },
+      flick: { true: <TickSvg classes="" />, false: <UnTickSvg fill={backgroundColorIn} /> },
     };
     const returnValue: { [elemName: string]: ReactElement } = svgLookup[value];
     return returnValue;

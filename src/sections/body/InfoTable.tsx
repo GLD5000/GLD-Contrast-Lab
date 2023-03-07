@@ -4,6 +4,7 @@ import { autoTextColour } from '../../utilities/colour/autoTextColour';
 import { colourSpace } from '../../utilities/colour/colourSpace';
 import { contrast } from '../../utilities/colour/contrastRatio';
 import { luminance } from '../../utilities/colour/luminance';
+import CsvButton from './CsvButton';
 
 function sortByLuminance(acc: Array<Array<string>>, curr: string) {
   const luminanceInteger = Math.round(1000 * luminance.convertHexToLuminance(curr));
@@ -11,70 +12,96 @@ function sortByLuminance(acc: Array<Array<string>>, curr: string) {
   return acc;
 }
 
-function tableReducer(acc: Array<Array<ReactElement>>, curr: string): Array<Array<ReactElement>> {
+function tableReducer(
+  acc: {
+    csv: string;
+    jsx: ReactElement[][];
+  },
+  curr: string,
+): {
+  csv: string;
+  jsx: ReactElement[][];
+} {
   const classNames = 'block w-36 p-4 text-xs rounded-none';
   const luminanceFloat = luminance.convertHexToLuminance(curr);
-  const currP = (
+  const HSLValue = colourSpace.convertHexToHslString(curr);
+  const RGBValue = colourSpace.convertHextoRgbString(curr);
+  const LuminanceValue = luminance.convertHexToLuminancePercent(curr);
+  const ContrastRatioBlackValue = contrast.getContrastRatio2Dp([0, luminanceFloat]);
+  const ContrastRatioWhiteValue = contrast.getContrastRatio2Dp([1, luminanceFloat]);
+
+  const newCsvRow = `\r\n${curr}\t${HSLValue}\t${RGBValue}\t${LuminanceValue}\t${ContrastRatioBlackValue}\t${ContrastRatioWhiteValue}`;
+  acc.csv += newCsvRow;
+  const currJsx = (
     <span key={`${curr}-currP`} className={`${classNames}`}>
       {curr}
     </span>
   );
-  const HSL = (
+  const HSLJsx = (
     <span key={`${curr}-HSL`} className={`${classNames}`}>
-      {colourSpace.convertHexToHslString(curr)}
+      {HSLValue}
     </span>
   );
-  const RGB = (
+  const RGBJsx = (
     <span key={`${curr}-RGB`} className={`${classNames}`}>
-      {colourSpace.convertHextoRgbString(curr)}
+      {RGBValue}
     </span>
   );
-  const Luminance = (
+  const LuminanceJsx = (
     <span key={`${curr}-Luminance`} className={`${classNames}`}>
-      {luminance.convertHexToLuminancePercent(curr)}
+      {LuminanceValue}
     </span>
   );
-  const ContrastRatioBlack = (
+  const ContrastRatioBlackJsx = (
     <span key={`${curr}-ContrastRatioBlack`} className={`${classNames}`}>
-      {contrast.getContrastRatio2Dp([0, luminanceFloat])}
+      {ContrastRatioBlackValue}
     </span>
   );
-  const ContrastRatioWhite = (
+  const ContrastRatioWhiteJsx = (
     <span key={`${curr}-ContrastRatioWhite`} className={`${classNames}`}>
-      {contrast.getContrastRatio2Dp([1, luminanceFloat])}
+      {ContrastRatioWhiteValue}
     </span>
   );
-  const newRow: Array<ReactElement> = [currP, HSL, RGB, Luminance, ContrastRatioBlack, ContrastRatioWhite];
-  acc.push(newRow);
+  const newRow: Array<ReactElement> = [
+    currJsx,
+    HSLJsx,
+    RGBJsx,
+    LuminanceJsx,
+    ContrastRatioBlackJsx,
+    ContrastRatioWhiteJsx,
+  ];
+  acc.jsx.push(newRow);
   return acc;
 }
 function getTable(colourArray: string[]) {
   const classNames = ' block w-36 p-2 text-sm rounded-none text-center my-auto';
-
-  const dataTable = colourArray.reduce(tableReducer, [
-    [
-      <b key="Hex" className={`${classNames}`}>
-        Hex
-      </b>,
-      <b key="HSL" className={`${classNames}`}>
-        HSL
-      </b>,
-      <b key="RGB" className={`${classNames}`}>
-        RGB
-      </b>,
-      <b key="Luminance" className={`${classNames}`}>
-        Luminance
-      </b>,
-      <b key="Black" className={`${classNames}`}>
-        Contrast Black
-      </b>,
-      <b key="White" className={`${classNames}`}>
-        Contrast White
-      </b>,
+  const tableAccumulator = {
+    csv: 'Hex\tHSL\tRGB\tLuminance\tBlack\tWhite',
+    jsx: [
+      [
+        <b key="Hex" className={`${classNames}`}>
+          Hex
+        </b>,
+        <b key="HSL" className={`${classNames}`}>
+          HSL
+        </b>,
+        <b key="RGB" className={`${classNames}`}>
+          RGB
+        </b>,
+        <b key="Luminance" className={`${classNames}`}>
+          Luminance
+        </b>,
+        <b key="Black" className={`${classNames}`}>
+          Contrast Black
+        </b>,
+        <b key="White" className={`${classNames}`}>
+          Contrast White
+        </b>,
+      ],
     ],
-  ]);
-
-  const flexBoxes = dataTable.map((x, i) => {
+  };
+  const { csv, jsx } = colourArray.reduce(tableReducer, tableAccumulator);
+  const flexBoxes = jsx.map((x, i) => {
     const curr = x[0].key?.toString().split('-')[0] || '#000000';
     const style = i === 0 ? undefined : { backgroundColor: curr, color: autoTextColour.autoTextColourFromHex(curr) };
 
@@ -85,6 +112,7 @@ function getTable(colourArray: string[]) {
       </div>
     );
   });
+  flexBoxes.push(<CsvButton key="csv-copy-btn" data={csv} />);
   return flexBoxes;
 }
 
