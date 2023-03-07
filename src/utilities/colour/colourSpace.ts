@@ -49,6 +49,11 @@ export const colourSpace = {
       .map((x, i) => (i === 0 ? x.toFixed(0) : `${x.toFixed(0)}%`));
     return `hsl(${hslArray.join(', ')})`;
   },
+  convertHexToHslArray(hex: string) {
+    const srgb = colourSpace.convertHexToSrgbArray(hex);
+    const hslArray = colourSpace.convertSrgbToHslArray(srgb);
+    return hslArray;
+  },
   convertHextoRgbStringLb(hex: string) {
     const splitHex = colourSpace.splitHexString(hex);
     const rgbArray = splitHex.map((digits) => colourSpace.hexDigitsToInteger(digits));

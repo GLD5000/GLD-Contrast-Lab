@@ -22,7 +22,7 @@ function tableReducer(
   csv: string;
   jsx: ReactElement[][];
 } {
-  const classNames = 'block w-36 p-4 text-xs rounded-none';
+  const classNames = 'block w-40 p-4 text-xs rounded-none';
   const luminanceFloat = luminance.convertHexToLuminance(curr);
   const HSLValue = colourSpace.convertHexToHslString(curr);
   const RGBValue = colourSpace.convertHextoRgbString(curr);
@@ -74,7 +74,7 @@ function tableReducer(
   return acc;
 }
 function getTable(colourArray: string[]) {
-  const classNames = ' block w-36 p-2 text-sm rounded-none text-center my-auto';
+  const classNames = ' block w-40 p-2 text-sm rounded-none text-center my-auto';
   const tableAccumulator = {
     csv: 'Hex\tHSL\tRGB\tLuminance\tBlack\tWhite',
     jsx: [

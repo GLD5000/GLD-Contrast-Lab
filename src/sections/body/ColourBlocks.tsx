@@ -29,7 +29,6 @@ function getBlockRow(backgroundColour: string, index: number, array: string[]) {
 }
 
 function sortByLuminance(acc: Array<Array<string>>, curr: string) {
-  // Build sparse array based on  Math.round(lum * 100)
   const luminanceInteger = Math.round(1000 * luminance.convertHexToLuminance(curr));
   acc[luminanceInteger] = acc[luminanceInteger] === undefined ? [curr] : [...acc[luminanceInteger], curr];
   return acc;

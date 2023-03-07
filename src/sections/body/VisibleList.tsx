@@ -3,6 +3,13 @@ import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
 import SpicyLi from '../../elements/SpicyLi';
 import Ul from '../../elements/Ul';
 import autoTextColourFromHex from '../../utilities/colour/autoTextColour';
+import { colourSpace } from '../../utilities/colour/colourSpace';
+
+function sortByHue(acc: Array<Array<string>>, curr: string) {
+  const hue = Math.round(colourSpace.convertHexToHslArray(curr)[0]);
+  acc[hue] = acc[hue] === undefined ? [curr] : [...acc[hue], curr];
+  return acc;
+}
 
 function getContent(
   listSet: Set<string>,
@@ -16,7 +23,7 @@ function getContent(
     }>
   >,
 ) {
-  const listArray = [...listSet];
+  const listArray = [...listSet].reduce(sortByHue, [[]]).flatMap((x) => x);
 
   return listArray.map((name, index) => {
     const uniqueKey = `${name}-${index}`;
