@@ -1,4 +1,4 @@
-export default function MoonSvg({ classes = 'stroke-current fill-none stroke-2 ' }) {
+export default function MoonSvg({ classes = 'stroke-current fill-current stroke-2 ' }) {
   return (
     <div className="pointer-events-none h-full w-full">
       <svg
