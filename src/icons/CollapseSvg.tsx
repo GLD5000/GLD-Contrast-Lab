@@ -1,6 +1,6 @@
 export default function CollapseSvg({ classes = 'stroke-current fill-none' }) {
   return (
-    <div className="pointer-events-none m-1 h-full w-full">
+    <div className="pointer-events-none h-full w-full">
       <svg id="collapse-svg" role="img" aria-label="Collapse" height="100%" width="100%" viewBox="0 0 10 10">
         <path
           className={classes}

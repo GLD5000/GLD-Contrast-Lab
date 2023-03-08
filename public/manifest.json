@@ -2,8 +2,8 @@
   "manifest_version": "3",
   "version": "0.1",
   "short_name": "GLD",
-  "name": "GLD Portfolio",
-  "description": "View my portfolio projects, see my source code and get in touch with me.",
+  "name": "GLD Contrast Tool",
+  "description": "Compare your colours for guaranteed accessibility.",
   "icons": [
     {
       "src": "GLD144.png", 
