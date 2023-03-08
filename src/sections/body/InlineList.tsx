@@ -22,6 +22,7 @@ function getContent(
 
   const deleteBtn = (
     <button
+      key="delete-all-btn"
       type="button"
       onClick={handleClickClearTags}
       className=" flex h-8 w-28 flex-row content-center items-center justify-center rounded-full border p-1 text-sm text-pink-700 hover:bg-pink-700 hover:text-white dark:text-pink-300 dark:hover:bg-pink-300 dark:hover:text-black"
