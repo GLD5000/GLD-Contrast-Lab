@@ -12,7 +12,7 @@ export default function Header({
 }) {
   return (
     <header className="sticky top-0 left-0 right-0 z-[999] grid h-fit w-screen flex-shrink-0 flex-grow-0 grid-cols-frAutoFr content-center bg-neutral-100 dark:bg-neutral-800">
-      <nav className=" col-start-2 flex w-body min-w-body max-w-body flex-wrap items-center justify-between align-middle  ">
+      <nav className=" col-start-2 flex w-body min-w-body max-w-body flex-wrap items-center justify-between  ">
         <div className="flex h-16 flex-wrap items-center gap-4 p-2">
           <GldSvg />
           <h2>{title}</h2>

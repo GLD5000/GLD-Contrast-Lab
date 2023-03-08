@@ -1,4 +1,4 @@
-import { Dispatch, ReactElement, SetStateAction, useState } from 'react';
+import { Dispatch, ReactElement, MouseEvent, SetStateAction, useState } from 'react';
 import { useColourInputContext } from '../../contexts/ColourInputProvider';
 import SvgButton from '../../elements/SvgButton';
 import { autoTextColour } from '../../utilities/colour/autoTextColour';
@@ -12,18 +12,19 @@ function sortByLuminance(acc: Array<Array<string>>, curr: string) {
   acc[luminanceInteger] = acc[luminanceInteger] === undefined ? [curr] : [...acc[luminanceInteger], curr];
   return acc;
 }
-
 function tableReducer(
   acc: {
     csv: string;
     jsx: ReactElement[][];
     dataColumns: Set<string>;
+    showData: boolean;
   },
   curr: string,
 ): {
   csv: string;
   jsx: ReactElement[][];
   dataColumns: Set<string>;
+  showData: boolean;
 } {
   const classNames = 'block w-40 p-4 text-xs rounded-none';
   const luminanceFloat = luminance.convertHexToLuminance(curr);
@@ -39,25 +40,24 @@ function tableReducer(
 
   const newerRow = Object.values(valuesObject).reduce(titleRowReducer, '\r\n');
   acc.csv += newerRow;
-
-  const newJsxRow = [...acc.dataColumns].map((key) => (
-    <span key={`${curr}-${key}`} className={`${classNames}`}>
-      {valuesObject[key]}
-    </span>
-  ));
-  const newRow: Array<ReactElement> = newJsxRow;
-  acc.jsx.push(newRow);
+  if (acc.showData) {
+    const newJsxRow = [...acc.dataColumns].map((key) => (
+      <span key={`${curr}-${key}`} className={`${classNames}`}>
+        {valuesObject[key]}
+      </span>
+    ));
+    acc.jsx.push(newJsxRow);
+  }
   return acc;
 }
 function titleRowReducer(previousValue: string, currentValue: string, currentIndex: number, array: string[]) {
   const returnValue = previousValue + (currentIndex < array.length - 1 ? `${currentValue}\t` : `${currentValue}`);
   return returnValue;
 }
-
-function getButtons(csv: string, setDataColumns: Dispatch<SetStateAction<Set<string>>>) {
+function getButtons(csv: string, setShowData: Dispatch<SetStateAction<boolean>>) {
   const csvButton = <CsvButton key="csv-copy-btn" data={csv} />;
   function handleVisibilityClick() {
-    setDataColumns(new Set());
+    setShowData((state) => !state);
   }
   const visibilityButton = (
     <SvgButton
@@ -81,11 +81,44 @@ function getButtons(csv: string, setDataColumns: Dispatch<SetStateAction<Set<str
     </div>
   );
 }
-
+function getVisibiltyButtons(dataColumns: Set<string>, setDataColumns: Dispatch<SetStateAction<Set<string>>>) {
+  const titles = ['Hex', 'HSL', 'RGB', 'Luminance', 'Black', 'White'];
+  function handleVisibilityClick(e: MouseEvent<HTMLButtonElement>) {
+    const name = e.currentTarget.id.split('-')[0];
+    setDataColumns((currentState) => {
+      const newState = new Set([...currentState]);
+      if (newState.has(name) && newState.size > 2) {
+        newState.delete(name);
+        return newState;
+      }
+      newState.add(name);
+      return newState;
+    });
+  }
+  const buttons = titles.map((key) => (
+    <SvgButton
+      key={`${key}-custom-visibility-btn`}
+      text={key}
+      clickFunction={handleVisibilityClick}
+      id={`${key}-custom-visibility-btn`}
+      name={`${key} Visibility`}
+      className=" flex justify-start gap-2 pl-16 text-sm hover:bg-black hover:text-white hover:transition active:bg-slate-600 hover:dark:bg-white hover:dark:text-black"
+      type={dataColumns.has(key) ? 'preview' : 'delete'}
+      showText
+      reverse={false}
+      buttonClasses={undefined}
+      svgWrapperClasses="w-6 h-6"
+      svgClasses="stroke fill-none stroke-current self-center"
+    />
+  ));
+  return buttons;
+}
 function getTable(
   colourArray: string[],
   dataColumns: Set<string>,
   setDataColumns: Dispatch<SetStateAction<Set<string>>>,
+  showData: boolean,
+  setShowData: Dispatch<SetStateAction<boolean>>,
 ) {
   const classNames = ' block w-40 p-2 text-sm rounded-none text-center my-auto';
   const jsxArray = [...dataColumns].map((key) => {
@@ -100,6 +133,7 @@ function getTable(
     csv: 'Hex\tHSL\tRGB\tLuminance\tBlack\tWhite',
     jsx: [[...jsxArray]],
     dataColumns,
+    showData,
   };
   const { csv, jsx } = colourArray.reduce(tableReducer, tableAccumulator);
   const flexBoxes = jsx.map((x, i) => {
@@ -113,11 +147,14 @@ function getTable(
       </div>
     );
   });
-  const buttonArray = getButtons(csv, setDataColumns);
+  const buttonArray = getButtons(csv, setShowData);
+  if (showData === false) {
+    const visibilityButtonsArray = getVisibiltyButtons(dataColumns, setDataColumns);
+    flexBoxes.push(...visibilityButtonsArray);
+  }
   flexBoxes.push(buttonArray);
   return flexBoxes;
 }
-
 function setInitialColumns(): Set<string> {
   const windowWidth = window.innerWidth;
   const windowKey = Math.min(6, Math.max(2, Math.floor(windowWidth / 200)));
@@ -135,13 +172,14 @@ function setInitialColumns(): Set<string> {
 export default function InfoTable() {
   const { colourSet } = useColourInputContext();
   const [dataColumns, setDataColumns] = useState(setInitialColumns());
-  if (colourSet.size === 0 || dataColumns.size === 0) return null;
+  const [showData, setShowData] = useState(true);
+  if (colourSet.size === 0) return null;
   function setColumnsOnResize() {
     setDataColumns(setInitialColumns());
   }
   window.onresize = setColumnsOnResize;
   const lumSort = [...colourSet].reduce(sortByLuminance, []).flatMap((x) => x);
-  const tableMarkDown = dataColumns.size > 1 ? getTable(lumSort, dataColumns, setDataColumns) : null;
+  const tableMarkDown = getTable(lumSort, dataColumns, setDataColumns, showData, setShowData);
   return (
     <div className="relative w-full overflow-x-auto pb-4">
       <div className="relative mx-auto flex w-fit grow  flex-col gap-0 overflow-clip rounded border border-neutral-900 bg-white text-center text-neutral-800 dark:border-neutral-300 dark:bg-neutral-700 dark:text-neutral-50">

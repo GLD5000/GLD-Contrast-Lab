@@ -44,7 +44,7 @@ export default function Body() {
   const returnSection = getTab(tab);
   return (
     <ColourInputProvider>
-      <main id="body-container" className=" grid w-screen  flex-grow justify-items-center  pt-2  align-middle ">
+      <main id="body-container" className=" grid w-screen  flex-grow justify-items-center  pt-2  ">
         <section className="flex h-full w-body min-w-body max-w-body flex-col ">
           {showBanner && <Banner setShowBanner={setShowBanner} />}
           <InputTabs tab={tab} setTab={setTab} />
