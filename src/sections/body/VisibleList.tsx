@@ -18,7 +18,7 @@ function getContent(
       colourMode: string;
       showRatio: boolean;
       showPoor: boolean;
-      limit: boolean;
+      limit: string;
       visibleSet: Set<string>;
     }>
   >,
@@ -27,7 +27,6 @@ function getContent(
 
   return listArray.map((name, index) => {
     const uniqueKey = `${name}-${index}`;
-    // add clickHandler
     function clickHandler(e: MouseEvent<HTMLButtonElement>) {
       const hex = e.currentTarget.id.split('-')[0];
       listSet.delete(hex);

@@ -5,7 +5,7 @@ const initialiserA: {
   colourMode: string;
   showRatio: boolean;
   showPoor: boolean;
-  limit: boolean;
+  limit: string;
   visibleSet: Set<string>;
 
   dispatchColourBlocks: Dispatch<
@@ -13,7 +13,7 @@ const initialiserA: {
       colourMode: string;
       showRatio: boolean;
       showPoor: boolean;
-      limit: boolean;
+      limit: string;
       visibleSet: Set<string>;
     }>
   >;
@@ -21,7 +21,7 @@ const initialiserA: {
   colourMode: 'hex',
   showRatio: false,
   showPoor: false,
-  limit: false,
+  limit: 'All Colours',
   visibleSet: new Set(''),
   dispatchColourBlocks: () => undefined,
 };
@@ -30,13 +30,13 @@ const initialiserB: {
   colourMode: string;
   showRatio: boolean;
   showPoor: boolean;
-  limit: boolean;
+  limit: string;
   visibleSet: Set<string>;
 } = {
   colourMode: 'hex',
   showRatio: false,
   showPoor: false,
-  limit: false,
+  limit: 'All Colours',
   visibleSet: new Set(''),
 };
 
@@ -48,14 +48,14 @@ function useData() {
         colourMode: string;
         showRatio: boolean;
         showPoor: boolean;
-        limit: boolean;
+        limit: string;
         visibleSet: Set<string>;
       },
       action: Partial<{
         colourMode: string;
         showRatio: boolean;
         showPoor: boolean;
-        limit: boolean;
+        limit: string;
         visibleSet: Set<string>;
       }>,
     ) => ({ ...state, ...action }),

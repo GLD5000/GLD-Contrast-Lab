@@ -4,11 +4,12 @@ import { getContrastRatioFromHex, contrast } from '../../utilities/colour/contra
 import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
 import { luminance } from '../../utilities/colour/luminance';
 import ShowButtons from './ShowButtons';
+import BlockVisibility from './BlockVisibility';
 
 function getBlockRow(backgroundColour: string, index: number, array: string[]) {
-  const keyA = `${backgroundColour}${index}`;
+  const keyA = `${backgroundColour}-${index}`;
   const rowArray = array.map((textColour, number) => {
-    const keyB = `${textColour}${number}`;
+    const keyB = `${textColour}-${number}`;
     const autoColour = textColour === backgroundColour;
     const textColourMod = autoColour ? autoTextColourFromHex(backgroundColour) : textColour;
     const contrastRatio = Number(getContrastRatioFromHex(backgroundColour, textColourMod).toFixed(2));
@@ -44,6 +45,7 @@ function createColourBlockArrays(coloursArray: Set<string>) {
         style={{ backgroundColor: backgroundColour }}
         className=" grid gap-1 rounded border border-current p-2"
       >
+        <BlockVisibility hexId={keyA} />
         {rowArray}
       </div>
     );

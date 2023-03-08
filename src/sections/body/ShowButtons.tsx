@@ -1,15 +1,14 @@
 import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
 import { useColourInputContext } from '../../contexts/ColourInputProvider';
-import VisibleList from './VisibleList';
 
 export default function ShowButtons() {
-  const { showRatio, showPoor, limit, colourMode, dispatchColourBlocks } = useColourBlocksContext();
+  const { showRatio, showPoor, limit, colourMode, visibleSet, dispatchColourBlocks } = useColourBlocksContext();
   const { colourSet } = useColourInputContext();
   const colourModeLabel = `${colourMode}`;
   const ratioLabel = showRatio ? 'Contrast' : 'Rating';
   const ratingRatio = showRatio ? 'Ratios' : 'Ratings';
   const poorLabel = showPoor ? `All ${ratingRatio}` : `Safe ${ratingRatio}`;
-  const limitLabel = limit ? 'Selection' : 'All Colours';
+  const limitLabel = limit;
 
   function handleClickColourMode() {
     const nextMode: { [elemName: string]: string } = {
@@ -29,10 +28,17 @@ export default function ShowButtons() {
     dispatchColourBlocks({ showPoor: !showPoor });
   }
   function handleClickLimit() {
-    if (limit === true) {
+    const limitLookup: { [elemName: string]: string } = {
+      'All Colours': 'Selecting...',
+      'Selecting...': 'Selection',
+      Selection: 'All Colours',
+    };
+    const nextLimit =
+      limit === 'Selecting...' && visibleSet.size === colourSet.size ? 'All Colours' : limitLookup[limit];
+    if (nextLimit === 'All Colours') {
       dispatchColourBlocks({ visibleSet: new Set(colourSet) });
     }
-    dispatchColourBlocks({ limit: !limit });
+    dispatchColourBlocks({ limit: nextLimit });
   }
 
   return (
@@ -45,7 +51,7 @@ export default function ShowButtons() {
           <button
             type="button"
             onClick={handleClickColourMode}
-            className="m-2 w-28 shrink-0 rounded p-2 text-sm text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
+            className="m-2 w-28 shrink-0 rounded border p-2 text-sm text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
           >
             {colourModeLabel}
           </button>
@@ -53,27 +59,38 @@ export default function ShowButtons() {
           <button
             type="button"
             onClick={handleClickRatio}
-            className="m-2 w-28 shrink-0 rounded p-2 text-sm text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
+            className="m-2 w-28 shrink-0 rounded border p-2 text-sm text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
           >
             {ratioLabel}
           </button>
           <button
             type="button"
             onClick={handleClickPoor}
-            className="m-2 w-28 shrink-0 rounded p-2 text-sm text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
+            className="m-2 w-28 shrink-0 rounded border p-2 text-sm text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
           >
             {poorLabel}
           </button>
           <button
             type="button"
             onClick={handleClickLimit}
-            className="m-2 w-28 shrink-0 rounded p-2 text-sm text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
+            className="m-2 w-28 shrink-0 rounded border p-2 text-sm text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
           >
             {limitLabel}
           </button>
         </div>
       </div>
-      {limit && <VisibleList />}
+      {/* {limit === 'Selecting...' && (
+        <>
+          <span className="mx-auto text-sm">Click 'Done' after you have chosen your colours...</span>
+          <button
+            type="button"
+            onClick={handleClickLimit}
+            className="m-2 mx-auto w-28 shrink-0 rounded border p-2 text-sm text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
+          >
+            Done
+          </button>
+        </>
+      )} */}
     </>
   );
 }
