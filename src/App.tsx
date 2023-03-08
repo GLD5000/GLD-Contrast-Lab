@@ -4,13 +4,15 @@ import Header from './sections/Header';
 import Body from './sections/Body';
 import Footer from './sections/Footer';
 
-// function getThemeFromLocalStorage() {}
-// function setThemeToLocalStorage() {}
+function setThemeToLocalStorage(themeBoolean: boolean) {
+  localStorage.setItem('theme', themeBoolean.toString());
+}
 
 function App() {
-  const [colourTheme, setColourTheme] = useState(false);
+  const [colourTheme, setColourTheme] = useState(localStorage.getItem('theme') !== 'false');
   function toggleColourTheme() {
     setColourTheme((currentTheme: boolean) => !currentTheme);
+    setThemeToLocalStorage(!colourTheme);
   }
 
   return (
