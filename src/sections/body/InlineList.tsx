@@ -16,7 +16,21 @@ function getContent(
     }>;
   }>,
 ) {
-  return listArray.map((name, index) => {
+  function handleClickClearTags() {
+    dispatchColourInput({ type: 'CLEAR_TAGS', payload: {} });
+  }
+
+  const deleteBtn = (
+    <button
+      type="button"
+      onClick={handleClickClearTags}
+      className=" flex h-8 w-28 flex-row content-center items-center justify-center rounded-full border p-1 text-sm text-pink-700 hover:bg-pink-700 hover:text-white dark:text-pink-300 dark:hover:bg-pink-300 dark:hover:text-black"
+    >
+      <b>Delete All</b>
+    </button>
+  );
+
+  const itemArray = listArray.map((name, index) => {
     const uniqueKey = `${name}-${index}`;
     // add clickHandler
     function clickHandler(e: MouseEvent<HTMLButtonElement>) {
@@ -34,12 +48,15 @@ function getContent(
       />
     );
   });
+
+  return [deleteBtn, ...itemArray];
 }
 
 export default function InlineList() {
   const { colourSet, dispatchColourInput } = useColourInputContext();
+
   if (colourSet.size === 0) return null;
   const content = getContent([...colourSet], dispatchColourInput);
-  const className = 'list-none flex flex-row flex-wrap gap-2 mx-auto justify-around';
+  const className = 'list-none flex flex-row flex-wrap gap-2 mx-auto justify-center';
   return <Ul content={content} className={className} />;
 }

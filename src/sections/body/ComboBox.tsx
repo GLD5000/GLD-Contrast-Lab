@@ -11,9 +11,6 @@ function getList() {
 
 export default function ComboBox() {
   const { textInput, colourSet, dispatchColourInput } = useColourInputContext();
-  function handleClickClearTags() {
-    dispatchColourInput({ type: 'CLEAR_TAGS', payload: {} });
-  }
 
   const list = getList();
   return (
@@ -46,14 +43,6 @@ export default function ComboBox() {
             <b className="text-lg">Current Colours: </b>
             <Span className="text-base text-neutral-700 dark:text-neutral-400" content={`(${colourSet.size})`} />
           </div>
-
-          <button
-            type="button"
-            onClick={handleClickClearTags}
-            className=" mr-auto flex h-8 w-28 flex-row content-center items-center justify-center rounded-full p-1 text-sm text-pink-700 hover:bg-pink-700 hover:text-white dark:text-pink-300 dark:hover:bg-pink-300 dark:hover:text-black"
-          >
-            <b>Delete All</b>
-          </button>
         </div>
         <div className="p-2">{list}</div>
       </div>
