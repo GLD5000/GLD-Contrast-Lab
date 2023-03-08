@@ -84,13 +84,26 @@ function getTable(colourArray: string[], dataColumns: Set<string>) {
   return flexBoxes;
 }
 
+function setInitialColumns(): Set<string> {
+  const windowWidth = window.innerWidth;
+  const windowKey = Math.min(6, Math.max(2, Math.floor(windowWidth / 200)));
+  const dataColumnLookup: { [elemName: number]: string[] } = {
+    2: ['Hex', 'Luminance'],
+    3: ['Hex', 'Luminance', 'Black'],
+    4: ['Hex', 'Luminance', 'Black', 'White'],
+    5: ['Hex', 'HSL', 'Luminance', 'Black', 'White'],
+    6: ['Hex', 'HSL', 'RGB', 'Luminance', 'Black', 'White'],
+  };
+
+  return new Set(dataColumnLookup[windowKey]);
+}
+
 export default function InfoTable() {
   const { colourSet } = useColourInputContext();
-  const [dataColumns, setDataColumns] = useState(new Set(['Hex', 'Luminance']));
+  const [dataColumns, setDataColumns] = useState(setInitialColumns());
   console.log('setDataColumns:', setDataColumns);
   if (colourSet.size === 0) return null;
   const lumSort = [...colourSet].reduce(sortByLuminance, []).flatMap((x) => x);
-
   const tableMarkDown = getTable(lumSort, dataColumns);
   return (
     <div className="relative w-full overflow-x-auto pb-4">
