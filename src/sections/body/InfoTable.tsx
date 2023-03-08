@@ -1,5 +1,6 @@
-import { ReactElement, useState } from 'react';
+import { Dispatch, ReactElement, SetStateAction, useState } from 'react';
 import { useColourInputContext } from '../../contexts/ColourInputProvider';
+import SvgButton from '../../elements/SvgButton';
 import { autoTextColour } from '../../utilities/colour/autoTextColour';
 import { colourSpace } from '../../utilities/colour/colourSpace';
 import { contrast } from '../../utilities/colour/contrastRatio';
@@ -53,7 +54,39 @@ function titleRowReducer(previousValue: string, currentValue: string, currentInd
   return returnValue;
 }
 
-function getTable(colourArray: string[], dataColumns: Set<string>) {
+function getButtons(csv: string, setDataColumns: Dispatch<SetStateAction<Set<string>>>) {
+  const csvButton = <CsvButton key="csv-copy-btn" data={csv} />;
+  function handleVisibilityClick() {
+    setDataColumns(new Set());
+  }
+  const visibilityButton = (
+    <SvgButton
+      key="custom-visibility-btn"
+      text="Customise..."
+      clickFunction={handleVisibilityClick}
+      id="custom-visibility-btn"
+      name="Customise Data"
+      className=" flex justify-center gap-2 text-sm hover:bg-black hover:text-white hover:transition active:bg-slate-600 hover:dark:bg-white hover:dark:text-black"
+      type="preview"
+      showText
+      reverse={false}
+      buttonClasses={undefined}
+      svgWrapperClasses="w-6 h-6"
+      svgClasses="stroke fill-none stroke-current self-center"
+    />
+  );
+  return (
+    <div key="table-bottom-btns" className="flex w-full flex-row gap-2  rounded-none">
+      {visibilityButton} {csvButton}
+    </div>
+  );
+}
+
+function getTable(
+  colourArray: string[],
+  dataColumns: Set<string>,
+  setDataColumns: Dispatch<SetStateAction<Set<string>>>,
+) {
   const classNames = ' block w-40 p-2 text-sm rounded-none text-center my-auto';
   const jsxArray = [...dataColumns].map((key) => {
     const content = key === 'White' || key === 'Black' ? `Contrast ${key}` : key;
@@ -80,7 +113,8 @@ function getTable(colourArray: string[], dataColumns: Set<string>) {
       </div>
     );
   });
-  flexBoxes.push(<CsvButton key="csv-copy-btn" data={csv} />);
+  const buttonArray = getButtons(csv, setDataColumns);
+  flexBoxes.push(buttonArray);
   return flexBoxes;
 }
 
@@ -101,10 +135,13 @@ function setInitialColumns(): Set<string> {
 export default function InfoTable() {
   const { colourSet } = useColourInputContext();
   const [dataColumns, setDataColumns] = useState(setInitialColumns());
-  console.log('setDataColumns:', setDataColumns);
-  if (colourSet.size === 0) return null;
+  if (colourSet.size === 0 || dataColumns.size === 0) return null;
+  function setColumnsOnResize() {
+    setDataColumns(setInitialColumns());
+  }
+  window.onresize = setColumnsOnResize;
   const lumSort = [...colourSet].reduce(sortByLuminance, []).flatMap((x) => x);
-  const tableMarkDown = getTable(lumSort, dataColumns);
+  const tableMarkDown = dataColumns.size > 1 ? getTable(lumSort, dataColumns, setDataColumns) : null;
   return (
     <div className="relative w-full overflow-x-auto pb-4">
       <div className="relative mx-auto flex w-fit grow  flex-col gap-0 overflow-clip rounded border border-neutral-900 bg-white text-center text-neutral-800 dark:border-neutral-300 dark:bg-neutral-700 dark:text-neutral-50">

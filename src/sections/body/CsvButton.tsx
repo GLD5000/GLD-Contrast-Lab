@@ -25,9 +25,8 @@ export default function CsvButton({ data }: { data: string }) {
       }}
       showText
       reverse={false}
-      buttonClasses="border-transparent sticky left-0"
-      className=" sticky left-0 bottom-0 flex w-full items-center  justify-center gap-2 rounded-none border-2 border-transparent text-sm hover:bg-black hover:text-white hover:transition active:bg-slate-600 hover:dark:bg-white hover:dark:text-black"
-      // marginLeft='auto'
+      buttonClasses={undefined}
+      className="flex justify-center gap-2 text-sm hover:bg-black hover:text-white hover:transition active:bg-slate-600 hover:dark:bg-white hover:dark:text-black"
       svgClasses="stroke-1 fill-none stroke-current"
       id="copy-table"
       name="Copy SVG Info"

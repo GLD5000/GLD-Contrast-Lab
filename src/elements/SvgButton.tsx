@@ -83,7 +83,7 @@ export default function SvgButton({
     `,
 }: {
   text: string | undefined;
-  clickFunction: (e: MouseEvent<HTMLButtonElement>) => void;
+  clickFunction: (e: MouseEvent<HTMLButtonElement>) => void | (() => void);
   id: string | undefined;
   name: string | undefined;
   className: string | undefined;
