@@ -8,7 +8,7 @@ export default function Header({
 }: {
   title: string;
   toggleColourTheme: () => void;
-  colourTheme: string;
+  colourTheme: boolean;
 }) {
   return (
     <header className="sticky top-0 left-0 right-0 z-[999] grid h-fit w-screen flex-shrink-0 flex-grow-0 grid-cols-frAutoFr content-center bg-neutral-100 dark:bg-neutral-800">
@@ -30,9 +30,9 @@ export default function Header({
           /> */}
           <SvgButton
             svgWrapperClasses="pointer-events-none h-6 w-6"
-            text={colourTheme === 'dark' ? 'Light' : 'Dark'}
+            text={colourTheme ? 'Light' : 'Dark'}
             clickFunction={toggleColourTheme}
-            type={colourTheme === 'dark' ? 'sun' : 'moon'}
+            type={colourTheme ? 'sun' : 'moon'}
             showText
             reverse={false}
             id="colour-theme-button"
