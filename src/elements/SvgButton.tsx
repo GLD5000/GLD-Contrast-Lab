@@ -25,7 +25,7 @@ import TickSvg from '../icons/TickSvg';
 // import CollapseSvg from '../icons/Collapse'
 // import ExpandSvg from '../icons/Expand'
 function getSvg(type: string, svgClasses: string, svgWrapperClasses: string): ReactElement {
-  const svgLookup: { [elemName: string]: ReactElement } = {
+  const svgLookup: { [key: string]: ReactElement } = {
     italic: <ItalicSvg classes={svgClasses} />,
     bold: <BoldSvg classes={svgClasses} />,
     up: <UpSvg classes={svgClasses} />,

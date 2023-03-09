@@ -50,6 +50,7 @@ export const colourSpace = {
     return `hsl(${hslArray.join(', ')})`;
   },
   convertHexToHslArray(hex: string) {
+    if (hex.length !== 7) return [0, 0, 0];
     const srgb = colourSpace.convertHexToSrgbArray(hex);
     const hslArray = colourSpace.convertSrgbToHslArray(srgb);
     return hslArray;

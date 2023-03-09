@@ -29,7 +29,7 @@ function tableReducer(
   const classNames = 'block w-40 p-4 text-xs rounded-none';
   const luminanceFloat = luminance.convertHexToLuminance(curr);
 
-  const valuesObject: { [elemName: string]: string } = {
+  const valuesObject: { [key: string]: string } = {
     Hex: curr,
     HSL: colourSpace.convertHexToHslString(curr),
     RGB: colourSpace.convertHextoRgbString(curr),
@@ -158,7 +158,7 @@ function getTable(
 function setInitialColumns(): Set<string> {
   const windowWidth = window.innerWidth;
   const windowKey = Math.min(6, Math.max(2, Math.floor(windowWidth / 200)));
-  const dataColumnLookup: { [elemName: number]: string[] } = {
+  const dataColumnLookup: { [key: number]: string[] } = {
     2: ['Hex', 'Luminance'],
     3: ['Hex', 'Luminance', 'Black'],
     4: ['Hex', 'Luminance', 'Black', 'White'],

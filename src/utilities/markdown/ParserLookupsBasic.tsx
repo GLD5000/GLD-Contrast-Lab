@@ -53,7 +53,7 @@ export function wrapText({
   type: string;
 }) {
   const newKey = `x${index}`;
-  const typeHandler: { [elemName: string]: ReactElement } = {
+  const typeHandler: { [key: string]: ReactElement } = {
     link: <LinkMarkdown key={`l${newKey}`} content={content} />,
     singleQuote: <InlineQuote key={`span${newKey}`} content={content} type="single" />,
     doubleQuote: <InlineQuote key={`span${newKey}`} content={content} type="double" />,

@@ -79,3 +79,29 @@ h6 {
 p {
   margin-bottom: 2rem;
 }
+input[type='color'] {
+  margin: 0;
+  opacity: 0;
+  padding: 0;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 1rem; /* Set a specific slider handle width */
+  height: 1rem; /* Slider handle height */
+  background: currentColor; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+  border-radius: 100%;
+}
+
+input[type='range']::-moz-range-thumb {
+  width: 1rem; /* Set a specific slider handle width */
+  height: 1rem; /* Slider handle height */
+  background: currentColor; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+  border-radius: 100%;
+}

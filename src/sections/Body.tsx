@@ -14,6 +14,7 @@ function getTab(tab: string) {
         <ComboBox />
         <ColourBlocksProvider>
           <InfoTable />
+          <ColourBlocks />
         </ColourBlocksProvider>
       </div>
     );

@@ -2,34 +2,39 @@ import { createContext, ReactNode, useContext, useReducer, Dispatch, useEffect }
 import { colourSpace } from '../utilities/colour/colourSpace';
 
 const initialiserA: {
-  textInput: string | undefined;
+  textInput: string;
+  recentColour: string;
   colourSet: Set<string>;
 
   dispatchColourInput: Dispatch<{
     type: string;
     payload: Partial<{
-      textInput: string | undefined;
+      textInput: string;
+      recentColour: string;
       colourSet: Set<string>;
     }>;
   }>;
 } = {
   textInput: '',
+  recentColour: '',
   colourSet: new Set(''),
   dispatchColourInput: () => undefined,
 };
 
 const initialiserB: {
-  textInput: string | undefined;
+  textInput: string;
+  recentColour: string;
   colourSet: Set<string>;
 } = {
   textInput: '',
+  recentColour: '',
   colourSet: new Set(''),
 };
 
 function useData() {
   //    '#fafafa\r#f4f4f5\r#e4e4e7\r#d4d4d8\r#a1a1aa\r#71717a\r#52525b\r#3f3f46\r#27272a\r#18181b',
 
-  const [{ textInput, colourSet }, dispatchColourInput] = useReducer(tagReducer, initialiserB);
+  const [{ textInput, recentColour, colourSet }, dispatchColourInput] = useReducer(tagReducer, initialiserB);
 
   useEffect(() => {
     dispatchColourInput({ type: 'INIT', payload: {} });
@@ -38,37 +43,40 @@ function useData() {
   return {
     textInput,
     colourSet,
-
+    recentColour,
     dispatchColourInput,
   };
   function tagReducer(
-    state: { textInput: string | undefined; colourSet: Set<string> },
+    state: { textInput: string; recentColour: string; colourSet: Set<string> },
     action: {
       type: string;
       payload: Partial<{
-        textInput: string | undefined | undefined;
+        textInput: string;
+        recentColour: string;
         colourSet: Set<string>;
 
         tag: string;
       }>;
     },
-  ): { textInput: string | undefined; colourSet: Set<string> } {
+  ): { textInput: string; recentColour: string; colourSet: Set<string> } {
     switch (action.type) {
       case 'INIT': {
         const { processedText, processedArray } = processText(
           // '#eff6ff\r#dbeafe\r#bfdbfe\r#93c5fd\r#60a5fa\r#3b82f6\r#2563eb\r#1d4ed8\r#1e40af\r#1e3a8a\r',
-          '#bfdbfe\r#60a5fa\r#1d4ed8\r#1e3a8a\r',
+          '#b6b6c8\r#ffddff\r#557766\r#565678\r',
         );
         const returnValue = {
           textInput: processedText,
+          recentColour: processedArray.at(-1) || '',
           colourSet: new Set(processedArray),
         };
         return returnValue;
       }
       case 'UPDATE_TEXT': {
-        const { processedText, processedArray } = processText(action.payload.textInput);
+        const { processedText, processedArray } = processText(action.payload.textInput || '');
         const returnValue = {
-          textInput: processedText,
+          textInput: processedText || '',
+          recentColour: processedArray.at(-1) || '',
           colourSet: new Set([...state.colourSet, ...processedArray]),
         };
         return returnValue;
@@ -149,8 +157,8 @@ function hexReducer(acc: { processedText: string; processedArray: string[] }, cu
   return acc;
 }
 
-function processText(text: string | undefined) {
-  if (text === undefined || text.search(/\s/) === -1) {
+function processText(text: string) {
+  if (text === '' || text.search(/\s/) === -1) {
     return { processedText: text, processedArray: [] };
   }
   const shouldSkipLastElement = text[text.length - 1].search(/\s/) === -1;

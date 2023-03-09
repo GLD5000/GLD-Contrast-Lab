@@ -45,8 +45,8 @@ function createColourBlockArrays(coloursArray: Set<string>) {
         style={{ backgroundColor: backgroundColour }}
         className=" grid gap-1 rounded border border-current p-2"
       >
-        <BlockVisibility hexId={keyA} />
         {rowArray}
+        <BlockVisibility hexId={keyA} />
       </div>
     );
   });
@@ -62,10 +62,10 @@ function getColourBlocks(colourSet: Set<string>) {
 
   return (
     <div className=" mt-8 grid  w-full items-center justify-center gap-4 self-center overflow-auto rounded-none">
-      <ShowButtons />
       <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 gap-1 overflow-auto rounded">
         {returnArrays}
       </div>
+      <ShowButtons />
     </div>
   );
 }

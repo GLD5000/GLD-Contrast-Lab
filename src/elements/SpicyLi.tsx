@@ -9,7 +9,7 @@ export default function SpicyLi({
   clickFunction,
 }: {
   className: string;
-  style: { [elemName: string]: string };
+  style: { [key: string]: string };
   content: ReactElement | string | number | undefined | Array<ReactElement | string | number | undefined>;
   id: string;
   clickFunction: (e: MouseEvent<HTMLButtonElement>) => void;

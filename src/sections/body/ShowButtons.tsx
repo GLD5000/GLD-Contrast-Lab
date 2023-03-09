@@ -11,7 +11,7 @@ export default function ShowButtons() {
   const limitLabel = limit;
 
   function handleClickColourMode() {
-    const nextMode: { [elemName: string]: string } = {
+    const nextMode: { [key: string]: string } = {
       hex: 'luminance',
       luminance: 'hsl',
       hsl: 'rgb',
@@ -28,7 +28,7 @@ export default function ShowButtons() {
     dispatchColourBlocks({ showPoor: !showPoor });
   }
   function handleClickLimit() {
-    const limitLookup: { [elemName: string]: string } = {
+    const limitLookup: { [key: string]: string } = {
       'All Colours': 'Selecting...',
       'Selecting...': 'Selection',
       Selection: 'All Colours',

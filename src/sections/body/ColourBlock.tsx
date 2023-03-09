@@ -5,7 +5,7 @@ import { luminance } from '../../utilities/colour/luminance';
 function getColourString(hexCode: string, mode: string) {
   if (mode === 'hex') return `hex\r\n${hexCode.slice(1)}`;
 
-  const colourStringCallbacks: { [elemName: string]: string } = {
+  const colourStringCallbacks: { [key: string]: string } = {
     luminance: `lum\r\n${luminance.convertHexToLuminancePercent(hexCode)}`,
     hsl: colourSpace.convertHexToHslStringLb(hexCode),
     rgb: colourSpace.convertHextoRgbStringLb(hexCode),
@@ -41,7 +41,7 @@ export default function ColourBlock({
   if (!backgroundColour || !textColour) return null;
 
   function handleClickColourMode() {
-    const nextMode: { [elemName: string]: string } = {
+    const nextMode: { [key: string]: string } = {
       hex: 'luminance',
       luminance: 'hsl',
       hsl: 'rgb',
@@ -59,7 +59,7 @@ export default function ColourBlock({
     const dispatchObject = poorContrast ? { showPoor: !showPoor } : { showRatio: !showRatio };
     dispatchColourBlocks(dispatchObject);
   }
-  const style: { [elemName: string]: string } = {
+  const style: { [key: string]: string } = {
     // backgroundColor: backgroundColour,
     color: poorContrast && showPoor === false ? 'transparent' : textColour,
     borderColor: autoColour || poorContrast ? 'transparent' : textColour,
