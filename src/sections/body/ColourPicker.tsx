@@ -8,7 +8,7 @@ export default function ColourPicker() {
   const { recentColour, dispatchColourInput } = useColourInputContext();
   const [currentValue, setCurrentValue] = useState(() => {
     if (recentColour.length === 7) return recentColour;
-    return '#000000';
+    return '#565678';
   });
 
   useEffect(() => {

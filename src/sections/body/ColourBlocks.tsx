@@ -53,13 +53,8 @@ function createColourBlockArrays(coloursArray: Set<string>) {
 }
 
 function getColourBlocks(colourSet: Set<string>) {
-  const returnArrays =
-    colourSet.size > 0 ? (
-      createColourBlockArrays(colourSet)
-    ) : (
-      <b className="w-90 m-auto text-center text-xl">Add Colours</b>
-    );
-
+  if (colourSet.size === 0) return null;
+  const returnArrays = createColourBlockArrays(colourSet);
   return (
     <div className=" mt-8 grid  w-full items-center justify-center gap-4 self-center overflow-auto rounded-none">
       <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 gap-1 overflow-auto rounded">
