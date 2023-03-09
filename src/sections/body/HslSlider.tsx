@@ -17,7 +17,7 @@ function getSliderValueFromHex(hexString: string, type: string) {
 }
 
 function convertSliderToHsl(value: number, type: string) {
-  if (type !== 'hue') return Math.max(1, Math.round(value / 3.6));
+  if (type !== 'hue') return Math.round(value / 3.6);
   return Math.round(value);
 }
 
@@ -70,8 +70,7 @@ export default function HslSlider({
     setCurrentValue(getSliderValueFromHex(hexValue, newType));
   }
   function handleSliderInput(e: MouseEvent<HTMLInputElement>) {
-    const newValue =
-      type === 'hex' ? parseInt(e.currentTarget.value, 10) : Math.max(1, parseInt(e.currentTarget.value, 10));
+    const newValue = type === 'hex' ? parseInt(e.currentTarget.value, 10) : parseInt(e.currentTarget.value, 10);
     const newHex = getHexValueFromSlider(newValue, hexValue, type);
     setHexValue(newHex);
     setCurrentValue(newValue);

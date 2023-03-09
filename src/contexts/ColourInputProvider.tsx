@@ -65,18 +65,22 @@ function useData() {
           // '#eff6ff\r#dbeafe\r#bfdbfe\r#93c5fd\r#60a5fa\r#3b82f6\r#2563eb\r#1d4ed8\r#1e40af\r#1e3a8a\r',
           '#b6b6c8\r#ffddff\r#557766\r#565678\r',
         );
+        const recentColourValue = getRecentColour(processedText);
+
         const returnValue = {
           textInput: processedText,
-          recentColour: processedArray.at(-1) || '',
+          recentColour: recentColourValue || '',
           colourSet: new Set(processedArray),
         };
         return returnValue;
       }
       case 'UPDATE_TEXT': {
         const { processedText, processedArray } = processText(action.payload.textInput || '');
+
+        const recentColourValue = getRecentColour(processedText);
         const returnValue = {
           textInput: processedText || '',
-          recentColour: processedArray.at(-1) || '',
+          recentColour: recentColourValue || '',
           colourSet: new Set([...state.colourSet, ...processedArray]),
         };
         return returnValue;
@@ -113,6 +117,11 @@ export default function ColourInputProvider({ children }: { children: ReactNode 
   return <ColourInput.Provider value={data}>{children}</ColourInput.Provider>;
 }
 
+function valueIsHex(input: string) {
+  const returnBoolean = input.length === 7 && input.search(/#[0-9a-fA-F]{6}/) === 0;
+  return returnBoolean;
+}
+
 function processHexString(value: string) {
   if (value[0] !== '#' || value.length < 2 || value.slice(1).search(/#|[^0-9a-fA-F]/) > -1) return value;
   let modifiedHex = value.length > 7 ? value.slice(0, 7) : value;
@@ -124,19 +133,31 @@ function processHexString(value: string) {
 }
 
 function processRgbString(value: string) {
+  if (value.search(/rgb\([\d]{1,3},[\d]{1,3},[\d]{1,3}\)/) === -1) return value;
   const cleanedUpValue = value.toLowerCase().replaceAll(/[ ()rgb]/g, '');
-  if (cleanedUpValue.search(/^[\d]{1,3},[\d]{1,3},[\d]{1,3}$/) === -1) return value;
+  console.log('rgbvalue:', value);
   const rgbArray = cleanedUpValue.split(',').map((x) => parseInt(x, 10));
   const hex = colourSpace.convertRgbToHex(rgbArray);
+  console.log('rgbhex:', hex);
   return hex;
 }
 
 function processHslString(value: string) {
+  if (value.search(/hsl\([\d]{1,3},[\d]{1,3},[\d]{1,3}\)/) === -1) return value;
   const cleanedUpValue = value.toLowerCase().replaceAll(/[ ()hsl%]/g, '');
-  if (cleanedUpValue.search(/^[\d]{1,3},[\d]{1,3},[\d]{1,3}$/) === -1) return value;
   const hslArray = cleanedUpValue.split(',').map((x) => parseInt(x, 10));
   const hex = colourSpace.convertHslArrayToHex(hslArray);
   return hex;
+}
+
+function processColourStringLong(stringIn: string) {
+  if (stringIn.length < 7) return stringIn;
+  return processColourString(stringIn);
+}
+function getRecentColour(text: string) {
+  const testedProcessedText = valueIsHex(text) ? text : processColourStringLong(text);
+  const recentColour = valueIsHex(testedProcessedText) ? testedProcessedText : '';
+  return recentColour;
 }
 
 function processColourString(stringIn: string) {
@@ -165,16 +186,17 @@ function processText(text: string) {
   const splitText = text.replaceAll(', ', ',').split(/\s/);
   if (shouldSkipLastElement) {
     const slicedArray = splitText.slice(0, -1);
+    const lastElement = splitText.at(-1);
     const { processedText, processedArray } = slicedArray.reduce(hexReducer, {
       processedText: '',
       processedArray: [],
     });
-    const suffixedText =
-      processedText.length > 0 ? `${processedText} ${splitText.at(-1)}` : `${processedText}${splitText.at(-1)}`;
+    const suffixedText = processedText.length > 0 ? `${processedText} ${lastElement}` : `${lastElement}`;
     return { processedText: suffixedText, processedArray };
   }
-  return splitText.reduce(hexReducer, {
+  const { processedText, processedArray } = splitText.reduce(hexReducer, {
     processedText: '',
     processedArray: [],
   });
+  return { processedText, processedArray };
 }
