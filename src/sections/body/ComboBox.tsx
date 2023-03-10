@@ -1,7 +1,6 @@
 import { FormEvent } from 'react';
 import { useColourInputContext } from '../../contexts/ColourInputProvider';
 
-import Span from '../../elements/Span';
 import TextArea from '../../elements/TextArea';
 import { colourSpace } from '../../utilities/colour/colourSpace';
 import { contrast } from '../../utilities/colour/contrastRatio';
@@ -9,9 +8,6 @@ import { luminance } from '../../utilities/colour/luminance';
 import ColourPicker from './ColourPicker';
 import InlineList from './InlineList';
 
-function getList() {
-  return <InlineList />;
-}
 function getHexData(hexString: string) {
   const luminanceFloat = luminance.convertHexToLuminance(hexString);
 
@@ -34,7 +30,6 @@ Contrast w/ White: ${White}`;
 export default function ComboBox() {
   const { textInput, colourSet, recentColour, dispatchColourInput } = useColourInputContext();
 
-  const list = getList();
   return (
     <div className="mx-auto grid w-full max-w-[1200px] items-center self-center p-4">
       <div className="m-2 flex flex-col gap-2">
@@ -64,14 +59,11 @@ export default function ComboBox() {
         </div>
       </div>
 
-      <div className="flex flex-row flex-wrap items-center justify-around p-2">
+      <div className="grid p-2">
         <div className="mr-auto grid place-items-start">
-          <div>
-            <b className="text-lg">Current Colours: </b>
-            <Span className="text-base text-neutral-800 dark:text-neutral-200" content={`(${colourSet.size})`} />
-          </div>
+          <div>{colourSet.size > 0 && <b className="text-lg">Current Colours: </b>}</div>
         </div>
-        <div className="p-2">{list}</div>
+        <InlineList />
       </div>
     </div>
   );

@@ -25,9 +25,9 @@ function getContent(
       key="delete-all-btn"
       type="button"
       onClick={handleClickClearTags}
-      className=" flex h-8 w-28 flex-row content-center items-center justify-center rounded-full border p-1 text-sm text-pink-700 hover:bg-pink-700 hover:text-white dark:text-pink-300 dark:hover:bg-pink-300 dark:hover:text-black"
+      className=" flex h-8 w-28 flex-row content-center items-center justify-center rounded border-2 border-current p-1 text-sm text-pink-700 hover:bg-pink-700 hover:text-white dark:text-pink-300 dark:hover:bg-pink-300 dark:hover:text-black"
     >
-      <b>Delete All</b>
+      Delete All <span className=" whitespace-pre font-normal"> ({listArray.length})</span>
     </button>
   );
 
@@ -50,7 +50,7 @@ function getContent(
     );
   });
 
-  return [deleteBtn, ...itemArray];
+  return [...itemArray, deleteBtn];
 }
 
 export default function InlineList() {
@@ -58,6 +58,6 @@ export default function InlineList() {
 
   if (colourSet.size === 0) return null;
   const content = getContent([...colourSet], dispatchColourInput);
-  const className = 'list-none flex flex-row flex-wrap gap-2 mx-auto justify-center';
+  const className = 'list-none flex flex-row flex-wrap gap-2 mx-auto justify-center p-2';
   return <Ul content={content} className={className} />;
 }
