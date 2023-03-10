@@ -6,21 +6,25 @@ export default function SpicyLi({
   style,
   className = 'm-2',
   id,
-  clickFunction,
+  closeFunction,
+  tagFunction,
 }: {
   className: string;
   style: { [key: string]: string };
   content: ReactElement | string | number | undefined | Array<ReactElement | string | number | undefined>;
   id: string;
-  clickFunction: (e: MouseEvent<HTMLButtonElement>) => void;
+  closeFunction: (e: MouseEvent<HTMLButtonElement>) => void;
+  tagFunction: (e: MouseEvent<HTMLButtonElement>) => void;
 }) {
   return (
     <li id={id} className={className} style={style}>
-      <span className="mx-auto">{content}</span>
+      <button type="button" id={`${id}-tag-btn`} onClick={tagFunction} className="mx-auto">
+        {content}
+      </button>
       <SvgButton
         svgWrapperClasses="pointer-events-none h-6 w-6"
         text={undefined}
-        clickFunction={clickFunction}
+        clickFunction={closeFunction}
         id={`${id}-close-btn`}
         name={`${id}-close-btn`}
         className=""

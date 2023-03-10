@@ -17,7 +17,6 @@ export default function ColourPicker() {
     let run = true;
     if (run && recentColour.length === 7) {
       setCurrentValue(recentColour);
-      console.log('recentColour:', recentColour);
     }
 
     return () => {

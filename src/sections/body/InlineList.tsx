@@ -34,9 +34,14 @@ function getContent(
   const itemArray = listArray.map((name, index) => {
     const uniqueKey = `${name}-${index}`;
     // add clickHandler
-    function clickHandler(e: MouseEvent<HTMLButtonElement>) {
+    function closeHandler(e: MouseEvent<HTMLButtonElement>) {
       const hex = e.currentTarget.id.split('-')[0];
       dispatchColourInput({ type: 'CLOSE_TAG', payload: { tag: hex } });
+    }
+    function tagHandler(e: MouseEvent<HTMLButtonElement>) {
+      const hex = e.currentTarget.id.split('-')[0];
+      console.log('hex:', hex);
+      dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: hex } });
     }
     return (
       <SpicyLi
@@ -45,7 +50,8 @@ function getContent(
         content={name}
         className="flex  h-8 w-28 flex-row items-center justify-between rounded-full border border-neutral-900 p-1 text-center text-sm dark:border-neutral-300"
         style={{ backgroundColor: name, color: autoTextColourFromHex(name) }}
-        clickFunction={clickHandler}
+        closeFunction={closeHandler}
+        tagFunction={tagHandler}
       />
     );
   });
