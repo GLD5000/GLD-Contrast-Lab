@@ -6,7 +6,7 @@ import { luminance } from '../../utilities/colour/luminance';
 import ShowButtons from './ShowButtons';
 import BlockVisibility from './BlockVisibility';
 
-function getBlockRow(backgroundColour: string, index: number, array: string[]) {
+function getBlockRow(backgroundColour: string, index: number, array: string[], highContrast: boolean) {
   const keyA = `${backgroundColour}-${index}`;
   const rowArray = array.map((textColour, number) => {
     const keyB = `${textColour}-${number}`;
@@ -19,7 +19,9 @@ function getBlockRow(backgroundColour: string, index: number, array: string[]) {
       <ColourBlock
         key={`${keyA}-${keyB}`}
         backgroundColour={backgroundColour}
-        textColour={textColourMod}
+        textColour={
+          highContrast && !autoColour && contrastRatio < 3 ? autoTextColourFromHex(backgroundColour) : textColourMod
+        }
         autoColour={autoColour}
         contrastRating={contrastRating}
         contrastRatio={contrastRatio}
@@ -35,10 +37,10 @@ function sortByLuminance(acc: Array<Array<string>>, curr: string) {
   return acc;
 }
 
-function createColourBlockArrays(coloursArray: Set<string>) {
+function createColourBlockArrays(coloursArray: Set<string>, highContrast: boolean) {
   const lumSort = [...coloursArray].reduce(sortByLuminance, []).flatMap((x) => x);
   return lumSort.map((backgroundColour, index, array) => {
-    const { keyA, rowArray } = getBlockRow(backgroundColour, index, array);
+    const { keyA, rowArray } = getBlockRow(backgroundColour, index, array, highContrast);
     return (
       <div
         key={`${backgroundColour}-${keyA}`}
@@ -52,9 +54,9 @@ function createColourBlockArrays(coloursArray: Set<string>) {
   });
 }
 
-function getColourBlocks(colourSet: Set<string>) {
+function getColourBlocks(colourSet: Set<string>, highContrast: boolean) {
   if (colourSet.size === 0) return null;
-  const returnArrays = createColourBlockArrays(colourSet);
+  const returnArrays = createColourBlockArrays(colourSet, highContrast);
   return (
     <div className=" mt-8 grid  w-full items-center justify-center gap-4 self-center overflow-auto rounded-none">
       <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 gap-1 overflow-auto rounded">
@@ -65,8 +67,8 @@ function getColourBlocks(colourSet: Set<string>) {
   );
 }
 export default function ColourBlocks() {
-  const { visibleSet } = useColourBlocksContext();
+  const { visibleSet, highContrast } = useColourBlocksContext();
 
-  const colourBlocks = getColourBlocks(visibleSet);
+  const colourBlocks = getColourBlocks(visibleSet, highContrast);
   return colourBlocks;
 }
