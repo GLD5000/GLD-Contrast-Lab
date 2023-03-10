@@ -88,22 +88,14 @@ function useData() {
       case 'CLEAR_TAGS': {
         const newSet = new Set(state.colourSet);
         newSet.clear();
-        const returnValue = { ...state, colourSet: newSet, textInput: '' };
+        const returnValue = { ...state, colourSet: newSet, textInput: '', recentColour: '' };
         return returnValue;
       }
-      case 'CLOSE_TAG': {
-        const newSet = new Set(state.colourSet);
-        if (typeof action.payload.tag === 'string' && newSet.has(action.payload.tag)) newSet.delete(action.payload.tag);
-        const returnValue = { ...state, colourSet: newSet };
-        return returnValue;
-      }
-
-      case 'TOGGLE_TAG':
+      case 'CLOSE_TAG':
       default: {
         const newSet = new Set(state.colourSet);
         if (typeof action.payload.tag === 'string' && newSet.has(action.payload.tag)) newSet.delete(action.payload.tag);
-        if (typeof action.payload.tag === 'string' && !newSet.has(action.payload.tag)) newSet.add(action.payload.tag);
-        const returnValue = { ...state, colourSet: newSet };
+        const returnValue = { ...state, colourSet: newSet, recentColour: '' };
         return returnValue;
       }
     }

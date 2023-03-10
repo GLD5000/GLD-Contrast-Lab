@@ -1,5 +1,6 @@
 import { MouseEvent, useEffect, useState } from 'react';
 import { useColourInputContext } from '../../contexts/ColourInputProvider';
+import autoTextColourFromHex from '../../utilities/colour/autoTextColour';
 import HslSlider from './HslSlider';
 
 export default function ColourPicker() {
@@ -30,8 +31,22 @@ export default function ColourPicker() {
   }
   return (
     <div className="grid h-fit w-80 overflow-clip rounded border">
-      <div className="mx-auto flex h-12 w-full overflow-clip rounded-b-none" style={styles}>
-        <input className="h-full w-full grow" type="color" onInput={handleInput} value={currentValue} />
+      <div className="relative mx-auto flex h-12 w-full content-center overflow-clip rounded-b-none" style={styles}>
+        <label
+          htmlFor="main-colour-picker"
+          className="absolute top-4 m-auto h-fit w-full text-center text-sm font-bold"
+          style={{ color: autoTextColourFromHex(currentValue) }}
+        >
+          Pick Colour
+        </label>
+
+        <input
+          id="main-colour-picker"
+          className="h-full w-full grow"
+          type="color"
+          onInput={handleInput}
+          value={currentValue}
+        />
       </div>
       <HslSlider
         hexValue={currentValue}
