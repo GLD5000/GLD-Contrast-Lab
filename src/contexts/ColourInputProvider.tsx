@@ -135,10 +135,8 @@ function processHexString(value: string) {
 function processRgbString(value: string) {
   if (value.search(/rgb\([\d]{1,3},[\d]{1,3},[\d]{1,3}\)/) === -1) return value;
   const cleanedUpValue = value.toLowerCase().replaceAll(/[ ()rgb]/g, '');
-  console.log('rgbvalue:', value);
   const rgbArray = cleanedUpValue.split(',').map((x) => parseInt(x, 10));
   const hex = colourSpace.convertRgbToHex(rgbArray);
-  console.log('rgbhex:', hex);
   return hex;
 }
 

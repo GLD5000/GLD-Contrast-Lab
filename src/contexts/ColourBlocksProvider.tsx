@@ -5,7 +5,7 @@ const initialiserA: {
   colourMode: string;
   showRatio: boolean;
   showPoor: boolean;
-  highContrast: boolean;
+
   limit: string;
   visibleSet: Set<string>;
 
@@ -14,7 +14,7 @@ const initialiserA: {
       colourMode: string;
       showRatio: boolean;
       showPoor: boolean;
-      highContrast: boolean;
+
       limit: string;
       visibleSet: Set<string>;
     }>
@@ -23,7 +23,6 @@ const initialiserA: {
   colourMode: 'hex',
   showRatio: false,
   showPoor: false,
-  highContrast: false,
   limit: 'All Colours',
   visibleSet: new Set(''),
   dispatchColourBlocks: () => undefined,
@@ -33,27 +32,26 @@ const initialiserB: {
   colourMode: string;
   showRatio: boolean;
   showPoor: boolean;
-  highContrast: boolean;
+
   limit: string;
   visibleSet: Set<string>;
 } = {
   colourMode: 'hex',
   showRatio: false,
   showPoor: false,
-  highContrast: false,
   limit: 'All Colours',
   visibleSet: new Set(''),
 };
 
 function useData() {
   const { colourSet } = useColourInputContext();
-  const [{ colourMode, showRatio, showPoor, highContrast, limit, visibleSet }, dispatchColourBlocks] = useReducer(
+  const [{ colourMode, showRatio, showPoor, limit, visibleSet }, dispatchColourBlocks] = useReducer(
     (
       state: {
         colourMode: string;
         showRatio: boolean;
         showPoor: boolean;
-        highContrast: boolean;
+
         limit: string;
         visibleSet: Set<string>;
       },
@@ -61,7 +59,7 @@ function useData() {
         colourMode: string;
         showRatio: boolean;
         showPoor: boolean;
-        highContrast: boolean;
+
         limit: string;
         visibleSet: Set<string>;
       }>,
@@ -83,7 +81,6 @@ function useData() {
     colourMode,
     showRatio,
     showPoor,
-    highContrast,
     limit,
     visibleSet,
     dispatchColourBlocks,

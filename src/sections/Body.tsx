@@ -10,10 +10,11 @@ import Banner from './header/Banner';
 function getTab(tab: string) {
   if (tab === 'add-colours') {
     return (
-      <div className=" grow bg-neutral-100 dark:bg-neutral-800">
+      <div className=" w-body min-w-body max-w-body grow bg-neutral-100 dark:bg-neutral-800">
         <ComboBox />
         <ColourBlocksProvider>
           <InfoTable />
+
           <ColourBlocks />
         </ColourBlocksProvider>
       </div>

@@ -119,7 +119,6 @@ export const autoContrast = {
     return total > 0 && total < 3;
   },
   adjustLuminanceFine(targetContrast: number, originalLuminance: number, resultingSrgb: number[]) {
-    console.log('adjustLuminanceFine');
     let loopLimiter = 0;
     const loopLimit = 25;
     let currentSrgb = resultingSrgb;
@@ -153,7 +152,6 @@ export const autoContrast = {
         outOfBounds += 1;
       }
     }
-    if (loopLimiter > 15) console.log('loopLimiter:', loopLimiter);
     const { resultingContrastRatio, resultingHex } = autoContrast.getResults(currentSrgb, originalLuminance);
     const resultsAreGood = autoContrast.testResults(resultingHex, resultingContrastRatio, targetContrast);
     if (resultsAreGood) return { resultingContrastRatio, resultingHex };

@@ -22,7 +22,6 @@ export default function ColourPicker() {
     };
   }, [recentColour]);
 
-  console.log('recentColour:', recentColour);
   const styles = { backgroundColor: currentValue };
   function handleInput(e: MouseEvent<HTMLInputElement>) {
     const newValue = e.currentTarget.value;

@@ -2,8 +2,7 @@ import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
 import { useColourInputContext } from '../../contexts/ColourInputProvider';
 
 export default function ShowButtons() {
-  const { showRatio, showPoor, highContrast, limit, colourMode, visibleSet, dispatchColourBlocks } =
-    useColourBlocksContext();
+  const { showRatio, showPoor, limit, colourMode, visibleSet, dispatchColourBlocks } = useColourBlocksContext();
   const { colourSet } = useColourInputContext();
   const colourModeLabel = `${colourMode}`;
   const ratioLabel = showRatio ? 'Contrast' : 'Rating';
@@ -26,7 +25,7 @@ export default function ShowButtons() {
     dispatchColourBlocks({ showRatio: !showRatio });
   }
   function handleClickPoor() {
-    dispatchColourBlocks({ showPoor: !showPoor, highContrast: !highContrast });
+    dispatchColourBlocks({ showPoor: !showPoor });
   }
   function handleClickLimit() {
     const limitLookup: { [key: string]: string } = {
