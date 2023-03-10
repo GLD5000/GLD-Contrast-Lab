@@ -34,14 +34,14 @@ export default function ComboBox() {
     <div className="mx-auto grid w-full max-w-[1200px] items-center self-center p-4">
       <div className="m-2 flex flex-col gap-2">
         <label htmlFor="colour-input">
-          <b className="text-lg">Add Colours: </b>
+          <h2 className="text-2xl font-bold">Add Colours</h2>{' '}
         </label>
         <div className="flex flex-row flex-wrap justify-center gap-2">
           <ColourPicker />
           <div className="flex min-h-[9rem] w-80 flex-col rounded border bg-inherit">
             <TextArea
               id="colour-input"
-              placeholder="Enter colours here (separated by spaces, tabs, or line-breaks) e.g.:      #fafafa  /  rgb(120,120,120)  /  hsl(200,50%,50%)"
+              placeholder="Enter colours here (separated by spaces, tabs, or line-breaks) e.g.:      #fafafa  /  rgb(120, 120, 120)  /  hsl(200, 50%, 50%)"
               name="codeInput"
               className="shrink grow resize-none overflow-auto bg-transparent px-2 pt-2 text-base placeholder:text-gray-600 dark:placeholder:text-gray-300"
               value={textInput}
@@ -61,7 +61,7 @@ export default function ComboBox() {
 
       <div className="grid p-2">
         <div className="mr-auto grid place-items-start">
-          <div>{colourSet.size > 0 && <b className="text-lg">Current Colours: </b>}</div>
+          <div>{colourSet.size > 0 && <h2 className="mb-4 pb-2 text-2xl font-bold">Compare Colours</h2>}</div>
         </div>
         <InlineList />
       </div>

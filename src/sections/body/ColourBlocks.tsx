@@ -55,10 +55,9 @@ function createColourBlockArrays(coloursArray: Set<string>, showPoor: boolean) {
 }
 
 function getColourBlocks(colourSet: Set<string>, showPoor: boolean) {
-  if (colourSet.size === 0) return null;
   const returnArrays = createColourBlockArrays(colourSet, showPoor);
   return (
-    <div className="grid  w-full gap-4 overflow-auto rounded-none">
+    <div className="grid  w-full gap-2 overflow-auto rounded-none">
       <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 gap-1 overflow-clip rounded">
         {returnArrays}
       </div>
@@ -68,11 +67,13 @@ function getColourBlocks(colourSet: Set<string>, showPoor: boolean) {
 }
 export default function ColourBlocks() {
   const { visibleSet, showPoor } = useColourBlocksContext();
+  if (visibleSet.size === 0) return null;
+
   const colourBlocks = getColourBlocks(visibleSet, showPoor);
   return (
-    <>
-      <b className="m-2 p-4 text-lg">Add Colours: </b>
+    <div className="relative grid w-full">
+      <h2 className="m-2 p-4 text-2xl font-bold">Compare Colours</h2>
       {colourBlocks}
-    </>
+    </div>
   );
 }

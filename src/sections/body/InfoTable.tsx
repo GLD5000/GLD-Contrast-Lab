@@ -181,8 +181,9 @@ export default function InfoTable() {
   const lumSort = [...colourSet].reduce(sortByLuminance, []).flatMap((x) => x);
   const tableMarkDown = getTable(lumSort, dataColumns, setDataColumns, showData, setShowData);
   return (
-    <div className="relative w-full overflow-x-auto pb-4">
-      <div className="relative mx-auto flex w-fit grow  flex-col gap-0 overflow-clip rounded border border-neutral-900 bg-white text-center text-neutral-800 dark:border-neutral-300 dark:bg-neutral-700 dark:text-neutral-50">
+    <div className="relative grid w-full overflow-x-auto pb-4">
+      <h2 className="m-2 p-4 text-2xl font-bold">Colour Data</h2>
+      <div className="mx-auto flex w-fit grow  flex-col gap-0 overflow-clip rounded border border-neutral-900 bg-white text-center text-neutral-800 dark:border-neutral-300 dark:bg-neutral-700 dark:text-neutral-50">
         {tableMarkDown}
       </div>
     </div>
