@@ -109,7 +109,7 @@ export default function HslSlider({
         value={hexValue}
         onClick={handleClickAdd}
       >
-        <b className="m-auto ">Add Colour</b>
+        <b className="m-auto ">Submit</b>
       </button>
     </div>
   );
