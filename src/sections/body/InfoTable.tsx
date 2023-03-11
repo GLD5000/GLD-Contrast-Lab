@@ -66,7 +66,7 @@ function getButtons(csv: string, setShowData: Dispatch<SetStateAction<boolean>>)
       clickFunction={handleVisibilityClick}
       id="custom-visibility-btn"
       name="Customise Data"
-      className=" flex justify-center gap-2 text-sm hover:bg-black hover:text-white hover:transition active:bg-slate-600 hover:dark:bg-white hover:dark:text-black"
+      className=" flex justify-center gap-2 text-sm  hover:bg-black hover:text-white hover:transition active:bg-slate-600 hover:dark:bg-white hover:dark:text-black"
       type="preview"
       showText
       reverse={false}
@@ -76,7 +76,10 @@ function getButtons(csv: string, setShowData: Dispatch<SetStateAction<boolean>>)
     />
   );
   return (
-    <div key="table-bottom-btns" className="flex w-full flex-row gap-2  rounded-none">
+    <div
+      key="table-bottom-btns"
+      className="flex w-full flex-row gap-2 rounded-none border border-transparent border-t-current"
+    >
       {visibilityButton} {csvButton}
     </div>
   );
@@ -141,8 +144,13 @@ function getTable(
     const style = i === 0 ? undefined : { backgroundColor: curr, color: autoTextColour.autoTextColourFromHex(curr) };
 
     const key = `${i}row`;
+    const border = i === 0 ? ' border-b-current' : undefined;
     return (
-      <div key={key} style={style} className="flex w-fit  grow flex-row gap-2 rounded-none">
+      <div
+        key={key}
+        style={style}
+        className={`flex w-fit  grow flex-row gap-2 rounded-none border border-transparent ${!!border && border} `}
+      >
         {x}
       </div>
     );
