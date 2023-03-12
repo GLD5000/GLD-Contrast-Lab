@@ -52,8 +52,8 @@ export default function ComboBox() {
                 dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: targetValue } });
               }}
             />
-            {textInput.length > 0 && (
-              <pre className="shrink-0 grow px-2 py-1 text-xs text-green-700 dark:text-green-300">
+            {recentColour.length > 0 && textInput.length > 0 && (
+              <pre className="shrink-0 grow px-2 pt-1 text-xs text-green-700 dark:text-green-300">
                 {getHexData(recentColour)}
               </pre>
             )}
