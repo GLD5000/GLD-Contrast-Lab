@@ -42,6 +42,7 @@ function getContent(
       const hex = e.currentTarget.id.split('-')[0];
       console.log('hex:', hex);
       dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: hex } });
+      document.getElementById('colour-input')?.focus();
     }
     return (
       <SpicyLi
@@ -72,7 +73,7 @@ export default function InlineList() {
           <h2 className=" m-0 text-2xl font-bold">Current Colours</h2>
           <p className="mt-2 mb-8 text-lg">Edit or Delete</p>
           <p className="m-0">Edit your colours by clicking them and using the colour picker above. </p>
-          <p className="m-0">Delete colours using the &apos;X&apos; button or the &apos;Delete All&apos; button.</p>
+          <p className="m-0">Use &apos;Delete All&apos; or &apos;X&apos; to delete colours.</p>
         </div>
         <Ul content={content} className={className} />
       </section>

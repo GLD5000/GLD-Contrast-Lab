@@ -79,7 +79,6 @@ export default function ColourBlocks() {
         <p className="m-0">Pick your colours to compare in Hex, RGB, HSL or Relative Luminance. </p>
         <p className="m-0">Choose to Contrast Ratios see or Contrast Ratings (compliant with WCAG 2.1 guidance).</p>
       </div>
-
       {colourBlocks}
     </section>
   );

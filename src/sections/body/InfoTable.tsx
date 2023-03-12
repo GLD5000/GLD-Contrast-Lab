@@ -198,7 +198,7 @@ export default function InfoTable() {
             See the Relative Luminance of each colour and find its Contrast Ratio against white or black.{' '}
           </p>
           <p className="m-0">
-            &apos;Customise&apos; to choose the data on screen or &apos;Copy Data&apos; to export all data in a
+            Use &apos;customise&apos; to choose the data on screen or &apos;Copy Data&apos; to export all data in a
             spreadsheet format (TSV - Tab Separated Values).
           </p>
         </div>

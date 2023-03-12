@@ -21,9 +21,6 @@ RGB: ${RGB}
 Relative Luminance: ${Luminance}
 Contrast w/ Black: ${Black}
 Contrast w/ White: ${White}`;
-  // return `  Relative Luminance: ${Luminance}
-  // Contrast Black: ${Black}
-  // Contrast White: ${White}`;
 }
 
 export default function ComboBox() {
