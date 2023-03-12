@@ -61,37 +61,46 @@ function useData() {
   ): { textInput: string; recentColour: string; colourSet: Set<string> } {
     switch (action.type) {
       case 'INIT': {
-        const { processedText, processedArray } = processText('#b6b6c8\r#565678\r#557766\r#ffddff\r');
-        const recentColourValue = getRecentColour(processedText);
+        const savedString = sessionStorage.getItem('colourSet') ?? '';
+        const { processedText, processedArray } = processText(
+          savedString.replaceAll(',', '\r') || '#b6b6c8\r#565678\r#557766\r#ffddff\r',
+        );
+        const recentColourValue = getRecentColour(processedText) || processedArray.at(-1);
 
         const returnValue = {
           textInput: processedText,
-          recentColour: recentColourValue || '',
+          recentColour: recentColourValue ?? '',
           colourSet: new Set(processedArray),
         };
         return returnValue;
       }
       case 'UPDATE_TEXT': {
         const { processedText, processedArray } = processText(action.payload.textInput || '');
+        const newSet = new Set([...state.colourSet, ...processedArray]);
+        sessionStorage.setItem('colourSet', `${[...newSet].join(',')},`);
 
         const recentColourValue = getRecentColour(processedText);
         const returnValue = {
           textInput: processedText || '',
           recentColour: recentColourValue || '',
-          colourSet: new Set([...state.colourSet, ...processedArray]),
+          colourSet: newSet,
         };
         return returnValue;
       }
       case 'CLEAR_TAGS': {
         const newSet = new Set(state.colourSet);
         newSet.clear();
+        sessionStorage.setItem('colourSet', `${[...newSet].join(',')},`);
+
         const returnValue = { ...state, colourSet: newSet, textInput: '', recentColour: '' };
         return returnValue;
       }
       case 'CLOSE_TAG':
       default: {
         const newSet = new Set(state.colourSet);
+
         if (typeof action.payload.tag === 'string' && newSet.has(action.payload.tag)) newSet.delete(action.payload.tag);
+        sessionStorage.setItem('colourSet', `${[...newSet].join(',')},`);
         const returnValue = { ...state, colourSet: newSet, recentColour: '' };
         return returnValue;
       }
