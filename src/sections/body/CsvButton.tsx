@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import SvgButton from '../../elements/SvgButton';
 
 export default function CsvButton({ data }: { data: string }) {
-  const [copyButtonMessage, setCopyButtonMessage] = useState('Copy Data');
+  const [copyButtonMessage, setCopyButtonMessage] = useState('Copy All');
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      setCopyButtonMessage('Copy Data');
+      setCopyButtonMessage('Copy All');
     }, 2000);
 
     return () => {
@@ -16,7 +16,7 @@ export default function CsvButton({ data }: { data: string }) {
 
   return (
     <SvgButton
-      type={copyButtonMessage === 'Copy Data' ? 'duplicate' : 'tick'}
+      type={copyButtonMessage === 'Copy All' ? 'duplicate' : 'tick'}
       key={`${1}copyCode`}
       text={copyButtonMessage}
       clickFunction={() => {
