@@ -53,7 +53,7 @@ export default function ComboBox() {
               }}
             />
             {textInput.length > 0 && (
-              <pre className="shrink-0 grow px-2 text-xs text-green-700 dark:text-green-300">
+              <pre className="shrink-0 grow px-2 py-1 text-xs text-green-700 dark:text-green-300">
                 {getHexData(recentColour)}
               </pre>
             )}
