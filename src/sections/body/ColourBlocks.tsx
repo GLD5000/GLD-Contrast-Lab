@@ -6,7 +6,7 @@ import { luminance } from '../../utilities/colour/luminance';
 import ShowButtons from './ShowButtons';
 import BlockVisibility from './BlockVisibility';
 
-function getBlockRow(backgroundColour: string, index: number, array: string[], showPoor: boolean) {
+function getBlockRow(backgroundColour: string, index: number, array: string[]) {
   const keyA = `${backgroundColour}-${index}`;
   const rowArray = array.map((textColour, number) => {
     const keyB = `${textColour}-${number}`;
@@ -14,14 +14,13 @@ function getBlockRow(backgroundColour: string, index: number, array: string[], s
     const textColourMod = autoColour ? autoTextColourFromHex(backgroundColour) : textColour;
     const contrastRatio = Number(getContrastRatioFromHex(backgroundColour, textColourMod).toFixed(2));
     const contrastRating = contrast.makeContrastRating(contrastRatio);
-
+    const bwText = !autoColour && contrastRatio < 4.5;
     return (
       <ColourBlock
         key={`${keyA}-${keyB}`}
         backgroundColour={backgroundColour}
-        textColour={
-          showPoor && !autoColour && contrastRatio < 3 ? autoTextColourFromHex(backgroundColour) : textColourMod
-        }
+        textColour={bwText ? autoTextColourFromHex(backgroundColour) : textColourMod}
+        borderColour={textColourMod}
         autoColour={autoColour}
         contrastRating={contrastRating}
         contrastRatio={contrastRatio}
@@ -37,10 +36,10 @@ function sortByLuminance(acc: Array<Array<string>>, curr: string) {
   return acc;
 }
 
-function createColourBlockArrays(coloursArray: Set<string>, showPoor: boolean) {
+function createColourBlockArrays(coloursArray: Set<string>) {
   const lumSort = [...coloursArray].reduce(sortByLuminance, []).flatMap((x) => x);
   return lumSort.map((backgroundColour, index, array) => {
-    const { keyA, rowArray } = getBlockRow(backgroundColour, index, array, showPoor);
+    const { keyA, rowArray } = getBlockRow(backgroundColour, index, array);
     return (
       <div
         key={`${backgroundColour}-${keyA}`}
@@ -54,8 +53,8 @@ function createColourBlockArrays(coloursArray: Set<string>, showPoor: boolean) {
   });
 }
 
-function getColourBlocks(colourSet: Set<string>, showPoor: boolean) {
-  const returnArrays = createColourBlockArrays(colourSet, showPoor);
+function getColourBlocks(colourSet: Set<string>) {
+  const returnArrays = createColourBlockArrays(colourSet);
   return (
     <>
       <ShowButtons />
@@ -68,10 +67,10 @@ function getColourBlocks(colourSet: Set<string>, showPoor: boolean) {
   );
 }
 export default function ColourBlocks() {
-  const { visibleSet, showPoor } = useColourBlocksContext();
+  const { visibleSet } = useColourBlocksContext();
   if (visibleSet.size === 0) return null;
 
-  const colourBlocks = getColourBlocks(visibleSet, showPoor);
+  const colourBlocks = getColourBlocks(visibleSet);
   return (
     <section className="grid gap-4">
       <div className="mr-auto grid place-items-start">

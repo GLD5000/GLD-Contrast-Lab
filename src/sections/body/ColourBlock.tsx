@@ -29,12 +29,14 @@ export default function ColourBlock({
   autoColour,
   contrastRating,
   contrastRatio,
+  borderColour = '#000000',
 }: {
   backgroundColour: string;
   textColour: string;
   autoColour: boolean;
   contrastRating: string;
   contrastRatio: number;
+  borderColour: string;
 }) {
   const { showRatio, showPoor, colourMode, dispatchColourBlocks } = useColourBlocksContext();
   const poorContrast = contrastRatio < 3;
@@ -62,7 +64,7 @@ export default function ColourBlock({
   const style: { [key: string]: string } = {
     // backgroundColor: backgroundColour,
     color: poorContrast && showPoor === false ? 'transparent' : textColour,
-    borderColor: autoColour || poorContrast ? 'transparent' : textColour,
+    borderColor: autoColour || poorContrast ? 'transparent' : borderColour,
   };
   const colourString = autoColour
     ? getColourString(backgroundColour, colourMode)
