@@ -69,7 +69,7 @@ export default function InlineList() {
     <>
       <section className="grid gap-4">
         <div className="mr-auto grid place-items-start">
-          <h2 className=" m-0 text-3xl font-bold">Current Colours</h2>
+          <h2 className=" m-0 text-2xl font-bold">Current Colours</h2>
           <p className="mt-2 mb-8 text-lg">Edit or Delete.</p>
           <p className="m-0">Edit your colours by clicking them and using the colour picker above. </p>
           <p className="m-0">Delete colours using the &apos;X&apos; button or the &apos;Delete All&apos; button.</p>

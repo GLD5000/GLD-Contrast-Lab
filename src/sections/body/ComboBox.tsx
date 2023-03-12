@@ -34,7 +34,7 @@ export default function ComboBox() {
       <section className="m-0 flex flex-col gap-4">
         <div className="mr-auto grid place-items-start">
           <label htmlFor="colour-input m-0 p-0">
-            <h2 className="m-0 p-0 text-3xl font-bold">Add Colours</h2>
+            <h2 className="m-0 p-0 text-2xl font-bold">Add Colours</h2>
           </label>
           <p className="mt-2 mb-8 text-lg">Paste, pick and adjust.</p>
           <p className="m-0">Use the colour picker and slider to choose and adjust colours.</p>

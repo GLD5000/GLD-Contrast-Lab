@@ -2,24 +2,25 @@ import SvgButton from '../elements/SvgButton';
 import GldSvg from '../icons/GldSvg';
 
 export default function Header({
-  title,
   toggleColourTheme,
   colourTheme,
 }: {
-  title: string;
   toggleColourTheme: () => void;
   colourTheme: boolean;
 }) {
   return (
     <header className="sticky top-0 left-0 right-0 z-[999] grid h-fit w-screen flex-shrink-0 flex-grow-0 grid-cols-frAutoFr content-center bg-neutral-100 dark:bg-neutral-800">
       <nav className=" col-start-2 flex w-body min-w-body max-w-body flex-wrap items-center justify-between  ">
-        <div className="flex h-16 flex-wrap items-center gap-4 p-2">
+        <div className="flex h-16 flex-wrap items-center gap-2 p-2">
           <a href="https://gld-portfolio.vercel.app/" target="_blank" rel="noreferrer">
             {' '}
             <GldSvg />
           </a>
 
-          <h2>{title}</h2>
+          <div className="flex flex-row overflow-clip rounded-lg border-2 border-current">
+            <h1 className=" rounded-none bg-white px-1 text-2xl font-black text-black">CONTRAST</h1>
+            <h1 className="  rounded-none bg-black px-1 text-2xl font-black text-white">TOOL</h1>
+          </div>
         </div>
         <div className="relative flex h-16 flex-wrap items-center justify-center gap-4 py-2">
           {/* <Button
