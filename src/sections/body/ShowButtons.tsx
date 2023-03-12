@@ -42,7 +42,7 @@ export default function ShowButtons() {
   }
 
   return (
-    <div className="sticky left-0 flex w-body min-w-body max-w-body  items-center overflow-x-auto">
+    <div className="flex items-center overflow-x-auto">
       <div className="mx-auto flex w-fit flex-row flex-wrap items-center justify-around gap-1 rounded">
         <button
           type="button"

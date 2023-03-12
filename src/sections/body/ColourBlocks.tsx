@@ -57,12 +57,14 @@ function createColourBlockArrays(coloursArray: Set<string>, showPoor: boolean) {
 function getColourBlocks(colourSet: Set<string>, showPoor: boolean) {
   const returnArrays = createColourBlockArrays(colourSet, showPoor);
   return (
-    <div className="grid  w-full gap-2 overflow-auto rounded-none">
-      <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 gap-1 overflow-clip rounded">
-        {returnArrays}
-      </div>
+    <>
       <ShowButtons />
-    </div>
+      <div className="grid  w-full gap-2 overflow-auto rounded-none">
+        <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 gap-1 overflow-clip rounded">
+          {returnArrays}
+        </div>
+      </div>
+    </>
   );
 }
 export default function ColourBlocks() {
@@ -71,9 +73,15 @@ export default function ColourBlocks() {
 
   const colourBlocks = getColourBlocks(visibleSet, showPoor);
   return (
-    <div className="relative grid w-full">
-      <h2 className="m-2 p-4 text-2xl font-bold">Compare Colours</h2>
+    <section className="grid gap-4">
+      <div className="mr-auto grid place-items-start">
+        <h2 className=" m-0 text-3xl font-bold">Compare Colours</h2>
+        <p className="mt-2 mb-8 text-lg">Customise and Analyse.</p>
+        <p className="m-0">Pick your colours to compare in Hex, RGB, HSL or Relative Luminance. </p>
+        <p className="m-0">Choose to Contrast Ratios see or Contrast Ratings (compliant with WCAG 2.1 guidance).</p>
+      </div>
+
       {colourBlocks}
-    </div>
+    </section>
   );
 }

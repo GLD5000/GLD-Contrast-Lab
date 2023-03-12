@@ -189,11 +189,26 @@ export default function InfoTable() {
   const lumSort = [...colourSet].reduce(sortByLuminance, []).flatMap((x) => x);
   const tableMarkDown = getTable(lumSort, dataColumns, setDataColumns, showData, setShowData);
   return (
-    <div className="relative grid w-full overflow-x-auto pb-4">
-      <h2 className="m-2 p-4 text-2xl font-bold">Colour Data</h2>
-      <div className="mx-auto flex w-fit grow  flex-col gap-0 overflow-clip rounded border border-neutral-900 bg-white text-center text-neutral-800 dark:border-neutral-300 dark:bg-neutral-700 dark:text-neutral-50">
-        {tableMarkDown}
-      </div>
-    </div>
+    <>
+      <section className="grid gap-4">
+        <div className="mr-auto grid place-items-start">
+          <h2 className=" m-0 text-3xl font-bold">Colour Data</h2>
+          <p className="mt-2 mb-8 text-lg">View and Export.</p>
+          <p className="m-0">
+            See the Relative Luminance of each colour and find its Contrast Ratio against white or black.{' '}
+          </p>
+          <p className="m-0">
+            &apos;Customise&apos; to choose the data on screen or &apos;Copy Data&apos; to export all data in a
+            spreadsheet format (TSV - Tab Separated Values).
+          </p>
+        </div>
+        <div className="relative grid w-full overflow-x-auto">
+          <div className="mx-auto flex w-fit grow  flex-col gap-0 overflow-clip rounded border border-neutral-900 bg-white text-center text-neutral-800 dark:border-neutral-300 dark:bg-neutral-700 dark:text-neutral-50">
+            {tableMarkDown}
+          </div>
+        </div>
+      </section>
+      <hr className="my-8" />
+    </>
   );
 }

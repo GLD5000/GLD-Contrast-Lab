@@ -65,5 +65,18 @@ export default function InlineList() {
   if (colourSet.size === 0) return null;
   const content = getContent([...colourSet], dispatchColourInput);
   const className = 'list-none flex flex-row flex-wrap gap-2 mx-auto justify-center p-2';
-  return <Ul content={content} className={className} />;
+  return (
+    <>
+      <section className="grid gap-4">
+        <div className="mr-auto grid place-items-start">
+          <h2 className=" m-0 text-3xl font-bold">Current Colours</h2>
+          <p className="mt-2 mb-8 text-lg">Edit or Delete.</p>
+          <p className="m-0">Edit your colours by clicking them and using the colour picker above. </p>
+          <p className="m-0">Delete colours using the &apos;X&apos; button or the &apos;Delete All&apos; button.</p>
+        </div>
+        <Ul content={content} className={className} />
+      </section>
+      <hr className="my-8" />
+    </>
+  );
 }
