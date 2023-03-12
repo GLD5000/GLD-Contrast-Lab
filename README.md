@@ -1,6 +1,6 @@
 # GLD Contrast Tool
 
-## A tool to help developers create accessible colour combinations
+## Create Accessible Colour Combinations
 
 We all know accessibility is important and should be one of the cornerstones of any good design. 
 
@@ -36,7 +36,4 @@ Also, text displayed on the colours will automatically be in black or white if t
 ## [License](https://github.com/GLD5000/parsing-multi/blob/74e8ce1ec6bd1f25aab2c5100f5caea8346737f9/LICENSE.MD)
 
 GLD Contrast Tool  Copyright (C) 2023  Gareth L Devlin
-This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
-This is free software, and you are welcome to redistribute it
-under certain conditions; type `show c' for details.
-
+This program comes with ABSOLUTELY NO WARRANTY; 
