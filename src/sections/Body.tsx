@@ -16,7 +16,7 @@ export default function Body() {
                 <h1 className=" rounded-none bg-white px-2  font-black text-black sm:text-6xl">CONTRAST</h1>{' '}
                 <h1 className="  rounded-none bg-black px-2 font-black text-white sm:text-6xl">TOOL</h1>
               </div>
-              <b className="mx-auto mt-2 mb-20 text-xl">Helping Developers Create Accessible Colour Combinations</b>
+              <b className="mx-auto mt-2 mb-20 text-center text-xl">Create Accessible Colour Combinations</b>
 
               <ComboBox />
               <InlineList />
