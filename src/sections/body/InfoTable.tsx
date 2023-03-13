@@ -190,6 +190,8 @@ export default function InfoTable() {
   const tableMarkDown = getTable(lumSort, dataColumns, setDataColumns, showData, setShowData);
   return (
     <>
+      <hr className="my-8" />
+
       <section className="grid gap-4">
         <div className="mr-auto grid place-items-start">
           <h2 className=" m-0 text-2xl font-bold">Colour Data</h2>
@@ -208,7 +210,6 @@ export default function InfoTable() {
           </div>
         </div>
       </section>
-      <hr className="my-8" />
     </>
   );
 }

@@ -22,10 +22,10 @@ export default function BlockVisibility({ hexId }: { hexId: string }) {
       onClick={handleClickVisibility}
       className="mx-auto h-12 w-10 rounded border border-transparent text-sm text-current hover:border-current hover:transition"
     >
-      <span className="mx-auto text-xs">Hide</span>
       <div className="mx-auto h-6 w-6">
         <DeleteSvg />
       </div>
+      <span className="mx-auto text-xs">Hide</span>
     </button>
   );
 }

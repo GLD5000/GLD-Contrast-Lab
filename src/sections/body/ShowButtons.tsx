@@ -5,7 +5,7 @@ export default function ShowButtons() {
   const { showRatio, showPoor, limit, colourMode, visibleSet, dispatchColourBlocks } = useColourBlocksContext();
   const { colourSet } = useColourInputContext();
   const colourModeLabel = `${colourMode}`;
-  const ratioLabel = showRatio ? 'Contrast' : 'Rating';
+  const ratioLabel = showRatio ? 'Ratio' : 'Rating';
   const ratingRatio = showRatio ? 'Ratios' : 'Ratings';
   const poorLabel = showPoor ? `All ${ratingRatio}` : `Safe ${ratingRatio}`;
   const limitLabel = limit;

@@ -46,8 +46,8 @@ function createColourBlockArrays(coloursArray: Set<string>) {
         style={{ backgroundColor: backgroundColour }}
         className=" grid gap-1 rounded border border-current p-1"
       >
-        {rowArray}
         <BlockVisibility hexId={keyA} />
+        {rowArray}
       </div>
     );
   });
