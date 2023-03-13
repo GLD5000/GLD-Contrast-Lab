@@ -3,12 +3,12 @@ import { colourSpace } from '../../utilities/colour/colourSpace';
 import { luminance } from '../../utilities/colour/luminance';
 
 function getColourString(hexCode: string, mode: string) {
-  if (mode === 'hex') return `hex\r\n${hexCode.slice(1)}`;
+  if (mode === 'Hex') return `Hex\r\n${hexCode.slice(1)}`;
 
   const colourStringCallbacks: { [key: string]: string } = {
-    luminance: `lum\r\n${luminance.convertHexToLuminancePercent(hexCode)}`,
-    hsl: colourSpace.convertHexToHslStringLb(hexCode),
-    rgb: colourSpace.convertHextoRgbStringLb(hexCode),
+    Luminance: `Lum\r\n${luminance.convertHexToLuminancePercent(hexCode)}`,
+    HSL: colourSpace.convertHexToHslStringLb(hexCode),
+    RGB: colourSpace.convertHextoRgbStringLb(hexCode),
   };
   return colourStringCallbacks[mode];
 }
@@ -44,10 +44,10 @@ export default function ColourBlock({
 
   function handleClickColourMode() {
     const nextMode: { [key: string]: string } = {
-      hex: 'luminance',
-      luminance: 'hsl',
-      hsl: 'rgb',
-      rgb: 'hex',
+      Hex: 'Luminance',
+      Luminance: 'HSL',
+      HSL: 'RGB',
+      RGB: 'Hex',
     };
 
     dispatchColourBlocks({ colourMode: nextMode[colourMode] });
@@ -68,7 +68,7 @@ export default function ColourBlock({
   };
   const colourString = autoColour
     ? getColourString(backgroundColour, colourMode)
-    : `hex\r\n${backgroundColour.slice(1)}`;
+    : `Hex\r\n${backgroundColour.slice(1)}`;
   const returnContent = getContent(showRatio, contrastRatio, contrastRating, autoColour, colourString);
   const border = autoColour ? 'border-none' : 'border-2';
   return (

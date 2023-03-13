@@ -12,10 +12,10 @@ export default function ShowButtons() {
 
   function handleClickColourMode() {
     const nextMode: { [key: string]: string } = {
-      hex: 'luminance',
-      luminance: 'hsl',
-      hsl: 'rgb',
-      rgb: 'hex',
+      Hex: 'Luminance',
+      Luminance: 'HSL',
+      HSL: 'RGB',
+      RGB: 'Hex',
     };
 
     dispatchColourBlocks({ colourMode: nextMode[colourMode] });
@@ -43,11 +43,11 @@ export default function ShowButtons() {
 
   return (
     <div className="flex items-center overflow-x-auto">
-      <div className="mx-auto flex w-fit flex-row flex-wrap items-center justify-around gap-1 rounded">
+      <div className="mx-auto flex w-fit flex-row flex-wrap items-center justify-center gap-1 rounded">
         <button
           type="button"
           onClick={handleClickColourMode}
-          className="m-2 w-28 shrink-0 rounded border p-2 text-sm text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
+          className="w-28 shrink-0 rounded bg-neutral-300 p-2 text-sm  text-current hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
         >
           {colourModeLabel}
         </button>
@@ -55,21 +55,21 @@ export default function ShowButtons() {
         <button
           type="button"
           onClick={handleClickRatio}
-          className="m-2 w-28 shrink-0 rounded border p-2 text-sm text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
+          className="w-28 shrink-0 rounded bg-neutral-300 p-2 text-sm  text-current hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
         >
           {ratioLabel}
         </button>
         <button
           type="button"
           onClick={handleClickPoor}
-          className="m-2 w-28 shrink-0 rounded border p-2 text-sm text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
+          className="w-28 shrink-0 rounded bg-neutral-300 p-2 text-sm  text-current hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
         >
           {poorLabel}
         </button>
         <button
           type="button"
           onClick={handleClickLimit}
-          className="m-2 w-28 shrink-0 rounded border p-2 text-sm text-current hover:bg-black hover:text-white hover:transition dark:hover:bg-white dark:hover:text-black"
+          className="w-28 shrink-0 rounded bg-neutral-300 p-2 text-sm  text-current hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
         >
           {limitLabel}
         </button>

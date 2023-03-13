@@ -16,8 +16,8 @@ function getHexData(hexString: string) {
   const Black = `${contrast.getContrastRatio2Dp([0, luminanceFloat])}`;
   const White = `${contrast.getContrastRatio2Dp([1, luminanceFloat])}`;
 
-  return `HSL: ${HSL}
-RGB: ${RGB}
+  return `${HSL}
+${RGB}
 Relative Luminance: ${Luminance}
 Contrast w/ Black: ${Black}
 Contrast w/ White: ${White}`;
