@@ -1,6 +1,6 @@
 import { colourSpace } from './colourSpace';
 
-const randomColour = {
+export const randomColour = {
   randomIntegerInRange(start: number, end: number): number {
     return start + Math.floor(Math.random() * (end - start));
   },
@@ -15,6 +15,10 @@ const randomColour = {
     const sat = randomColour.randomIntegerInRange(60, 90);
     const lum = randomColour.randomIntegerInRange(70, 90);
     return [hue, sat, lum];
+  },
+  makeRandomHslString() {
+    const [hue, sat, lum] = randomColour.makeRandomHslSafer();
+    return `HSL(${hue}, ${sat}%, ${lum}%)`;
   },
   makeRandomHex() {
     const randomHsl = randomColour.makeRandomHslSafer();

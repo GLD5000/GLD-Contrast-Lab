@@ -7,7 +7,7 @@ import TextArea from '../../elements/TextArea';
 // import { luminance } from '../../utilities/colour/luminance';
 import ColourPicker from './ColourPicker';
 
-function getHexData(colourObject: { [key: string]: number | string }) {
+function getHexData(colourObject: { [key: string]: number | string }, mode: string) {
   // const luminanceFloat = luminance.convertHexToLuminance(hexString);
 
   // const HSL = colourSpace.convertHexToHslString(hexString);
@@ -15,16 +15,31 @@ function getHexData(colourObject: { [key: string]: number | string }) {
   // const Luminance = luminance.convertHexToLuminancePercent(hexString);
   // const Black = `${contrast.getContrastRatio2Dp([0, luminanceFloat])}`;
   // const White = `${contrast.getContrastRatio2Dp([1, luminanceFloat])}`;
-  const { HSL, RGB, Luminance, Black, White } = colourObject;
-  return `${HSL}
-${RGB}
-Relative Luminance: ${Luminance}
+  const { Hex, HSL, RGB, Luminance, Black, White } = colourObject;
+  const colourSpaceLookup: { [key: string]: string } = {
+    Hex: `${`${HSL}\r\n`}${`${RGB}\r\n`}`,
+    HSL: `${`${Hex}\r\n`}${`${RGB}\r\n`}`,
+    RGB: `${`${Hex}\r\n`}${`${HSL}\r\n`}`,
+  };
+  return `${colourSpaceLookup[mode]}Relative Luminance: ${Luminance}
 Contrast w/ Black: ${Black}
 Contrast w/ White: ${White}`;
 }
 
 export default function ComboBox() {
-  const { textInput, colourSet, recentColour, colourMap, dispatchColourInput } = useColourInputContext();
+  const { textInput, colourSet, recentColour, colourMap, mode, dispatchColourInput } = useColourInputContext();
+  function handleClickMode() {
+    const nextModeLookup: { [key: string]: string } = {
+      Hex: 'HSL',
+      HSL: 'RGB',
+      RGB: 'Hex',
+      // Luminance: string,
+      // Black: string,
+      // White: string,
+    };
+    dispatchColourInput({ type: 'CHANGE_MODE', payload: { mode: nextModeLookup[mode] } });
+  }
+
   console.log('colourMap:', colourMap);
   return (
     <>
@@ -40,12 +55,12 @@ export default function ComboBox() {
 
         <div className="flex flex-row flex-wrap justify-center gap-2">
           <ColourPicker />
-          <div className="relative flex min-h-[9rem] w-80 flex-col rounded border bg-inherit">
+          <div className="relative flex min-h-[9rem] w-80 flex-col gap-1 rounded border bg-inherit">
             <TextArea
               id="colour-input"
               placeholder="Enter colours here e.g.:    #fafafa   rgb(120, 120, 120)   hsl(200, 50%, 50%)  (submit with space or enter )"
               name="codeInput"
-              className="shrink grow resize-none overflow-auto bg-transparent px-2 pt-2 text-base placeholder:text-gray-600 dark:placeholder:text-gray-300"
+              className="shrink grow resize-none overflow-auto bg-transparent px-2 pt-2 pb-1 text-base placeholder:text-gray-600 dark:placeholder:text-gray-300"
               value={textInput}
               onInput={(e: FormEvent<HTMLTextAreaElement>): void => {
                 const { value: targetValue } = e.currentTarget;
@@ -56,14 +71,15 @@ export default function ComboBox() {
               <button
                 className="absolute right-1 top-1 w-fit bg-neutral-300 py-2 px-4 text-xs hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
                 type="button"
+                onClick={handleClickMode}
               >
-                hex
+                {mode}
               </button>
             )}
 
             {recentColour !== undefined && textInput.length > 0 && (
               <pre className="shrink-0 grow px-2 pt-1 text-xs text-green-700 dark:text-green-300">
-                {getHexData(recentColour)}
+                {getHexData(recentColour, mode)}
               </pre>
             )}
           </div>

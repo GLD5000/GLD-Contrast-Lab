@@ -9,14 +9,14 @@ export default function ColourPicker() {
   console.log('recentColour:', recentColour);
   const fallbackValue = '#ffddff';
   const [currentValue, setCurrentValue] = useState(() => {
-    if (recentColour !== undefined) return recentColour.Hex;
+    if (recentColour !== undefined) return `${recentColour.Hex}`;
     return colourSet.size > 1 ? [...colourSet].at(-1) || fallbackValue : fallbackValue;
   });
 
   useEffect(() => {
     let run = true;
     if (run && recentColour !== undefined) {
-      setCurrentValue(recentColour.Hex);
+      setCurrentValue(`${recentColour.Hex}`);
     }
 
     return () => {

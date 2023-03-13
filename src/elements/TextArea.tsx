@@ -17,6 +17,7 @@ export default function TextArea({
 }) {
   return (
     <textarea
+      rows={1}
       id={id}
       placeholder={placeholder}
       name={name}

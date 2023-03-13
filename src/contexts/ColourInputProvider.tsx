@@ -5,17 +5,8 @@ import { luminance } from '../utilities/colour/luminance';
 
 const initialiserA: {
   textInput: string;
-  recentColour:
-    | {
-        luminanceFloat: number;
-        Hex: string;
-        HSL: string;
-        RGB: string;
-        Luminance: string;
-        Black: string;
-        White: string;
-      }
-    | undefined;
+  mode: string;
+  recentColour: { [key: string]: string | number } | undefined;
   colourSet: Set<string>;
   colourMap: Map<string, { [key: string]: string }>;
 
@@ -23,23 +14,15 @@ const initialiserA: {
     type: string;
     payload: Partial<{
       textInput: string;
-      recentColour:
-        | {
-            luminanceFloat: number;
-            Hex: string;
-            HSL: string;
-            RGB: string;
-            Luminance: string;
-            Black: string;
-            White: string;
-          }
-        | undefined;
+      mode: string;
+      recentColour: { [key: string]: string | number } | undefined;
       colourSet: Set<string>;
       colourMap: Map<string, { [key: string]: string }>;
     }>;
   }>;
 } = {
   textInput: '',
+  mode: 'Hex',
   recentColour: undefined,
   colourSet: new Set(''),
   colourMap: new Map(),
@@ -48,21 +31,13 @@ const initialiserA: {
 
 const initialiserB: {
   textInput: string;
-  recentColour:
-    | {
-        luminanceFloat: number;
-        Hex: string;
-        HSL: string;
-        RGB: string;
-        Luminance: string;
-        Black: string;
-        White: string;
-      }
-    | undefined;
+  mode: string;
+  recentColour: { [key: string]: string | number } | undefined;
   colourSet: Set<string>;
   colourMap: Map<string, { [key: string]: string }>;
 } = {
   textInput: '',
+  mode: 'Hex',
   recentColour: undefined,
   colourSet: new Set(''),
   colourMap: new Map(),
@@ -71,7 +46,10 @@ const initialiserB: {
 function useData() {
   //    '#fafafa\r#f4f4f5\r#e4e4e7\r#d4d4d8\r#a1a1aa\r#71717a\r#52525b\r#3f3f46\r#27272a\r#18181b',
 
-  const [{ textInput, recentColour, colourSet, colourMap }, dispatchColourInput] = useReducer(tagReducer, initialiserB);
+  const [{ textInput, mode, recentColour, colourSet, colourMap }, dispatchColourInput] = useReducer(
+    tagReducer,
+    initialiserB,
+  );
 
   useEffect(() => {
     dispatchColourInput({ type: 'INIT', payload: {} });
@@ -79,6 +57,7 @@ function useData() {
 
   return {
     textInput,
+    mode,
     colourSet,
     colourMap,
     recentColour,
@@ -87,17 +66,8 @@ function useData() {
   function tagReducer(
     state: {
       textInput: string;
-      recentColour:
-        | {
-            luminanceFloat: number;
-            Hex: string;
-            HSL: string;
-            RGB: string;
-            Luminance: string;
-            Black: string;
-            White: string;
-          }
-        | undefined;
+      mode: string;
+      recentColour: { [key: string]: string | number } | undefined;
       colourSet: Set<string>;
       colourMap: Map<string, { [key: string]: string }>;
     },
@@ -105,17 +75,8 @@ function useData() {
       type: string;
       payload: Partial<{
         textInput: string;
-        recentColour:
-          | {
-              luminanceFloat: number;
-              Hex: string;
-              HSL: string;
-              RGB: string;
-              Luminance: string;
-              Black: string;
-              White: string;
-            }
-          | undefined;
+        mode: string;
+        recentColour: { [key: string]: string | number } | undefined;
         colourSet: Set<string>;
         colourMap: Map<string, { [key: string]: string }>;
 
@@ -124,17 +85,8 @@ function useData() {
     },
   ): {
     textInput: string;
-    recentColour:
-      | {
-          luminanceFloat: number;
-          Hex: string;
-          HSL: string;
-          RGB: string;
-          Luminance: string;
-          Black: string;
-          White: string;
-        }
-      | undefined;
+    mode: string;
+    recentColour: { [key: string]: string | number } | undefined;
     colourSet: Set<string>;
     colourMap: Map<string, { [key: string]: string }>;
   } {
@@ -148,6 +100,7 @@ function useData() {
         const newMap = createMap(processedArray) || new Map();
         const returnValue = {
           textInput: processedText,
+          mode: 'Hex',
           recentColour: recentColourValue,
           colourSet: new Set(processedArray),
           colourMap: newMap,
@@ -161,8 +114,13 @@ function useData() {
         sessionStorage.setItem('colourSet', `${[...newSet].join(',')},`);
         const newMap = createMap(joinedArrays) || new Map();
         const recentColourValue = getRecentColour(processedText);
+        const textOutput =
+          valueIsHex(processedText) && recentColourValue !== undefined
+            ? `${recentColourValue[state.mode]}`
+            : processedText;
         const returnValue = {
-          textInput: processedText || '',
+          ...state,
+          textInput: textOutput || '',
           recentColour: recentColourValue,
           colourSet: newSet,
           colourMap: newMap,
@@ -174,7 +132,13 @@ function useData() {
         newSet.clear();
         sessionStorage.setItem('colourSet', `${[...newSet].join(',')},`);
 
-        const returnValue = { ...state, colourSet: newSet, textInput: '', recentColour: undefined };
+        const returnValue = { ...state, colourSet: newSet, textInput: '', mode: 'Hex', recentColour: undefined };
+        return returnValue;
+      }
+      case 'CHANGE_MODE': {
+        const newMode = action.payload.mode || 'Hex';
+        const returnValue = { ...state, mode: newMode };
+        if (returnValue.recentColour !== undefined) returnValue.textInput = `${returnValue.recentColour[newMode]}`;
         return returnValue;
       }
       case 'CLOSE_TAG':
@@ -239,17 +203,7 @@ function processColourStringLong(stringIn: string) {
   if (stringIn.length < 7) return stringIn;
   return processColourString(stringIn);
 }
-function getRecentColour(text: string):
-  | undefined
-  | {
-      luminanceFloat: number;
-      Hex: string;
-      HSL: string;
-      RGB: string;
-      Luminance: string;
-      Black: string;
-      White: string;
-    } {
+function getRecentColour(text: string): undefined | { [key: string]: string | number } {
   const testedProcessedText = valueIsHex(text) ? text : processColourStringLong(text);
   const recentColour = valueIsHex(testedProcessedText) ? makeColourObject(testedProcessedText) : undefined;
   return recentColour;
