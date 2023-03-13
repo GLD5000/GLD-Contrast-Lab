@@ -6,6 +6,7 @@ import TextArea from '../../elements/TextArea';
 // import { contrast } from '../../utilities/colour/contrastRatio';
 // import { luminance } from '../../utilities/colour/luminance';
 import ColourPicker from './ColourPicker';
+import InlineList from './InlineList';
 
 function getHexData(colourObject: { [key: string]: number | string }, mode: string) {
   // const luminanceFloat = luminance.convertHexToLuminance(hexString);
@@ -47,13 +48,14 @@ export default function ComboBox() {
           <label htmlFor="colour-input m-0 p-0">
             <h2 className="m-0 p-0 text-2xl font-bold">Add Colours</h2>
           </label>
-          <p className="mt-2 mb-8 text-lg">Paste, Pick and Adjust</p>
+          <p className="mt-2 mb-8 text-lg">Add, Edit and Delete</p>
           <p className="m-0">Use the colour picker and slider to choose and adjust colours.</p>
           <p className="m-0">Batch add colours by pasting them into the text box.</p>
+          <p className="m-0">Edit your colours by clicking them and using the colour picker above. </p>
+          <p className="m-0">Use &apos;Delete All&apos; or &apos;X&apos; to delete colours.</p>
         </div>
 
         <div className="flex flex-row flex-wrap justify-center gap-2">
-          <ColourPicker />
           <div className="relative flex min-h-[9rem] w-80 flex-col gap-1 rounded border bg-inherit">
             <TextArea
               id="colour-input"
@@ -77,12 +79,14 @@ export default function ComboBox() {
             )}
 
             {recentColour !== undefined && textInput.length > 0 && (
-              <pre className="absolute bottom-2 left-2 m-0 h-fit p-0 text-xs   text-green-700 dark:text-green-300">
+              <pre className="absolute bottom-2 left-2 m-0 h-fit p-0 text-xs   text-green-900 dark:text-green-300">
                 {getHexData(recentColour, mode)}
               </pre>
             )}
           </div>
+          <ColourPicker />
         </div>
+        <InlineList />
       </section>
       {colourSet.size > 0 && <hr className="my-8" />}
     </>

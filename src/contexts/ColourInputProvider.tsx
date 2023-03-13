@@ -127,6 +127,21 @@ function useData() {
         };
         return returnValue;
       }
+      case 'UPDATE_HSL': {
+        const newHsl = action.payload.textInput;
+        const recentColourValue: { [key: string]: string | number } | undefined = newHsl
+          ? makeColourObjectHsl(newHsl)
+          : undefined;
+        const modeOut = state.mode ? state.mode : 'Hex';
+        const textOutput = recentColourValue ? `${recentColourValue[modeOut]}` : '';
+        const returnValue = {
+          ...state,
+          textInput: textOutput,
+          recentColour: recentColourValue,
+        };
+        return returnValue;
+      }
+
       case 'CLEAR_TAGS': {
         const newSet = new Set(state.colourSet);
         newSet.clear();
@@ -255,6 +270,25 @@ function makeColourObject(hexValue: string) {
   const HSL = colourSpace.convertHexToHslString(hexValue);
   const RGB = colourSpace.convertHextoRgbString(hexValue);
   const Luminance = luminance.convertHexToLuminancePercent(hexValue);
+  const Black = `${contrast.getContrastRatio2Dp([0, luminanceFloat])}`;
+  const White = `${contrast.getContrastRatio2Dp([1, luminanceFloat])}`;
+
+  return {
+    luminanceFloat,
+    Hex,
+    HSL,
+    RGB,
+    Luminance,
+    Black,
+    White,
+  };
+}
+function makeColourObjectHsl(hslValue: string) {
+  const Hex = colourSpace.convertHslStringToHex(hslValue);
+  const HSL = hslValue;
+  const RGB = colourSpace.convertHextoRgbString(Hex);
+  const Luminance = luminance.convertHexToLuminancePercent(Hex);
+  const luminanceFloat = luminance.convertHexToLuminance(Hex);
   const Black = `${contrast.getContrastRatio2Dp([0, luminanceFloat])}`;
   const White = `${contrast.getContrastRatio2Dp([1, luminanceFloat])}`;
 

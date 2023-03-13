@@ -4,7 +4,6 @@ import autoTextColourFromHex from '../../utilities/colour/autoTextColour';
 import HslSlider from './HslSlider';
 
 export default function ColourPicker() {
-  const [type, setType] = useState('Lum');
   const { recentColour, colourSet, dispatchColourInput } = useColourInputContext();
   const fallbackValue = '#ffddff';
   const [currentValue, setCurrentValue] = useState(() => {
@@ -48,13 +47,7 @@ export default function ColourPicker() {
           value={currentValue}
         />
       </div>
-      <HslSlider
-        hexValue={currentValue}
-        setHexValue={setCurrentValue}
-        dispatchColourInput={dispatchColourInput}
-        type={type}
-        setType={setType}
-      />
+      <HslSlider />
     </div>
   );
 }

@@ -3,7 +3,6 @@ import ColourInputProvider from '../contexts/ColourInputProvider';
 import ColourBlocks from './body/ColourBlocks';
 import ComboBox from './body/ComboBox';
 import InfoTable from './body/InfoTable';
-import InlineList from './body/InlineList';
 
 export default function Body() {
   return (
@@ -19,10 +18,9 @@ export default function Body() {
               <b className="mx-auto mt-2 mb-20 text-center text-xl">Create Accessible Colour Combinations</b>
 
               <ComboBox />
-              <InlineList />
               <ColourBlocksProvider>
-                <InfoTable />
                 <ColourBlocks />
+                <InfoTable />
               </ColourBlocksProvider>
             </div>
           </div>

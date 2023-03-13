@@ -143,7 +143,18 @@ export const colourSpace = {
 
     return [red, green, blue];
   },
-
+  parseHslStringToArray(stringIn: string) {
+    const arrayValue = stringIn
+      .toLowerCase()
+      .replaceAll(/[hsl( )%]/g, '')
+      .split(',')
+      .map((x) => parseInt(x, 10));
+    return arrayValue;
+  },
+  convertHslStringToHex(stringIn: string) {
+    const arrayValue = colourSpace.parseHslStringToArray(stringIn);
+    return colourSpace.convertHslArrayToHex(arrayValue);
+  },
   convertHslArrayToHex(hslArray: Array<number>) {
     return colourSpace.convertSrgbToHex(colourSpace.convertHslArrayToSrgb(hslArray));
   },
