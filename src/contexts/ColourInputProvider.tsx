@@ -1,10 +1,13 @@
 import { createContext, ReactNode, useContext, useReducer, Dispatch, useEffect } from 'react';
 import { colourSpace } from '../utilities/colour/colourSpace';
+import { contrast } from '../utilities/colour/contrastRatio';
+import { luminance } from '../utilities/colour/luminance';
 
 const initialiserA: {
   textInput: string;
   recentColour: string;
   colourSet: Set<string>;
+  colourMap: Map<string, { [key: string]: string }>;
 
   dispatchColourInput: Dispatch<{
     type: string;
@@ -12,12 +15,14 @@ const initialiserA: {
       textInput: string;
       recentColour: string;
       colourSet: Set<string>;
+      colourMap: Map<string, { [key: string]: string }>;
     }>;
   }>;
 } = {
   textInput: '',
   recentColour: '',
   colourSet: new Set(''),
+  colourMap: new Map(),
   dispatchColourInput: () => undefined,
 };
 
@@ -25,16 +30,18 @@ const initialiserB: {
   textInput: string;
   recentColour: string;
   colourSet: Set<string>;
+  colourMap: Map<string, { [key: string]: string }>;
 } = {
   textInput: '',
   recentColour: '',
   colourSet: new Set(''),
+  colourMap: new Map(),
 };
 
 function useData() {
   //    '#fafafa\r#f4f4f5\r#e4e4e7\r#d4d4d8\r#a1a1aa\r#71717a\r#52525b\r#3f3f46\r#27272a\r#18181b',
 
-  const [{ textInput, recentColour, colourSet }, dispatchColourInput] = useReducer(tagReducer, initialiserB);
+  const [{ textInput, recentColour, colourSet, colourMap }, dispatchColourInput] = useReducer(tagReducer, initialiserB);
 
   useEffect(() => {
     dispatchColourInput({ type: 'INIT', payload: {} });
@@ -43,22 +50,34 @@ function useData() {
   return {
     textInput,
     colourSet,
+    colourMap,
     recentColour,
     dispatchColourInput,
   };
   function tagReducer(
-    state: { textInput: string; recentColour: string; colourSet: Set<string> },
+    state: {
+      textInput: string;
+      recentColour: string;
+      colourSet: Set<string>;
+      colourMap: Map<string, { [key: string]: string }>;
+    },
     action: {
       type: string;
       payload: Partial<{
         textInput: string;
         recentColour: string;
         colourSet: Set<string>;
+        colourMap: Map<string, { [key: string]: string }>;
 
         tag: string;
       }>;
     },
-  ): { textInput: string; recentColour: string; colourSet: Set<string> } {
+  ): {
+    textInput: string;
+    recentColour: string;
+    colourSet: Set<string>;
+    colourMap: Map<string, { [key: string]: string }>;
+  } {
     switch (action.type) {
       case 'INIT': {
         const savedString = sessionStorage.getItem('colourSet') ?? '';
@@ -66,11 +85,12 @@ function useData() {
           savedString.replaceAll(',', '\r') || '#b6b6c8\r#565678\r#557766\r#ffddff\r',
         );
         const recentColourValue = getRecentColour(processedText) || processedArray.at(-1);
-
+        const newMap = createMap(processedArray) || new Map();
         const returnValue = {
           textInput: processedText,
           recentColour: recentColourValue ?? '',
           colourSet: new Set(processedArray),
+          colourMap: newMap,
         };
         return returnValue;
       }
@@ -78,12 +98,13 @@ function useData() {
         const { processedText, processedArray } = processText(action.payload.textInput || '');
         const newSet = new Set([...state.colourSet, ...processedArray]);
         sessionStorage.setItem('colourSet', `${[...newSet].join(',')},`);
-
+        const newMap = createMap(processedArray) || new Map();
         const recentColourValue = getRecentColour(processedText);
         const returnValue = {
           textInput: processedText || '',
           recentColour: recentColourValue || '',
           colourSet: newSet,
+          colourMap: newMap,
         };
         return returnValue;
       }
@@ -131,7 +152,12 @@ function processHexString(value: string) {
 }
 
 function processRgbString(value: string) {
-  if (value.search(/rgb\([\d]{1,3},[\d]{1,3},[\d]{1,3}\)/) === -1) return value;
+  console.log('value:', value);
+  const rgbRegex =
+    /(rgb(\(((25[0-5])|(2[0-4][0-9])|(1?[0-9]{1,2})),[ ]?((25[0-5])|(2[0-4][0-9])|(1?[0-9]{1,2})),[ ]?((25[0-5])|(2[0-4][0-9])|(1?[0-9]{1,2}))\)))/;
+
+  // if (value.search(/rgb\([\d]{1,3},[\d]{1,3},[\d]{1,3}\)/) === -1) return value;
+  if (value.search(rgbRegex) === -1) return value;
   const cleanedUpValue = value.toLowerCase().replaceAll(/[ ()rgb]/g, '');
   const rgbArray = cleanedUpValue.split(',').map((x) => parseInt(x, 10));
   const hex = colourSpace.convertRgbToHex(rgbArray);
@@ -139,7 +165,9 @@ function processRgbString(value: string) {
 }
 
 function processHslString(value: string) {
-  if (value.search(/hsl\([\d]{1,3},[\d]{1,3},[\d]{1,3}\)/) === -1) return value;
+  const hslRegex = /hsl\(((360)|(3[0-5][0-9])|([1-2]?[0-9]{1,2}))(,[ ]?(100|([0-9]{1,2}))%?){2}\)/;
+  // if (value.search(/hsl\([\d]{1,3},[\d]{1,3},[\d]{1,3}\)/) === -1) return value;
+  if (value.search(hslRegex) === -1) return value;
   const cleanedUpValue = value.toLowerCase().replaceAll(/[ ()hsl%]/g, '');
   const hslArray = cleanedUpValue.split(',').map((x) => parseInt(x, 10));
   const hex = colourSpace.convertHslArrayToHex(hslArray);
@@ -151,7 +179,9 @@ function processColourStringLong(stringIn: string) {
   return processColourString(stringIn);
 }
 function getRecentColour(text: string) {
+  console.log('text:', text);
   const testedProcessedText = valueIsHex(text) ? text : processColourStringLong(text);
+  console.log('testedProcessedText:', testedProcessedText);
   const recentColour = valueIsHex(testedProcessedText) ? testedProcessedText : '';
   return recentColour;
 }
@@ -195,4 +225,32 @@ function processText(text: string) {
     processedArray: [],
   });
   return { processedText, processedArray };
+}
+
+function createMap(hexArray: string[]) {
+  const buildArray: Iterable<readonly [string, { [key: string]: string | number }]> | null = hexArray.map((hex) => {
+    const luminanceFloat = luminance.convertHexToLuminance(hex);
+    const Hex = hex;
+    const HSL = colourSpace.convertHexToHslString(hex);
+    const RGB = colourSpace.convertHextoRgbString(hex);
+    const Luminance = luminance.convertHexToLuminancePercent(hex);
+    const Black = `${contrast.getContrastRatio2Dp([0, luminanceFloat])}`;
+    const White = `${contrast.getContrastRatio2Dp([1, luminanceFloat])}`;
+
+    return [
+      hex,
+      {
+        luminanceFloat,
+        Hex,
+        HSL,
+        RGB,
+        Luminance,
+        Black,
+        White,
+      },
+    ];
+  });
+
+  const map: Map<string, { [key: string]: string | number }> | null = buildArray ? new Map(buildArray) : null;
+  return map;
 }

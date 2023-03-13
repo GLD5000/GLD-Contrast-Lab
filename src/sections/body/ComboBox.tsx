@@ -24,8 +24,8 @@ Contrast w/ White: ${White}`;
 }
 
 export default function ComboBox() {
-  const { textInput, colourSet, recentColour, dispatchColourInput } = useColourInputContext();
-
+  const { textInput, colourSet, recentColour, colourMap, dispatchColourInput } = useColourInputContext();
+  console.log('colourMap:', colourMap);
   return (
     <>
       <section className="m-0 flex flex-col gap-4">
