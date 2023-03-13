@@ -3,32 +3,32 @@ import { colourSpace } from '../../utilities/colour/colourSpace';
 import getRandomColour from '../../utilities/colour/randomColour';
 
 function convertHslToSlider(value: number, type: string) {
-  if (type !== 'hue') return Math.round(value * 3.6);
+  if (type !== 'Hue') return Math.round(value * 3.6);
   return Math.round(value);
 }
 function getSliderValueFromHex(hexString: string, type: string) {
-  const [hue, sat, lum] = colourSpace.convertHexToHslArray(hexString);
+  const [Hue, Sat, Lum] = colourSpace.convertHexToHslArray(hexString);
   const valueLookup: { [key: string]: number } = {
-    hue,
-    sat,
-    lum,
+    Hue,
+    Sat,
+    Lum,
   };
   const newValue = convertHslToSlider(valueLookup[type], type);
   return newValue;
 }
 
 function convertSliderToHsl(value: number, type: string) {
-  if (type !== 'hue') return Math.round(value / 3.6);
+  if (type !== 'Hue') return Math.round(value / 3.6);
   return Math.round(value);
 }
 
 function getHexValueFromSlider(sliderValue: number, hexString: string, type: string) {
   const convertedSliderValue = convertSliderToHsl(sliderValue, type);
-  const [hue, sat, lum] = colourSpace.convertHexToHslArray(hexString);
+  const [Hue, Sat, Lum] = colourSpace.convertHexToHslArray(hexString);
   const hslLookUp: { [key: string]: number[] } = {
-    hue: [convertedSliderValue, sat, lum],
-    sat: [hue, convertedSliderValue, lum],
-    lum: [hue, sat, convertedSliderValue],
+    Hue: [convertedSliderValue, Sat, Lum],
+    Sat: [Hue, convertedSliderValue, Lum],
+    Lum: [Hue, Sat, convertedSliderValue],
   };
   const newHexValue = colourSpace.convertHslArrayToHex(hslLookUp[type]);
   return newHexValue;
@@ -70,9 +70,9 @@ export default function HslSlider({
 
   function handleTypeClick() {
     const typeLookup: { [key: string]: string } = {
-      hue: 'sat',
-      sat: 'lum',
-      lum: 'hue',
+      Hue: 'Sat',
+      Sat: 'Lum',
+      Lum: 'Hue',
     };
     const newType = typeLookup[type];
     setType(newType);

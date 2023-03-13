@@ -177,9 +177,8 @@ function processHexString(value: string) {
 }
 
 function processRgbString(value: string) {
-  console.log('value:', value);
   const rgbRegex =
-    /(rgb(\(((25[0-5])|(2[0-4][0-9])|(1?[0-9]{1,2})),[ ]?((25[0-5])|(2[0-4][0-9])|(1?[0-9]{1,2})),[ ]?((25[0-5])|(2[0-4][0-9])|(1?[0-9]{1,2}))\)))/;
+    /((rgb)|(RGB)(\(((25[0-5])|(2[0-4][0-9])|(1?[0-9]{1,2})),[ ]?((25[0-5])|(2[0-4][0-9])|(1?[0-9]{1,2})),[ ]?((25[0-5])|(2[0-4][0-9])|(1?[0-9]{1,2}))\)))/;
 
   // if (value.search(/rgb\([\d]{1,3},[\d]{1,3},[\d]{1,3}\)/) === -1) return value;
   if (value.search(rgbRegex) === -1) return value;
@@ -190,7 +189,7 @@ function processRgbString(value: string) {
 }
 
 function processHslString(value: string) {
-  const hslRegex = /hsl\(((360)|(3[0-5][0-9])|([1-2]?[0-9]{1,2}))(,[ ]?(100|([0-9]{1,2}))%?){2}\)/;
+  const hslRegex = /(hsl)|(HSL)\(((360)|(3[0-5][0-9])|([1-2]?[0-9]{1,2}))(,[ ]?(100|([0-9]{1,2}))%?){2}\)/;
   // if (value.search(/hsl\([\d]{1,3},[\d]{1,3},[\d]{1,3}\)/) === -1) return value;
   if (value.search(hslRegex) === -1) return value;
   const cleanedUpValue = value.toLowerCase().replaceAll(/[ ()hsl%]/g, '');
@@ -235,7 +234,7 @@ function processText(text: string) {
   const splitText = text.replaceAll(', ', ',').split(/\s/);
   if (shouldSkipLastElement) {
     const slicedArray = splitText.slice(0, -1);
-    const lastElement = splitText.at(-1);
+    const lastElement = splitText.at(-1)?.replaceAll(',', ', ');
     const { processedText, processedArray } = slicedArray.reduce(hexReducer, {
       processedText: '',
       processedArray: [],

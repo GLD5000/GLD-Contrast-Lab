@@ -17,17 +17,17 @@ function getHexData(colourObject: { [key: string]: number | string }, mode: stri
   // const White = `${contrast.getContrastRatio2Dp([1, luminanceFloat])}`;
   const { Hex, HSL, RGB, Luminance, Black, White } = colourObject;
   const colourSpaceLookup: { [key: string]: string } = {
-    Hex: `${`${HSL}\r\n`}${`${RGB}\r\n`}`,
-    HSL: `${`${Hex}\r\n`}${`${RGB}\r\n`}`,
-    RGB: `${`${Hex}\r\n`}${`${HSL}\r\n`}`,
+    Hex: `${`~${Hex}~\r\n`}${` ${HSL}\r\n`}${` ${RGB}\r\n`}`,
+    HSL: `${` ${Hex}\r\n`}${`~${HSL}~\r\n`}${` ${RGB}\r\n`}`,
+    RGB: `${` ${Hex}\r\n`}${` ${HSL}\r\n`}${`~${RGB}~\r\n`}`,
   };
-  return `${colourSpaceLookup[mode]}Relative Luminance: ${Luminance}
-Contrast w/ Black: ${Black}
-Contrast w/ White: ${White}`;
+  return `${colourSpaceLookup[mode]} Relative Luminance: ${Luminance}
+ Contrast w/ Black: ${Black}
+ Contrast w/ White: ${White}`;
 }
 
 export default function ComboBox() {
-  const { textInput, colourSet, recentColour, colourMap, mode, dispatchColourInput } = useColourInputContext();
+  const { textInput, colourSet, recentColour, mode, dispatchColourInput } = useColourInputContext();
   function handleClickMode() {
     const nextModeLookup: { [key: string]: string } = {
       Hex: 'HSL',
@@ -40,7 +40,6 @@ export default function ComboBox() {
     dispatchColourInput({ type: 'CHANGE_MODE', payload: { mode: nextModeLookup[mode] } });
   }
 
-  console.log('colourMap:', colourMap);
   return (
     <>
       <section className="m-0 flex flex-col gap-4">
@@ -69,7 +68,7 @@ export default function ComboBox() {
             />
             {recentColour !== undefined && textInput.length > 0 && (
               <button
-                className="absolute right-1 top-1 w-fit bg-neutral-300 py-2 px-4 text-xs hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
+                className="absolute right-2 bottom-2 w-fit bg-neutral-300 py-2 px-4 text-xs hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
                 type="button"
                 onClick={handleClickMode}
               >
@@ -78,7 +77,7 @@ export default function ComboBox() {
             )}
 
             {recentColour !== undefined && textInput.length > 0 && (
-              <pre className="shrink-0 grow px-2 pt-1 text-xs text-green-700 dark:text-green-300">
+              <pre className="absolute bottom-2 left-2 m-0 h-fit p-0 text-xs   text-green-700 dark:text-green-300">
                 {getHexData(recentColour, mode)}
               </pre>
             )}
