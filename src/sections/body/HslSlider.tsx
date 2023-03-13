@@ -1,5 +1,6 @@
 import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from 'react';
 import { colourSpace } from '../../utilities/colour/colourSpace';
+import getRandomColour from '../../utilities/colour/randomColour';
 
 function convertHslToSlider(value: number, type: string) {
   if (type !== 'hue') return Math.round(value * 3.6);
@@ -80,6 +81,11 @@ export default function HslSlider({
   function handleClickAdd() {
     dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: `${hexValue}\t` } });
   }
+  function handleClickRandom() {
+    const newHex = getRandomColour();
+    dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: `${newHex}` } });
+  }
+
   return (
     <div className="grid ">
       <div className="flex h-12 w-full flex-row flex-wrap content-center gap-2 px-2">
@@ -102,15 +108,27 @@ export default function HslSlider({
           onInput={handleSliderInput}
         />
       </div>
-      <button
-        type="button"
-        id="add-colour"
-        className="mx-auto my-0 flex h-12 w-full  content-center gap-4 rounded-t-none bg-neutral-300 p-2 text-sm hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
-        value={hexValue}
-        onClick={handleClickAdd}
-      >
-        <b className="m-auto ">Submit</b>
-      </button>
+      <div className="flex flex-row gap-1">
+        <button
+          type="button"
+          id="add-colour"
+          className="mx-auto my-0 flex h-12 w-full  content-center gap-4 rounded-t-none rounded-r-none bg-neutral-300 p-2 text-sm hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
+          value={hexValue}
+          onClick={handleClickRandom}
+        >
+          <b className="m-auto ">Randomise</b>
+        </button>
+
+        <button
+          type="button"
+          id="add-colour"
+          className="mx-auto my-0 flex h-12 w-full  content-center gap-4 rounded-t-none rounded-l-none bg-neutral-300 p-2 text-sm hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
+          value={hexValue}
+          onClick={handleClickAdd}
+        >
+          <b className="m-auto ">Submit</b>
+        </button>
+      </div>
     </div>
   );
 }
