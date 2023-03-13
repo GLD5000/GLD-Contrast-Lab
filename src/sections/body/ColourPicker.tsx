@@ -5,18 +5,18 @@ import HslSlider from './HslSlider';
 
 export default function ColourPicker() {
   const [type, setType] = useState('lum');
-
   const { recentColour, colourSet, dispatchColourInput } = useColourInputContext();
+  console.log('recentColour:', recentColour);
   const fallbackValue = '#ffddff';
   const [currentValue, setCurrentValue] = useState(() => {
-    if (recentColour.length === 7) return recentColour;
+    if (recentColour !== undefined) return recentColour.Hex;
     return colourSet.size > 1 ? [...colourSet].at(-1) || fallbackValue : fallbackValue;
   });
 
   useEffect(() => {
     let run = true;
-    if (run && recentColour.length === 7) {
-      setCurrentValue(recentColour);
+    if (run && recentColour !== undefined) {
+      setCurrentValue(recentColour.Hex);
     }
 
     return () => {

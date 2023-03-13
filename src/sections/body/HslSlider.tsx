@@ -47,7 +47,15 @@ export default function HslSlider({
     type: string;
     payload: Partial<{
       textInput: string;
-      recentColour: string;
+      recentColour: {
+        luminanceFloat: number;
+        Hex: string;
+        HSL: string;
+        RGB: string;
+        Luminance: string;
+        Black: string;
+        White: string;
+      };
       colourSet: Set<string>;
     }>;
   }>;

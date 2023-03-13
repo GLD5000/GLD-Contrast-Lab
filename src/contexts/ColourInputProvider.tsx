@@ -5,7 +5,17 @@ import { luminance } from '../utilities/colour/luminance';
 
 const initialiserA: {
   textInput: string;
-  recentColour: string;
+  recentColour:
+    | {
+        luminanceFloat: number;
+        Hex: string;
+        HSL: string;
+        RGB: string;
+        Luminance: string;
+        Black: string;
+        White: string;
+      }
+    | undefined;
   colourSet: Set<string>;
   colourMap: Map<string, { [key: string]: string }>;
 
@@ -13,14 +23,24 @@ const initialiserA: {
     type: string;
     payload: Partial<{
       textInput: string;
-      recentColour: string;
+      recentColour:
+        | {
+            luminanceFloat: number;
+            Hex: string;
+            HSL: string;
+            RGB: string;
+            Luminance: string;
+            Black: string;
+            White: string;
+          }
+        | undefined;
       colourSet: Set<string>;
       colourMap: Map<string, { [key: string]: string }>;
     }>;
   }>;
 } = {
   textInput: '',
-  recentColour: '',
+  recentColour: undefined,
   colourSet: new Set(''),
   colourMap: new Map(),
   dispatchColourInput: () => undefined,
@@ -28,12 +48,22 @@ const initialiserA: {
 
 const initialiserB: {
   textInput: string;
-  recentColour: string;
+  recentColour:
+    | {
+        luminanceFloat: number;
+        Hex: string;
+        HSL: string;
+        RGB: string;
+        Luminance: string;
+        Black: string;
+        White: string;
+      }
+    | undefined;
   colourSet: Set<string>;
   colourMap: Map<string, { [key: string]: string }>;
 } = {
   textInput: '',
-  recentColour: '',
+  recentColour: undefined,
   colourSet: new Set(''),
   colourMap: new Map(),
 };
@@ -57,7 +87,17 @@ function useData() {
   function tagReducer(
     state: {
       textInput: string;
-      recentColour: string;
+      recentColour:
+        | {
+            luminanceFloat: number;
+            Hex: string;
+            HSL: string;
+            RGB: string;
+            Luminance: string;
+            Black: string;
+            White: string;
+          }
+        | undefined;
       colourSet: Set<string>;
       colourMap: Map<string, { [key: string]: string }>;
     },
@@ -65,7 +105,17 @@ function useData() {
       type: string;
       payload: Partial<{
         textInput: string;
-        recentColour: string;
+        recentColour:
+          | {
+              luminanceFloat: number;
+              Hex: string;
+              HSL: string;
+              RGB: string;
+              Luminance: string;
+              Black: string;
+              White: string;
+            }
+          | undefined;
         colourSet: Set<string>;
         colourMap: Map<string, { [key: string]: string }>;
 
@@ -74,7 +124,17 @@ function useData() {
     },
   ): {
     textInput: string;
-    recentColour: string;
+    recentColour:
+      | {
+          luminanceFloat: number;
+          Hex: string;
+          HSL: string;
+          RGB: string;
+          Luminance: string;
+          Black: string;
+          White: string;
+        }
+      | undefined;
     colourSet: Set<string>;
     colourMap: Map<string, { [key: string]: string }>;
   } {
@@ -84,11 +144,11 @@ function useData() {
         const { processedText, processedArray } = processText(
           savedString.replaceAll(',', '\r') || '#b6b6c8\r#565678\r#557766\r#ffddff\r',
         );
-        const recentColourValue = getRecentColour(processedText) || processedArray.at(-1);
+        const recentColourValue = getRecentColour(processedText || processedArray.at(-1) || '');
         const newMap = createMap(processedArray) || new Map();
         const returnValue = {
           textInput: processedText,
-          recentColour: recentColourValue ?? '',
+          recentColour: recentColourValue,
           colourSet: new Set(processedArray),
           colourMap: newMap,
         };
@@ -96,13 +156,14 @@ function useData() {
       }
       case 'UPDATE_TEXT': {
         const { processedText, processedArray } = processText(action.payload.textInput || '');
-        const newSet = new Set([...state.colourSet, ...processedArray]);
+        const joinedArrays = [...state.colourSet, ...processedArray];
+        const newSet = new Set(joinedArrays);
         sessionStorage.setItem('colourSet', `${[...newSet].join(',')},`);
-        const newMap = createMap(processedArray) || new Map();
+        const newMap = createMap(joinedArrays) || new Map();
         const recentColourValue = getRecentColour(processedText);
         const returnValue = {
           textInput: processedText || '',
-          recentColour: recentColourValue || '',
+          recentColour: recentColourValue,
           colourSet: newSet,
           colourMap: newMap,
         };
@@ -113,7 +174,7 @@ function useData() {
         newSet.clear();
         sessionStorage.setItem('colourSet', `${[...newSet].join(',')},`);
 
-        const returnValue = { ...state, colourSet: newSet, textInput: '', recentColour: '' };
+        const returnValue = { ...state, colourSet: newSet, textInput: '', recentColour: undefined };
         return returnValue;
       }
       case 'CLOSE_TAG':
@@ -122,7 +183,7 @@ function useData() {
 
         if (typeof action.payload.tag === 'string' && newSet.has(action.payload.tag)) newSet.delete(action.payload.tag);
         sessionStorage.setItem('colourSet', `${[...newSet].join(',')},`);
-        const returnValue = { ...state, colourSet: newSet, recentColour: '' };
+        const returnValue = { ...state, colourSet: newSet, recentColour: undefined };
         return returnValue;
       }
     }
@@ -178,11 +239,19 @@ function processColourStringLong(stringIn: string) {
   if (stringIn.length < 7) return stringIn;
   return processColourString(stringIn);
 }
-function getRecentColour(text: string) {
-  console.log('text:', text);
+function getRecentColour(text: string):
+  | undefined
+  | {
+      luminanceFloat: number;
+      Hex: string;
+      HSL: string;
+      RGB: string;
+      Luminance: string;
+      Black: string;
+      White: string;
+    } {
   const testedProcessedText = valueIsHex(text) ? text : processColourStringLong(text);
-  console.log('testedProcessedText:', testedProcessedText);
-  const recentColour = valueIsHex(testedProcessedText) ? testedProcessedText : '';
+  const recentColour = valueIsHex(testedProcessedText) ? makeColourObject(testedProcessedText) : undefined;
   return recentColour;
 }
 
@@ -227,28 +296,30 @@ function processText(text: string) {
   return { processedText, processedArray };
 }
 
+function makeColourObject(hexValue: string) {
+  const luminanceFloat = luminance.convertHexToLuminance(hexValue);
+  const Hex = hexValue;
+  const HSL = colourSpace.convertHexToHslString(hexValue);
+  const RGB = colourSpace.convertHextoRgbString(hexValue);
+  const Luminance = luminance.convertHexToLuminancePercent(hexValue);
+  const Black = `${contrast.getContrastRatio2Dp([0, luminanceFloat])}`;
+  const White = `${contrast.getContrastRatio2Dp([1, luminanceFloat])}`;
+
+  return {
+    luminanceFloat,
+    Hex,
+    HSL,
+    RGB,
+    Luminance,
+    Black,
+    White,
+  };
+}
+
 function createMap(hexArray: string[]) {
   const buildArray: Iterable<readonly [string, { [key: string]: string | number }]> | null = hexArray.map((hex) => {
-    const luminanceFloat = luminance.convertHexToLuminance(hex);
-    const Hex = hex;
-    const HSL = colourSpace.convertHexToHslString(hex);
-    const RGB = colourSpace.convertHextoRgbString(hex);
-    const Luminance = luminance.convertHexToLuminancePercent(hex);
-    const Black = `${contrast.getContrastRatio2Dp([0, luminanceFloat])}`;
-    const White = `${contrast.getContrastRatio2Dp([1, luminanceFloat])}`;
-
-    return [
-      hex,
-      {
-        luminanceFloat,
-        Hex,
-        HSL,
-        RGB,
-        Luminance,
-        Black,
-        White,
-      },
-    ];
+    const colourObject = makeColourObject(hex);
+    return [hex, colourObject];
   });
 
   const map: Map<string, { [key: string]: string | number }> | null = buildArray ? new Map(buildArray) : null;
