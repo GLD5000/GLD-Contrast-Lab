@@ -23,6 +23,7 @@ function getSliderValueHslString(hslString: string, type: string) {
     Lum,
   };
   const newValue = convertHslToSlider(valueLookup[type], type);
+  console.log(newValue);
   return newValue;
 }
 
@@ -52,7 +53,7 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
   const [type, setType] = useState('Lum');
 
   const { recentColour, dispatchColourInput } = useColourInputContext();
-  const hslString = `${recentColour?.HSL}` || '50,50,50';
+  const hslString = `${recentColour?.HSL}` ?? '50,50,50';
   function handleTypeClick() {
     const typeLookup: { [key: string]: string } = {
       Hue: 'Sat',
@@ -91,7 +92,7 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
           type="range"
           min={0}
           max={360}
-          value={getSliderValueHslString(hslString, type) || 360}
+          value={getSliderValueHslString(hslString, type) || 0}
           onInput={handleSliderInput}
         />
       </div>
