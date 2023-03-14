@@ -52,7 +52,7 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
   const [type, setType] = useState('Lum');
 
   const { recentColour, dispatchColourInput } = useColourInputContext();
-  const hslString = recentColour?.HSL === undefined ? 'hsl(250,0%,0%)' : `${recentColour?.HSL}`;
+  const hslString = recentColour?.HSL === undefined ? 'hsl(0,0%,0%)' : `${recentColour?.HSL}`;
   function handleTypeClick() {
     const typeLookup: { [key: string]: string } = {
       Hue: 'Sat',
