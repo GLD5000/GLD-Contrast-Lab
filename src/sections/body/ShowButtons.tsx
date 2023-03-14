@@ -3,7 +3,7 @@ import { useColourInputContext } from '../../contexts/ColourInputProvider';
 
 export default function ShowButtons() {
   const { showRatio, showPoor, limit, colourMode, visibleSet, dispatchColourBlocks } = useColourBlocksContext();
-  const { colourSet } = useColourInputContext();
+  const { colourMap } = useColourInputContext();
   const colourModeLabel = `${colourMode}`;
   const ratioLabel = showRatio ? 'Ratio' : 'Rating';
   const ratingRatio = showRatio ? 'Ratios' : 'Ratings';
@@ -34,11 +34,12 @@ export default function ShowButtons() {
       Selection: 'All Colours',
     };
     const nextLimit =
-      colourSet && visibleSet && limit === 'Selecting...' && visibleSet.size === colourSet.size
+      colourMap && visibleSet && limit === 'Selecting...' && visibleSet.size === colourMap.size
         ? 'All Colours'
         : limitLookup[limit];
     if (nextLimit === 'All Colours') {
-      dispatchColourBlocks({ visibleSet: new Set(colourSet) });
+      const keysArray = colourMap !== undefined ? [...colourMap.keys()] : undefined;
+      if (keysArray) dispatchColourBlocks({ visibleSet: new Set(keysArray) });
     }
     dispatchColourBlocks({ limit: nextLimit });
   }

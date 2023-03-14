@@ -44,7 +44,7 @@ const initialiserB: {
 };
 
 function useData() {
-  const { colourSet } = useColourInputContext();
+  const { colourMap } = useColourInputContext();
   const [{ colourMode, showRatio, showPoor, limit, visibleSet }, dispatchColourBlocks] = useReducer(
     (
       state: {
@@ -70,12 +70,13 @@ function useData() {
   useEffect(() => {
     let mounted = true;
     if (mounted) {
-      dispatchColourBlocks({ visibleSet: new Set(colourSet) });
+      const keysArray = colourMap !== undefined ? [...colourMap.keys()] : undefined;
+      if (keysArray) dispatchColourBlocks({ visibleSet: new Set(keysArray) });
     }
     return () => {
       mounted = false;
     };
-  }, [colourSet]);
+  }, [colourMap]);
 
   return {
     colourMode,

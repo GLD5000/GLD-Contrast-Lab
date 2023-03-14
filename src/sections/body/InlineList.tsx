@@ -10,7 +10,6 @@ function getContent(
     type: string;
     payload: Partial<{
       textInput: string | undefined;
-      colourSet: Set<string>;
       limit: number;
       tag: string;
     }>;
@@ -60,10 +59,11 @@ function getContent(
 }
 
 export default function InlineList() {
-  const { colourSet, dispatchColourInput } = useColourInputContext();
+  const { colourMap, dispatchColourInput } = useColourInputContext();
 
-  if (!colourSet || colourSet.size === 0) return null;
-  const content = getContent([...colourSet], dispatchColourInput);
+  if (!colourMap) return null;
+  const keysArray = [...colourMap.keys()];
+  const content = getContent(keysArray, dispatchColourInput);
   const className = 'list-none flex flex-row flex-wrap gap-2 mx-auto justify-center p-2';
   return <Ul content={content} className={className} />;
 }

@@ -17,7 +17,7 @@ function getHexData(colourObject: { [key: string]: number | string }, mode: stri
 }
 
 export default function ComboBox() {
-  const { textInput, colourSet, recentColour, mode, dispatchColourInput } = useColourInputContext();
+  const { textInput, colourMap, recentColour, mode, dispatchColourInput } = useColourInputContext();
   function handleClickMode() {
     const nextModeLookup: { [key: string]: string } = {
       Hex: 'HSL',
@@ -97,7 +97,7 @@ export default function ComboBox() {
         </div>
         <InlineList />
       </section>
-      {colourSet && colourSet.size > 0 && <hr className="my-8" />}
+      {colourMap && <hr className="my-8" />}
     </>
   );
 }

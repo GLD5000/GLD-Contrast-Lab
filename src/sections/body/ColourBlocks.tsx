@@ -53,8 +53,8 @@ function createColourBlockArrays(coloursArray: Set<string>) {
   });
 }
 
-function getColourBlocks(colourSet: Set<string>) {
-  const returnArrays = createColourBlockArrays(colourSet);
+function getColourBlocks(visibleColours: Set<string>) {
+  const returnArrays = createColourBlockArrays(visibleColours);
   return (
     <>
       <ShowButtons />
