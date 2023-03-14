@@ -55,7 +55,7 @@ function useData() {
   useEffect(() => {
     dispatchColourInput({ type: 'INIT', payload: {} });
   }, []);
-
+  console.log(colourSet, colourMap);
   return {
     textInput,
     mode,
@@ -95,7 +95,6 @@ function useData() {
       case 'INIT': {
         const savedSet = getSessionStorageSet();
         const savedMap = getSessionStorageMap();
-        // console.log(savedSet, savedMap);
         const recentColourValue = makeColourObjectHsl(randomColour.makeRandomHslString());
 
         const returnValue = {
@@ -147,9 +146,20 @@ function useData() {
       case 'CLEAR_TAGS': {
         const newSet = new Set(state.colourSet);
         newSet.clear();
-        sessionStorage.removeItem('colourSet');
+        clearSessionStorageSet();
 
-        const returnValue = { ...state, colourSet: newSet, textInput: '', mode: 'Hex', recentColour: undefined };
+        const newMap = new Map(state.colourMap);
+        newMap.clear();
+        clearSessionStorageMap();
+
+        const returnValue = {
+          ...state,
+          colourSet: newSet,
+          colourMap: newMap,
+          textInput: '',
+          mode: 'Hex',
+          recentColour: undefined,
+        };
         return returnValue;
       }
       case 'CHANGE_MODE': {
@@ -160,10 +170,18 @@ function useData() {
       }
       case 'CLOSE_TAG':
       default: {
+        const { tag } = action.payload;
+
         const newSet = new Set(state.colourSet);
-        // setSessionStorageSet([...newSet]);
-        if (typeof action.payload.tag === 'string' && newSet.has(action.payload.tag)) newSet.delete(action.payload.tag);
-        const returnValue = { ...state, colourSet: newSet, recentColour: undefined };
+        if (typeof tag === 'string' && newSet.has(tag)) newSet.delete(tag);
+        setSessionStorageSet([...newSet]);
+
+        const newMap = new Map(state.colourMap);
+        if (typeof tag === 'string' && newMap.has(tag)) newMap.delete(tag);
+
+        setSessionStorageMap(newMap);
+
+        const returnValue = { ...state, colourSet: newSet, colourMap: newMap, recentColour: undefined };
         return returnValue;
       }
     }
@@ -334,18 +352,25 @@ function getSessionStorageSet() {
   const savedSet = savedString.length > 0 ? new Set(savedString.split(',')) : undefined;
   return savedSet;
 }
+function clearSessionStorageSet() {
+  sessionStorage.removeItem('colourSet');
+}
 
-function setSessionStorageMap(newMap: Map<string, { [key: string]: string | number }>) {
-  const newString = stringifyMap(newMap);
+function setSessionStorageMap(map: Map<string, { [key: string]: string | number }>) {
+  const newString = stringifyMap(map);
 
   if (newString.length > 0) sessionStorage.setItem('colourMap', newString);
 }
+
 function getSessionStorageMap() {
   const savedString = sessionStorage.getItem('colourMap') ?? undefined;
   if (savedString === undefined) return undefined;
   const mapAgain = parseStringToMap(savedString);
 
   return mapAgain || undefined;
+}
+function clearSessionStorageMap() {
+  sessionStorage.removeItem('colourMap');
 }
 
 function stringifyMap(mapIn: Map<string, { [mapKey: string]: string | number }>) {
