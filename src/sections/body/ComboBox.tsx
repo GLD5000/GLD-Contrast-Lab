@@ -1,21 +1,10 @@
 import { FormEvent } from 'react';
 import { useColourInputContext } from '../../contexts/ColourInputProvider';
 
-import TextArea from '../../elements/TextArea';
-// import { colourSpace } from '../../utilities/colour/colourSpace';
-// import { contrast } from '../../utilities/colour/contrastRatio';
-// import { luminance } from '../../utilities/colour/luminance';
 import ColourPicker from './ColourPicker';
 import InlineList from './InlineList';
 
 function getHexData(colourObject: { [key: string]: number | string }, mode: string) {
-  // const luminanceFloat = luminance.convertHexToLuminance(hexString);
-
-  // const HSL = colourSpace.convertHexToHslString(hexString);
-  // const RGB = colourSpace.convertHextoRgbString(hexString);
-  // const Luminance = luminance.convertHexToLuminancePercent(hexString);
-  // const Black = `${contrast.getContrastRatio2Dp([0, luminanceFloat])}`;
-  // const White = `${contrast.getContrastRatio2Dp([1, luminanceFloat])}`;
   const { Hex, HSL, RGB, Luminance, Black, White } = colourObject;
   const colourSpaceLookup: { [key: string]: string } = {
     Hex: `${`~${Hex}~\r\n`}${` ${HSL}\r\n`}${` ${RGB}\r\n`}`,
@@ -57,7 +46,8 @@ export default function ComboBox() {
 
         <div className="flex flex-row flex-wrap justify-center gap-2">
           <div className="relative flex min-h-[9rem] w-80 flex-col gap-1 rounded border bg-inherit">
-            <TextArea
+            <textarea
+              rows={1}
               id="colour-input"
               placeholder="Enter colours here e.g.:    #fafafa   rgb(120, 120, 120)   hsl(200, 50%, 50%)  (submit with space or enter )"
               name="codeInput"
@@ -67,6 +57,9 @@ export default function ComboBox() {
                 const { value: targetValue } = e.currentTarget;
                 dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: targetValue } });
               }}
+              wrap="hard"
+              autoComplete="off"
+              autoCorrect="off"
             />
             {recentColour !== undefined && textInput.length > 0 && (
               <button

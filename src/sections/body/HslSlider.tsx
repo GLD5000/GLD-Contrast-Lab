@@ -99,7 +99,7 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
         <button
           type="button"
           id="add-colour"
-          className="mx-auto my-0 flex  w-full  content-center gap-4 rounded-t-none rounded-r-none bg-neutral-300 p-2 text-sm hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
+          className="mx-auto my-0 flex  w-full  content-center gap-4 rounded bg-neutral-300 p-2 text-sm hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
           onClick={handleClickRandom}
         >
           <b className="m-auto ">Randomise</b>
@@ -108,7 +108,7 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
         <button
           type="button"
           id="add-colour"
-          className="mx-auto my-0 flex w-full  content-center gap-4 rounded-t-none rounded-l-none bg-neutral-300 p-2 text-sm hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
+          className="mx-auto my-0 flex w-full  content-center gap-4 rounded bg-neutral-300 p-2 text-sm hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
           onClick={handleClickAdd}
         >
           <b className="m-auto ">Submit</b>
