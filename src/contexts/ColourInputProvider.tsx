@@ -95,7 +95,7 @@ function useData() {
       case 'INIT': {
         const savedSet = getSessionStorageSet();
         const savedMap = getSessionStorageMap();
-        console.log(savedSet, savedMap);
+        // console.log(savedSet, savedMap);
         const recentColourValue = makeColourObjectHsl(randomColour.makeRandomHslString());
 
         const returnValue = {
