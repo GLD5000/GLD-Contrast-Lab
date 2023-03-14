@@ -93,16 +93,17 @@ function useData() {
   } {
     switch (action.type) {
       case 'INIT': {
-        const savedString = sessionStorage.getItem('colourSet') ?? '';
-        const savedSet = savedString.length > 0 ? new Set(savedString.split(',')) : undefined;
+        const savedSet = getSessionStorageSet();
+        const savedMap = getSessionStorageMap();
+        console.log(savedSet, savedMap);
         const recentColourValue = makeColourObjectHsl(randomColour.makeRandomHslString());
 
         const returnValue = {
           textInput: recentColourValue.Hex,
           mode: 'Hex',
           recentColour: recentColourValue,
-          colourSet: savedSet || undefined,
-          colourMap: undefined,
+          colourSet: savedSet,
+          colourMap: savedMap,
         };
         return returnValue;
       }
@@ -111,7 +112,7 @@ function useData() {
         const returnedColourSet = state.colourSet;
         const joinedArrays = returnedColourSet ? [...returnedColourSet, ...processedArray] : processedArray;
         const newSet =
-          !joinedArrays || !joinedArrays.includes('#') ? new Set(joinedArrays.filter((x) => x[0] === '#')) : undefined;
+          !joinedArrays || !joinedArrays.includes('#') ? new Set(joinedArrays.filter(valueIsHex)) : undefined;
         if (newSet) setSessionStorageSet([...newSet]);
         const newMap = createMap(joinedArrays) || undefined;
         const recentColourValue = getRecentColour(processedText);
@@ -171,6 +172,7 @@ function useData() {
 
 const ColourInput = createContext(initialiserA);
 export const useColourInputContext = () => useContext(ColourInput);
+
 export default function ColourInputProvider({ children }: { children: ReactNode }) {
   const data = useData();
   return <ColourInput.Provider value={data}>{children}</ColourInput.Provider>;
@@ -304,19 +306,82 @@ function makeColourObjectHsl(hslValue: string) {
 }
 
 function createMap(hexArray: string[] | undefined) {
-  if (!hexArray || !hexArray.includes('#')) return undefined;
-  const buildArray: Iterable<readonly [string, { [key: string]: string | number }]> | null = hexArray.map((hex) => {
-    const colourObject = makeColourObject(hex);
-    return [hex, colourObject];
-  });
+  if (!hexArray) return undefined;
+  const filteredArray = hexArray.filter(valueIsHex);
+  if (filteredArray.length === 0) return undefined;
+  const buildArray: Iterable<readonly [string, { [key: string]: string | number }]> | null = filteredArray.map(
+    (hex) => {
+      const colourObject = makeColourObject(hex);
+      return [hex, colourObject];
+    },
+  );
+  const mapValue: Map<string, { [key: string]: string | number }> | undefined = buildArray
+    ? new Map(buildArray)
+    : undefined;
 
-  const map: Map<string, { [key: string]: string | number }> | null = buildArray ? new Map(buildArray) : null;
-  return map;
+  if (mapValue) setSessionStorageMap(mapValue);
+  return mapValue;
 }
 
 function setSessionStorageSet(arrayIn: string[]) {
   if (arrayIn.length === 0) return;
   if (arrayIn.length === 1 && arrayIn[0][0] === '#') sessionStorage.setItem('colourSet', arrayIn[0]);
 
-  if (arrayIn.length > 1) sessionStorage.setItem('colourSet', `${[...arrayIn].filter((x) => x[0] === '#').join(',')}`);
+  if (arrayIn.length > 1) sessionStorage.setItem('colourSet', `${[...arrayIn].filter(valueIsHex).join(',')}`);
+}
+function getSessionStorageSet() {
+  const savedString = sessionStorage.getItem('colourSet') ?? '';
+  const savedSet = savedString.length > 0 ? new Set(savedString.split(',')) : undefined;
+  return savedSet;
+}
+
+function setSessionStorageMap(newMap: Map<string, { [key: string]: string | number }>) {
+  const newString = stringifyMap(newMap);
+
+  if (newString.length > 0) sessionStorage.setItem('colourMap', newString);
+}
+function getSessionStorageMap() {
+  const savedString = sessionStorage.getItem('colourMap') ?? undefined;
+  if (savedString === undefined) return undefined;
+  const mapAgain = parseStringToMap(savedString);
+
+  return mapAgain || undefined;
+}
+
+function stringifyMap(mapIn: Map<string, { [mapKey: string]: string | number }>) {
+  const str = JSON.stringify(mapIn, replacer);
+  return str;
+}
+
+function parseStringToMap(jsonString: string) {
+  const newValue = JSON.parse(jsonString, reviver);
+  return newValue;
+}
+function replacer(key: undefined | string, value: Map<string, { [mapKey: string]: string | number }>) {
+  if (value instanceof Map) {
+    return {
+      dataType: 'Map',
+      value: Array.from(value.entries()), // or with spread: value: [...value]
+    };
+  }
+  return value;
+}
+function reviver(
+  key: undefined | string,
+  value: {
+    dataType: string;
+    value: [
+      string,
+      {
+        [key: string]: string | number;
+      },
+    ][];
+  },
+) {
+  if (typeof value === 'object' && value !== null) {
+    if (value.dataType === 'Map') {
+      return new Map(value.value);
+    }
+  }
+  return value;
 }
