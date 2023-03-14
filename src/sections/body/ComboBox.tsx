@@ -57,6 +57,10 @@ export default function ComboBox() {
                 const { value: targetValue } = e.currentTarget;
                 dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: targetValue } });
               }}
+              onFocus={(e: FormEvent<HTMLTextAreaElement>): void => {
+                const element = e.currentTarget;
+                element.select();
+              }}
               wrap="hard"
               autoComplete="off"
               autoCorrect="off"
