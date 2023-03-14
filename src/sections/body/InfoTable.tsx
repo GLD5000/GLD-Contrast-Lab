@@ -178,15 +178,16 @@ function setInitialColumns(): Set<string> {
 }
 
 export default function InfoTable() {
-  const { colourSet } = useColourInputContext();
+  const { colourMap } = useColourInputContext();
   const [dataColumns, setDataColumns] = useState(setInitialColumns());
   const [showData, setShowData] = useState(true);
-  if (!colourSet || colourSet.size === 0) return null;
+  if (!colourMap || colourMap.size === 0) return null;
   function setColumnsOnResize() {
     setDataColumns(setInitialColumns());
   }
   window.onresize = setColumnsOnResize;
-  const lumSort = [...colourSet].reduce(sortByLuminance, []).flatMap((x) => x);
+  const keysArray = [...colourMap.keys()];
+  const lumSort = keysArray.reduce(sortByLuminance, []).flatMap((x) => x);
   const tableMarkDown = getTable(lumSort, dataColumns, setDataColumns, showData, setShowData);
   return (
     <section className="grid gap-4">
