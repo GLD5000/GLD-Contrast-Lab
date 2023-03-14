@@ -6,12 +6,12 @@ import HslSlider from './HslSlider';
 export default function ColourPicker() {
   const { recentColour, dispatchColourInput } = useColourInputContext();
   const [currentValue, setCurrentValue] = useState(
-    recentColour && recentColour?.Hex ? `${recentColour?.Hex}` : '#ffffff',
+    recentColour && recentColour?.Hex ? `${recentColour?.Hex}` : '#000000',
   );
   useEffect(() => {
     let run = true;
-    if (run && recentColour && recentColour.Hex) {
-      setCurrentValue(`${recentColour.Hex}`);
+    if (run) {
+      setCurrentValue(recentColour && recentColour?.Hex ? `${recentColour?.Hex}` : '#000000');
     }
     return () => {
       run = false;
