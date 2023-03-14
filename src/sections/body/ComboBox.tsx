@@ -29,6 +29,9 @@ export default function ComboBox() {
     };
     dispatchColourInput({ type: 'CHANGE_MODE', payload: { mode: nextModeLookup[mode] } });
   }
+  function handleClickClear() {
+    dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: '' } });
+  }
 
   return (
     <>
@@ -72,6 +75,15 @@ export default function ComboBox() {
                 onClick={handleClickMode}
               >
                 {mode}
+              </button>
+            )}
+            {recentColour !== undefined && textInput.length > 0 && (
+              <button
+                className="absolute right-2 top-2 w-fit bg-neutral-300 py-2 px-4 text-xs hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
+                type="button"
+                onClick={handleClickClear}
+              >
+                Clear
               </button>
             )}
 
