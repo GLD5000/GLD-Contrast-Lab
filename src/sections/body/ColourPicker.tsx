@@ -1,22 +1,18 @@
-import { MouseEvent, useEffect, useState } from 'react';
+import { MouseEvent, useState, useEffect } from 'react';
 import { useColourInputContext } from '../../contexts/ColourInputProvider';
 import autoTextColourFromHex from '../../utilities/colour/autoTextColour';
 import HslSlider from './HslSlider';
 
 export default function ColourPicker() {
-  const { recentColour, colourSet, dispatchColourInput } = useColourInputContext();
-  const fallbackValue = '#ffddff';
-  const [currentValue, setCurrentValue] = useState(() => {
-    if (recentColour !== undefined) return `${recentColour.Hex}`;
-    return colourSet.size > 1 ? [...colourSet].at(-1) || fallbackValue : fallbackValue;
-  });
-
+  const { recentColour, dispatchColourInput } = useColourInputContext();
+  const [currentValue, setCurrentValue] = useState(
+    recentColour && recentColour?.Hex ? `${recentColour?.Hex}` : '#ffffff',
+  );
   useEffect(() => {
     let run = true;
-    if (run && recentColour !== undefined) {
+    if (run && recentColour && recentColour.Hex) {
       setCurrentValue(`${recentColour.Hex}`);
     }
-
     return () => {
       run = false;
     };
@@ -28,13 +24,20 @@ export default function ColourPicker() {
     setCurrentValue(newValue);
     dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: newValue } });
   }
+
+  function handleClickAdd() {
+    if (currentValue[0] === '#')
+      dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: `${currentValue}` } });
+    if (recentColour) dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: `${currentValue}\t` } });
+  }
+
   return (
     <div className="grid h-fit w-80 overflow-clip rounded border">
       <div className="relative mx-auto flex h-12 w-full content-center overflow-clip rounded-b-none" style={styles}>
         <label
           htmlFor="main-colour-picker"
           className="absolute top-4 m-auto h-fit w-full text-center text-sm font-bold"
-          style={{ color: autoTextColourFromHex(currentValue) }}
+          style={{ color: autoTextColourFromHex(currentValue || '#ffffff') }}
         >
           Pick Colour
         </label>
@@ -47,7 +50,7 @@ export default function ColourPicker() {
           value={currentValue}
         />
       </div>
-      <HslSlider />
+      <HslSlider handleClickAdd={handleClickAdd} />
     </div>
   );
 }

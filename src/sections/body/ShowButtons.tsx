@@ -34,7 +34,9 @@ export default function ShowButtons() {
       Selection: 'All Colours',
     };
     const nextLimit =
-      limit === 'Selecting...' && visibleSet.size === colourSet.size ? 'All Colours' : limitLookup[limit];
+      colourSet && visibleSet && limit === 'Selecting...' && visibleSet.size === colourSet.size
+        ? 'All Colours'
+        : limitLookup[limit];
     if (nextLimit === 'All Colours') {
       dispatchColourBlocks({ visibleSet: new Set(colourSet) });
     }

@@ -2,13 +2,14 @@ import { createContext, ReactNode, useContext, useReducer, Dispatch, useEffect }
 import { colourSpace } from '../utilities/colour/colourSpace';
 import { contrast } from '../utilities/colour/contrastRatio';
 import { luminance } from '../utilities/colour/luminance';
+import { randomColour } from '../utilities/colour/randomColour';
 
 const initialiserA: {
   textInput: string;
   mode: string;
   recentColour: { [key: string]: string | number } | undefined;
-  colourSet: Set<string>;
-  colourMap: Map<string, { [key: string]: string }>;
+  colourSet: undefined | Set<string>;
+  colourMap: undefined | Map<string, { [key: string]: string | number }>;
 
   dispatchColourInput: Dispatch<{
     type: string;
@@ -16,16 +17,16 @@ const initialiserA: {
       textInput: string;
       mode: string;
       recentColour: { [key: string]: string | number } | undefined;
-      colourSet: Set<string>;
-      colourMap: Map<string, { [key: string]: string }>;
+      colourSet: undefined | Set<string>;
+      colourMap: undefined | Map<string, { [key: string]: string | number }>;
     }>;
   }>;
 } = {
   textInput: '',
   mode: 'Hex',
   recentColour: undefined,
-  colourSet: new Set(''),
-  colourMap: new Map(),
+  colourSet: undefined,
+  colourMap: undefined,
   dispatchColourInput: () => undefined,
 };
 
@@ -33,14 +34,14 @@ const initialiserB: {
   textInput: string;
   mode: string;
   recentColour: { [key: string]: string | number } | undefined;
-  colourSet: Set<string>;
-  colourMap: Map<string, { [key: string]: string }>;
+  colourSet: undefined | Set<string>;
+  colourMap: undefined | Map<string, { [key: string]: string | number }>;
 } = {
   textInput: '',
   mode: 'Hex',
   recentColour: undefined,
-  colourSet: new Set(''),
-  colourMap: new Map(),
+  colourSet: undefined,
+  colourMap: undefined,
 };
 
 function useData() {
@@ -68,8 +69,8 @@ function useData() {
       textInput: string;
       mode: string;
       recentColour: { [key: string]: string | number } | undefined;
-      colourSet: Set<string>;
-      colourMap: Map<string, { [key: string]: string }>;
+      colourSet: undefined | Set<string>;
+      colourMap: undefined | Map<string, { [key: string]: string | number }>;
     },
     action: {
       type: string;
@@ -77,8 +78,8 @@ function useData() {
         textInput: string;
         mode: string;
         recentColour: { [key: string]: string | number } | undefined;
-        colourSet: Set<string>;
-        colourMap: Map<string, { [key: string]: string }>;
+        colourSet: undefined | Set<string>;
+        colourMap: undefined | Map<string, { [key: string]: string | number }>;
 
         tag: string;
       }>;
@@ -87,32 +88,32 @@ function useData() {
     textInput: string;
     mode: string;
     recentColour: { [key: string]: string | number } | undefined;
-    colourSet: Set<string>;
-    colourMap: Map<string, { [key: string]: string }>;
+    colourSet: undefined | Set<string>;
+    colourMap: undefined | Map<string, { [key: string]: string | number }>;
   } {
     switch (action.type) {
       case 'INIT': {
         const savedString = sessionStorage.getItem('colourSet') ?? '';
-        const { processedText, processedArray } = processText(
-          savedString.replaceAll(',', '\r') || '#b6b6c8\r#565678\r#557766\r#ffddff\r',
-        );
-        const recentColourValue = getRecentColour(processedText || processedArray.at(-1) || '');
-        const newMap = createMap(processedArray) || new Map();
+        const savedSet = savedString.length > 0 ? new Set(savedString.split(',')) : undefined;
+        const recentColourValue = makeColourObjectHsl(randomColour.makeRandomHslString());
+
         const returnValue = {
-          textInput: processedText,
+          textInput: recentColourValue.Hex,
           mode: 'Hex',
           recentColour: recentColourValue,
-          colourSet: new Set(processedArray),
-          colourMap: newMap,
+          colourSet: savedSet || undefined,
+          colourMap: undefined,
         };
         return returnValue;
       }
       case 'UPDATE_TEXT': {
         const { processedText, processedArray } = processText(action.payload.textInput || '');
-        const joinedArrays = [...state.colourSet, ...processedArray];
-        const newSet = new Set(joinedArrays);
-        sessionStorage.setItem('colourSet', `${[...newSet].join(',')},`);
-        const newMap = createMap(joinedArrays) || new Map();
+        const returnedColourSet = state.colourSet;
+        const joinedArrays = returnedColourSet ? [...returnedColourSet, ...processedArray] : processedArray;
+        const newSet =
+          !joinedArrays || !joinedArrays.includes('#') ? new Set(joinedArrays.filter((x) => x[0] === '#')) : undefined;
+        if (newSet) setSessionStorageSet([...newSet]);
+        const newMap = createMap(joinedArrays) || undefined;
         const recentColourValue = getRecentColour(processedText);
         const textOutput =
           valueIsHex(processedText) && recentColourValue !== undefined
@@ -145,7 +146,7 @@ function useData() {
       case 'CLEAR_TAGS': {
         const newSet = new Set(state.colourSet);
         newSet.clear();
-        sessionStorage.setItem('colourSet', `${[...newSet].join(',')},`);
+        sessionStorage.removeItem('colourSet');
 
         const returnValue = { ...state, colourSet: newSet, textInput: '', mode: 'Hex', recentColour: undefined };
         return returnValue;
@@ -159,9 +160,8 @@ function useData() {
       case 'CLOSE_TAG':
       default: {
         const newSet = new Set(state.colourSet);
-
+        // setSessionStorageSet([...newSet]);
         if (typeof action.payload.tag === 'string' && newSet.has(action.payload.tag)) newSet.delete(action.payload.tag);
-        sessionStorage.setItem('colourSet', `${[...newSet].join(',')},`);
         const returnValue = { ...state, colourSet: newSet, recentColour: undefined };
         return returnValue;
       }
@@ -303,7 +303,8 @@ function makeColourObjectHsl(hslValue: string) {
   };
 }
 
-function createMap(hexArray: string[]) {
+function createMap(hexArray: string[] | undefined) {
+  if (!hexArray || !hexArray.includes('#')) return undefined;
   const buildArray: Iterable<readonly [string, { [key: string]: string | number }]> | null = hexArray.map((hex) => {
     const colourObject = makeColourObject(hex);
     return [hex, colourObject];
@@ -311,4 +312,11 @@ function createMap(hexArray: string[]) {
 
   const map: Map<string, { [key: string]: string | number }> | null = buildArray ? new Map(buildArray) : null;
   return map;
+}
+
+function setSessionStorageSet(arrayIn: string[]) {
+  if (arrayIn.length === 0) return;
+  if (arrayIn.length === 1 && arrayIn[0][0] === '#') sessionStorage.setItem('colourSet', arrayIn[0]);
+
+  if (arrayIn.length > 1) sessionStorage.setItem('colourSet', `${[...arrayIn].filter((x) => x[0] === '#').join(',')}`);
 }

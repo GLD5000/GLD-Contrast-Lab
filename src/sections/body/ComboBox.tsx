@@ -88,7 +88,7 @@ export default function ComboBox() {
         </div>
         <InlineList />
       </section>
-      {colourSet.size > 0 && <hr className="my-8" />}
+      {colourSet && colourSet.size > 0 && <hr className="my-8" />}
     </>
   );
 }

@@ -181,7 +181,7 @@ export default function InfoTable() {
   const { colourSet } = useColourInputContext();
   const [dataColumns, setDataColumns] = useState(setInitialColumns());
   const [showData, setShowData] = useState(true);
-  if (colourSet.size === 0) return null;
+  if (!colourSet || colourSet.size === 0) return null;
   function setColumnsOnResize() {
     setDataColumns(setInitialColumns());
   }
@@ -189,27 +189,23 @@ export default function InfoTable() {
   const lumSort = [...colourSet].reduce(sortByLuminance, []).flatMap((x) => x);
   const tableMarkDown = getTable(lumSort, dataColumns, setDataColumns, showData, setShowData);
   return (
-    <>
-      <hr className="my-8" />
-
-      <section className="grid gap-4">
-        <div className="mr-auto grid place-items-start">
-          <h2 className=" m-0 text-2xl font-bold">Colour Data</h2>
-          <p className="mt-2 mb-8 text-lg">View and Export</p>
-          <p className="m-0">
-            See the Relative Luminance of each colour and find its Contrast Ratio against white or black.{' '}
-          </p>
-          <p className="m-0">
-            Use &apos;customise&apos; to choose the data on screen or &apos;Copy All&apos; to export all data in a
-            spreadsheet format (TSV - Tab Separated Values).
-          </p>
+    <section className="grid gap-4">
+      <div className="mr-auto grid place-items-start">
+        <h2 className=" m-0 text-2xl font-bold">Colour Data</h2>
+        <p className="mt-2 mb-8 text-lg">View and Export</p>
+        <p className="m-0">
+          See the Relative Luminance of each colour and find its Contrast Ratio against white or black.{' '}
+        </p>
+        <p className="m-0">
+          Use &apos;customise&apos; to choose the data on screen or &apos;Copy All&apos; to export all data in a
+          spreadsheet format (TSV - Tab Separated Values).
+        </p>
+      </div>
+      <div className="relative grid w-full overflow-x-auto">
+        <div className="mx-auto flex w-fit grow  flex-col gap-0 overflow-clip rounded border border-neutral-900 bg-white text-center text-neutral-800 dark:border-neutral-300 dark:bg-neutral-700 dark:text-neutral-50">
+          {tableMarkDown}
         </div>
-        <div className="relative grid w-full overflow-x-auto">
-          <div className="mx-auto flex w-fit grow  flex-col gap-0 overflow-clip rounded border border-neutral-900 bg-white text-center text-neutral-800 dark:border-neutral-300 dark:bg-neutral-700 dark:text-neutral-50">
-            {tableMarkDown}
-          </div>
-        </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

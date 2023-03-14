@@ -1,22 +1,11 @@
 import { MouseEvent, useState } from 'react';
 import { useColourInputContext } from '../../contexts/ColourInputProvider';
-// import { colourSpace } from '../../utilities/colour/colourSpace';
 import getRandomColour from '../../utilities/colour/randomColour';
 
 function convertHslToSlider(value: number, type: string) {
   if (type !== 'Hue') return Math.round(value * 3.6);
   return Math.round(value);
 }
-// function getSliderValueFromHex(hexString: string, type: string) {
-//   const [Hue, Sat, Lum] = colourSpace.convertHexToHslArray(hexString);
-//   const valueLookup: { [key: string]: number } = {
-//     Hue,
-//     Sat,
-//     Lum,
-//   };
-//   const newValue = convertHslToSlider(valueLookup[type], type);
-//   return newValue;
-// }
 
 function parseHslStringToArray(stringIn: string) {
   const arrayValue = stringIn
@@ -42,18 +31,6 @@ function convertSliderToHsl(value: number, type: string) {
   return Math.round(value);
 }
 
-// function getHexValueFromSlider(sliderValue: number, hexString: string, type: string) {
-//   const convertedSliderValue = convertSliderToHsl(sliderValue, type);
-//   const [Hue, Sat, Lum] = colourSpace.convertHexToHslArray(hexString);
-//   const hslLookUp: { [key: string]: number[] } = {
-//     Hue: [convertedSliderValue, Sat, Lum],
-//     Sat: [Hue, convertedSliderValue, Lum],
-//     Lum: [Hue, Sat, convertedSliderValue],
-//   };
-//   const newHexValue = colourSpace.convertHslArrayToHex(hslLookUp[type]);
-//   return newHexValue;
-// }
-
 function stringifyHslArray(ArrayIn: number[]) {
   const [hue, sat, lum] = ArrayIn;
   const stringValue = `HSL(${hue}, ${sat}%, ${lum}%)`;
@@ -71,12 +48,11 @@ function getHslValueFromSlider(sliderValue: number, type: string, hslString: str
   return stringifyHslArray(hslLookUp[type]);
 }
 
-export default function HslSlider() {
+export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => void }) {
   const [type, setType] = useState('Lum');
 
   const { recentColour, dispatchColourInput } = useColourInputContext();
   const hslString = `${recentColour?.HSL}` || '50,50,50';
-  const hexValue = `${recentColour?.Hex}` || '#ffffff';
   function handleTypeClick() {
     const typeLookup: { [key: string]: string } = {
       Hue: 'Sat',
@@ -92,9 +68,6 @@ export default function HslSlider() {
     dispatchColourInput({ type: 'UPDATE_HSL', payload: { textInput: newText } });
   }
 
-  function handleClickAdd() {
-    dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: `${hexValue}\t` } });
-  }
   function handleClickRandom() {
     const newHex = getRandomColour();
     dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: `${newHex}` } });
@@ -118,7 +91,7 @@ export default function HslSlider() {
           type="range"
           min={0}
           max={360}
-          value={recentColour ? getSliderValueHslString(hslString, type) : 0}
+          value={getSliderValueHslString(hslString, type) || 360}
           onInput={handleSliderInput}
         />
       </div>
