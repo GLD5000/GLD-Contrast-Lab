@@ -95,11 +95,11 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
           onInput={handleSliderInput}
         />
       </div>
-      <div className="flex flex-row gap-1">
+      <div className="flex h-12 flex-row gap-1 p-1">
         <button
           type="button"
           id="add-colour"
-          className="mx-auto my-0 flex h-12 w-full  content-center gap-4 rounded-t-none rounded-r-none bg-neutral-300 p-2 text-sm hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
+          className="mx-auto my-0 flex  w-full  content-center gap-4 rounded-t-none rounded-r-none bg-neutral-300 p-2 text-sm hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
           onClick={handleClickRandom}
         >
           <b className="m-auto ">Randomise</b>
@@ -108,7 +108,7 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
         <button
           type="button"
           id="add-colour"
-          className="mx-auto my-0 flex h-12 w-full  content-center gap-4 rounded-t-none rounded-l-none bg-neutral-300 p-2 text-sm hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
+          className="mx-auto my-0 flex w-full  content-center gap-4 rounded-t-none rounded-l-none bg-neutral-300 p-2 text-sm hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
           onClick={handleClickAdd}
         >
           <b className="m-auto ">Submit</b>
