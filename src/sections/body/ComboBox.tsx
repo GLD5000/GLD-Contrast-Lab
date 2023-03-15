@@ -31,6 +31,7 @@ export default function ComboBox() {
   }
   function handleClickClear() {
     dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: '' } });
+    document.getElementById('colour-input')?.focus();
   }
 
   return (
