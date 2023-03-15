@@ -105,6 +105,27 @@ function useData() {
         };
         return returnValue;
       }
+      case 'SUBMIT': {
+        const newText = `${state.textInput}\t`;
+        const { processedText, processedArray } = processText(newText || action.payload.textInput || '');
+        console.log(processedText, processedArray);
+        const returnedColours = state.colourMap ? [...state.colourMap.keys()] : [];
+        const joinedArrays = returnedColours ? [...returnedColours, ...processedArray] : processedArray;
+        const newMap = createMap(joinedArrays) || undefined;
+        const recentColourValue = getRecentColour(processedText);
+        const textOutput =
+          valueIsHex(processedText) && recentColourValue !== undefined
+            ? `${recentColourValue[state.mode]}`
+            : processedText;
+        const returnValue = {
+          ...state,
+          textInput: textOutput || '',
+          recentColour: recentColourValue,
+          colourMap: newMap,
+        };
+        return returnValue;
+      }
+
       case 'UPDATE_HSL': {
         const newHsl = action.payload.textInput;
         const recentColourValue: { [key: string]: string | number } | undefined = newHsl
@@ -174,35 +195,56 @@ function processHexString(value: string) {
   return modifiedHex;
 }
 
-function testRgbString(testString: string) {
-  const prefix = testString.slice(0, 4).toLowerCase();
-  const startsWithRgbBracket = prefix === 'rgb(';
-  const endsWithBracket = testString.at(-1) === ')';
+function testColourString(
+  testString: string,
+  prefixLetters: string,
+  withinRange: (testValue: number, index: number) => boolean,
+) {
+  const indexAfterOpenBracket = testString.indexOf('(') + 1;
+  const indexOfClosedBracket = testString.indexOf(')');
+  const prefix = testString.slice(0, indexAfterOpenBracket).toLowerCase().replaceAll(' ', '');
+  const startsWithRgbBracket = prefix === `${prefixLetters}(`;
+  const endsWithBracket = indexOfClosedBracket > -1;
   const containsTwoCommas = testString.replaceAll(',', '').length + 2 === testString.length;
   const shouldReturn = !startsWithRgbBracket || !endsWithBracket || !containsTwoCommas;
-  if (shouldReturn) return { isRgb: false, result: undefined };
-  const stringArray = testString.slice(4, -1).replaceAll(', ', ',').split(',');
-  const withinRange = (testValue: number) => testValue >= 0 && testValue <= 255;
+  if (shouldReturn) return { isCorrect: false, result: undefined };
+  const stringArray = testString.slice(indexAfterOpenBracket, indexOfClosedBracket).replaceAll(/[ %]/g, '').split(',');
   const numberArray = stringArray.map((x) => parseInt(x, 10));
   const booleanResult = numberArray.every(withinRange);
   const arrayResult = booleanResult ? numberArray : undefined;
-  return { isRgb: booleanResult, result: arrayResult };
+  return { isCorrect: booleanResult, result: arrayResult };
+}
+function testRgbString(stringIn: string) {
+  const rgb = 'rgb';
+  const rangeTest = (testValue: number) => testValue >= 0 && testValue <= 255;
+
+  return testColourString(stringIn, rgb, rangeTest);
+}
+function testHslString(stringIn: string) {
+  const hsl = 'hsl';
+  const rangeTest = (testValue: number, index: number) =>
+    index === 0 ? testValue >= 0 && testValue <= 360 : testValue >= 0 && testValue <= 100;
+
+  return testColourString(stringIn, hsl, rangeTest);
 }
 
 function processRgbString(value: string) {
-  const { isRgb, result } = testRgbString(value);
-  if (!isRgb || result === undefined) return value;
+  const { isCorrect, result } = testRgbString(value);
+  if (!isCorrect || result === undefined) return value;
 
   const hex = colourSpace.convertRgbToHex(result);
   return hex;
 }
 
 function processHslString(value: string) {
-  const hslRegex = /(hsl)|(HSL)\(((360)|(3[0-5][0-9])|([1-2]?[0-9]{1,2}))(,[ ]?(100|([0-9]{1,2}))%?){2}\)/;
-  if (value.search(hslRegex) === -1) return value;
-  const cleanedUpValue = value.toLowerCase().replaceAll(/[ ()hsl%]/g, '');
-  const hslArray = cleanedUpValue.split(',').map((x) => parseInt(x, 10));
-  const hex = colourSpace.convertHslArrayToHex(hslArray);
+  // const hslRegex = /(hsl)|(HSL)\(((360)|(3[0-5][0-9])|([1-2]?[0-9]{1,2}))(,[ ]?(100|([0-9]{1,2}))%?){2}\)/;
+  // if (value.search(hslRegex) === -1) return value;
+  // const cleanedUpValue = value.toLowerCase().replaceAll(/[ ()hsl%]/g, '');
+  // const hslArray = cleanedUpValue.split(',').map((x) => parseInt(x, 10));
+  const { isCorrect, result } = testHslString(value);
+  if (!isCorrect || result === undefined) return value;
+
+  const hex = colourSpace.convertHslArrayToHex(result);
   return hex;
 }
 
