@@ -88,6 +88,7 @@ function useData() {
       }
       case 'UPDATE_TEXT': {
         const { processedText, processedArray } = processText(action.payload.textInput || '');
+        console.log(processedText, processedArray);
         const returnedColours = state.colourMap ? [...state.colourMap.keys()] : [];
         const joinedArrays = returnedColours ? [...returnedColours, ...processedArray] : processedArray;
         const newMap = createMap(joinedArrays) || undefined;
@@ -173,13 +174,26 @@ function processHexString(value: string) {
   return modifiedHex;
 }
 
+function testRgbString(testString: string) {
+  const prefix = testString.slice(0, 4).toLowerCase();
+  const startsWithRgbBracket = prefix === 'rgb(';
+  const endsWithBracket = testString.at(-1) === ')';
+  const containsTwoCommas = testString.replaceAll(',', '').length + 2 === testString.length;
+  const shouldReturn = !startsWithRgbBracket || !endsWithBracket || !containsTwoCommas;
+  if (shouldReturn) return { isRgb: false, result: undefined };
+  const stringArray = testString.slice(4, -1).replaceAll(', ', ',').split(',');
+  const withinRange = (testValue: number) => testValue >= 0 && testValue <= 255;
+  const numberArray = stringArray.map((x) => parseInt(x, 10));
+  const booleanResult = numberArray.every(withinRange);
+  const arrayResult = booleanResult ? numberArray : undefined;
+  return { isRgb: booleanResult, result: arrayResult };
+}
+
 function processRgbString(value: string) {
-  const rgbRegex =
-    /((rgb)|(RGB)(\(((25[0-5])|(2[0-4][0-9])|(1?[0-9]{1,2})),[ ]?((25[0-5])|(2[0-4][0-9])|(1?[0-9]{1,2})),[ ]?((25[0-5])|(2[0-4][0-9])|(1?[0-9]{1,2}))\)))/;
-  if (value.search(rgbRegex) === -1) return value;
-  const cleanedUpValue = value.toLowerCase().replaceAll(/[ ()rgb]/g, '');
-  const rgbArray = cleanedUpValue.split(',').map((x) => parseInt(x, 10));
-  const hex = colourSpace.convertRgbToHex(rgbArray);
+  const { isRgb, result } = testRgbString(value);
+  if (!isRgb || result === undefined) return value;
+
+  const hex = colourSpace.convertRgbToHex(result);
   return hex;
 }
 
@@ -220,12 +234,15 @@ function hexReducer(acc: { processedText: string; processedArray: string[] }, cu
 }
 
 function processText(text: string) {
-  if (text === '' || text.search(/\s/) === -1) {
+  const isEmpty = text === '';
+  const hasNoSpaces = text.search(/\s/) === -1;
+  if (isEmpty || hasNoSpaces) {
     return { processedText: text, processedArray: [] };
   }
-  const shouldSkipLastElement = text[text.length - 1].search(/\s/) === -1;
+  const noSpaceAtEnd = text[text.length - 1].search(/\s/) === -1;
   const splitText = text.replaceAll(', ', ',').split(/\s/);
-  if (shouldSkipLastElement) {
+
+  if (noSpaceAtEnd) {
     const slicedArray = splitText.slice(0, -1);
     const lastElement = splitText.at(-1)?.replaceAll(',', ', ');
     const { processedText, processedArray } = slicedArray.reduce(hexReducer, {
