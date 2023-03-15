@@ -87,40 +87,55 @@ function useData() {
         return returnValue;
       }
       case 'UPDATE_TEXT': {
-        const { processedText, processedArray } = processText(action.payload.textInput || '');
-        console.log(processedText, processedArray);
+        const textReceived = action.payload.textInput;
+        const isSubmit = /\s/.test(textReceived?.at(-1) || '');
+        console.log('isSubmit:', isSubmit);
+        if (textReceived && isSubmit) {
+          const recentColourReturn = makeRecentColour(state);
+          if (recentColourReturn !== null) return recentColourReturn;
+        }
+
+        const { processedText, processedArray, recent } = processText(textReceived || '', state.mode);
+        console.log(processedText, processedArray, recent);
         const returnedColours = state.colourMap ? [...state.colourMap.keys()] : [];
         const joinedArrays = returnedColours ? [...returnedColours, ...processedArray] : processedArray;
         const newMap = createMap(joinedArrays) || undefined;
-        const recentColourValue = getRecentColour(processedText);
-        const textOutput =
-          valueIsHex(processedText) && recentColourValue !== undefined
-            ? `${recentColourValue[state.mode]}`
-            : processedText;
+        // const recentColourValue = getRecentColour(processedText);
+        // const textOutput =
+        //   valueIsHex(processedText) && recentColourValue !== undefined
+        //     ? `${recentColourValue[state.mode]}`
+        //     : processedText;
         const returnValue = {
           ...state,
-          textInput: textOutput || '',
-          recentColour: recentColourValue,
+          textInput: processedText || '',
+          recentColour: recent,
           colourMap: newMap,
         };
         return returnValue;
       }
       case 'SUBMIT': {
-        const newText = `${state.textInput}\t`;
-        const { processedText, processedArray } = processText(newText || action.payload.textInput || '');
+        const recentColourReturn = makeRecentColour(state);
+        if (recentColourReturn !== null) return recentColourReturn;
+
+        const newText = state.textInput ? `${state.textInput}\t` : action.payload.textInput || '';
+        console.log('newText:', newText);
+        const { processedText, processedArray, recent } = processText(
+          newText || action.payload.textInput || '',
+          state.mode,
+        );
         console.log(processedText, processedArray);
         const returnedColours = state.colourMap ? [...state.colourMap.keys()] : [];
         const joinedArrays = returnedColours ? [...returnedColours, ...processedArray] : processedArray;
         const newMap = createMap(joinedArrays) || undefined;
-        const recentColourValue = getRecentColour(processedText);
-        const textOutput =
-          valueIsHex(processedText) && recentColourValue !== undefined
-            ? `${recentColourValue[state.mode]}`
-            : processedText;
+        // const recentColourValue = getRecentColour(processedText);
+        // const textOutput =
+        //   valueIsHex(processedText) && recentColourValue !== undefined
+        //     ? `${recentColourValue[state.mode]}`
+        //     : processedText;
         const returnValue = {
           ...state,
-          textInput: textOutput || '',
-          recentColour: recentColourValue,
+          textInput: processedText || '',
+          recentColour: recent,
           colourMap: newMap,
         };
         return returnValue;
@@ -181,12 +196,34 @@ export default function ColourInputProvider({ children }: { children: ReactNode 
 }
 
 function valueIsHex(input: string) {
-  const returnBoolean = input.length === 7 && input.search(/#[0-9a-fA-F]{6}/) === 0;
+  const returnBoolean = input.length === 7 && input.search(/#[0-9a-fA-F]{6}/) > -1;
   return returnBoolean;
 }
 
+function makeRecentColour(stateIn: {
+  textInput: string;
+  mode: string;
+  recentColour: { [key: string]: string | number } | undefined;
+  colourMap: undefined | Map<string, { [key: string]: string | number }>;
+}) {
+  const recentState = stateIn.recentColour;
+  if (!recentState) return null;
+  const newMap = addToMap(recentState, stateIn.colourMap || new Map());
+  const returnValue = {
+    ...stateIn,
+    textInput: '',
+    recentColour: undefined,
+    colourMap: newMap,
+  };
+  console.log('returnValue RecentState Submit:', returnValue);
+  return returnValue;
+}
+
 function processHexString(value: string) {
-  if (value[0] !== '#' || value.length < 2 || value.slice(1).search(/#|[^0-9a-fA-F]/) > -1) return value;
+  const isHex = /^#[0-9a-fA-F]{1,6}$/.test(value);
+  if (!isHex) return value;
+
+  if (value.length === 7) return value;
   let modifiedHex = value.length > 7 ? value.slice(0, 7) : value;
   if (value.length < 7) {
     const characters = value.slice(1);
@@ -202,11 +239,12 @@ function testColourString(
 ) {
   const indexAfterOpenBracket = testString.indexOf('(') + 1;
   const indexOfClosedBracket = testString.indexOf(')');
-  const prefix = testString.slice(0, indexAfterOpenBracket).toLowerCase().replaceAll(' ', '');
-  const startsWithRgbBracket = prefix === `${prefixLetters}(`;
+  const indexOfLetters = testString.indexOf(prefixLetters);
+  const prefix = testString.slice(indexOfLetters, indexAfterOpenBracket).toLowerCase().replaceAll(' ', '');
+  const correctPrefix = prefix === `${prefixLetters}(`;
   const endsWithBracket = indexOfClosedBracket > -1;
   const containsTwoCommas = testString.replaceAll(',', '').length + 2 === testString.length;
-  const shouldReturn = !startsWithRgbBracket || !endsWithBracket || !containsTwoCommas;
+  const shouldReturn = !correctPrefix || !endsWithBracket || !containsTwoCommas;
   if (shouldReturn) return { isCorrect: false, result: undefined };
   const stringArray = testString.slice(indexAfterOpenBracket, indexOfClosedBracket).replaceAll(/[ %]/g, '').split(',');
   const numberArray = stringArray.map((x) => parseInt(x, 10));
@@ -249,6 +287,7 @@ function processHslString(value: string) {
 }
 
 function processColourStringLong(stringIn: string) {
+  console.log('stringIn:', stringIn);
   if (stringIn.length < 7) return stringIn;
   return processColourString(stringIn);
 }
@@ -275,30 +314,58 @@ function hexReducer(acc: { processedText: string; processedArray: string[] }, cu
   return acc;
 }
 
-function processText(text: string) {
+function processText(text: string, mode: string) {
   const isEmpty = text === '';
-  const hasNoSpaces = text.search(/\s/) === -1;
-  if (isEmpty || hasNoSpaces) {
-    return { processedText: text, processedArray: [] };
+  if (isEmpty) {
+    return emptyTextProcess();
   }
+
+  const hasNoSpaces = text.search(/\s/) === -1;
+  if (hasNoSpaces) {
+    return singleTextProcess(text, mode);
+  }
+
   const noSpaceAtEnd = text[text.length - 1].search(/\s/) === -1;
-  const splitText = text.replaceAll(', ', ',').split(/\s/);
 
   if (noSpaceAtEnd) {
-    const slicedArray = splitText.slice(0, -1);
-    const lastElement = splitText.at(-1)?.replaceAll(',', ', ');
-    const { processedText, processedArray } = slicedArray.reduce(hexReducer, {
-      processedText: '',
-      processedArray: [],
-    });
-    const suffixedText = processedText.length > 0 ? `${processedText} ${lastElement}` : `${lastElement}`;
-    return { processedText: suffixedText, processedArray };
+    return multiRecentProcess(text, mode);
   }
+  return multiProcess(text);
+}
+
+function multiProcess(text: string) {
+  const splitText = text.replaceAll(', ', ',').split(/\s/);
+
   const { processedText, processedArray } = splitText.reduce(hexReducer, {
     processedText: '',
     processedArray: [],
   });
-  return { processedText, processedArray };
+  return { processedText, processedArray, recent: undefined };
+}
+
+function multiRecentProcess(text: string, mode: string) {
+  const splitText = text.replaceAll(', ', ',').split(/\s/);
+  const slicedArray = splitText.slice(0, -1);
+  const lastElement = splitText.at(-1)?.replaceAll(',', ', ');
+  const recentValue = lastElement && lastElement.length > 0 ? getRecentColour(lastElement) : undefined;
+
+  const { processedText, processedArray } = slicedArray.reduce(hexReducer, {
+    processedText: '',
+    processedArray: [],
+  });
+  const suffixedText = processedText.length > 0 ? `${processedText} ${lastElement}` : `${lastElement}`;
+  const textValue = recentValue ? `${recentValue[mode]}` : suffixedText;
+  return { processedText: textValue, processedArray, recent: recentValue };
+}
+
+function singleTextProcess(text: string, mode: string) {
+  const recentValue = getRecentColour(text);
+  const textValue = recentValue ? recentValue[mode] : text;
+  return { processedText: `${textValue}`, processedArray: [], recent: recentValue };
+}
+
+function emptyTextProcess() {
+  return { processedText: '', processedArray: [], recent: undefined };
 }
 
 function makeColourObject(hexValue: string) {
@@ -353,4 +420,17 @@ function createMap(hexArray: string[] | undefined) {
     : undefined;
   if (mapValue) setSessionStorageMap(mapValue);
   return mapValue;
+}
+
+function addToMap(
+  newObject: { [key: string]: string | number },
+  existingMap: Map<string, { [key: string]: string | number }>,
+) {
+  const newMap = new Map([...existingMap]);
+
+  newMap.set(`${newObject.Hex}`, newObject);
+
+  if (newMap) setSessionStorageMap(newMap);
+
+  return newMap;
 }

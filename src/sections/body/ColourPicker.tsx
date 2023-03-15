@@ -26,9 +26,7 @@ export default function ColourPicker() {
   }
 
   function handleClickAdd() {
-    if (currentValue[0] === '#')
-      dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: `${currentValue}` } });
-    if (recentColour) dispatchColourInput({ type: 'SUBMIT', payload: { textInput: `${currentValue}\t` } });
+    dispatchColourInput({ type: 'SUBMIT', payload: { textInput: `${currentValue}` } });
   }
 
   return (
