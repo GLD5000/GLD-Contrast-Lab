@@ -3,21 +3,19 @@ import { colourSpace } from '../utilities/colour/colourSpace';
 import { contrast } from '../utilities/colour/contrastRatio';
 import { luminance } from '../utilities/colour/luminance';
 import { randomColour } from '../utilities/colour/randomColour';
+import { getSessionStorageMap, clearSessionStorageMap, setSessionStorageMap } from './sessionStorageMap';
 
 const initialiserA: {
   textInput: string;
   mode: string;
   recentColour: { [key: string]: string | number } | undefined;
-
   colourMap: undefined | Map<string, { [key: string]: string | number }>;
-
   dispatchColourInput: Dispatch<{
     type: string;
     payload: Partial<{
       textInput: string;
       mode: string;
       recentColour: { [key: string]: string | number } | undefined;
-
       colourMap: undefined | Map<string, { [key: string]: string | number }>;
     }>;
   }>;
@@ -25,7 +23,6 @@ const initialiserA: {
   textInput: '',
   mode: 'Hex',
   recentColour: undefined,
-
   colourMap: undefined,
   dispatchColourInput: () => undefined,
 };
@@ -34,26 +31,22 @@ const initialiserB: {
   textInput: string;
   mode: string;
   recentColour: { [key: string]: string | number } | undefined;
-
   colourMap: undefined | Map<string, { [key: string]: string | number }>;
 } = {
   textInput: '',
   mode: 'Hex',
   recentColour: undefined,
-
   colourMap: undefined,
 };
 
 function useData() {
   const [{ textInput, mode, recentColour, colourMap }, dispatchColourInput] = useReducer(tagReducer, initialiserB);
-
   useEffect(() => {
     dispatchColourInput({ type: 'INIT', payload: {} });
   }, []);
   return {
     textInput,
     mode,
-
     colourMap,
     recentColour,
     dispatchColourInput,
@@ -63,7 +56,6 @@ function useData() {
       textInput: string;
       mode: string;
       recentColour: { [key: string]: string | number } | undefined;
-
       colourMap: undefined | Map<string, { [key: string]: string | number }>;
     },
     action: {
@@ -72,9 +64,7 @@ function useData() {
         textInput: string;
         mode: string;
         recentColour: { [key: string]: string | number } | undefined;
-
         colourMap: undefined | Map<string, { [key: string]: string | number }>;
-
         tag: string;
       }>;
     },
@@ -82,14 +72,12 @@ function useData() {
     textInput: string;
     mode: string;
     recentColour: { [key: string]: string | number } | undefined;
-
     colourMap: undefined | Map<string, { [key: string]: string | number }>;
   } {
     switch (action.type) {
       case 'INIT': {
         const savedMap = getSessionStorageMap();
         const recentColourValue = makeColourObjectHsl(randomColour.makeRandomHslString());
-
         const returnValue = {
           textInput: recentColourValue.Hex,
           mode: 'Hex',
@@ -112,7 +100,6 @@ function useData() {
           ...state,
           textInput: textOutput || '',
           recentColour: recentColourValue,
-
           colourMap: newMap,
         };
         return returnValue;
@@ -131,12 +118,10 @@ function useData() {
         };
         return returnValue;
       }
-
       case 'CLEAR_TAGS': {
         const newMap = new Map(state.colourMap);
         newMap.clear();
         clearSessionStorageMap();
-
         const returnValue = {
           ...state,
           colourMap: newMap,
@@ -155,12 +140,9 @@ function useData() {
       case 'CLOSE_TAG':
       default: {
         const { tag } = action.payload;
-
         const newMap = new Map(state.colourMap);
         if (typeof tag === 'string' && newMap.has(tag)) newMap.delete(tag);
-
         setSessionStorageMap(newMap);
-
         const returnValue = { ...state, colourMap: newMap, recentColour: undefined };
         return returnValue;
       }
@@ -194,7 +176,6 @@ function processHexString(value: string) {
 function processRgbString(value: string) {
   const rgbRegex =
     /((rgb)|(RGB)(\(((25[0-5])|(2[0-4][0-9])|(1?[0-9]{1,2})),[ ]?((25[0-5])|(2[0-4][0-9])|(1?[0-9]{1,2})),[ ]?((25[0-5])|(2[0-4][0-9])|(1?[0-9]{1,2}))\)))/;
-
   if (value.search(rgbRegex) === -1) return value;
   const cleanedUpValue = value.toLowerCase().replaceAll(/[ ()rgb]/g, '');
   const rgbArray = cleanedUpValue.split(',').map((x) => parseInt(x, 10));
@@ -234,7 +215,6 @@ function hexReducer(acc: { processedText: string; processedArray: string[] }, cu
     acc.processedArray.push(processedHex);
     return acc;
   }
-
   acc.processedText += acc.processedText.length > 0 ? ` ${curr}` : curr;
   return acc;
 }
@@ -270,7 +250,6 @@ function makeColourObject(hexValue: string) {
   const Luminance = luminance.convertHexToLuminancePercent(hexValue);
   const Black = `${contrast.getContrastRatio2Dp([0, luminanceFloat])}`;
   const White = `${contrast.getContrastRatio2Dp([1, luminanceFloat])}`;
-
   return {
     luminanceFloat,
     Hex,
@@ -289,7 +268,6 @@ function makeColourObjectHsl(hslValue: string) {
   const luminanceFloat = luminance.convertHexToLuminance(Hex);
   const Black = `${contrast.getContrastRatio2Dp([0, luminanceFloat])}`;
   const White = `${contrast.getContrastRatio2Dp([1, luminanceFloat])}`;
-
   return {
     luminanceFloat,
     Hex,
@@ -314,62 +292,6 @@ function createMap(hexArray: string[] | undefined) {
   const mapValue: Map<string, { [key: string]: string | number }> | undefined = buildArray
     ? new Map(buildArray)
     : undefined;
-
   if (mapValue) setSessionStorageMap(mapValue);
   return mapValue;
-}
-
-function setSessionStorageMap(map: Map<string, { [key: string]: string | number }>) {
-  const newString = stringifyMap(map);
-
-  if (newString.length > 0) sessionStorage.setItem('colourMap', newString);
-}
-
-function getSessionStorageMap() {
-  const savedString = sessionStorage.getItem('colourMap') ?? undefined;
-  if (savedString === undefined) return undefined;
-  const mapAgain = parseStringToMap(savedString);
-
-  return mapAgain || undefined;
-}
-function clearSessionStorageMap() {
-  sessionStorage.removeItem('colourMap');
-}
-
-function stringifyMap(mapIn: Map<string, { [mapKey: string]: string | number }>) {
-  const str = JSON.stringify(mapIn, replacer);
-  return str;
-}
-
-function parseStringToMap(jsonString: string) {
-  const newValue = JSON.parse(jsonString, reviver);
-  return newValue;
-}
-function replacer(key: undefined | string, value: Map<string, { [mapKey: string]: string | number }>) {
-  if (value instanceof Map) {
-    return {
-      dataType: 'Map',
-      value: Array.from(value.entries()), // or with spread: value: [...value]
-    };
-  }
-  return value;
-}
-function reviver(
-  key: undefined | string,
-  value: {
-    dataType: string;
-    value: [
-      string,
-      {
-        [key: string]: string | number;
-      },
-    ][];
-  },
-) {
-  if (typeof value === 'object' && value !== null) {
-    if (value.dataType === 'Map') {
-      return new Map(value.value);
-    }
-  }
-  return value;
 }
