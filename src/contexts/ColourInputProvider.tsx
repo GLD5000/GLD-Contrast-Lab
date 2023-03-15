@@ -8,7 +8,7 @@ const initialiserA: {
   textInput: string;
   mode: string;
   recentColour: { [key: string]: string | number } | undefined;
-  colourSet: undefined | Set<string>;
+
   colourMap: undefined | Map<string, { [key: string]: string | number }>;
 
   dispatchColourInput: Dispatch<{
@@ -17,7 +17,7 @@ const initialiserA: {
       textInput: string;
       mode: string;
       recentColour: { [key: string]: string | number } | undefined;
-      colourSet: undefined | Set<string>;
+
       colourMap: undefined | Map<string, { [key: string]: string | number }>;
     }>;
   }>;
@@ -25,7 +25,7 @@ const initialiserA: {
   textInput: '',
   mode: 'Hex',
   recentColour: undefined,
-  colourSet: undefined,
+
   colourMap: undefined,
   dispatchColourInput: () => undefined,
 };
@@ -34,32 +34,26 @@ const initialiserB: {
   textInput: string;
   mode: string;
   recentColour: { [key: string]: string | number } | undefined;
-  colourSet: undefined | Set<string>;
+
   colourMap: undefined | Map<string, { [key: string]: string | number }>;
 } = {
   textInput: '',
   mode: 'Hex',
   recentColour: undefined,
-  colourSet: undefined,
+
   colourMap: undefined,
 };
 
 function useData() {
-  //    '#fafafa\r#f4f4f5\r#e4e4e7\r#d4d4d8\r#a1a1aa\r#71717a\r#52525b\r#3f3f46\r#27272a\r#18181b',
-
-  const [{ textInput, mode, recentColour, colourSet, colourMap }, dispatchColourInput] = useReducer(
-    tagReducer,
-    initialiserB,
-  );
+  const [{ textInput, mode, recentColour, colourMap }, dispatchColourInput] = useReducer(tagReducer, initialiserB);
 
   useEffect(() => {
     dispatchColourInput({ type: 'INIT', payload: {} });
   }, []);
-  console.log(colourSet, colourMap);
   return {
     textInput,
     mode,
-    colourSet,
+
     colourMap,
     recentColour,
     dispatchColourInput,
@@ -69,7 +63,7 @@ function useData() {
       textInput: string;
       mode: string;
       recentColour: { [key: string]: string | number } | undefined;
-      colourSet: undefined | Set<string>;
+
       colourMap: undefined | Map<string, { [key: string]: string | number }>;
     },
     action: {
@@ -78,7 +72,7 @@ function useData() {
         textInput: string;
         mode: string;
         recentColour: { [key: string]: string | number } | undefined;
-        colourSet: undefined | Set<string>;
+
         colourMap: undefined | Map<string, { [key: string]: string | number }>;
 
         tag: string;
@@ -88,12 +82,11 @@ function useData() {
     textInput: string;
     mode: string;
     recentColour: { [key: string]: string | number } | undefined;
-    colourSet: undefined | Set<string>;
+
     colourMap: undefined | Map<string, { [key: string]: string | number }>;
   } {
     switch (action.type) {
       case 'INIT': {
-        const savedSet = getSessionStorageSet();
         const savedMap = getSessionStorageMap();
         const recentColourValue = makeColourObjectHsl(randomColour.makeRandomHslString());
 
@@ -101,18 +94,14 @@ function useData() {
           textInput: recentColourValue.Hex,
           mode: 'Hex',
           recentColour: recentColourValue,
-          colourSet: savedSet,
           colourMap: savedMap,
         };
         return returnValue;
       }
       case 'UPDATE_TEXT': {
         const { processedText, processedArray } = processText(action.payload.textInput || '');
-        const returnedColourSet = state.colourSet;
-        const joinedArrays = returnedColourSet ? [...returnedColourSet, ...processedArray] : processedArray;
-        const newSet =
-          !joinedArrays || !joinedArrays.includes('#') ? new Set(joinedArrays.filter(valueIsHex)) : undefined;
-        if (newSet) setSessionStorageSet([...newSet]);
+        const returnedColours = state.colourMap ? [...state.colourMap.keys()] : [];
+        const joinedArrays = returnedColours ? [...returnedColours, ...processedArray] : processedArray;
         const newMap = createMap(joinedArrays) || undefined;
         const recentColourValue = getRecentColour(processedText);
         const textOutput =
@@ -123,7 +112,7 @@ function useData() {
           ...state,
           textInput: textOutput || '',
           recentColour: recentColourValue,
-          colourSet: newSet,
+
           colourMap: newMap,
         };
         return returnValue;
@@ -144,17 +133,12 @@ function useData() {
       }
 
       case 'CLEAR_TAGS': {
-        const newSet = new Set(state.colourSet);
-        newSet.clear();
-        clearSessionStorageSet();
-
         const newMap = new Map(state.colourMap);
         newMap.clear();
         clearSessionStorageMap();
 
         const returnValue = {
           ...state,
-          colourSet: newSet,
           colourMap: newMap,
           textInput: '',
           mode: 'Hex',
@@ -172,16 +156,12 @@ function useData() {
       default: {
         const { tag } = action.payload;
 
-        const newSet = new Set(state.colourSet);
-        if (typeof tag === 'string' && newSet.has(tag)) newSet.delete(tag);
-        setSessionStorageSet([...newSet]);
-
         const newMap = new Map(state.colourMap);
         if (typeof tag === 'string' && newMap.has(tag)) newMap.delete(tag);
 
         setSessionStorageMap(newMap);
 
-        const returnValue = { ...state, colourSet: newSet, colourMap: newMap, recentColour: undefined };
+        const returnValue = { ...state, colourMap: newMap, recentColour: undefined };
         return returnValue;
       }
     }
@@ -215,7 +195,6 @@ function processRgbString(value: string) {
   const rgbRegex =
     /((rgb)|(RGB)(\(((25[0-5])|(2[0-4][0-9])|(1?[0-9]{1,2})),[ ]?((25[0-5])|(2[0-4][0-9])|(1?[0-9]{1,2})),[ ]?((25[0-5])|(2[0-4][0-9])|(1?[0-9]{1,2}))\)))/;
 
-  // if (value.search(/rgb\([\d]{1,3},[\d]{1,3},[\d]{1,3}\)/) === -1) return value;
   if (value.search(rgbRegex) === -1) return value;
   const cleanedUpValue = value.toLowerCase().replaceAll(/[ ()rgb]/g, '');
   const rgbArray = cleanedUpValue.split(',').map((x) => parseInt(x, 10));
@@ -225,7 +204,6 @@ function processRgbString(value: string) {
 
 function processHslString(value: string) {
   const hslRegex = /(hsl)|(HSL)\(((360)|(3[0-5][0-9])|([1-2]?[0-9]{1,2}))(,[ ]?(100|([0-9]{1,2}))%?){2}\)/;
-  // if (value.search(/hsl\([\d]{1,3},[\d]{1,3},[\d]{1,3}\)/) === -1) return value;
   if (value.search(hslRegex) === -1) return value;
   const cleanedUpValue = value.toLowerCase().replaceAll(/[ ()hsl%]/g, '');
   const hslArray = cleanedUpValue.split(',').map((x) => parseInt(x, 10));
@@ -339,21 +317,6 @@ function createMap(hexArray: string[] | undefined) {
 
   if (mapValue) setSessionStorageMap(mapValue);
   return mapValue;
-}
-
-function setSessionStorageSet(arrayIn: string[]) {
-  if (arrayIn.length === 0) return;
-  if (arrayIn.length === 1 && arrayIn[0][0] === '#') sessionStorage.setItem('colourSet', arrayIn[0]);
-
-  if (arrayIn.length > 1) sessionStorage.setItem('colourSet', `${[...arrayIn].filter(valueIsHex).join(',')}`);
-}
-function getSessionStorageSet() {
-  const savedString = sessionStorage.getItem('colourSet') ?? '';
-  const savedSet = savedString.length > 0 ? new Set(savedString.split(',')) : undefined;
-  return savedSet;
-}
-function clearSessionStorageSet() {
-  sessionStorage.removeItem('colourSet');
 }
 
 function setSessionStorageMap(map: Map<string, { [key: string]: string | number }>) {
