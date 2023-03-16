@@ -1,6 +1,5 @@
 import { MouseEvent, useState } from 'react';
 import { useColourInputContext } from '../../contexts/ColourInputProvider';
-import getRandomColour from '../../utilities/colour/randomColour';
 
 function convertHslToSlider(value: number, type: string) {
   if (type !== 'Hue') return Math.round(value * 3.6);
@@ -69,8 +68,7 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
   }
 
   function handleClickRandom() {
-    const newHex = getRandomColour();
-    dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: `${newHex}` } });
+    dispatchColourInput({ type: 'RANDOMISE', payload: {} });
   }
 
   return (

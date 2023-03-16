@@ -3,7 +3,7 @@ import { setToTargetLuminance } from '../utilities/colour/autoContrast';
 import { colourSpace } from '../utilities/colour/colourSpace';
 import { contrast } from '../utilities/colour/contrastRatio';
 import { luminance } from '../utilities/colour/luminance';
-import { randomColour } from '../utilities/colour/randomColour';
+import getRandomColour, { randomColour } from '../utilities/colour/randomColour';
 import { getSessionStorageMap, clearSessionStorageMap, setSessionStorageMap } from './sessionStorageMap';
 
 const initialiserA: {
@@ -87,6 +87,19 @@ function useData() {
         };
         return returnValue;
       }
+      case 'RANDOMISE': {
+        const newHex = getRandomColour();
+        const currentMode = `${state.mode}` || 'Hex';
+        const newColourObject = makeColourObject(newHex);
+        const returnValue = { ...state, mode: currentMode, recentColour: newColourObject };
+        if (newColourObject !== undefined) {
+          returnValue.textInput =
+            currentMode === 'RLum'
+              ? `RLum: ${getRecentTextField(newColourObject, currentMode)}`
+              : getRecentTextField(newColourObject, currentMode);
+        }
+        return returnValue;
+      }
       case 'UPDATE_TEXT': {
         const textReceived = action.payload.textInput;
         const isSubmit = /\s/.test(textReceived?.at(-1) || '');
@@ -106,23 +119,24 @@ function useData() {
           return returnValue;
         }
 
-        if (!isSubmit && recentColourState && textReceived && mode === 'RLum') {
+        if (!isSubmit && recentColourState && textReceived && isRelativeLuminance) {
+          const textWithoutRLum = textReceived.replace('RLum: ', '');
           const currentHex = `${recentColourState.Hex}`;
-          const isPercentage = textReceived.includes('%');
+          const isPercentage = textWithoutRLum.includes('%');
           if (!isPercentage) {
             const returnValue = {
               ...state,
-              textInput: textReceived || '%',
+              textInput: `RLum: ${textWithoutRLum}` || 'RLum: ',
             };
             return returnValue;
           }
-          const parsedFloat = Math.trunc(parseFloat(textReceived) * 10) * 0.001;
+          const parsedFloat = Math.trunc(parseFloat(textWithoutRLum) * 10) * 0.001;
           const isInRange = parsedFloat >= 0 && parsedFloat <= 1;
 
           if (!isInRange && isPercentage) {
             const returnValue = {
               ...state,
-              textInput: textReceived || '%',
+              textInput: `RLum: ${textWithoutRLum}` || 'RLum: ',
             };
             return returnValue;
           }
@@ -130,17 +144,17 @@ function useData() {
           if (isInRange && isPercentage) {
             const { resultingHex: newHex } = setToTargetLuminance(currentHex, parsedFloat);
             const newColourObject = makeColourObject(newHex);
-            const textValue = newColourObject ? getRecentTextField(newColourObject, mode) : textReceived;
+            const textValue = newColourObject ? getRecentTextField(newColourObject, modeState) : textWithoutRLum;
             const returnValue = {
               ...state,
-              textInput: textValue || '',
+              textInput: `RLum: ${textValue}` || '',
               recentColour: newColourObject,
             };
             return returnValue;
           }
         }
 
-        const { processedText, processedArray, recent } = processText(textReceived || '', state.mode);
+        const { processedText, processedArray, recent } = processText(textReceived || '', modeState);
         const returnedColours = state.colourMap ? [...state.colourMap.keys()] : [];
         const joinedArrays = returnedColours ? [...returnedColours, ...processedArray] : processedArray;
         const newMap = createMap(joinedArrays) || undefined;
@@ -205,7 +219,10 @@ function useData() {
         const returnValue = { ...state, mode: newMode };
         const mostRecentColour = returnValue.recentColour;
         if (mostRecentColour !== undefined) {
-          returnValue.textInput = getRecentTextField(mostRecentColour, newMode);
+          returnValue.textInput =
+            newMode === 'RLum'
+              ? `RLum: ${getRecentTextField(mostRecentColour, newMode)}`
+              : getRecentTextField(mostRecentColour, newMode);
         }
         return returnValue;
       }
