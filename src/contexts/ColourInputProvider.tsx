@@ -251,8 +251,7 @@ function makeRecentColour(stateIn: {
   const newMap = addToMap(recentState, stateIn.colourMap || new Map());
   const returnValue = {
     ...stateIn,
-    textInput: '',
-    recentColour: undefined,
+    textInput: getRecentTextField(recentState, stateIn.mode),
     colourMap: newMap,
   };
   return returnValue;
