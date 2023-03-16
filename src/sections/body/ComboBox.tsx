@@ -32,7 +32,7 @@ export default function ComboBox() {
     dispatchColourInput({ type: 'CHANGE_MODE', payload: { mode: nextModeLookup[mode] } });
   }
   function handleClickClear() {
-    dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: '' } });
+    dispatchColourInput({ type: 'CLEAR_TEXT', payload: {} });
     document.getElementById('colour-input')?.focus();
   }
 

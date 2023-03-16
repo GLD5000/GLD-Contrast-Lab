@@ -93,10 +93,7 @@ function useData() {
         const newColourObject = makeColourObject(newHex);
         const returnValue = { ...state, mode: currentMode, recentColour: newColourObject };
         if (newColourObject !== undefined) {
-          returnValue.textInput =
-            currentMode === 'RLum'
-              ? `RLum: ${getRecentTextField(newColourObject, currentMode)}`
-              : getRecentTextField(newColourObject, currentMode);
+          returnValue.textInput = getRecentTextField(newColourObject, currentMode);
         }
         return returnValue;
       }
@@ -106,11 +103,12 @@ function useData() {
         const newColourObject = makeColourObject(newHex);
         const returnValue = { ...state, mode: currentMode, recentColour: newColourObject };
         if (newColourObject !== undefined) {
-          returnValue.textInput =
-            currentMode === 'RLum'
-              ? `RLum: ${getRecentTextField(newColourObject, currentMode)}`
-              : getRecentTextField(newColourObject, currentMode);
+          returnValue.textInput = getRecentTextField(newColourObject, currentMode);
         }
+        return returnValue;
+      }
+      case 'CLEAR_TEXT': {
+        const returnValue = { ...state, mode: 'Hex', recentColour: undefined, textInput: '' };
         return returnValue;
       }
       case 'UPDATE_TEXT': {
@@ -166,7 +164,7 @@ function useData() {
           ? makeColourObjectHsl(newHsl)
           : undefined;
         const modeOut = state.mode ? state.mode : 'Hex';
-        const textOutput = recentColourValue ? `${recentColourValue[modeOut]}` : '';
+        const textOutput = recentColourValue ? getRecentTextField(recentColourValue, modeOut) : '';
         const returnValue = {
           ...state,
           textInput: textOutput,
@@ -192,10 +190,7 @@ function useData() {
         const returnValue = { ...state, mode: newMode };
         const mostRecentColour = returnValue.recentColour;
         if (mostRecentColour !== undefined) {
-          returnValue.textInput =
-            newMode === 'RLum'
-              ? `RLum: ${getRecentTextField(mostRecentColour, newMode)}`
-              : getRecentTextField(mostRecentColour, newMode);
+          returnValue.textInput = getRecentTextField(mostRecentColour, newMode);
         }
         return returnValue;
       }
@@ -234,7 +229,15 @@ function getRecentTextField(recentColourObject: { [key: string]: string | number
     CRB: 'Black',
     CRW: 'White',
   };
-  return `${recentColourObject[lookupKey[modeString]]}`;
+
+  const presetLookup: { [key: string]: string } = {
+    RLum: 'RLum: ',
+    Black: 'CRBl: ',
+    White: 'CRWh: ',
+  };
+  const preset = presetLookup[modeString] || '';
+  const returnString = `${preset}${recentColourObject[lookupKey[modeString]]}`;
+  return returnString;
 }
 
 function makeRecentColour(stateIn: {
@@ -505,18 +508,28 @@ function handleRlumUpdate(
 ) {
   const textReceived = payload.textInput;
   const isSubmit = /\s/.test(textReceived?.at(-1) || '');
+  const textWithoutRLum = textReceived ? textReceived.replace('RLum:', '').replace(' ', '') : '';
   const recentColourState = state.recentColour;
+
+  // if (!isSubmit && !textReceived) {
+  //   console.log('!isSubmit && !textReceived');
+
+  //   const returnValue = {
+  //     ...state,
+  //     textInput: 'RLum: ',
+  //   };
+  //   return returnValue;
+  // }
 
   if (textReceived && isSubmit) {
     console.log('textReceived && isSubmit');
-    const textWithoutRLum = textReceived.replace('RLum: ', '');
     const isPercentage = textWithoutRLum.includes('%');
     const parsedFloat = Math.trunc(parseFloat(textWithoutRLum) * 10) * 0.001;
     const isInRange = parsedFloat >= 0 && parsedFloat <= 1;
     if (!isPercentage || !isInRange) {
       const returnValue = {
         ...state,
-        textInput: textReceived,
+        textInput: textWithoutRLum ? `RLum: ${textWithoutRLum}` : 'RLum: ',
       };
       return returnValue;
     }
@@ -525,53 +538,42 @@ function handleRlumUpdate(
     if (recentColourReturn !== null) return recentColourReturn;
   }
 
-  if (!isSubmit && !textReceived) {
-    console.log('!isSubmit && !textReceived');
-
-    const returnValue = {
-      ...state,
-      textInput: 'RLum: ',
-    };
-    return returnValue;
-  }
-
   if (!isSubmit && recentColourState && textReceived) {
     console.log('!isSubmit && recentColourState && textReceived');
 
-    const textWithoutRLum = textReceived.replace('RLum:', '').replace(' ', '');
     const currentHex = `${recentColourState.Hex}`;
     const isPercentage = textWithoutRLum.includes('%');
     const parsedFloat = Math.trunc(parseFloat(textWithoutRLum) * 10) * 0.001;
     const isInRange = parsedFloat >= 0 && parsedFloat <= 1;
 
-    if (!isPercentage) {
-      console.log('!isPercentage');
+    // if (!isPercentage) {
+    //   console.log('!isPercentage');
 
-      const returnValue = {
-        ...state,
-        textInput: `RLum: ${textWithoutRLum}` || 'RLum: ',
-      };
-      return returnValue;
-    }
+    //   const returnValue = {
+    //     ...state,
+    //     textInput: `RLum: ${textWithoutRLum}` || 'RLum: ',
+    //   };
+    //   return returnValue;
+    // }
 
-    if (!isInRange && isPercentage) {
-      console.log('!isInRange && isPercentage');
+    // if (!isInRange && isPercentage) {
+    //   console.log('!isInRange && isPercentage');
 
-      const returnValue = {
-        ...state,
-        textInput: `RLum: ${textWithoutRLum}` || 'RLum: ',
-      };
-      return returnValue;
-    }
+    //   const returnValue = {
+    //     ...state,
+    //     textInput: `RLum: ${textWithoutRLum}` || 'RLum: ',
+    //   };
+    //   return returnValue;
+    // }
 
     if (isInRange && isPercentage) {
       console.log('isInRange && isPercentage');
       const { resultingHex: newHex } = setToTargetLuminance(currentHex, parsedFloat);
       const newColourObject = makeColourObject(newHex);
-      const textValue = newColourObject ? getRecentTextField(newColourObject, 'RLum') : textWithoutRLum;
+      const textValue = newColourObject ? getRecentTextField(newColourObject, 'RLum') : `RLum: ${textWithoutRLum}`;
       const returnValue = {
         ...state,
-        textInput: `RLum: ${textValue}` || 'RLum: ',
+        textInput: textValue || 'RLum: ',
         recentColour: newColourObject,
       };
       return returnValue;
@@ -580,7 +582,7 @@ function handleRlumUpdate(
   console.log('default');
   const returnValue = {
     ...state,
-    textInput: textReceived || 'RLum: ',
+    textInput: textWithoutRLum ? `RLum: ${textWithoutRLum}` : 'RLum: ',
   };
   return returnValue;
 }
