@@ -39,7 +39,7 @@ function getContent(
     }
     function tagHandler(e: MouseEvent<HTMLButtonElement>) {
       const hex = e.currentTarget.id.split('-')[0];
-      dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: hex } });
+      dispatchColourInput({ type: 'EDIT', payload: { textInput: hex } });
       document.getElementById('colour-input')?.focus();
     }
     return (

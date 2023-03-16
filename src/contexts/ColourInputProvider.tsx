@@ -100,58 +100,31 @@ function useData() {
         }
         return returnValue;
       }
-      case 'UPDATE_TEXT': {
-        const textReceived = action.payload.textInput;
-        const isSubmit = /\s/.test(textReceived?.at(-1) || '');
-        if (textReceived && isSubmit) {
-          const recentColourReturn = makeRecentColour(state);
-          if (recentColourReturn !== null) return recentColourReturn;
+      case 'EDIT': {
+        const newHex = action.payload.textInput || '#000000';
+        const currentMode = `${state.mode}` || 'Hex';
+        const newColourObject = makeColourObject(newHex);
+        const returnValue = { ...state, mode: currentMode, recentColour: newColourObject };
+        if (newColourObject !== undefined) {
+          returnValue.textInput =
+            currentMode === 'RLum'
+              ? `RLum: ${getRecentTextField(newColourObject, currentMode)}`
+              : getRecentTextField(newColourObject, currentMode);
         }
-        const recentColourState = state.recentColour;
+        return returnValue;
+      }
+      case 'UPDATE_TEXT': {
         const { mode: modeState } = state;
         const isRelativeLuminance = modeState === 'RLum';
 
-        if (!isSubmit && isRelativeLuminance && !textReceived) {
-          const returnValue = {
-            ...state,
-            textInput: '%',
-          };
-          return returnValue;
-        }
+        if (isRelativeLuminance) return handleRlumUpdate(state, action.payload);
 
-        if (!isSubmit && recentColourState && textReceived && isRelativeLuminance) {
-          const textWithoutRLum = textReceived.replace('RLum: ', '');
-          const currentHex = `${recentColourState.Hex}`;
-          const isPercentage = textWithoutRLum.includes('%');
-          if (!isPercentage) {
-            const returnValue = {
-              ...state,
-              textInput: `RLum: ${textWithoutRLum}` || 'RLum: ',
-            };
-            return returnValue;
-          }
-          const parsedFloat = Math.trunc(parseFloat(textWithoutRLum) * 10) * 0.001;
-          const isInRange = parsedFloat >= 0 && parsedFloat <= 1;
+        const textReceived = action.payload.textInput;
+        const isSubmit = /\s/.test(textReceived?.at(-1) || '');
 
-          if (!isInRange && isPercentage) {
-            const returnValue = {
-              ...state,
-              textInput: `RLum: ${textWithoutRLum}` || 'RLum: ',
-            };
-            return returnValue;
-          }
-
-          if (isInRange && isPercentage) {
-            const { resultingHex: newHex } = setToTargetLuminance(currentHex, parsedFloat);
-            const newColourObject = makeColourObject(newHex);
-            const textValue = newColourObject ? getRecentTextField(newColourObject, modeState) : textWithoutRLum;
-            const returnValue = {
-              ...state,
-              textInput: `RLum: ${textValue}` || '',
-              recentColour: newColourObject,
-            };
-            return returnValue;
-          }
+        if (textReceived && isSubmit) {
+          const recentColourReturn = makeRecentColour(state);
+          if (recentColourReturn !== null) return recentColourReturn;
         }
 
         const { processedText, processedArray, recent } = processText(textReceived || '', modeState);
@@ -491,4 +464,123 @@ function addToMap(
   if (newMap) setSessionStorageMap(newMap);
 
   return newMap;
+}
+
+function handleRlumUpdate(
+  state: {
+    textInput: string;
+    mode: string;
+    recentColour:
+      | {
+          [key: string]: string | number;
+        }
+      | undefined;
+    colourMap:
+      | Map<
+          string,
+          {
+            [key: string]: string | number;
+          }
+        >
+      | undefined;
+  },
+  payload: Partial<{
+    textInput: string;
+    mode: string;
+    recentColour:
+      | {
+          [key: string]: string | number;
+        }
+      | undefined;
+    colourMap:
+      | Map<
+          string,
+          {
+            [key: string]: string | number;
+          }
+        >
+      | undefined;
+    tag: string;
+  }>,
+) {
+  const textReceived = payload.textInput;
+  const isSubmit = /\s/.test(textReceived?.at(-1) || '');
+  const recentColourState = state.recentColour;
+
+  if (textReceived && isSubmit) {
+    console.log('textReceived && isSubmit');
+    const textWithoutRLum = textReceived.replace('RLum: ', '');
+    const isPercentage = textWithoutRLum.includes('%');
+    const parsedFloat = Math.trunc(parseFloat(textWithoutRLum) * 10) * 0.001;
+    const isInRange = parsedFloat >= 0 && parsedFloat <= 1;
+    if (!isPercentage || !isInRange) {
+      const returnValue = {
+        ...state,
+        textInput: textReceived,
+      };
+      return returnValue;
+    }
+
+    const recentColourReturn = makeRecentColour(state);
+    if (recentColourReturn !== null) return recentColourReturn;
+  }
+
+  if (!isSubmit && !textReceived) {
+    console.log('!isSubmit && !textReceived');
+
+    const returnValue = {
+      ...state,
+      textInput: 'RLum: ',
+    };
+    return returnValue;
+  }
+
+  if (!isSubmit && recentColourState && textReceived) {
+    console.log('!isSubmit && recentColourState && textReceived');
+
+    const textWithoutRLum = textReceived.replace('RLum:', '').replace(' ', '');
+    const currentHex = `${recentColourState.Hex}`;
+    const isPercentage = textWithoutRLum.includes('%');
+    const parsedFloat = Math.trunc(parseFloat(textWithoutRLum) * 10) * 0.001;
+    const isInRange = parsedFloat >= 0 && parsedFloat <= 1;
+
+    if (!isPercentage) {
+      console.log('!isPercentage');
+
+      const returnValue = {
+        ...state,
+        textInput: `RLum: ${textWithoutRLum}` || 'RLum: ',
+      };
+      return returnValue;
+    }
+
+    if (!isInRange && isPercentage) {
+      console.log('!isInRange && isPercentage');
+
+      const returnValue = {
+        ...state,
+        textInput: `RLum: ${textWithoutRLum}` || 'RLum: ',
+      };
+      return returnValue;
+    }
+
+    if (isInRange && isPercentage) {
+      console.log('isInRange && isPercentage');
+      const { resultingHex: newHex } = setToTargetLuminance(currentHex, parsedFloat);
+      const newColourObject = makeColourObject(newHex);
+      const textValue = newColourObject ? getRecentTextField(newColourObject, 'RLum') : textWithoutRLum;
+      const returnValue = {
+        ...state,
+        textInput: `RLum: ${textValue}` || 'RLum: ',
+        recentColour: newColourObject,
+      };
+      return returnValue;
+    }
+  }
+  console.log('default');
+  const returnValue = {
+    ...state,
+    textInput: textReceived || 'RLum: ',
+  };
+  return returnValue;
 }
