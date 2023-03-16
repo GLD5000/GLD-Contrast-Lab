@@ -10,6 +10,7 @@ const initialiserA: {
   textInput: string;
   mode: string;
   recentColour: { [key: string]: string | number } | undefined;
+  previousColour: { [key: string]: string | number } | undefined;
   colourMap: undefined | Map<string, { [key: string]: string | number }>;
   dispatchColourInput: Dispatch<{
     type: string;
@@ -17,6 +18,7 @@ const initialiserA: {
       textInput: string;
       mode: string;
       recentColour: { [key: string]: string | number } | undefined;
+      previousColour: { [key: string]: string | number } | undefined;
       colourMap: undefined | Map<string, { [key: string]: string | number }>;
     }>;
   }>;
@@ -24,6 +26,7 @@ const initialiserA: {
   textInput: '',
   mode: 'Hex',
   recentColour: undefined,
+  previousColour: undefined,
   colourMap: undefined,
   dispatchColourInput: () => undefined,
 };
@@ -32,16 +35,21 @@ const initialiserB: {
   textInput: string;
   mode: string;
   recentColour: { [key: string]: string | number } | undefined;
+  previousColour: { [key: string]: string | number } | undefined;
   colourMap: undefined | Map<string, { [key: string]: string | number }>;
 } = {
   textInput: '',
   mode: 'Hex',
   recentColour: undefined,
+  previousColour: undefined,
   colourMap: undefined,
 };
 
 function useData() {
-  const [{ textInput, mode, recentColour, colourMap }, dispatchColourInput] = useReducer(tagReducer, initialiserB);
+  const [{ textInput, mode, recentColour, previousColour, colourMap }, dispatchColourInput] = useReducer(
+    tagReducer,
+    initialiserB,
+  );
   useEffect(() => {
     dispatchColourInput({ type: 'INIT', payload: {} });
   }, []);
@@ -50,6 +58,7 @@ function useData() {
     mode,
     colourMap,
     recentColour,
+    previousColour,
     dispatchColourInput,
   };
   function tagReducer(
@@ -57,6 +66,7 @@ function useData() {
       textInput: string;
       mode: string;
       recentColour: { [key: string]: string | number } | undefined;
+      previousColour: { [key: string]: string | number } | undefined;
       colourMap: undefined | Map<string, { [key: string]: string | number }>;
     },
     action: {
@@ -65,6 +75,7 @@ function useData() {
         textInput: string;
         mode: string;
         recentColour: { [key: string]: string | number } | undefined;
+        previousColour: { [key: string]: string | number } | undefined;
         colourMap: undefined | Map<string, { [key: string]: string | number }>;
         tag: string;
       }>;
@@ -73,6 +84,7 @@ function useData() {
     textInput: string;
     mode: string;
     recentColour: { [key: string]: string | number } | undefined;
+    previousColour: { [key: string]: string | number } | undefined;
     colourMap: undefined | Map<string, { [key: string]: string | number }>;
   } {
     switch (action.type) {
@@ -83,6 +95,7 @@ function useData() {
           textInput: recentColourValue.Hex,
           mode: 'Hex',
           recentColour: recentColourValue,
+          previousColour: undefined,
           colourMap: savedMap,
         };
         return returnValue;
@@ -92,6 +105,8 @@ function useData() {
         const currentMode = `${state.mode}` || 'Hex';
         const newColourObject = makeColourObject(newHex);
         const returnValue = { ...state, mode: currentMode, recentColour: newColourObject };
+        const previousValue = setPreviousContrast(returnValue);
+        if (previousValue) returnValue.previousColour = previousValue;
         if (newColourObject !== undefined) {
           returnValue.textInput = getRecentTextField(newColourObject, currentMode);
         }
@@ -101,7 +116,12 @@ function useData() {
         const newHex = action.payload.textInput || '#000000';
         const currentMode = `${state.mode}` || 'Hex';
         const newColourObject = makeColourObject(newHex);
-        const returnValue = { ...state, mode: currentMode, recentColour: newColourObject };
+        const returnValue = {
+          ...state,
+          mode: currentMode,
+          recentColour: newColourObject,
+          previousColour: setPreviousLuminance(newColourObject),
+        };
         if (newColourObject !== undefined) {
           returnValue.textInput = getRecentTextField(newColourObject, currentMode);
         }
@@ -135,6 +155,9 @@ function useData() {
           recentColour: recent,
           colourMap: newMap,
         };
+        const previousValue = setPreviousContrast(returnValue);
+        if (previousValue) returnValue.previousColour = previousValue;
+
         return returnValue;
       }
       case 'SUBMIT': {
@@ -170,6 +193,9 @@ function useData() {
           textInput: textOutput,
           recentColour: recentColourValue,
         };
+        const previousValue = setPreviousContrast(returnValue);
+        if (previousValue) returnValue.previousColour = previousValue;
+
         return returnValue;
       }
       case 'CLEAR_TAGS': {
@@ -244,6 +270,7 @@ function makeRecentColour(stateIn: {
   textInput: string;
   mode: string;
   recentColour: { [key: string]: string | number } | undefined;
+  previousColour: { [key: string]: string | number } | undefined;
   colourMap: undefined | Map<string, { [key: string]: string | number }>;
 }) {
   const recentState = stateIn.recentColour;
@@ -252,6 +279,7 @@ function makeRecentColour(stateIn: {
   const returnValue = {
     ...stateIn,
     textInput: getRecentTextField(recentState, stateIn.mode),
+    previousColour: setPreviousLuminance(stateIn.recentColour),
     colourMap: newMap,
   };
   return returnValue;
@@ -477,6 +505,11 @@ function handleRlumUpdate(
           [key: string]: string | number;
         }
       | undefined;
+    previousColour:
+      | {
+          [key: string]: string | number;
+        }
+      | undefined;
     colourMap:
       | Map<
           string,
@@ -490,6 +523,11 @@ function handleRlumUpdate(
     textInput: string;
     mode: string;
     recentColour:
+      | {
+          [key: string]: string | number;
+        }
+      | undefined;
+    previousColour:
       | {
           [key: string]: string | number;
         }
@@ -521,7 +559,6 @@ function handleRlumUpdate(
   // }
 
   if (textReceived && isSubmit) {
-    console.log('textReceived && isSubmit');
     const isPercentage = textWithoutRLum.includes('%');
     const parsedFloat = Math.trunc(parseFloat(textWithoutRLum) * 10) * 0.001;
     const isInRange = parsedFloat >= 0 && parsedFloat <= 1;
@@ -538,8 +575,6 @@ function handleRlumUpdate(
   }
 
   if (!isSubmit && recentColourState && textReceived) {
-    console.log('!isSubmit && recentColourState && textReceived');
-
     const currentHex = `${recentColourState.Hex}`;
     const isPercentage = textWithoutRLum.includes('%');
     const parsedFloat = Math.trunc(parseFloat(textWithoutRLum) * 10) * 0.001;
@@ -566,7 +601,6 @@ function handleRlumUpdate(
     // }
 
     if (isInRange && isPercentage) {
-      console.log('isInRange && isPercentage');
       const { resultingHex: newHex } = setToTargetLuminance(currentHex, parsedFloat);
       const newColourObject = makeColourObject(newHex);
       const textValue = newColourObject ? getRecentTextField(newColourObject, 'RLum') : `RLum: ${textWithoutRLum}`;
@@ -578,10 +612,60 @@ function handleRlumUpdate(
       return returnValue;
     }
   }
-  console.log('default');
   const returnValue = {
     ...state,
     textInput: textWithoutRLum ? `RLum: ${textWithoutRLum}` : 'RLum: ',
   };
   return returnValue;
+}
+function setPreviousLuminance(
+  colourObject:
+    | {
+        [key: string]: string | number;
+      }
+    | undefined,
+) {
+  const recentLuminance = colourObject?.luminanceFloat;
+  if (recentLuminance) {
+    return {
+      luminance: typeof recentLuminance === 'number' ? recentLuminance : parseFloat(recentLuminance),
+      contrast: 1,
+    };
+  }
+
+  return undefined;
+}
+
+function setPreviousContrast(state: {
+  textInput: string;
+  mode: string;
+  recentColour:
+    | {
+        [key: string]: string | number;
+      }
+    | undefined;
+  previousColour:
+    | {
+        [key: string]: string | number;
+      }
+    | undefined;
+  colourMap:
+    | Map<
+        string,
+        {
+          [key: string]: string | number;
+        }
+      >
+    | undefined;
+}) {
+  const recentLuminance = state.recentColour?.luminanceFloat;
+  const previousLuminance = state.previousColour?.luminance;
+  if (recentLuminance && previousLuminance) {
+    const ratio = contrast.getContrastRatio2Dp([
+      typeof recentLuminance === 'number' ? recentLuminance : parseFloat(recentLuminance),
+      typeof previousLuminance === 'number' ? previousLuminance : parseFloat(previousLuminance),
+    ]);
+    return { luminance: previousLuminance, contrast: ratio };
+  }
+  return undefined;
 }

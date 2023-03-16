@@ -4,20 +4,20 @@ import { useColourInputContext } from '../../contexts/ColourInputProvider';
 import ColourPicker from './ColourPicker';
 import InlineList from './InlineList';
 
-function getHexData(colourObject: { [key: string]: number | string }, mode: string) {
+function getHexData(colourObject: { [key: string]: number | string }, mode: string, previousContrast: string) {
   const { Hex, HSL, RGB, Luminance, Black, White } = colourObject;
   const colourSpaceLookup: { [key: string]: string } = {
-    Hex: `${`~${Hex}~\r\n`}${` ${HSL}\r\n`}${` ${RGB}\r\n`} Relative Luminance: ${Luminance} \r\n`,
-    HSL: `${` ${Hex}\r\n`}${`~${HSL}~\r\n`}${` ${RGB}\r\n`} Relative Luminance: ${Luminance} \r\n`,
-    RGB: `${` ${Hex}\r\n`}${` ${HSL}\r\n`}${`~${RGB}~\r\n`} Relative Luminance: ${Luminance} \r\n`,
-    RLum: `${` ${Hex}\r\n`}${` ${HSL}\r\n`}${` ${RGB} \r\n`}~Relative Luminance: ${Luminance}~\r\n`,
+    Hex: ` Relative Luminance: ${Luminance} \r\n${`~${Hex}~\r\n`}${` ${HSL}\r\n`}${` ${RGB}\r\n`}`,
+    HSL: ` Relative Luminance: ${Luminance} \r\n${` ${Hex}\r\n`}${`~${HSL}~\r\n`}${` ${RGB}\r\n`}`,
+    RGB: ` Relative Luminance: ${Luminance} \r\n${` ${Hex}\r\n`}${` ${HSL}\r\n`}${`~${RGB}~\r\n`}`,
+    RLum: `~Relative Luminance: ${Luminance}~\r\n${` ${Hex}\r\n`}${` ${HSL}\r\n`}${` ${RGB} \r\n`}`,
   };
-  return `${colourSpaceLookup[mode]} Contrast w/ Black: ${Black}
- Contrast w/ White: ${White}`;
+  return ` Contrast Previous: ${previousContrast}\r\n Contrast Black/White: ${Black}/${White}\r\n${colourSpaceLookup[mode]}`;
 }
 
 export default function ComboBox() {
-  const { textInput, colourMap, recentColour, mode, dispatchColourInput } = useColourInputContext();
+  const { textInput, colourMap, recentColour, previousColour, mode, dispatchColourInput } = useColourInputContext();
+  const previousContrast = previousColour?.contrast ? `${previousColour?.contrast}` : '-';
   function handleClickMode() {
     const nextModeLookup: { [key: string]: string } = {
       Hex: 'HSL',
@@ -92,7 +92,7 @@ export default function ComboBox() {
 
             {recentColour !== undefined && textInput.length > 0 && (
               <pre className="absolute bottom-2 left-2 m-0 h-fit p-0 text-xs   text-green-900 dark:text-green-300">
-                {getHexData(recentColour, mode)}
+                {getHexData(recentColour, mode, previousContrast)}
               </pre>
             )}
           </div>
