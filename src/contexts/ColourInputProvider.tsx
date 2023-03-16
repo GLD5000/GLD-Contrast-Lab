@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useContext, useReducer, Dispatch, useEffect } from 'react';
+import { setToTargetLuminance } from '../utilities/colour/autoContrast';
 import { colourSpace } from '../utilities/colour/colourSpace';
 import { contrast } from '../utilities/colour/contrastRatio';
 import { luminance } from '../utilities/colour/luminance';
@@ -89,22 +90,60 @@ function useData() {
       case 'UPDATE_TEXT': {
         const textReceived = action.payload.textInput;
         const isSubmit = /\s/.test(textReceived?.at(-1) || '');
-        console.log('isSubmit:', isSubmit);
         if (textReceived && isSubmit) {
           const recentColourReturn = makeRecentColour(state);
           if (recentColourReturn !== null) return recentColourReturn;
         }
+        const recentColourState = state.recentColour;
+        const { mode: modeState } = state;
+        const isRelativeLuminance = modeState === 'RLum';
+
+        if (!isSubmit && isRelativeLuminance && !textReceived) {
+          const returnValue = {
+            ...state,
+            textInput: '%',
+          };
+          return returnValue;
+        }
+
+        if (!isSubmit && recentColourState && textReceived && mode === 'RLum') {
+          const currentHex = `${recentColourState.Hex}`;
+          const isPercentage = textReceived.includes('%');
+          if (!isPercentage) {
+            const returnValue = {
+              ...state,
+              textInput: textReceived || '%',
+            };
+            return returnValue;
+          }
+          const parsedFloat = Math.trunc(parseFloat(textReceived) * 10) * 0.001;
+          const isInRange = parsedFloat >= 0 && parsedFloat <= 1;
+
+          if (!isInRange && isPercentage) {
+            const returnValue = {
+              ...state,
+              textInput: textReceived || '%',
+            };
+            return returnValue;
+          }
+
+          if (isInRange && isPercentage) {
+            const { resultingHex: newHex } = setToTargetLuminance(currentHex, parsedFloat);
+            const newColourObject = makeColourObject(newHex);
+            const textValue = newColourObject ? getRecentTextField(newColourObject, mode) : textReceived;
+            const returnValue = {
+              ...state,
+              textInput: textValue || '',
+              recentColour: newColourObject,
+            };
+            return returnValue;
+          }
+        }
 
         const { processedText, processedArray, recent } = processText(textReceived || '', state.mode);
-        console.log(processedText, processedArray, recent);
         const returnedColours = state.colourMap ? [...state.colourMap.keys()] : [];
         const joinedArrays = returnedColours ? [...returnedColours, ...processedArray] : processedArray;
         const newMap = createMap(joinedArrays) || undefined;
-        // const recentColourValue = getRecentColour(processedText);
-        // const textOutput =
-        //   valueIsHex(processedText) && recentColourValue !== undefined
-        //     ? `${recentColourValue[state.mode]}`
-        //     : processedText;
         const returnValue = {
           ...state,
           textInput: processedText || '',
@@ -118,20 +157,13 @@ function useData() {
         if (recentColourReturn !== null) return recentColourReturn;
 
         const newText = state.textInput ? `${state.textInput}\t` : action.payload.textInput || '';
-        console.log('newText:', newText);
         const { processedText, processedArray, recent } = processText(
           newText || action.payload.textInput || '',
           state.mode,
         );
-        console.log(processedText, processedArray);
         const returnedColours = state.colourMap ? [...state.colourMap.keys()] : [];
         const joinedArrays = returnedColours ? [...returnedColours, ...processedArray] : processedArray;
         const newMap = createMap(joinedArrays) || undefined;
-        // const recentColourValue = getRecentColour(processedText);
-        // const textOutput =
-        //   valueIsHex(processedText) && recentColourValue !== undefined
-        //     ? `${recentColourValue[state.mode]}`
-        //     : processedText;
         const returnValue = {
           ...state,
           textInput: processedText || '',
@@ -230,7 +262,6 @@ function makeRecentColour(stateIn: {
     recentColour: undefined,
     colourMap: newMap,
   };
-  console.log('returnValue RecentState Submit:', returnValue);
   return returnValue;
 }
 
@@ -290,10 +321,6 @@ function processRgbString(value: string) {
 }
 
 function processHslString(value: string) {
-  // const hslRegex = /(hsl)|(HSL)\(((360)|(3[0-5][0-9])|([1-2]?[0-9]{1,2}))(,[ ]?(100|([0-9]{1,2}))%?){2}\)/;
-  // if (value.search(hslRegex) === -1) return value;
-  // const cleanedUpValue = value.toLowerCase().replaceAll(/[ ()hsl%]/g, '');
-  // const hslArray = cleanedUpValue.split(',').map((x) => parseInt(x, 10));
   const { isCorrect, result } = testHslString(value);
   if (!isCorrect || result === undefined) return value;
 
@@ -302,7 +329,6 @@ function processHslString(value: string) {
 }
 
 function processColourStringLong(stringIn: string) {
-  console.log('stringIn:', stringIn);
   if (stringIn.length < 7) return stringIn;
   return processColourString(stringIn);
 }

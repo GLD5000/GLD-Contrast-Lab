@@ -183,11 +183,39 @@ for (let i = 0; i < 50; i += 1) {
     describe(`#setToTargetContrast`, () => {
       it(`Works for setToTargetContrast ${hex}, ${ratio}, ${direction} `, () => {
         const result = setToTargetContrast(hex, ratio, direction);
+        if (
+          result.resultingContrastRatio.toFixed(2) !== ratio.toFixed(2) &&
+          result.resultingHex !== '#ffffff' &&
+          result.resultingHex !== '#000000'
+        )
+          console.log('result:', result);
+
         expect(
           result.resultingContrastRatio.toFixed(2) === ratio.toFixed(2) ||
             result.resultingHex === '#ffffff' ||
             result.resultingHex === '#000000',
         ).toBe(true);
+      });
+    });
+  })();
+}
+
+for (let i = 0; i < 1; i += 1) {
+  const hue = getRandomNumberBetween([0, 360]);
+  const sat = getRandomNumberBetween([0, 100]);
+  const lum = getRandomNumberBetween([0, 100]);
+
+  const hex = colourSpace.convertHslArrayToHex([hue, sat, lum]);
+  (() => {
+    const ratio = 1.2;
+    const direction = 'down';
+    describe(`#setToTargetContrast`, () => {
+      it(`Works for setToTargetContrast ${hex}, ${ratio}, ${direction} `, () => {
+        const result = setToTargetContrast(hex, ratio, direction);
+        console.log('result:', result);
+        expect(result.resultingContrastRatio.toFixed(2) === ratio.toFixed(2) || result.resultingHex === '#000000').toBe(
+          true,
+        );
       });
     });
   })();
