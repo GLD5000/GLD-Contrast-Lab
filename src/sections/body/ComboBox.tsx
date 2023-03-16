@@ -7,12 +7,12 @@ import InlineList from './InlineList';
 function getHexData(colourObject: { [key: string]: number | string }, mode: string) {
   const { Hex, HSL, RGB, Luminance, Black, White } = colourObject;
   const colourSpaceLookup: { [key: string]: string } = {
-    Hex: `${`~${Hex}~\r\n`}${` ${HSL}\r\n`}${` ${RGB}\r\n`}`,
-    HSL: `${` ${Hex}\r\n`}${`~${HSL}~\r\n`}${` ${RGB}\r\n`}`,
-    RGB: `${` ${Hex}\r\n`}${` ${HSL}\r\n`}${`~${RGB}~\r\n`}`,
+    Hex: `${`~${Hex}~\r\n`}${` ${HSL}\r\n`}${` ${RGB}\r\n`} Relative Luminance: ${Luminance} \r\n`,
+    HSL: `${` ${Hex}\r\n`}${`~${HSL}~\r\n`}${` ${RGB}\r\n`} Relative Luminance: ${Luminance} \r\n`,
+    RGB: `${` ${Hex}\r\n`}${` ${HSL}\r\n`}${`~${RGB}~\r\n`} Relative Luminance: ${Luminance} \r\n`,
+    RLum: `${` ${Hex}\r\n`}${` ${HSL}\r\n`}${` ${RGB} \r\n`}~Relative Luminance: ${Luminance}~\r\n`,
   };
-  return `${colourSpaceLookup[mode]} Relative Luminance: ${Luminance}
- Contrast w/ Black: ${Black}
+  return `${colourSpaceLookup[mode]} Contrast w/ Black: ${Black}
  Contrast w/ White: ${White}`;
 }
 
@@ -22,7 +22,9 @@ export default function ComboBox() {
     const nextModeLookup: { [key: string]: string } = {
       Hex: 'HSL',
       HSL: 'RGB',
-      RGB: 'Hex',
+      RGB: 'RLum',
+      RLum: 'Hex',
+
       // Luminance: string,
       // Black: string,
       // White: string,

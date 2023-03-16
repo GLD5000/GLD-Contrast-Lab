@@ -169,9 +169,12 @@ function useData() {
         return returnValue;
       }
       case 'CHANGE_MODE': {
-        const newMode = action.payload.mode || 'Hex';
+        const newMode = `${action.payload.mode}` || 'Hex';
         const returnValue = { ...state, mode: newMode };
-        if (returnValue.recentColour !== undefined) returnValue.textInput = `${returnValue.recentColour[newMode]}`;
+        const mostRecentColour = returnValue.recentColour;
+        if (mostRecentColour !== undefined) {
+          returnValue.textInput = getRecentTextField(mostRecentColour, newMode);
+        }
         return returnValue;
       }
       case 'CLOSE_TAG':
@@ -198,6 +201,18 @@ export default function ColourInputProvider({ children }: { children: ReactNode 
 function valueIsHex(input: string) {
   const returnBoolean = input.length === 7 && input.search(/#[0-9a-fA-F]{6}/) > -1;
   return returnBoolean;
+}
+
+function getRecentTextField(recentColourObject: { [key: string]: string | number }, modeString: string) {
+  const lookupKey: { [key: string]: string } = {
+    Hex: 'Hex',
+    HSL: 'HSL',
+    RGB: 'RGB',
+    RLum: 'Luminance',
+    CRB: 'Black',
+    CRW: 'White',
+  };
+  return `${recentColourObject[lookupKey[modeString]]}`;
 }
 
 function makeRecentColour(stateIn: {
@@ -354,13 +369,13 @@ function multiRecentProcess(text: string, mode: string) {
     processedArray: [],
   });
   const suffixedText = processedText.length > 0 ? `${processedText} ${lastElement}` : `${lastElement}`;
-  const textValue = recentValue ? `${recentValue[mode]}` : suffixedText;
+  const textValue = recentValue ? getRecentTextField(recentValue, mode) : suffixedText;
   return { processedText: textValue, processedArray, recent: recentValue };
 }
 
 function singleTextProcess(text: string, mode: string) {
   const recentValue = getRecentColour(text);
-  const textValue = recentValue ? recentValue[mode] : text;
+  const textValue = recentValue ? getRecentTextField(recentValue, mode) : text;
   return { processedText: `${textValue}`, processedArray: [], recent: recentValue };
 }
 
