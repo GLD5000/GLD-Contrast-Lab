@@ -48,11 +48,11 @@ function getHslValueFromSlider(sliderValue: number, type: string, hslString: str
 }
 
 function useDebounce(value: number, time: number, type: string, hslString: string) {
-  const [debounceValue, setDebounceValue] = useState('');
+  const [debounceValue, setDebounceValue] = useState({ textInput: '', mode: '' });
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setDebounceValue(getHslValueFromSlider(value, type, hslString));
+      setDebounceValue({ textInput: getHslValueFromSlider(value, type, hslString), mode: type });
     }, time);
 
     return () => {
@@ -64,12 +64,11 @@ function useDebounce(value: number, time: number, type: string, hslString: strin
 }
 
 export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => void }) {
-  const { recentColour, dispatchColourInput } = useColourInputContext();
-  const [type, setType] = useState('Lum');
+  const { recentColour, type, dispatchColourInput } = useColourInputContext();
 
   const hslString = recentColour?.HSL === undefined ? 'hsl(0,0%,0%)' : `${recentColour?.HSL}`;
   const [sliderValue, setSliderValue] = useState(getSliderValueHslString(hslString, type) || 0);
-  const debouncedValue = useDebounce(sliderValue, 100, type, hslString);
+  const debouncedValue = useDebounce(sliderValue, 50, type, hslString);
 
   useEffect(() => {
     let run = true;
@@ -79,12 +78,12 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
     return () => {
       run = false;
     };
-  }, [recentColour, hslString, type]);
+  }, [hslString, type]);
 
   useEffect(() => {
     let run = true;
     if (run) {
-      dispatchColourInput({ type: 'UPDATE_HSL', payload: { textInput: debouncedValue } });
+      dispatchColourInput({ type: 'UPDATE_HSL', payload: debouncedValue });
     }
     return () => {
       run = false;
@@ -98,7 +97,7 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
       Lum: 'Hue',
     };
     const newType = typeLookup[type];
-    setType(newType);
+    dispatchColourInput({ type: 'SET_TYPE', payload: { textInput: newType } });
   }
   function handleSliderInput(e: MouseEvent<HTMLInputElement>) {
     // const sliderValue = parseInt(e.currentTarget.value, 10);

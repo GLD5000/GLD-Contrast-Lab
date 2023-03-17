@@ -9,6 +9,7 @@ import { getSessionStorageMap, clearSessionStorageMap, setSessionStorageMap } fr
 const initialiserA: {
   textInput: string;
   mode: string;
+  type: string;
   recentColour: { [key: string]: string | number } | undefined;
   previousColour: { [key: string]: string | number } | undefined;
   colourMap: undefined | Map<string, { [key: string]: string | number }>;
@@ -17,6 +18,7 @@ const initialiserA: {
     payload: Partial<{
       textInput: string;
       mode: string;
+      type: string;
       recentColour: { [key: string]: string | number } | undefined;
       previousColour: { [key: string]: string | number } | undefined;
       colourMap: undefined | Map<string, { [key: string]: string | number }>;
@@ -25,6 +27,7 @@ const initialiserA: {
 } = {
   textInput: '',
   mode: 'Hex',
+  type: 'Lum',
   recentColour: undefined,
   previousColour: undefined,
   colourMap: undefined,
@@ -34,19 +37,21 @@ const initialiserA: {
 const initialiserB: {
   textInput: string;
   mode: string;
+  type: string;
   recentColour: { [key: string]: string | number } | undefined;
   previousColour: { [key: string]: string | number } | undefined;
   colourMap: undefined | Map<string, { [key: string]: string | number }>;
 } = {
   textInput: '',
   mode: 'Hex',
+  type: 'Lum',
   recentColour: undefined,
   previousColour: undefined,
   colourMap: undefined,
 };
 
 function useData() {
-  const [{ textInput, mode, recentColour, previousColour, colourMap }, dispatchColourInput] = useReducer(
+  const [{ textInput, mode, type, recentColour, previousColour, colourMap }, dispatchColourInput] = useReducer(
     tagReducer,
     initialiserB,
   );
@@ -56,6 +61,7 @@ function useData() {
   return {
     textInput,
     mode,
+    type,
     colourMap,
     recentColour,
     previousColour,
@@ -65,6 +71,7 @@ function useData() {
     state: {
       textInput: string;
       mode: string;
+      type: string;
       recentColour: { [key: string]: string | number } | undefined;
       previousColour: { [key: string]: string | number } | undefined;
       colourMap: undefined | Map<string, { [key: string]: string | number }>;
@@ -74,6 +81,7 @@ function useData() {
       payload: Partial<{
         textInput: string;
         mode: string;
+        type: string;
         recentColour: { [key: string]: string | number } | undefined;
         previousColour: { [key: string]: string | number } | undefined;
         colourMap: undefined | Map<string, { [key: string]: string | number }>;
@@ -83,6 +91,7 @@ function useData() {
   ): {
     textInput: string;
     mode: string;
+    type: string;
     recentColour: { [key: string]: string | number } | undefined;
     previousColour: { [key: string]: string | number } | undefined;
     colourMap: undefined | Map<string, { [key: string]: string | number }>;
@@ -94,6 +103,7 @@ function useData() {
         const returnValue = {
           textInput: recentColourValue.Hex,
           mode: 'Hex',
+          type: 'Lum',
           recentColour: recentColourValue,
           previousColour: undefined,
           colourMap: savedMap,
@@ -128,7 +138,7 @@ function useData() {
         return returnValue;
       }
       case 'CLEAR_TEXT': {
-        const returnValue = { ...state, mode: 'Hex', recentColour: undefined, textInput: '' };
+        const returnValue = { ...state, mode: 'Hex', type: 'Lum', recentColour: undefined, textInput: '' };
         return returnValue;
       }
       case 'UPDATE_TEXT': {
@@ -182,7 +192,8 @@ function useData() {
       }
 
       case 'UPDATE_HSL': {
-        const newHsl = action.payload.textInput;
+        const newHsl = action.payload.textInput || '';
+
         const recentColourValue: { [key: string]: string | number } | undefined = newHsl
           ? makeColourObjectHsl(newHsl)
           : undefined;
@@ -195,8 +206,54 @@ function useData() {
         };
         const previousValue = setPreviousContrast(returnValue);
         if (previousValue) returnValue.previousColour = previousValue;
-
         return returnValue;
+      }
+      // case 'UPDATE_HSL': {
+      //   const newHsl = action.payload.textInput || 'hsl(250,40,40)';
+      //   const slider = action.payload.mode || 'Lum';
+      //   console.log(newHsl, slider);
+      //   // const recentColourValue: { [key: string]: string | number } | undefined = newHsl
+      //   //   ? makeColourObjectHsl(newHsl)
+      //   //   : undefined;
+      //   // const modeOut = state.mode ? state.mode : 'Hex';
+      //   // const textOutput = recentColourValue ? getRecentTextField(recentColourValue, modeOut) : '';
+      //   // const returnValue = {
+      //   //   ...state,
+      //   //   textInput: textOutput,
+      //   //   recentColour: recentColourValue,
+      //   // };
+      //   // const previousValue = setPreviousContrast(returnValue);
+      //   // if (previousValue) returnValue.previousColour = previousValue;
+      //   const returnValue = luminanceMatchNewHsl(newHsl, slider, state) || { ...state };
+      //   return returnValue;
+      // }
+      case 'SET_TYPE': {
+        const typeIn = action.payload.textInput || 'Lum';
+        const returnValue = {
+          ...state,
+          type: typeIn,
+        };
+        return returnValue;
+      }
+      case 'MATCH_LUMINANCE': {
+        const previousLuminance = state.previousColour?.luminance;
+        const newHex = action.payload.textInput;
+
+        if (typeof previousLuminance === 'number' && typeof newHex === 'string') {
+          const { resultingHex } = setToTargetLuminance(newHex, previousLuminance);
+          const newObject = makeColourObject(resultingHex);
+          const modeOut = state.mode ? state.mode : 'Hex';
+          const textOutput = newObject ? getRecentTextField(newObject, modeOut) : '';
+          const returnValue = {
+            ...state,
+            textInput: textOutput,
+            recentColour: newObject,
+          };
+          const previousContrast = setPreviousContrast(returnValue);
+          if (previousContrast !== undefined) returnValue.previousColour = previousContrast;
+          return returnValue;
+        }
+        return { ...state };
       }
       case 'CLEAR_TAGS': {
         const newMap = new Map(state.colourMap);
@@ -207,6 +264,7 @@ function useData() {
           colourMap: newMap,
           textInput: '',
           mode: 'Hex',
+          type: 'Lum',
           recentColour: undefined,
         };
         return returnValue;
@@ -269,6 +327,7 @@ function getRecentTextField(recentColourObject: { [key: string]: string | number
 function makeRecentColour(stateIn: {
   textInput: string;
   mode: string;
+  type: string;
   recentColour: { [key: string]: string | number } | undefined;
   previousColour: { [key: string]: string | number } | undefined;
   colourMap: undefined | Map<string, { [key: string]: string | number }>;
@@ -509,6 +568,7 @@ function handleRlumUpdate(
   state: {
     textInput: string;
     mode: string;
+    type: string;
     recentColour:
       | {
           [key: string]: string | number;
@@ -531,6 +591,7 @@ function handleRlumUpdate(
   payload: Partial<{
     textInput: string;
     mode: string;
+    type: string;
     recentColour:
       | {
           [key: string]: string | number;
@@ -650,6 +711,7 @@ function setPreviousLuminance(
 function setPreviousContrast(state: {
   textInput: string;
   mode: string;
+  type: string;
   recentColour:
     | {
         [key: string]: string | number;

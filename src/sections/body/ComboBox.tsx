@@ -12,12 +12,14 @@ function getHexData(colourObject: { [key: string]: number | string }, mode: stri
     RGB: `Relative Luminance: ${Luminance} \r\n${`${Hex}\r\n`}${`${HSL}\r\n`}`,
     RLum: `${`${Hex}\r\n`}${`${HSL}\r\n`}${`${RGB}\r\n`}`,
   };
-  console.log('Name:', Name);
+  if (Name) console.log('Name:', Name);
   return `Contrast Previous: ${previousContrast}\r\nContrast Black/White: ${Black}/${White}\r\n${colourSpaceLookup[mode]}`;
 }
 
 export default function ComboBox() {
-  const { textInput, colourMap, recentColour, previousColour, mode, dispatchColourInput } = useColourInputContext();
+  const { textInput, colourMap, recentColour, previousColour, mode, type, dispatchColourInput } =
+    useColourInputContext();
+
   const previousContrast = previousColour?.contrast ? `${previousColour?.contrast}` : '-';
 
   function handleClickMode() {
@@ -36,6 +38,10 @@ export default function ComboBox() {
   function handleClickClear() {
     dispatchColourInput({ type: 'CLEAR_TEXT', payload: {} });
     document.getElementById('colour-input')?.focus();
+  }
+  function handleClickMatch() {
+    if (recentColour?.Hex !== undefined)
+      dispatchColourInput({ type: 'MATCH_LUMINANCE', payload: { textInput: `${recentColour.Hex}` } });
   }
 
   return (
@@ -75,6 +81,7 @@ export default function ComboBox() {
             />
             {recentColour !== undefined && textInput.length > 0 && (
               <button
+                id="clear-btn"
                 className="absolute right-2 top-2 w-16 bg-neutral-300 py-2 px-4 text-xs hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
                 type="button"
                 onClick={handleClickClear}
@@ -82,9 +89,23 @@ export default function ComboBox() {
                 Clear
               </button>
             )}
+            {type !== 'Lum' &&
+              previousContrast !== undefined &&
+              previousContrast !== '-' &&
+              previousContrast !== '1' && (
+                <button
+                  id="match-btn"
+                  className="absolute right-2 top-12 w-16 bg-neutral-300 py-2 px-4 text-xs hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
+                  type="button"
+                  onClick={handleClickMatch}
+                >
+                  Match
+                </button>
+              )}
 
             {recentColour !== undefined && textInput.length > 0 && (
               <button
+                id="colourspace-btn"
                 className="absolute right-2 bottom-2 w-16 bg-neutral-300 py-2 px-4 text-xs hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
                 type="button"
                 onClick={handleClickMode}
