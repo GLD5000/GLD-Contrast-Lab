@@ -7,12 +7,12 @@ import InlineList from './InlineList';
 function getHexData(colourObject: { [key: string]: number | string }, mode: string, previousContrast: string) {
   const { Hex, HSL, RGB, Luminance, Black, White } = colourObject;
   const colourSpaceLookup: { [key: string]: string } = {
-    Hex: ` Relative Luminance: ${Luminance} \r\n${`~${Hex}~\r\n`}${` ${HSL}\r\n`}${` ${RGB}\r\n`}`,
-    HSL: ` Relative Luminance: ${Luminance} \r\n${` ${Hex}\r\n`}${`~${HSL}~\r\n`}${` ${RGB}\r\n`}`,
-    RGB: ` Relative Luminance: ${Luminance} \r\n${` ${Hex}\r\n`}${` ${HSL}\r\n`}${`~${RGB}~\r\n`}`,
-    RLum: `~Relative Luminance: ${Luminance}~\r\n${` ${Hex}\r\n`}${` ${HSL}\r\n`}${` ${RGB} \r\n`}`,
+    Hex: `Relative Luminance: ${Luminance} \r\n${`${HSL}\r\n`}${`${RGB}\r\n`}`,
+    HSL: `Relative Luminance: ${Luminance} \r\n${`${Hex}\r\n`}${`${RGB}\r\n`}`,
+    RGB: `Relative Luminance: ${Luminance} \r\n${`${Hex}\r\n`}${`${HSL}\r\n`}`,
+    RLum: `${`${Hex}\r\n`}${`${HSL}\r\n`}${`${RGB}\r\n`}`,
   };
-  return ` Contrast Previous: ${previousContrast}\r\n Contrast Black/White: ${Black}/${White}\r\n${colourSpaceLookup[mode]}`;
+  return `Contrast Previous: ${previousContrast}\r\nContrast Black/White: ${Black}/${White}\r\n${colourSpaceLookup[mode]}`;
 }
 
 export default function ComboBox() {
