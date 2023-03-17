@@ -5,19 +5,21 @@ import ColourPicker from './ColourPicker';
 import InlineList from './InlineList';
 
 function getHexData(colourObject: { [key: string]: number | string }, mode: string, previousContrast: string) {
-  const { Hex, HSL, RGB, Luminance, Black, White } = colourObject;
+  const { Hex, HSL, RGB, Luminance, Black, White, Name } = colourObject;
   const colourSpaceLookup: { [key: string]: string } = {
     Hex: `Relative Luminance: ${Luminance} \r\n${`${HSL}\r\n`}${`${RGB}\r\n`}`,
     HSL: `Relative Luminance: ${Luminance} \r\n${`${Hex}\r\n`}${`${RGB}\r\n`}`,
     RGB: `Relative Luminance: ${Luminance} \r\n${`${Hex}\r\n`}${`${HSL}\r\n`}`,
     RLum: `${`${Hex}\r\n`}${`${HSL}\r\n`}${`${RGB}\r\n`}`,
   };
+  console.log('Name:', Name);
   return `Contrast Previous: ${previousContrast}\r\nContrast Black/White: ${Black}/${White}\r\n${colourSpaceLookup[mode]}`;
 }
 
 export default function ComboBox() {
   const { textInput, colourMap, recentColour, previousColour, mode, dispatchColourInput } = useColourInputContext();
   const previousContrast = previousColour?.contrast ? `${previousColour?.contrast}` : '-';
+
   function handleClickMode() {
     const nextModeLookup: { [key: string]: string } = {
       Hex: 'HSL',

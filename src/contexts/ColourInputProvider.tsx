@@ -637,7 +637,6 @@ function setPreviousLuminance(
     | undefined,
 ) {
   const recentLuminance = colourObject?.luminanceFloat;
-  console.log('recentLuminance:', recentLuminance);
   if (typeof recentLuminance === 'number') {
     return {
       luminance: recentLuminance,

@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { useColourInputContext } from '../../contexts/ColourInputProvider';
 
 function convertHslToSlider(value: number, type: string) {
@@ -47,11 +47,50 @@ function getHslValueFromSlider(sliderValue: number, type: string, hslString: str
   return stringifyHslArray(hslLookUp[type]);
 }
 
+function useDebounce(value: number, time: number, type: string, hslString: string) {
+  const [debounceValue, setDebounceValue] = useState('');
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setDebounceValue(getHslValueFromSlider(value, type, hslString));
+    }, time);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [value, time, type, hslString]);
+
+  return debounceValue;
+}
+
 export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => void }) {
+  const { recentColour, dispatchColourInput } = useColourInputContext();
   const [type, setType] = useState('Lum');
 
-  const { recentColour, dispatchColourInput } = useColourInputContext();
   const hslString = recentColour?.HSL === undefined ? 'hsl(0,0%,0%)' : `${recentColour?.HSL}`;
+  const [sliderValue, setSliderValue] = useState(getSliderValueHslString(hslString, type) || 0);
+  const debouncedValue = useDebounce(sliderValue, 100, type, hslString);
+
+  useEffect(() => {
+    let run = true;
+    if (run) {
+      setSliderValue(getSliderValueHslString(hslString, type));
+    }
+    return () => {
+      run = false;
+    };
+  }, [recentColour, hslString, type]);
+
+  useEffect(() => {
+    let run = true;
+    if (run) {
+      dispatchColourInput({ type: 'UPDATE_HSL', payload: { textInput: debouncedValue } });
+    }
+    return () => {
+      run = false;
+    };
+  }, [debouncedValue, dispatchColourInput]);
+
   function handleTypeClick() {
     const typeLookup: { [key: string]: string } = {
       Hue: 'Sat',
@@ -62,9 +101,12 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
     setType(newType);
   }
   function handleSliderInput(e: MouseEvent<HTMLInputElement>) {
-    const sliderValue = parseInt(e.currentTarget.value, 10);
-    const newText = getHslValueFromSlider(sliderValue, type, hslString);
-    dispatchColourInput({ type: 'UPDATE_HSL', payload: { textInput: newText } });
+    // const sliderValue = parseInt(e.currentTarget.value, 10);
+
+    // const newText = getHslValueFromSlider(sliderValue, type, hslString);
+    // dispatchColourInput({ type: 'UPDATE_HSL', payload: { textInput: newText } });
+
+    setSliderValue(parseInt(e.currentTarget.value, 10));
   }
 
   function handleClickRandom() {
@@ -89,7 +131,7 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
           type="range"
           min={0}
           max={360}
-          value={getSliderValueHslString(hslString, type) || 0}
+          value={sliderValue}
           onInput={handleSliderInput}
         />
       </div>
