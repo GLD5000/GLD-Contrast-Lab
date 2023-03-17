@@ -211,7 +211,8 @@ export function setToTargetLuminance(
   targetLuminance: number,
 ): { resultingHex: string; resultingContrastRatio: number } {
   const originalLuminance = luminance.convertHexToLuminance(originalHex);
+  const originalSrgb = colourSpace.convertHexToSrgbArray(originalHex);
   const targetContrast = contrast.getContrastRatioFloat([targetLuminance, originalLuminance]);
-  const newDirection = originalLuminance < targetLuminance ? 'up' : 'down';
-  return setToTargetContrast(originalHex, targetContrast, newDirection);
+  // const newDirection = originalLuminance < targetLuminance ? 'up' : 'down';
+  return autoContrast.adjustLuminanceFine(targetContrast, originalLuminance, targetLuminance, originalSrgb);
 }
