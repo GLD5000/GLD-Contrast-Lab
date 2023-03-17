@@ -151,7 +151,7 @@ function useData() {
         const newMap = createMap(joinedArrays) || undefined;
         const returnValue = {
           ...state,
-          textInput: processedText || '',
+          textInput: isSubmit ? `${processedText} ` : processedText || '',
           recentColour: recent,
           colourMap: newMap,
         };
@@ -257,9 +257,9 @@ function getRecentTextField(recentColourObject: { [key: string]: string | number
   };
 
   const presetLookup: { [key: string]: string } = {
-    RLum: 'RLum: ',
-    Black: 'CRBl: ',
-    White: 'CRWh: ',
+    RLum: 'Relative Luminance: ',
+    Black: 'Contrast Black: ',
+    White: 'Contrast White: ',
   };
   const preset = presetLookup[modeString] || '';
   const returnString = `${preset}${recentColourObject[lookupKey[modeString]]}`;
@@ -365,13 +365,13 @@ function processColourString(stringIn: string) {
   return stringIn;
 }
 
-function hexReducer(acc: { processedText: string; processedArray: string[] }, curr: string) {
+function hexReducer(acc: { processedTextArray: string[]; processedArray: string[] }, curr: string) {
   const processedHex = processColourString(curr);
   if (processedHex.length === 7 && processedHex[0] === '#') {
     acc.processedArray.push(processedHex);
     return acc;
   }
-  acc.processedText += acc.processedText.length > 0 ? ` ${curr}` : curr;
+  if (curr.length > 0) acc.processedTextArray.push(curr);
   return acc;
 }
 
@@ -397,10 +397,15 @@ function processText(text: string, mode: string) {
 function multiProcess(text: string) {
   const splitText = text.replaceAll(', ', ',').split(/\s/);
 
-  const { processedText, processedArray } = splitText.reduce(hexReducer, {
-    processedText: '',
+  const { processedTextArray, processedArray } = splitText.reduce(hexReducer, {
+    processedTextArray: [],
     processedArray: [],
   });
+  if (processedTextArray.length === processedArray.length) {
+    console.log('name');
+  }
+
+  const processedText = processedTextArray.join(' ');
   return { processedText, processedArray, recent: undefined };
 }
 
@@ -410,10 +415,14 @@ function multiRecentProcess(text: string, mode: string) {
   const lastElement = splitText.at(-1)?.replaceAll(',', ', ');
   const recentValue = lastElement && lastElement.length > 0 ? getRecentColour(lastElement) : undefined;
 
-  const { processedText, processedArray } = slicedArray.reduce(hexReducer, {
-    processedText: '',
+  const { processedTextArray, processedArray } = slicedArray.reduce(hexReducer, {
+    processedTextArray: [],
     processedArray: [],
   });
+  if (processedTextArray.length === processedArray.length) {
+    console.log('name');
+  }
+  const processedText = processedTextArray.join(' ');
   const suffixedText = processedText.length > 0 ? `${processedText} ${lastElement}` : `${lastElement}`;
   const textValue = recentValue ? getRecentTextField(recentValue, mode) : suffixedText;
   return { processedText: textValue, processedArray, recent: recentValue };
@@ -545,7 +554,7 @@ function handleRlumUpdate(
 ) {
   const textReceived = payload.textInput;
   const isSubmit = /\s/.test(textReceived?.at(-1) || '');
-  const textWithoutRLum = textReceived ? textReceived.replace('RLum:', '').replace(' ', '') : '';
+  const textWithoutRLum = textReceived ? textReceived.replace('Relative Luminance:', '').replace(' ', '') : '';
   const recentColourState = state.recentColour;
 
   // if (!isSubmit && !textReceived) {
@@ -553,7 +562,7 @@ function handleRlumUpdate(
 
   //   const returnValue = {
   //     ...state,
-  //     textInput: 'RLum: ',
+  //     textInput: 'Relative Luminance: ',
   //   };
   //   return returnValue;
   // }
@@ -565,7 +574,7 @@ function handleRlumUpdate(
     if (!isPercentage || !isInRange) {
       const returnValue = {
         ...state,
-        textInput: textWithoutRLum ? `RLum: ${textWithoutRLum}` : 'RLum: ',
+        textInput: textWithoutRLum ? `Relative Luminance: ${textWithoutRLum}` : 'Relative Luminance: ',
       };
       return returnValue;
     }
@@ -585,7 +594,7 @@ function handleRlumUpdate(
 
     //   const returnValue = {
     //     ...state,
-    //     textInput: `RLum: ${textWithoutRLum}` || 'RLum: ',
+    //     textInput: `Relative Luminance: ${textWithoutRLum}` || 'Relative Luminance: ',
     //   };
     //   return returnValue;
     // }
@@ -595,7 +604,7 @@ function handleRlumUpdate(
 
     //   const returnValue = {
     //     ...state,
-    //     textInput: `RLum: ${textWithoutRLum}` || 'RLum: ',
+    //     textInput: `Relative Luminance: ${textWithoutRLum}` || 'Relative Luminance: ',
     //   };
     //   return returnValue;
     // }
@@ -603,10 +612,12 @@ function handleRlumUpdate(
     if (isInRange && isPercentage) {
       const { resultingHex: newHex } = setToTargetLuminance(currentHex, parsedFloat);
       const newColourObject = makeColourObject(newHex);
-      const textValue = newColourObject ? getRecentTextField(newColourObject, 'RLum') : `RLum: ${textWithoutRLum}`;
+      const textValue = newColourObject
+        ? getRecentTextField(newColourObject, 'RLum')
+        : `Relative Luminance: ${textWithoutRLum}`;
       const returnValue = {
         ...state,
-        textInput: textValue || 'RLum: ',
+        textInput: textValue || 'Relative Luminance: ',
         recentColour: newColourObject,
       };
       return returnValue;
@@ -614,7 +625,7 @@ function handleRlumUpdate(
   }
   const returnValue = {
     ...state,
-    textInput: textWithoutRLum ? `RLum: ${textWithoutRLum}` : 'RLum: ',
+    textInput: textWithoutRLum ? `Relative Luminance: ${textWithoutRLum}` : 'Relative Luminance: ',
   };
   return returnValue;
 }
