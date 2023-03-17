@@ -96,7 +96,7 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
       <div className="flex h-12 flex-row gap-1 p-1">
         <button
           type="button"
-          id="add-colour"
+          id="randomise-colour"
           className="mx-auto my-0 flex  w-full  content-center gap-4 rounded bg-neutral-300 p-2 text-sm hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
           onClick={handleClickRandom}
         >
