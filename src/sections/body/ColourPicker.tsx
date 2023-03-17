@@ -31,7 +31,10 @@ export default function ColourPicker() {
 
   return (
     <div className="grid h-fit w-80 overflow-clip rounded border">
-      <div className="relative mx-auto flex h-12 w-full content-center overflow-clip rounded-b-none" style={styles}>
+      <div
+        className="relative mx-auto flex h-12 w-full content-center overflow-clip rounded-b-none focus-within:outline focus-within:outline-current"
+        style={styles}
+      >
         <label
           htmlFor="main-colour-picker"
           className="absolute top-4 m-auto h-fit w-full text-center text-sm font-bold"

@@ -18,7 +18,7 @@ export default function SpicyLi({
 }) {
   return (
     <li id={id} className={className} style={style}>
-      <button type="button" id={`${id}-tag-btn`} onClick={tagFunction} className="mx-auto">
+      <button type="button" id={`${id}-tag-btn`} onClick={tagFunction} className="mx-auto p-1">
         {content}
       </button>
       <SvgButton
