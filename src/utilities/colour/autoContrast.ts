@@ -163,7 +163,7 @@ export const autoContrast = {
         outOfBounds += 1;
       }
     }
-    if (loopLimiter === loopLimit) console.log('loopLimiter:', loopLimiter);
+    // if (loopLimiter === loopLimit) console.log('loopLimiter:', loopLimiter);
     const { resultingContrastRatio, resultingHex } = autoContrast.getResults(currentSrgb, originalLuminance);
     const resultsAreGood = autoContrast.testResults(resultingHex, resultingContrastRatio, targetContrast);
     if (resultsAreGood) return { resultingContrastRatio, resultingHex };
