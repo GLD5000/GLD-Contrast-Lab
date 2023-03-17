@@ -626,9 +626,10 @@ function setPreviousLuminance(
     | undefined,
 ) {
   const recentLuminance = colourObject?.luminanceFloat;
-  if (recentLuminance) {
+  console.log('recentLuminance:', recentLuminance);
+  if (typeof recentLuminance === 'number') {
     return {
-      luminance: typeof recentLuminance === 'number' ? recentLuminance : parseFloat(recentLuminance),
+      luminance: recentLuminance,
       contrast: 1,
     };
   }
@@ -660,11 +661,8 @@ function setPreviousContrast(state: {
 }) {
   const recentLuminance = state.recentColour?.luminanceFloat;
   const previousLuminance = state.previousColour?.luminance;
-  if (recentLuminance && previousLuminance) {
-    const ratio = contrast.getContrastRatio2Dp([
-      typeof recentLuminance === 'number' ? recentLuminance : parseFloat(recentLuminance),
-      typeof previousLuminance === 'number' ? previousLuminance : parseFloat(previousLuminance),
-    ]);
+  if (typeof recentLuminance === 'number' && typeof previousLuminance === 'number') {
+    const ratio = contrast.getContrastRatio2Dp([recentLuminance, previousLuminance]);
     return { luminance: previousLuminance, contrast: ratio };
   }
   return undefined;
