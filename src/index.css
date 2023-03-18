@@ -94,7 +94,7 @@ input[type='range']::-webkit-slider-thumb {
   width: 1rem; /* Set a specific slider handle width */
   height: 1rem; /* Slider handle height */
   background: currentColor; /* Green background */
-  cursor: pointer; /* Cursor on hover */
+  cursor: inherit; /* Cursor on hover */
   border-radius: 100%;
 }
 
@@ -102,6 +102,6 @@ input[type='range']::-moz-range-thumb {
   width: 1rem; /* Set a specific slider handle width */
   height: 1rem; /* Slider handle height */
   background: currentColor; /* Green background */
-  cursor: pointer; /* Cursor on hover */
+  cursor: inherit; /* Cursor on hover */
   border-radius: 100%;
 }
