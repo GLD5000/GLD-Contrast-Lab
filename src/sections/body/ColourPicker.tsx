@@ -52,7 +52,7 @@ export default function ColourPicker() {
           value={currentValue}
         />
       </div>
-      <HslSlider handleClickAdd={handleClickAdd} />
+      <HslSlider handleClickAdd={handleClickAdd} hexFromPicker={currentValue} />
     </div>
   );
 }

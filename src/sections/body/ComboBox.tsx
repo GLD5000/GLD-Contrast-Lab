@@ -38,6 +38,7 @@ export default function ComboBox() {
   function handleClickClear() {
     dispatchColourInput({ type: 'CLEAR_TEXT', payload: {} });
     document.getElementById('colour-input')?.focus();
+    // dispatchColourInput({ type: 'CLEAR_TEXT', payload: {} });
   }
   function handleClickMatch() {
     if (recentColour?.Hex !== undefined)

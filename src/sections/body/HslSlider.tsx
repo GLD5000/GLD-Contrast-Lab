@@ -1,5 +1,6 @@
 import { MouseEvent, useEffect, useState } from 'react';
 import { useColourInputContext } from '../../contexts/ColourInputProvider';
+import { colourSpace } from '../../utilities/colour/colourSpace';
 
 function convertHslToSlider(value: number, type: string) {
   if (type !== 'Hue') return Math.round(value * 3.6);
@@ -63,10 +64,16 @@ function useDebounce(value: number, time: number, type: string, hslString: strin
   return debounceValue;
 }
 
-export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => void }) {
+export default function HslSlider({
+  handleClickAdd,
+  hexFromPicker,
+}: {
+  handleClickAdd: () => void;
+  hexFromPicker: string;
+}) {
   const { recentColour, type, dispatchColourInput } = useColourInputContext();
-
-  const hslString = recentColour?.HSL === undefined ? 'hsl(0,0%,0%)' : `${recentColour?.HSL}`;
+  const hslString =
+    recentColour?.HSL === undefined ? colourSpace.convertHexToHslString(hexFromPicker) : `${recentColour?.HSL}`;
   const [sliderValue, setSliderValue] = useState(getSliderValueHslString(hslString, type) || 0);
   const debouncedValue = useDebounce(sliderValue, 50, type, hslString);
 
@@ -124,15 +131,28 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
             {type}
           </button>
         </label>
-        <input
-          id="hsl-slider"
-          className="my-auto h-1 shrink-0 grow cursor-pointer appearance-none rounded bg-neutral-500 text-black dark:bg-gray-500 dark:text-white"
-          type="range"
-          min={0}
-          max={360}
-          value={sliderValue}
-          onInput={handleSliderInput}
-        />
+        {recentColour !== undefined ? (
+          <input
+            id="hsl-slider"
+            className="my-auto h-1 shrink-0 grow cursor-pointer appearance-none rounded bg-neutral-500 text-black dark:text-white"
+            type="range"
+            min={0}
+            max={360}
+            value={sliderValue}
+            onInput={handleSliderInput}
+          />
+        ) : (
+          <input
+            id="hsl-slider"
+            disabled
+            className="my-auto h-1 shrink-0 grow cursor-not-allowed appearance-none rounded bg-neutral-500 text-neutral-500"
+            type="range"
+            min={0}
+            max={360}
+            value={sliderValue}
+            onInput={handleSliderInput}
+          />
+        )}
       </div>
       <div className="flex h-12 flex-row gap-1 p-1">
         <button

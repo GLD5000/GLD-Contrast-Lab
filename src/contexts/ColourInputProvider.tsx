@@ -193,7 +193,7 @@ function useData() {
 
       case 'UPDATE_HSL': {
         const newHsl = action.payload.textInput || '';
-
+        if (state.recentColour === undefined) return { ...state };
         const recentColourValue: { [key: string]: string | number } | undefined = newHsl
           ? makeColourObjectHsl(newHsl)
           : undefined;
