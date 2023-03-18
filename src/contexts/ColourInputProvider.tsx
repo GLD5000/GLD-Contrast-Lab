@@ -156,10 +156,13 @@ function useData() {
         if (isNameMode) {
           const textReceived = action.payload.textInput;
 
-          const textWithoutName = textReceived ? textReceived.replace('Name:', '').replace(' ', '') : '';
+          const textWithoutName = textReceived
+            ? textReceived.replace('Name:', '').replaceAll(/[\s]/g, '').slice(0, 22)
+            : '';
           const returnObject = { ...state, textInput: textWithoutName ? `Name: ${textWithoutName}` : 'Name: ' };
 
           if (returnObject.recentColour) returnObject.recentColour.Name = textWithoutName || '';
+
           return returnObject;
         }
 
