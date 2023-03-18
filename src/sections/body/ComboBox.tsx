@@ -11,9 +11,11 @@ function getHexData(colourObject: { [key: string]: number | string }, mode: stri
     HSL: `Relative Luminance: ${Luminance} \r\n${`${Hex}\r\n`}${`${RGB}\r\n`}`,
     RGB: `Relative Luminance: ${Luminance} \r\n${`${Hex}\r\n`}${`${HSL}\r\n`}`,
     RLum: `${`${Hex}\r\n`}${`${HSL}\r\n`}${`${RGB}\r\n`}`,
+    Name: `Relative Luminance: ${Luminance} \r\n${`${Hex}\r\n`}${`${HSL}\r\n`}`,
   };
-  if (Name) console.log('Name:', Name);
-  return `Contrast Previous: ${previousContrast}\r\nContrast Black/White: ${Black}/${White}\r\n${colourSpaceLookup[mode]}`;
+  return `Name: ${
+    Name || '-'
+  }\r\nContrast Previous: ${previousContrast}\r\nContrast Black/White: ${Black}/${White}\r\n${colourSpaceLookup[mode]}`;
 }
 
 export default function ComboBox() {
@@ -27,7 +29,8 @@ export default function ComboBox() {
       Hex: 'HSL',
       HSL: 'RGB',
       RGB: 'RLum',
-      RLum: 'Hex',
+      RLum: 'Name',
+      Name: 'Hex',
 
       // Luminance: string,
       // Black: string,
