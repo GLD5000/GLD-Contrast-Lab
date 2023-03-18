@@ -128,7 +128,6 @@ function useData() {
         if (!newHex) return { ...state };
         const currentMode = `${state.mode}` || 'Hex';
         const newColourObject = makeColourObject(newHex, state);
-        console.log('EDIT: newColourObject:', newColourObject);
         const returnValue = {
           ...state,
           mode: currentMode,
@@ -145,7 +144,6 @@ function useData() {
         return returnValue;
       }
       case 'UPDATE_TEXT': {
-        console.log('UPDATE_TEXT');
         const { mode: modeState } = state;
         const isRelativeLuminanceMode = modeState === 'RLum';
 
