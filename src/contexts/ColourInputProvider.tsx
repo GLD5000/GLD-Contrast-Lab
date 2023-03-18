@@ -687,6 +687,7 @@ function makeColourObjectHsl(
   const luminanceFloat = luminance.convertHexToLuminance(Hex);
   const Black = `${contrast.getContrastRatio2Dp([0, luminanceFloat])}`;
   const White = `${contrast.getContrastRatio2Dp([1, luminanceFloat])}`;
+  const Name = state.recentColour?.Name || '';
   return {
     luminanceFloat,
     Hex,
@@ -695,6 +696,7 @@ function makeColourObjectHsl(
     Luminance,
     Black,
     White,
+    Name,
   };
 }
 
