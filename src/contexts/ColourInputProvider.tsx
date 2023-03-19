@@ -197,7 +197,7 @@ function useData() {
         if (hasRecentColour) {
           const preset = getModePreset(state.mode);
           // console.log('preset:', preset);
-          const presetText = `${preset}​${processedText.replace('​', '').replace(preset, '')}`;
+          const presetText = `${preset}​${processedText.replace(`​`, '').replace(preset, '')}`;
           const returnValue = {
             ...state,
             textInput: isSubmit ? `${presetText} ` : presetText || '',
@@ -356,7 +356,7 @@ function getRecentTextField(recentColourObject: { [key: string]: string | number
   const modeIsColour = modeString === 'HSL' || modeString === 'RGB' || modeString === 'Hex';
   const returnString = recentColourObject[modeKey] ? `${recentColourObject[modeKey]}` : '';
   const returnValue = modeIsColour
-    ? `${preset}​${returnString.replace('​', '').replace(preset, '')}`
+    ? `${preset}​${returnString.replace(`​`, '').replace(preset, '')}`
     : `${preset}${returnString.replace(preset, '')}`;
   return returnValue;
 }
@@ -552,7 +552,7 @@ function processText(
       | undefined;
   },
 ) {
-  const noCommaSpaceText = text.replaceAll(', ', ',').replaceAll(': ', '');
+  const noCommaSpaceText = text.replaceAll(', ', ',').replaceAll(`​`, '');
   const isEmpty = text === '';
   const hasNoSpaces = noCommaSpaceText.search(/\s/) === -1;
   const noSpaceAtEnd = text[text.length - 1].search(/\s/) === -1;
