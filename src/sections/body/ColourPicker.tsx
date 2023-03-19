@@ -5,7 +5,7 @@ import HslSlider from './HslSlider';
 
 export default function ColourPicker() {
   const { recentColour, dispatchColourInput } = useColourInputContext();
-
+  const [hasFocus, setHasFocus] = useState(false);
   const [currentValue, setCurrentValue] = useState(
     recentColour && recentColour?.Hex ? `${recentColour?.Hex}` : '#000000',
   );
@@ -21,9 +21,12 @@ export default function ColourPicker() {
 
   const styles = { backgroundColor: currentValue };
   function handleInput(e: MouseEvent<HTMLInputElement>) {
-    const newValue = e.currentTarget.value;
-    setCurrentValue(newValue);
-    dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: newValue } });
+    if (hasFocus) {
+      const newValue = e.currentTarget.value;
+      console.log(newValue);
+      setCurrentValue(newValue);
+      dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: newValue } });
+    }
   }
 
   function handleClickAdd() {
@@ -49,10 +52,16 @@ export default function ColourPicker() {
           className="h-full w-full grow"
           type="color"
           onInput={handleInput}
+          onFocus={() => {
+            setHasFocus(true);
+          }}
+          onBlur={() => {
+            setHasFocus(false);
+          }}
           value={currentValue}
         />
       </div>
-      <HslSlider handleClickAdd={handleClickAdd} hexFromPicker={currentValue} />
+      <HslSlider handleClickAdd={handleClickAdd} />
     </div>
   );
 }

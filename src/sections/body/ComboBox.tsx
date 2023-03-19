@@ -21,8 +21,8 @@ function getHexData(colourObject: { [key: string]: number | string }, mode: stri
 export default function ComboBox() {
   const { textInput, colourMap, recentColour, previousColour, mode, type, dispatchColourInput } =
     useColourInputContext();
-
   const previousContrast = previousColour?.contrast ? `${previousColour?.contrast}` : '-';
+  // const [hasFocus, setHasFocus] = useState(false);
 
   function handleClickMode() {
     const nextModeLookup: { [key: string]: string } = {
@@ -44,6 +44,7 @@ export default function ComboBox() {
     // dispatchColourInput({ type: 'CLEAR_TEXT', payload: {} });
   }
   function handleClickMatch() {
+    console.log('MATCH_LUMINANCE');
     if (recentColour?.Hex !== undefined)
       dispatchColourInput({ type: 'MATCH_LUMINANCE', payload: { textInput: `${recentColour.Hex}` } });
   }
@@ -78,7 +79,12 @@ export default function ComboBox() {
               onFocus={(e: FormEvent<HTMLTextAreaElement>): void => {
                 const element = e.currentTarget;
                 element.select();
+                // setHasFocus(true);
               }}
+              // onBlur={() => {
+              //   setHasFocus(false);
+              // }}
+
               wrap="hard"
               autoComplete="off"
               autoCorrect="off"

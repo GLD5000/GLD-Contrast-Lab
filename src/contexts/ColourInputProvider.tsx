@@ -3,7 +3,7 @@ import { setToTargetLuminance } from '../utilities/colour/autoContrast';
 import { colourSpace } from '../utilities/colour/colourSpace';
 import { contrast } from '../utilities/colour/contrastRatio';
 import { luminance } from '../utilities/colour/luminance';
-import getRandomColour, { randomColour } from '../utilities/colour/randomColour';
+import getRandomColour from '../utilities/colour/randomColour';
 import { getSessionStorageMap, clearSessionStorageMap, setSessionStorageMap } from './sessionStorageMap';
 
 const initialiserA: {
@@ -16,6 +16,7 @@ const initialiserA: {
   dispatchColourInput: Dispatch<{
     type: string;
     payload: Partial<{
+      number: number;
       textInput: string;
       mode: string;
       type: string;
@@ -79,6 +80,7 @@ function useData() {
     action: {
       type: string;
       payload: Partial<{
+        number: number;
         textInput: string;
         mode: string;
         type: string;
@@ -98,13 +100,17 @@ function useData() {
   } {
     switch (action.type) {
       case 'INIT': {
+        // console.log('INIT');
+
         const savedMap = getSessionStorageMap();
-        const recentColourValue = makeColourObjectHsl(randomColour.makeRandomHslString(), state);
+        // const recentColourValue = makeColourObjectHsl(randomColour.makeRandomHslString(), state);
         const returnValue = {
-          textInput: `${recentColourValue.Hex}`,
+          // textInput: `${recentColourValue.Hex}`,
+          textInput: '',
           mode: 'Hex',
           type: 'Lum',
-          recentColour: recentColourValue,
+          // recentColour: recentColourValue,
+          recentColour: undefined,
           previousColour: undefined,
           colourMap: savedMap,
         };
@@ -112,6 +118,8 @@ function useData() {
         return returnValue;
       }
       case 'RANDOMISE': {
+        // console.log('RANDOMISE');
+
         const newHex = getRandomColour();
         const currentMode = `${state.mode}` || 'Hex';
         const newColourObject = makeColourObject(newHex, state);
@@ -124,6 +132,8 @@ function useData() {
         return returnValue;
       }
       case 'EDIT': {
+        // console.log('EDIT');
+
         const newHex = action.payload.textInput;
         if (!newHex) return { ...state };
         const currentMode = `${state.mode}` || 'Hex';
@@ -140,20 +150,29 @@ function useData() {
         return returnValue;
       }
       case 'CLEAR_TEXT': {
-        const returnValue = { ...state, mode: 'Hex', type: 'Lum', recentColour: undefined, textInput: '' };
+        // console.log('CLEAR_TEXT');
+        const returnValue = {
+          ...state,
+          mode: 'Hex',
+          type: 'Lum',
+          recentColour: undefined,
+          textInput: '',
+          previousColour: undefined,
+        };
         return returnValue;
       }
       case 'UPDATE_TEXT': {
+        // console.log('UPDATE_TEXT');
         const { mode: modeState } = state;
+        const hasRecentColour = state.recentColour !== undefined;
+        // console.log('hasRecentColour:', hasRecentColour);
         const isRelativeLuminanceMode = modeState === 'RLum';
-
+        const isNameMode = modeState === 'Name';
+        const textReceived = action.payload.textInput;
+        const isSubmit = /\s/.test(textReceived?.replaceAll(/(, )|(: )/g, '')?.at(-1) || '');
         if (isRelativeLuminanceMode) return handleRlumUpdate(state, action.payload);
 
-        const isNameMode = modeState === 'Name';
-
         if (isNameMode) {
-          const textReceived = action.payload.textInput;
-
           const textWithoutName = textReceived
             ? textReceived.replace('Name:', '').replaceAll(/[\s]/g, '').slice(0, 22)
             : '';
@@ -164,25 +183,35 @@ function useData() {
           return returnObject;
         }
 
-        const textReceived = action.payload.textInput;
-        // const isSubmit = /\s/.test(textReceived?.at(-1) || '');
-        const isSubmit = /\s/.test(textReceived?.replaceAll(', ', '')?.at(-1) || '');
         if (textReceived && isSubmit) {
           const recentColourReturn = submitRecentColour(state);
           if (recentColourReturn !== null) return recentColourReturn;
         }
 
         const { processedText, processedArray, recent } = processText(textReceived || '', state);
-
         const returnedColours = state.colourMap ? [...state.colourMap.keys()] : [];
         const joinedArrays = returnedColours ? [...returnedColours, ...processedArray] : processedArray;
         const newMap = createMap(joinedArrays, state) || undefined;
-        const preset = getModePreset(state.mode);
-        console.log('preset:', preset);
-        const presetText = `${preset}:${processedText.replace(':', '').replace(preset, '')}`;
+        // console.log(processedText, isSubmit ? `${processedText} ` : processedText || '', recent, newMap)
+
+        if (hasRecentColour) {
+          const preset = getModePreset(state.mode);
+          // console.log('preset:', preset);
+          const presetText = `${preset}: ${processedText.replace(': ', '').replace(preset, '')}`;
+          const returnValue = {
+            ...state,
+            textInput: isSubmit ? `${presetText} ` : presetText || '',
+            recentColour: recent,
+            colourMap: newMap,
+          };
+          const previousValue = setPreviousContrast(returnValue);
+          if (previousValue) returnValue.previousColour = previousValue;
+
+          return returnValue;
+        }
         const returnValue = {
           ...state,
-          textInput: isSubmit ? `${presetText} ` : presetText || '',
+          textInput: isSubmit ? `${processedText} ` : processedText || '',
           recentColour: recent,
           colourMap: newMap,
         };
@@ -192,6 +221,7 @@ function useData() {
         return returnValue;
       }
       case 'SUBMIT': {
+        // console.log('SUBMIT');
         const recentColourReturn = submitRecentColour(state);
         if (recentColourReturn !== null) return recentColourReturn;
 
@@ -210,8 +240,19 @@ function useData() {
       }
 
       case 'UPDATE_HSL': {
-        const newHsl = action.payload.textInput || '';
-        if (state.recentColour === undefined) return { ...state };
+        // console.log('UPDATE_HSL');
+        const sliderType = action.payload.type;
+        const sliderValue = action.payload.number;
+        // console.log(sliderType,sliderValue);
+
+        const In = state.recentColour;
+        // console.log('hasRecentColour:', state.In!== undefined);
+
+        if (In === undefined || sliderValue === undefined || sliderType === undefined) return { ...state };
+        const oldHsl = `${In.HSL}`;
+        // console.log('oldHsl:', oldHsl);
+        const newHsl = getHslValueFromSlider(sliderValue, sliderType, oldHsl);
+        // console.log('newHsl:', newHsl);
         const recentColourValue: { [key: string]: string | number } | undefined = newHsl
           ? makeColourObjectHsl(newHsl, state)
           : undefined;
@@ -227,6 +268,8 @@ function useData() {
         return returnValue;
       }
       case 'SET_TYPE': {
+        // console.log('SET_TYPE');
+
         const typeIn = action.payload.textInput || 'Lum';
         const returnValue = {
           ...state,
@@ -235,6 +278,7 @@ function useData() {
         return returnValue;
       }
       case 'MATCH_LUMINANCE': {
+        // console.log('MATCH_LUMINANCE');
         const previousLuminance = state.previousColour?.luminance;
         const newHex = action.payload.textInput;
 
@@ -255,6 +299,7 @@ function useData() {
         return { ...state };
       }
       case 'CLEAR_TAGS': {
+        // console.log('CLEAR_TAGS');
         const newMap = new Map(state.colourMap);
         newMap.clear();
         clearSessionStorageMap();
@@ -269,6 +314,7 @@ function useData() {
         return returnValue;
       }
       case 'CHANGE_MODE': {
+        // console.log('CHANGE_MODE')
         const newMode = `${action.payload.mode}` || 'Hex';
         const returnValue = { ...state, mode: newMode };
         const mostRecentColour = returnValue.recentColour;
@@ -279,6 +325,8 @@ function useData() {
       }
       case 'CLOSE_TAG':
       default: {
+        // console.log('CLOSE_TAG');
+
         const { tag } = action.payload;
         const newMap = new Map(state.colourMap);
         if (typeof tag === 'string' && newMap.has(tag)) newMap.delete(tag);
@@ -308,7 +356,7 @@ function getRecentTextField(recentColourObject: { [key: string]: string | number
   const modeIsColour = modeString === 'HSL' || modeString === 'RGB' || modeString === 'Hex';
   const returnString = recentColourObject[modeKey] ? `${recentColourObject[modeKey]}` : '';
   const returnValue = modeIsColour
-    ? `${preset}:${returnString.replace(':', '').replace(preset, '')}`
+    ? `${preset}: ${returnString.replace(': ', '').replace(preset, '')}`
     : `${preset}${returnString.replace(preset, '')}`;
   return returnValue;
 }
@@ -418,7 +466,7 @@ function processRgbString(value: string) {
 
 function processHslString(value: string) {
   const { isCorrect, result } = testHslString(value);
-  console.log(isCorrect, result);
+  // console.log(isCorrect, result);
   if (!isCorrect || result === undefined) return value;
   const hex = colourSpace.convertHslArrayToHex(result);
   return hex;
@@ -455,7 +503,6 @@ function getRecentColour(
   },
 ): undefined | { [key: string]: string | number } {
   const testedProcessedText = valueIsHex(text) ? text : processColourStringLong(text);
-  console.log('testedProcessedText:', testedProcessedText);
   const recentColour = valueIsHex(testedProcessedText)
     ? makeColourObject(testedProcessedText, state)
     : state.recentColour; // broken does not handle hsl / rgb properly
@@ -505,19 +552,20 @@ function processText(
       | undefined;
   },
 ) {
-  const noCommaSpaceText = text.replaceAll(', ', ',');
+  const noCommaSpaceText = text.replaceAll(', ', ',').replaceAll(': ', '');
   const isEmpty = text === '';
+  const hasNoSpaces = noCommaSpaceText.search(/\s/) === -1;
+  const noSpaceAtEnd = text[text.length - 1].search(/\s/) === -1;
+  const hasRecent = state.recentColour !== undefined;
   if (isEmpty) {
     return emptyTextProcess(state);
   }
 
-  const hasNoSpaces = noCommaSpaceText.search(/\s/) === -1;
   if (hasNoSpaces) {
-    return singleTextProcess(text, state);
+    return singleTextProcess(noCommaSpaceText, state);
   }
 
-  const noSpaceAtEnd = text[text.length - 1].search(/\s/) === -1;
-
+  console.log('hasRecent:', hasRecent);
   if (noSpaceAtEnd) {
     return multiRecentProcess(text, state);
   }
@@ -525,12 +573,14 @@ function processText(
 }
 
 function multiProcess(text: string) {
+  console.log('multiProcess');
   const splitText = text.replaceAll(', ', ',').split(/\s/);
 
   const { processedTextArray, processedArray } = splitText.reduce(hexReducer, {
     processedTextArray: [],
     processedArray: [],
   });
+
   if (processedTextArray.length === processedArray.length) {
     console.log('name');
   }
@@ -565,6 +615,8 @@ function multiRecentProcess(
       | undefined;
   },
 ) {
+  console.log('multiRecentProcess');
+
   const { mode } = state;
   const splitText = text.replaceAll(', ', ',').split(/\s/);
   const slicedArray = splitText.slice(0, -1);
@@ -610,12 +662,14 @@ function singleTextProcess(
       | undefined;
   },
 ) {
-  // const { mode } = state;
-
+  console.log('singleTextProcess');
+  // if (state.recentColour){
   const recentValue = getRecentColour(text, state);
-  // const textValue = recentValue ? getRecentTextField(recentValue, mode) : text;
   const textValue = text;
   return { processedText: `${textValue}`, processedArray: [], recent: recentValue };
+  // }
+
+  // return { processedText: text || '', processedArray: [], recent: undefined };
 }
 
 function emptyTextProcess(state: {
@@ -641,7 +695,7 @@ function emptyTextProcess(state: {
       >
     | undefined;
 }) {
-  console.log('empty', state.recentColour);
+  // console.log('empty', state.recentColour);
 
   return { processedText: '', processedArray: [], recent: state.recentColour };
 }
@@ -672,7 +726,7 @@ function makeColourObject(
       | undefined;
   },
 ) {
-  const foundMap = state.colourMap?.get(hexValue);
+  const foundMap = state.colourMap && hexValue.length === 7 ? state.colourMap.get(hexValue) : undefined;
   if (foundMap !== undefined) {
     return foundMap;
   }
@@ -724,12 +778,12 @@ function makeColourObjectHsl(
   },
 ) {
   const Hex = colourSpace.convertHslStringToHex(hslValue);
-  if (state) {
-    const foundMap = state.colourMap ? state.colourMap.get(Hex) : undefined;
-    if (foundMap !== undefined) {
-      return foundMap;
-    }
-  }
+  // if (state) {
+  //   const foundMap = state.colourMap && Hex.length === 7 ? state.colourMap.get(Hex) : undefined;
+  //   if (foundMap !== undefined) {
+  //     return foundMap;
+  //   }
+  // }
   const HSL = hslValue;
   const RGB = colourSpace.convertHextoRgbString(Hex);
   const Luminance = luminance.convertHexToLuminancePercent(Hex);
@@ -830,6 +884,7 @@ function handleRlumUpdate(
       | undefined;
   },
   payload: Partial<{
+    number: number;
     textInput: string;
     mode: string;
     type: string;
@@ -855,12 +910,12 @@ function handleRlumUpdate(
   }>,
 ) {
   const textReceived = payload.textInput;
-  const isSubmit = /\s/.test(textReceived?.replaceAll(', ', '')?.at(-1) || '');
+  const isSubmit = /\s/.test(textReceived?.replaceAll(/(, )|(: )/g, '')?.at(-1) || '');
   const textWithoutRLum = textReceived ? textReceived.replace('Relative Luminance:', '').replace(' ', '') : '';
   const recentColourState = state.recentColour;
 
   // if (!isSubmit && !textReceived) {
-  //   console.log('!isSubmit && !textReceived');
+  //   // console.log('!isSubmit && !textReceived');
 
   //   const returnValue = {
   //     ...state,
@@ -892,7 +947,7 @@ function handleRlumUpdate(
     const isInRange = parsedFloat >= 0 && parsedFloat <= 1;
 
     // if (!isPercentage) {
-    //   console.log('!isPercentage');
+    //   // console.log('!isPercentage');
 
     //   const returnValue = {
     //     ...state,
@@ -902,7 +957,7 @@ function handleRlumUpdate(
     // }
 
     // if (!isInRange && isPercentage) {
-    //   console.log('!isInRange && isPercentage');
+    //   // console.log('!isInRange && isPercentage');
 
     //   const returnValue = {
     //     ...state,
@@ -979,4 +1034,35 @@ function setPreviousContrast(state: {
     return { luminance: previousLuminance, contrast: ratio };
   }
   return undefined;
+}
+
+function convertSliderToHsl(value: number, type: string) {
+  if (type !== 'Hue') return Math.round(value / 3.6);
+  return Math.round(value);
+}
+
+function stringifyHslArray(ArrayIn: number[]) {
+  const [hue, sat, lum] = ArrayIn;
+  const stringValue = `HSL(${hue}, ${sat}%, ${lum}%)`;
+  return stringValue;
+}
+
+function getHslValueFromSlider(value: number, type: string, hslString: string) {
+  const convertedSliderValue = convertSliderToHsl(value, type);
+  const [Hue, Sat, Lum] = parseHslStringToArray(hslString);
+  const hslLookUp: { [key: string]: number[] } = {
+    Hue: [convertedSliderValue, Sat, Lum],
+    Sat: [Hue, convertedSliderValue, Lum],
+    Lum: [Hue, Sat, convertedSliderValue],
+  };
+  // console.log(hslLookUp[type]);
+  return stringifyHslArray(hslLookUp[type]);
+}
+function parseHslStringToArray(stringIn: string) {
+  const arrayValue = stringIn
+    .toLowerCase()
+    .replaceAll(/[hsl( )%]/g, '')
+    .split(',')
+    .map((x) => parseInt(x, 10));
+  return arrayValue;
 }
