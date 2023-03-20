@@ -746,7 +746,10 @@ function makeColourObject(
   const Luminance = luminance.convertHexToLuminancePercent(hexValue);
   const Black = `${contrast.getContrastRatio2Dp([0, luminanceFloat])}`;
   const White = `${contrast.getContrastRatio2Dp([1, luminanceFloat])}`;
-  const Name = slicedNewName || state.recentColour?.Name || Hex;
+  const stateName = state.recentColour?.Name;
+  const nonStaleHexName = stateName !== undefined && !valueIsHex(`${stateName}`) ? `${stateName}` : Hex;
+
+  const Name = slicedNewName || nonStaleHexName;
   const returnObject = {
     luminanceFloat,
     Hex,
@@ -786,19 +789,14 @@ function makeColourObjectHsl(
   },
 ) {
   const Hex = colourSpace.convertHslStringToHex(hslValue);
-  // if (state) {
-  //   const foundMap = state.colourMap && Hex.length === 7 ? state.colourMap.get(Hex) : undefined;
-  //   if (foundMap !== undefined) {
-  //     return foundMap;
-  //   }
-  // }
   const HSL = hslValue;
   const RGB = colourSpace.convertHextoRgbString(Hex);
   const Luminance = luminance.convertHexToLuminancePercent(Hex);
   const luminanceFloat = luminance.convertHexToLuminance(Hex);
   const Black = `${contrast.getContrastRatio2Dp([0, luminanceFloat])}`;
   const White = `${contrast.getContrastRatio2Dp([1, luminanceFloat])}`;
-  const Name = state.recentColour?.Name || Hex;
+  const stateName = state.recentColour?.Name;
+  const Name = stateName !== undefined && !valueIsHex(`${stateName}`) ? `${stateName}` : Hex;
   return {
     luminanceFloat,
     Hex,
