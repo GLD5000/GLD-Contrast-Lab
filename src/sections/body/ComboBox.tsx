@@ -44,7 +44,7 @@ export default function ComboBox() {
     // dispatchColourInput({ type: 'CLEAR_TEXT', payload: {} });
   }
   function handleClickMatch() {
-    console.log('MATCH_LUMINANCE');
+    // console.log('MATCH_LUMINANCE');
     if (recentColour?.Hex !== undefined)
       dispatchColourInput({ type: 'MATCH_LUMINANCE', payload: { textInput: `${recentColour.Hex}` } });
   }

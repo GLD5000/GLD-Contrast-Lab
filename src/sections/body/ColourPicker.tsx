@@ -23,7 +23,7 @@ export default function ColourPicker() {
   function handleInput(e: MouseEvent<HTMLInputElement>) {
     if (hasFocus) {
       const newValue = e.currentTarget.value;
-      console.log(newValue);
+      // console.log(newValue);
       setCurrentValue(newValue);
       dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: newValue } });
     }

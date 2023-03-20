@@ -192,7 +192,7 @@ function useData() {
         const returnedColours = state.colourMap ? state.colourMap : new Map();
         const { joinedMap: newMap, stringOut } =
           createMap(processedArray, state, processedText, returnedColours) || undefined;
-        console.log('stringOut:', stringOut);
+        // console.log('stringOut:', stringOut);
         if (hasRecentColour) {
           const preset = getModePreset(state.mode);
           const presetText = `${preset}​${stringOut.replace(`​`, '').replace(preset, '')}`;
@@ -558,8 +558,8 @@ function processText(
   const isEmpty = text === '';
   const hasNoSpaces = noCommaSpaceText.search(/\s/) === -1;
   const noSpaceAtEnd = text[text.length - 1].search(/\s/) === -1;
-  const hasRecent = state.recentColour !== undefined;
-  console.log('hasRecent:', hasRecent);
+  // const hasRecent = state.recentColour !== undefined;
+  // console.log('hasRecent:', hasRecent);
   if (isEmpty) {
     return emptyTextProcess(state);
   }
@@ -575,7 +575,7 @@ function processText(
 }
 
 function multiProcess(text: string) {
-  console.log('multiProcess');
+  // console.log('multiProcess');
   const splitText = text.replaceAll(', ', ',').split(/\s/);
 
   const { processedTextArray, processedArray } = splitText.reduce(hexReducer, {
@@ -584,7 +584,7 @@ function multiProcess(text: string) {
   });
 
   if (processedTextArray.length === processedArray.length) {
-    console.log('name');
+    // console.log('name');
   }
 
   const processedText = processedTextArray.join(' ');
@@ -617,7 +617,7 @@ function multiRecentProcess(
       | undefined;
   },
 ) {
-  console.log('multiRecentProcess');
+  // console.log('multiRecentProcess');
 
   const { mode } = state;
   const splitText = text.replaceAll(', ', ',').split(/\s/);
@@ -633,7 +633,7 @@ function multiRecentProcess(
     const name = processedTextArray.length >= 1 ? processedTextArray.at(-1) : recentValue.Hex;
     recentValue.Name = name || '';
   }
-  console.log(processedTextArray, processedArray, lastElement);
+  // console.log(processedTextArray, processedArray, lastElement);
   const processedText = processedTextArray.join(' ');
   const suffixedText = processedText.length > 0 ? `${processedText} ${lastElement}` : `${lastElement}`;
   const textValue = recentValue ? getRecentTextField(recentValue, mode) : suffixedText;
@@ -666,7 +666,7 @@ function singleTextProcess(
       | undefined;
   },
 ) {
-  console.log('singleTextProcess');
+  // console.log('singleTextProcess');
   // if (state.recentColour){
   const recentValue = getRecentColour(text, state);
   if (recentValue !== undefined) {
@@ -842,7 +842,7 @@ function createMap(
   oldMap: Map<string, { [key: string]: string | number }>,
 ) {
   const names = processedText.split(' ');
-  console.log(names);
+  // console.log(names);
   if (!hexArray || !state) return { joinedMap: oldMap, stringOut: processedText };
   const filteredArray = hexArray.filter(valueIsHex);
   const arrayLength = names.length;
@@ -851,8 +851,8 @@ function createMap(
   const buildArray: Iterable<readonly [string, { [key: string]: string | number }]> | null = filteredArray.map(
     (hex, index) => {
       const atIndex = getAtIndex(index);
-      console.log('atIndex:', atIndex);
-      console.log('names[atIndex]:', names[atIndex]);
+      // console.log('atIndex:', atIndex);
+      // console.log('names[atIndex]:', names[atIndex]);
       const colourObject = makeColourObject(hex, state, names[atIndex]);
       names[atIndex] = '';
       return [hex, colourObject];
