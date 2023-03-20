@@ -174,7 +174,7 @@ function useData() {
 
         if (isNameMode) {
           const textWithoutName = textReceived
-            ? textReceived.replace('Name:', '').replaceAll(/[\s]/g, '').slice(0, 22)
+            ? textReceived.replace('Name:', '').replaceAll(/[\s]/g, '').slice(0, 20)
             : '';
           const returnObject = { ...state, textInput: textWithoutName ? `Name: ${textWithoutName}` : 'Name: ' };
 
@@ -189,15 +189,13 @@ function useData() {
         }
 
         const { processedText, processedArray, recent } = processText(textReceived || '', state);
-        const returnedColours = state.colourMap ? [...state.colourMap.keys()] : [];
-        const joinedArrays = returnedColours ? [...returnedColours, ...processedArray] : processedArray;
-        const newMap = createMap(joinedArrays, state) || undefined;
-        // console.log(processedText, isSubmit ? `${processedText} ` : processedText || '', recent, newMap)
-
+        const returnedColours = state.colourMap ? state.colourMap : new Map();
+        const { joinedMap: newMap, stringOut } =
+          createMap(processedArray, state, processedText, returnedColours) || undefined;
+        console.log('stringOut:', stringOut);
         if (hasRecentColour) {
           const preset = getModePreset(state.mode);
-          // console.log('preset:', preset);
-          const presetText = `${preset}​${processedText.replace(`​`, '').replace(preset, '')}`;
+          const presetText = `${preset}​${stringOut.replace(`​`, '').replace(preset, '')}`;
           const returnValue = {
             ...state,
             textInput: isSubmit ? `${presetText} ` : presetText || '',
@@ -211,7 +209,7 @@ function useData() {
         }
         const returnValue = {
           ...state,
-          textInput: isSubmit ? `${processedText} ` : processedText || '',
+          textInput: isSubmit ? `${stringOut} ` : stringOut || '',
           recentColour: recent,
           colourMap: newMap,
         };
@@ -227,12 +225,12 @@ function useData() {
 
         const newText = state.textInput ? `${state.textInput}\t` : action.payload.textInput || '';
         const { processedText, processedArray, recent } = processText(newText || action.payload.textInput || '', state);
-        const returnedColours = state.colourMap ? [...state.colourMap.keys()] : [];
-        const joinedArrays = returnedColours ? [...returnedColours, ...processedArray] : processedArray;
-        const newMap = createMap(joinedArrays, state) || undefined;
+        const returnedColours = state.colourMap ? state.colourMap : new Map();
+        const { joinedMap: newMap, stringOut } =
+          createMap(processedArray, state, processedText, returnedColours) || undefined;
         const returnValue = {
           ...state,
-          textInput: processedText || '',
+          textInput: stringOut || '',
           recentColour: recent,
           colourMap: newMap,
         };
@@ -557,6 +555,7 @@ function processText(
   const hasNoSpaces = noCommaSpaceText.search(/\s/) === -1;
   const noSpaceAtEnd = text[text.length - 1].search(/\s/) === -1;
   const hasRecent = state.recentColour !== undefined;
+  console.log('hasRecent:', hasRecent);
   if (isEmpty) {
     return emptyTextProcess(state);
   }
@@ -565,7 +564,6 @@ function processText(
     return singleTextProcess(noCommaSpaceText, state);
   }
 
-  console.log('hasRecent:', hasRecent);
   if (noSpaceAtEnd) {
     return multiRecentProcess(text, state);
   }
@@ -627,9 +625,11 @@ function multiRecentProcess(
     processedTextArray: [],
     processedArray: [],
   });
-  if (processedTextArray.length === processedArray.length) {
-    console.log('name multiRecentProcess');
+  if (recentValue !== undefined) {
+    const name = processedTextArray.length >= 1 ? processedTextArray.at(-1) : recentValue.Hex;
+    recentValue.Name = name || '';
   }
+  console.log(processedTextArray, processedArray, lastElement);
   const processedText = processedTextArray.join(' ');
   const suffixedText = processedText.length > 0 ? `${processedText} ${lastElement}` : `${lastElement}`;
   const textValue = recentValue ? getRecentTextField(recentValue, mode) : suffixedText;
@@ -665,6 +665,11 @@ function singleTextProcess(
   console.log('singleTextProcess');
   // if (state.recentColour){
   const recentValue = getRecentColour(text, state);
+  if (recentValue !== undefined) {
+    const name = recentValue.Hex || '';
+    recentValue.Name = name;
+  }
+
   const textValue = text;
   return { processedText: `${textValue}`, processedArray: [], recent: recentValue };
   // }
@@ -725,9 +730,12 @@ function makeColourObject(
         >
       | undefined;
   },
+  name?: string | undefined,
 ) {
+  const slicedNewName = name?.slice(0, 20) || undefined;
   const foundMap = state.colourMap && hexValue.length === 7 ? state.colourMap.get(hexValue) : undefined;
   if (foundMap !== undefined) {
+    if (slicedNewName) foundMap.Name = slicedNewName;
     return foundMap;
   }
 
@@ -738,7 +746,7 @@ function makeColourObject(
   const Luminance = luminance.convertHexToLuminancePercent(hexValue);
   const Black = `${contrast.getContrastRatio2Dp([0, luminanceFloat])}`;
   const White = `${contrast.getContrastRatio2Dp([1, luminanceFloat])}`;
-  const Name = state.recentColour?.Name || '';
+  const Name = slicedNewName || state.recentColour?.Name || Hex;
   const returnObject = {
     luminanceFloat,
     Hex,
@@ -790,7 +798,7 @@ function makeColourObjectHsl(
   const luminanceFloat = luminance.convertHexToLuminance(Hex);
   const Black = `${contrast.getContrastRatio2Dp([0, luminanceFloat])}`;
   const White = `${contrast.getContrastRatio2Dp([1, luminanceFloat])}`;
-  const Name = state.recentColour?.Name || '';
+  const Name = state.recentColour?.Name || Hex;
   return {
     luminanceFloat,
     Hex,
@@ -828,22 +836,31 @@ function createMap(
         >
       | undefined;
   },
+  processedText: string,
+  oldMap: Map<string, { [key: string]: string | number }>,
 ) {
-  if (!hexArray || !state) return undefined;
+  const names = processedText.split(' ');
+  if (!hexArray || !state) return { joinedMap: oldMap, stringOut: processedText };
   const filteredArray = hexArray.filter(valueIsHex);
-  if (!filteredArray || filteredArray.length === 0) return undefined;
+  const filteredArrayLength = filteredArray.length;
+  if (!filteredArray || filteredArrayLength === 0) return { joinedMap: oldMap, stringOut: processedText };
+  const getAtIndex = (index: number) => filteredArrayLength - (filteredArrayLength - index);
   const buildArray: Iterable<readonly [string, { [key: string]: string | number }]> | null = filteredArray.map(
-    (hex) => {
-      const colourObject = makeColourObject(hex, state);
+    (hex, index) => {
+      const atIndex = getAtIndex(index);
+      console.log('atIndex:', atIndex);
+      console.log('names[atIndex]:', names[atIndex]);
+      const colourObject = makeColourObject(hex, state, names[atIndex]);
+      names[atIndex] = '';
       return [hex, colourObject];
     },
   );
-  if (buildArray === undefined) return undefined;
-  const mapValue: Map<string, { [key: string]: string | number }> | undefined = buildArray
-    ? new Map(buildArray)
-    : undefined;
-  if (mapValue) setSessionStorageMap(mapValue);
-  return mapValue;
+  if (buildArray === undefined) return { joinedMap: oldMap, stringOut: processedText };
+  const mapValue: Map<string, { [key: string]: string | number }> = buildArray ? new Map(buildArray) : new Map();
+  const joinedMap = oldMap ? new Map([...oldMap, ...mapValue]) : mapValue;
+  if (joinedMap) setSessionStorageMap(joinedMap);
+  const stringOut = names.join('');
+  return { joinedMap, stringOut };
 }
 
 function addToMap(
