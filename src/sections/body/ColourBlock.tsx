@@ -1,14 +1,16 @@
 import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
-import { colourSpace } from '../../utilities/colour/colourSpace';
-import { luminance } from '../../utilities/colour/luminance';
+import { useColourInputContext } from '../../contexts/ColourInputProvider';
 
-function getColourString(hexCode: string, mode: string) {
-  if (mode === 'Hex') return `Hex\r\n${hexCode.slice(1)}`;
+function getColourString(objectIn: { [key: string]: string | number }, mode: string) {
+  if (objectIn === undefined) return undefined;
+  const { Hex, Luminance, Name, HSL, RGB } = objectIn;
 
   const colourStringCallbacks: { [key: string]: string } = {
-    Luminance: `Lum\r\n${luminance.convertHexToLuminancePercent(hexCode)}`,
-    HSL: colourSpace.convertHexToHslStringLb(hexCode),
-    RGB: colourSpace.convertHextoRgbStringLb(hexCode),
+    Hex: `Hex\r\n${`${Hex}`.slice(1)}`,
+    Name: `${Name}`,
+    Luminance: `Lum\r\n${Luminance}`,
+    HSL: `${HSL}`,
+    RGB: `${RGB}`,
   };
   return colourStringCallbacks[mode];
 }
@@ -39,15 +41,17 @@ export default function ColourBlock({
   borderColour: string;
 }) {
   const { showRatio, showPoor, colourMode, dispatchColourBlocks } = useColourBlocksContext();
+  const { colourMap } = useColourInputContext();
   const poorContrast = contrastRatio < 3;
   if (!backgroundColour || !textColour) return null;
-
+  const colourObject = colourMap?.get(backgroundColour);
   function handleClickColourMode() {
     const nextMode: { [key: string]: string } = {
       Hex: 'Luminance',
       Luminance: 'HSL',
       HSL: 'RGB',
-      RGB: 'Hex',
+      RGB: 'Name',
+      Name: 'Hex',
     };
 
     dispatchColourBlocks({ colourMode: nextMode[colourMode] });
@@ -66,10 +70,15 @@ export default function ColourBlock({
     color: poorContrast && showPoor === false ? 'transparent' : textColour,
     borderColor: autoColour || poorContrast ? 'transparent' : borderColour,
   };
-  const colourString = autoColour
-    ? getColourString(backgroundColour, colourMode)
-    : `Hex\r\n${backgroundColour.slice(1)}`;
-  const returnContent = getContent(showRatio, contrastRatio, contrastRating, autoColour, colourString);
+  const colourString =
+    autoColour && colourObject ? getColourString(colourObject, colourMode) : `Hex\r\n${backgroundColour.slice(1)}`;
+  const returnContent = getContent(
+    showRatio,
+    contrastRatio,
+    contrastRating,
+    autoColour,
+    colourString || backgroundColour,
+  );
   const border = autoColour ? 'border-none' : 'border-2';
   return (
     <button
