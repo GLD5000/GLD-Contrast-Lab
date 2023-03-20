@@ -57,10 +57,20 @@ export default function ComboBox() {
             <h2 className="m-0 p-0 text-2xl font-bold">Add Colours</h2>
           </label>
           <p className="mt-2 mb-8 text-lg">Add, Edit and Delete</p>
-          <p className="m-0">Use the colour picker and slider to choose and adjust colours.</p>
-          <p className="m-0">Batch add colours by pasting them into the text box.</p>
-          <p className="m-0">Edit your colours by clicking them and using the colour picker above. </p>
-          <p className="m-0">Use &apos;Delete All&apos; or &apos;X&apos; to delete colours.</p>
+          <ul className=" list-inside list-disc">
+            <li key="input-list-a" id="input-list-a" className="m-0 mb-1">
+              Use the colour picker and slider to choose and adjust colours.{' '}
+            </li>
+            <li key="input-list-b" id="input-list-b" className="m-0 mb-1">
+              Batch add colours by pasting them into the text box.
+            </li>
+            <li key="input-list-c" id="input-list-c" className="m-0 mb-1">
+              Edit your colours by clicking them and using the colour picker above.{' '}
+            </li>
+            <li key="input-list-d" id="input-list-d" className="m-0 mb-1">
+              Use &apos;Delete All&apos; or &apos;X&apos; to delete colours.
+            </li>
+          </ul>
         </div>
 
         <div className="flex flex-row flex-wrap justify-center gap-2">

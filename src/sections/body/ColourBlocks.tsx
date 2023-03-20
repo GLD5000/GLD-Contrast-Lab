@@ -77,8 +77,14 @@ export default function ColourBlocks() {
         <div className="mr-auto grid place-items-start">
           <h2 className=" m-0 text-2xl font-bold">Compare Colours</h2>
           <p className="mt-2 mb-8 text-lg">Customise and Analyse</p>
-          <p className="m-0">Pick your colours to compare in Hex, RGB, HSL or Relative Luminance. </p>
-          <p className="m-0">Choose to see Contrast Ratios or Contrast Ratings (compliant with WCAG 2.1 guidance).</p>
+          <ul className=" list-inside list-disc">
+            <li key="blocks-list-a" id="blocks-list-a" className="m-0 mb-1">
+              Pick your colours to compare in Hex, RGB, HSL or Relative Luminance.{' '}
+            </li>
+            <li key="blocks-list-b" id="blocks-list-b" className="m-0 mb-1">
+              Choose to see Contrast Ratios or Contrast Ratings (compliant with WCAG 2.1 guidance).
+            </li>
+          </ul>
         </div>
         {colourBlocks}
       </section>
