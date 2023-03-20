@@ -838,11 +838,12 @@ function createMap(
   oldMap: Map<string, { [key: string]: string | number }>,
 ) {
   const names = processedText.split(' ');
+  console.log(names);
   if (!hexArray || !state) return { joinedMap: oldMap, stringOut: processedText };
   const filteredArray = hexArray.filter(valueIsHex);
-  const filteredArrayLength = filteredArray.length;
-  if (!filteredArray || filteredArrayLength === 0) return { joinedMap: oldMap, stringOut: processedText };
-  const getAtIndex = (index: number) => filteredArrayLength - (filteredArrayLength - index);
+  const arrayLength = names.length;
+  if (!filteredArray || filteredArray.length === 0) return { joinedMap: oldMap, stringOut: processedText };
+  const getAtIndex = (index: number) => arrayLength - (filteredArray.length - index);
   const buildArray: Iterable<readonly [string, { [key: string]: string | number }]> | null = filteredArray.map(
     (hex, index) => {
       const atIndex = getAtIndex(index);
