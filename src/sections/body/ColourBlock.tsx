@@ -1,13 +1,23 @@
 import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
 import { useColourInputContext } from '../../contexts/ColourInputProvider';
 
+function breakName(input: string) {
+  if (input.length < 10) return input;
+  if (input.slice(0, 9).includes('-')) return input;
+  const indexUpper = input.search(/[A-Z]/);
+  console.log('indexUpper:', indexUpper);
+  if (indexUpper > 4 && indexUpper < 10) return `${`${input}`.slice(0, indexUpper)}-${`${input}`.slice(indexUpper)}`;
+
+  return `${`${input}`.slice(0, 8)}-${`${input}`.slice(8)}`;
+}
+
 function getColourString(objectIn: { [key: string]: string | number }, mode: string) {
   if (objectIn === undefined) return undefined;
   const { Hex, Luminance, Name, HSL, RGB } = objectIn;
-
+  const breakableName = breakName(`${Name}`);
   const colourStringCallbacks: { [key: string]: string } = {
     Hex: `Hex\r\n${`${Hex}`.slice(1)}`,
-    Name: `${Name}`,
+    Name: `${breakableName}`,
     Luminance: `Lum\r\n${Luminance}`,
     HSL: `${HSL}`,
     RGB: `${RGB}`,
