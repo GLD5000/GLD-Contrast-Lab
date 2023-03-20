@@ -174,7 +174,7 @@ function useData() {
 
         if (isNameMode) {
           const textWithoutName = textReceived
-            ? textReceived.replace('Name:', '').replaceAll(/[\s]/g, '').slice(0, 20)
+            ? textReceived.replace('Name:', '').replaceAll(/[\s]/g, '').slice(0, 18)
             : '';
           const returnObject = { ...state, textInput: textWithoutName ? `Name: ${textWithoutName}` : 'Name: ' };
 
@@ -550,6 +550,10 @@ function processText(
       | undefined;
   },
 ) {
+  const noQuotesText = text
+    .replaceAll(/['":]/g, '')
+    .replaceAll('),', ')')
+    .replaceAll(/(,[\r\n]+)/g, '\r\n');
   const noCommaSpaceText = text.replaceAll(', ', ',').replaceAll(`​`, '');
   const isEmpty = text === '';
   const hasNoSpaces = noCommaSpaceText.search(/\s/) === -1;
@@ -567,7 +571,7 @@ function processText(
   if (noSpaceAtEnd) {
     return multiRecentProcess(text, state);
   }
-  return multiProcess(text);
+  return multiProcess(noQuotesText);
 }
 
 function multiProcess(text: string) {
@@ -732,7 +736,7 @@ function makeColourObject(
   },
   name?: string | undefined,
 ) {
-  const slicedNewName = name?.slice(0, 20) || undefined;
+  const slicedNewName = name?.slice(0, 18) || undefined;
   const foundMap = state.colourMap && hexValue.length === 7 ? state.colourMap.get(hexValue) : undefined;
   if (foundMap !== undefined) {
     if (slicedNewName) foundMap.Name = slicedNewName;
