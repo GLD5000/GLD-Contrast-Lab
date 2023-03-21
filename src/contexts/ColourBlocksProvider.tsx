@@ -20,7 +20,7 @@ const initialiserA: {
     }>
   >;
 } = {
-  colourMode: 'Hex',
+  colourMode: 'Name',
   showRatio: false,
   showPoor: false,
   limit: 'All Colours',
@@ -36,7 +36,7 @@ const initialiserB: {
   limit: string;
   visibleSet: Set<string>;
 } = {
-  colourMode: 'Hex',
+  colourMode: 'Name',
   showRatio: false,
   showPoor: false,
   limit: 'All Colours',
