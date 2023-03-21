@@ -557,7 +557,7 @@ function processText(
   const noCommaSpaceText = text.replaceAll(', ', ',').replaceAll(`​`, '');
   const isEmpty = text === '';
   const hasNoSpaces = noCommaSpaceText.search(/\s/) === -1;
-  const noSpaceAtEnd = text[text.length - 1].search(/\s/) === -1;
+  const noSpaceAtEnd = text[text.length - 1].search(/\s/) === -1 && text.search(/[\r\n]/) === -1;
   // const hasRecent = state.recentColour !== undefined;
   // console.log('hasRecent:', hasRecent);
   if (isEmpty) {
@@ -571,11 +571,11 @@ function processText(
   if (noSpaceAtEnd) {
     return multiRecentProcess(text, state);
   }
-  return multiProcess(noQuotesText);
+  return multiProcess(`${noQuotesText}\r\n`);
 }
 
 function multiProcess(text: string) {
-  // console.log('multiProcess');
+  console.log('multiProcess');
   const splitText = text.replaceAll(', ', ',').split(/\s/);
 
   const { processedTextArray, processedArray } = splitText.reduce(hexReducer, {
@@ -617,7 +617,7 @@ function multiRecentProcess(
       | undefined;
   },
 ) {
-  // console.log('multiRecentProcess');
+  console.log('multiRecentProcess');
 
   const { mode } = state;
   const splitText = text.replaceAll(', ', ',').split(/\s/);
