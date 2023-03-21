@@ -50,7 +50,7 @@ export default function ShowButtons() {
         <button
           type="button"
           onClick={handleClickColourMode}
-          className="w-28 shrink-0 rounded bg-neutral-300 p-2 text-sm  text-current  hover:bg-bg-txt-lo-lt hover:text-bg-var-lt hover:transition dark:bg-bg-deco-dk hover:dark:bg-bg-txt-dk hover:dark:text-bg-var-dk"
+          className="w-28 shrink-0 rounded bg-neutral-300 p-2 text-sm  text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
         >
           {colourModeLabel}
         </button>
@@ -58,21 +58,21 @@ export default function ShowButtons() {
         <button
           type="button"
           onClick={handleClickRatio}
-          className="w-28 shrink-0 rounded bg-neutral-300 p-2 text-sm  text-current  hover:bg-bg-txt-lo-lt hover:text-bg-var-lt hover:transition dark:bg-bg-deco-dk hover:dark:bg-bg-txt-dk hover:dark:text-bg-var-dk"
+          className="w-28 shrink-0 rounded bg-neutral-300 p-2 text-sm  text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
         >
           {ratioLabel}
         </button>
         <button
           type="button"
           onClick={handleClickPoor}
-          className="w-28 shrink-0 rounded bg-neutral-300 p-2 text-sm  text-current  hover:bg-bg-txt-lo-lt hover:text-bg-var-lt hover:transition dark:bg-bg-deco-dk hover:dark:bg-bg-txt-dk hover:dark:text-bg-var-dk"
+          className="w-28 shrink-0 rounded bg-neutral-300 p-2 text-sm  text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
         >
           {poorLabel}
         </button>
         <button
           type="button"
           onClick={handleClickLimit}
-          className="w-28 shrink-0 rounded bg-neutral-300 p-2 text-sm  text-current  hover:bg-bg-txt-lo-lt hover:text-bg-var-lt hover:transition dark:bg-bg-deco-dk hover:dark:bg-bg-txt-dk hover:dark:text-bg-var-dk"
+          className="w-28 shrink-0 rounded bg-neutral-300 p-2 text-sm  text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
         >
           {limitLabel}
         </button>

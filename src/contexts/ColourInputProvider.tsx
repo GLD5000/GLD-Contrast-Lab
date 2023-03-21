@@ -233,6 +233,7 @@ function useData() {
           textInput: stringOut || '',
           recentColour: recent,
           colourMap: newMap,
+          mode: 'Name',
         };
         return returnValue;
       }

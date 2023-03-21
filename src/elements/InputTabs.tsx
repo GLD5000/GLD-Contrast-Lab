@@ -22,7 +22,7 @@ export default function InputTabs({ tab, setTab }: { tab: string; setTab: Dispat
           key="help"
           text="Help"
           clickFunction={handleClick}
-          className="   w-40 grow rounded-none bg-bg-var-lt py-1 px-2 text-current  hover:transition active:bg-slate-300"
+          className="   w-40 grow rounded-none bg-bg-var py-1 px-2 text-current  hover:transition active:bg-slate-300"
           inactiveClasses="     dark:bg-bg-dk dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
           currentTab={tab}
           activeClasses=" shadow-current shadow-bottom dark:bg-bg-var-dk bg-neutral-50 dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
@@ -34,7 +34,7 @@ export default function InputTabs({ tab, setTab }: { tab: string; setTab: Dispat
           key="add-colours"
           text="Add"
           clickFunction={handleClick}
-          className=" w-40 grow rounded-none bg-bg-var-lt py-1 px-2 text-current  hover:transition active:bg-slate-300"
+          className=" w-40 grow rounded-none bg-bg-var py-1 px-2 text-current  hover:transition active:bg-slate-300"
           inactiveClasses="  dark:bg-bg-dk dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
           currentTab={tab}
           activeClasses=" shadow-current shadow-bottom dark:bg-bg-var-dk bg-neutral-50 dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
@@ -45,7 +45,7 @@ export default function InputTabs({ tab, setTab }: { tab: string; setTab: Dispat
           key="compare-matrix"
           text="Compare"
           clickFunction={handleClick}
-          className=" w-40 grow rounded-none bg-bg-var-lt py-1 px-2 text-current  hover:transition active:bg-slate-300"
+          className=" w-40 grow rounded-none bg-bg-var py-1 px-2 text-current  hover:transition active:bg-slate-300"
           inactiveClasses="  dark:bg-bg-dk dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
           currentTab={tab}
           activeClasses=" shadow-current shadow-bottom dark:bg-bg-var-dk bg-neutral-50 dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
@@ -56,7 +56,7 @@ export default function InputTabs({ tab, setTab }: { tab: string; setTab: Dispat
         key="colour-info"
         text="Colour Info"
         clickFunction={handleClick}
-        className=" w-40 grow rounded-none bg-bg-var-lt py-1 px-2 text-current  hover:transition active:bg-slate-300"
+        className=" w-40 grow rounded-none bg-bg-var py-1 px-2 text-current  hover:transition active:bg-slate-300"
         inactiveClasses="  dark:bg-bg-dk dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
         currentTab={tab}
         activeClasses=" shadow-current shadow-bottom dark:bg-bg-var-dk bg-neutral-50 dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"

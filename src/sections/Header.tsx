@@ -9,7 +9,7 @@ export default function Header({
   colourTheme: boolean;
 }) {
   return (
-    <header className="sticky top-0 left-0 right-0 z-[999] grid h-fit w-screen flex-shrink-0 flex-grow-0 grid-cols-frAutoFr content-center border-b bg-bg-var-lt dark:bg-bg-var-dk">
+    <header className="sticky top-0 left-0 right-0 z-[999] grid h-fit w-screen flex-shrink-0 flex-grow-0 grid-cols-frAutoFr content-center border-b bg-bg dark:bg-bg-dk">
       <nav className=" col-start-2 flex w-body min-w-body max-w-body flex-wrap items-center justify-between  ">
         <div className="flex h-16 flex-wrap items-center gap-2 p-2">
           <a href="https://gld-portfolio.vercel.app/" target="_blank" rel="noreferrer">
@@ -30,7 +30,7 @@ export default function Header({
             id="colour-theme-button"
             name="Dark Mode Button"
             className="rounded text-xs"
-            activeClasses="dark:hover:bg-bg-var-lt dark:hover:text-neutral-900 hover:text-neutral-50 hover:bg-neutral-800"
+            activeClasses="dark:hover:bg-bg-var dark:hover:text-neutral-900 hover:text-neutral-50 hover:bg-neutral-800"
             conditionalClasses=""
           /> */}
           <SvgButton

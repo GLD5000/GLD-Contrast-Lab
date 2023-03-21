@@ -49,7 +49,7 @@ function getContent(
         key={uniqueKey}
         id={uniqueKey}
         content={name}
-        className="flex  h-8 w-28 flex-row items-center justify-between rounded-full border border-bg-txt-lt p-1 text-center text-sm dark:border-neutral-300"
+        className="flex  h-8 w-28 flex-row items-center justify-between rounded-full border border-txt-main p-1 text-center text-sm dark:border-neutral-300"
         style={{ backgroundColor: name, color: autoTextColourFromHex(name) }}
         closeFunction={closeHandler}
         tagFunction={tagHandler}

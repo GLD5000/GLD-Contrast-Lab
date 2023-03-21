@@ -236,7 +236,7 @@ export default function InfoTable() {
         </ul>
       </div>
       <div className="relative grid w-full overflow-x-auto">
-        <div className="mx-auto flex w-fit grow  flex-col gap-0 overflow-clip rounded border border-bg-txt-lt bg-bg-lt text-center text-bg-txt-lt dark:border-bg-txt-dk dark:bg-bg-var-dk dark:text-bg-txt-dk">
+        <div className="mx-auto flex w-fit grow  flex-col gap-0 overflow-clip rounded border border-txt-main bg-bg text-center text-txt-main dark:border-txt-main-dk dark:bg-bg-var-dk dark:text-txt-main-dk">
           {tableMarkDown}
         </div>
       </div>
