@@ -403,6 +403,7 @@ function submitRecentColour(stateIn: {
     textInput: getRecentTextField(recentState, stateIn.mode),
     previousColour: setPreviousLuminance(stateIn.recentColour),
     colourMap: newMap,
+    mode: 'Name',
   };
   return returnValue;
 }
@@ -503,7 +504,7 @@ function getRecentColour(
   const testedProcessedText = valueIsHex(text) ? text : processColourStringLong(text);
   const recentColour = valueIsHex(testedProcessedText)
     ? makeColourObject(testedProcessedText, state)
-    : state.recentColour; // broken does not handle hsl / rgb properly
+    : state.recentColour;
   return recentColour;
 }
 
