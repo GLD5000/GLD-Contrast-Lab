@@ -17,7 +17,7 @@ function App() {
 
   return (
     <section id="theme-wrapper" className={colourTheme ? 'dark' : undefined}>
-      <section className="flex h-screen flex-col overflow-x-hidden overflow-y-scroll border-border bg-bg-var text-txt-main dark:border-border-dk dark:bg-bg-dk dark:text-txt-main-dk ">
+      <section className="flex h-screen flex-col overflow-x-hidden overflow-y-scroll border-border bg-bg text-txt-main dark:border-border-dk dark:bg-bg-dk dark:text-txt-main-dk ">
         <Header toggleColourTheme={toggleColourTheme} colourTheme={colourTheme} />
         <Body />
         <Footer />
