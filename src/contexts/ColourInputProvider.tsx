@@ -172,6 +172,10 @@ function useData() {
         const isSubmit = /\s/.test(textReceived?.replaceAll(/(, )|(: )/g, '')?.at(-1) || '');
         if (isRelativeLuminanceMode) return handleRlumUpdate(state, action.payload);
 
+        if (textReceived && isSubmit) {
+          const recentColourReturn = submitRecentColour(state);
+          if (recentColourReturn !== null) return recentColourReturn;
+        }
         if (isNameMode) {
           const textWithoutName = textReceived
             ? textReceived.replace('Name:', '').replaceAll(/[\s]/g, '').slice(0, 18)
@@ -181,11 +185,6 @@ function useData() {
           if (returnObject.recentColour) returnObject.recentColour.Name = textWithoutName || '';
 
           return returnObject;
-        }
-
-        if (textReceived && isSubmit) {
-          const recentColourReturn = submitRecentColour(state);
-          if (recentColourReturn !== null) return recentColourReturn;
         }
 
         const { processedText, processedArray, recent } = processText(textReceived || '', state);

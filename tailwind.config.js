@@ -22,7 +22,6 @@ module.exports = {
         body: 'calc(100vw - 4rem)',
       },
       colors: {
-
         'bg-var-dk': '#000000',
         'bg-dk': '#1f1f1f',
         'deco-dk': '#3d3d3d',
@@ -31,7 +30,6 @@ module.exports = {
         'txt-mid-dk': '#ababab',
         'txt-main-dk': '#ffffff',
 
-
         'txt-main': '#000000',
         'txt-mid': '#474747',
         'txt-low': '#636363',
@@ -39,8 +37,6 @@ module.exports = {
         'deco': '#e0e0e0',
         'bg-var': '#f7f7f7',
         'bg': '#ffffff',
-        
-
       },
       boxShadow: {
         bottom: '1px 3px 0px -2px rgba(0, 0, 0, 1)',
