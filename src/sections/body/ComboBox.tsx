@@ -102,7 +102,7 @@ export default function ComboBox() {
             {recentColour !== undefined && textInput.length > 0 && (
               <button
                 id="clear-btn"
-                className="active:deco absolute right-2 top-2 w-16 bg-deco py-2 px-4  text-xs text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
+                className="active:deco absolute right-2 top-2 w-16 bg-deco p-2  text-xs text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
                 type="button"
                 onClick={handleClickClear}
               >
@@ -115,7 +115,7 @@ export default function ComboBox() {
               previousContrast !== '1' && (
                 <button
                   id="match-btn"
-                  className="active:deco absolute right-2 top-12 w-16 bg-deco py-2 px-4  text-xs text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
+                  className="active:deco absolute right-2 top-12 w-16 bg-deco p-2  text-xs text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
                   type="button"
                   onClick={handleClickMatch}
                 >
@@ -126,7 +126,7 @@ export default function ComboBox() {
             {recentColour !== undefined && textInput.length > 0 && (
               <button
                 id="colourspace-btn"
-                className="active:deco absolute right-2 bottom-2 w-16 bg-deco py-2 px-4  text-xs text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
+                className="active:deco absolute right-2 bottom-2 w-16 bg-deco p-2  text-center text-xs text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
                 type="button"
                 onClick={handleClickMode}
               >

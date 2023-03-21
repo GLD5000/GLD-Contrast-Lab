@@ -16,7 +16,7 @@ module.exports = {
         body: '360px',
       },
       maxWidth: {
-        body: '1350px',
+        body: '1250px',
       },
       width: {
         body: 'calc(100vw - 4rem)',
@@ -33,10 +33,11 @@ module.exports = {
         'txt-main': '#000000',
         'txt-mid': '#474747',
         'txt-low': '#636363',
-        'border': '#8c8c8c',
+        'border': '#919191',
         'deco': '#e0e0e0',
-        'bg-var': '#f7f7f7',
+        'bg-var': '#fafafa',
         'bg': '#ffffff',
+                
       },
       boxShadow: {
         bottom: '1px 3px 0px -2px rgba(0, 0, 0, 1)',

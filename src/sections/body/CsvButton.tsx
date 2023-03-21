@@ -26,7 +26,7 @@ export default function CsvButton({ data, messageIn }: { data: string; messageIn
       showText
       reverse={false}
       buttonClasses={undefined}
-      className="flex justify-center gap-2 text-sm hover:bg-black hover:text-white hover:transition active:bg-slate-600 hover:dark:bg-white hover:dark:text-black"
+      className="flex h-9 justify-center gap-2 text-sm hover:bg-black hover:text-white hover:transition focus:text-white focus:transition hover:dark:bg-white hover:dark:text-black focus:dark:bg-white focus:dark:text-black"
       svgClasses="stroke-1 fill-none stroke-current"
       id="copy-table"
       name="Copy SVG Info"

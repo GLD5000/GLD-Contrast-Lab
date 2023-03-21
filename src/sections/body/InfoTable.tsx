@@ -85,7 +85,7 @@ function getButtons(tailwind: string, csv: string, setShowData: Dispatch<SetStat
       clickFunction={handleVisibilityClick}
       id="custom-visibility-btn"
       name="Customise Data"
-      className=" flex justify-center gap-2 text-sm  hover:bg-black hover:text-white hover:transition active:bg-slate-600 hover:dark:bg-white hover:dark:text-black"
+      className=" flex h-9 justify-center gap-2 text-sm hover:bg-black hover:text-white hover:transition focus:text-white focus:transition active:bg-slate-600 hover:dark:bg-white hover:dark:text-black focus:dark:bg-white focus:dark:text-black"
       type="preview"
       showText
       reverse={false}
@@ -124,7 +124,7 @@ function getVisibiltyButtons(dataColumns: Set<string>, setDataColumns: Dispatch<
       clickFunction={handleVisibilityClick}
       id={`${key}-custom-visibility-btn`}
       name={`${key} Visibility`}
-      className=" flex justify-start gap-2 pl-16 text-sm hover:bg-black hover:text-white hover:transition active:bg-slate-600 hover:dark:bg-white hover:dark:text-black"
+      className=" flex justify-start gap-2 pl-16 text-sm hover:bg-black hover:text-white hover:transition focus:text-white focus:transition hover:dark:bg-white hover:dark:text-black focus:dark:bg-white focus:dark:text-black"
       type={dataColumns.has(key) ? 'preview' : 'delete'}
       showText
       reverse={false}
