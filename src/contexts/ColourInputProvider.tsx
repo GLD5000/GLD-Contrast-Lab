@@ -550,19 +550,19 @@ function processText(
       | undefined;
   },
 ) {
+  const isEmpty = text === '';
+  if (isEmpty) {
+    return emptyTextProcess(state);
+  }
   const noQuotesText = text
     .replaceAll(/['":]/g, '')
     .replaceAll('),', ')')
     .replaceAll(/(,[\r\n]+)/g, '\r\n');
   const noCommaSpaceText = text.replaceAll(', ', ',').replaceAll(`​`, '');
-  const isEmpty = text === '';
   const hasNoSpaces = noCommaSpaceText.search(/\s/) === -1;
   const noSpaceAtEnd = text[text.length - 1].search(/\s/) === -1 && text.search(/[\r\n]/) === -1;
   // const hasRecent = state.recentColour !== undefined;
   // console.log('hasRecent:', hasRecent);
-  if (isEmpty) {
-    return emptyTextProcess(state);
-  }
 
   if (hasNoSpaces) {
     return singleTextProcess(noCommaSpaceText, state);
