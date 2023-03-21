@@ -2,8 +2,6 @@ import { Dispatch, ReactElement, MouseEvent, SetStateAction, useState } from 're
 import { useColourInputContext } from '../../contexts/ColourInputProvider';
 import SvgButton from '../../elements/SvgButton';
 import { autoTextColour } from '../../utilities/colour/autoTextColour';
-import { colourSpace } from '../../utilities/colour/colourSpace';
-import { contrast } from '../../utilities/colour/contrastRatio';
 import { luminance } from '../../utilities/colour/luminance';
 import CsvButton from './CsvButton';
 
@@ -14,30 +12,50 @@ function sortByLuminance(acc: Array<Array<string>>, curr: string) {
 }
 function tableReducer(
   acc: {
+    tailwind: string;
     csv: string;
     jsx: ReactElement[][];
     dataColumns: Set<string>;
     showData: boolean;
+    colourMap:
+      | Map<
+          string,
+          {
+            [key: string]: string | number;
+          }
+        >
+      | undefined;
   },
   curr: string,
 ): {
+  tailwind: string;
   csv: string;
   jsx: ReactElement[][];
   dataColumns: Set<string>;
   showData: boolean;
+  colourMap:
+    | Map<
+        string,
+        {
+          [key: string]: string | number;
+        }
+      >
+    | undefined;
 } {
   const classNames = 'block w-40 p-4 text-xs rounded-none';
-  const luminanceFloat = luminance.convertHexToLuminance(curr);
-
+  const currentObject = acc.colourMap?.get(curr);
+  if (currentObject === undefined) return acc;
+  const { Hex, HSL, RGB, Luminance, Black, White, Name } = currentObject;
   const valuesObject: { [key: string]: string } = {
-    Hex: curr,
-    HSL: colourSpace.convertHexToHslString(curr),
-    RGB: colourSpace.convertHextoRgbString(curr),
-    Luminance: luminance.convertHexToLuminancePercent(curr),
-    Black: `${contrast.getContrastRatio2Dp([0, luminanceFloat])}`,
-    White: `${contrast.getContrastRatio2Dp([1, luminanceFloat])}`,
+    Name: `${Name}`,
+    Hex: `${Hex}`,
+    HSL: `${HSL}`,
+    RGB: `${RGB}`,
+    Luminance: `${Luminance}`,
+    Black: `${Black}`,
+    White: `${White}`,
   };
-
+  acc.tailwind += `'${Name}': '${Hex}',\r\n`;
   const newerRow = Object.values(valuesObject).reduce(titleRowReducer, '\r\n');
   acc.csv += newerRow;
   if (acc.showData) {
@@ -54,8 +72,9 @@ function titleRowReducer(previousValue: string, currentValue: string, currentInd
   const returnValue = previousValue + (currentIndex < array.length - 1 ? `${currentValue}\t` : `${currentValue}`);
   return returnValue;
 }
-function getButtons(csv: string, setShowData: Dispatch<SetStateAction<boolean>>) {
-  const csvButton = <CsvButton key="csv-copy-btn" data={csv} />;
+function getButtons(tailwind: string, csv: string, setShowData: Dispatch<SetStateAction<boolean>>) {
+  const csvButton = <CsvButton key="csv-copy-btn" data={csv} messageIn="Copy TSV" />;
+  const twButton = <CsvButton key="tw-copy-btn" data={tailwind} messageIn="Copy TW" />;
   function handleVisibilityClick() {
     setShowData((state) => !state);
   }
@@ -80,12 +99,12 @@ function getButtons(csv: string, setShowData: Dispatch<SetStateAction<boolean>>)
       key="table-bottom-btns"
       className="flex w-full flex-row gap-2 rounded-none border border-transparent border-t-current"
     >
-      {visibilityButton} {csvButton}
+      {visibilityButton} {csvButton} {twButton}
     </div>
   );
 }
 function getVisibiltyButtons(dataColumns: Set<string>, setDataColumns: Dispatch<SetStateAction<Set<string>>>) {
-  const titles = ['Hex', 'HSL', 'RGB', 'Luminance', 'Black', 'White'];
+  const titles = ['Name', 'Hex', 'HSL', 'RGB', 'Luminance', 'Black', 'White'];
   function handleVisibilityClick(e: MouseEvent<HTMLButtonElement>) {
     const name = e.currentTarget.id.split('-')[0];
     setDataColumns((currentState) => {
@@ -122,6 +141,14 @@ function getTable(
   setDataColumns: Dispatch<SetStateAction<Set<string>>>,
   showData: boolean,
   setShowData: Dispatch<SetStateAction<boolean>>,
+  colourMap:
+    | Map<
+        string,
+        {
+          [key: string]: string | number;
+        }
+      >
+    | undefined,
 ) {
   const classNames = ' block w-40 p-2 text-sm rounded-none text-center my-auto';
   const jsxArray = [...dataColumns].map((key) => {
@@ -133,12 +160,14 @@ function getTable(
     );
   });
   const tableAccumulator = {
-    csv: 'Hex\tHSL\tRGB\tLuminance\tBlack\tWhite',
+    tailwind: '',
+    csv: 'Name\tHex\tHSL\tRGB\tLuminance\tBlack\tWhite',
     jsx: [[...jsxArray]],
     dataColumns,
     showData,
+    colourMap,
   };
-  const { csv, jsx } = colourArray.reduce(tableReducer, tableAccumulator);
+  const { tailwind, csv, jsx } = colourArray.reduce(tableReducer, tableAccumulator);
   const flexBoxes = jsx.map((x, i) => {
     const curr = x[0].key?.toString().split('-')[0] || '#000000';
     const style = i === 0 ? undefined : { backgroundColor: curr, color: autoTextColour.autoTextColourFromHex(curr) };
@@ -155,7 +184,7 @@ function getTable(
       </div>
     );
   });
-  const buttonArray = getButtons(csv, setShowData);
+  const buttonArray = getButtons(tailwind, csv, setShowData);
   if (showData === false) {
     const visibilityButtonsArray = getVisibiltyButtons(dataColumns, setDataColumns);
     flexBoxes.push(...visibilityButtonsArray);
@@ -167,11 +196,12 @@ function setInitialColumns(): Set<string> {
   const windowWidth = window.innerWidth;
   const windowKey = Math.min(6, Math.max(2, Math.floor(windowWidth / 200)));
   const dataColumnLookup: { [key: number]: string[] } = {
-    2: ['Hex', 'Luminance'],
-    3: ['Hex', 'Luminance', 'Black'],
-    4: ['Hex', 'Luminance', 'Black', 'White'],
-    5: ['Hex', 'HSL', 'Luminance', 'Black', 'White'],
-    6: ['Hex', 'HSL', 'RGB', 'Luminance', 'Black', 'White'],
+    2: ['Name', 'Luminance'],
+    3: ['Name', 'Luminance', 'Black'],
+    4: ['Name', 'Luminance', 'Black', 'White'],
+    5: ['Name', 'HSL', 'Luminance', 'Black', 'White'],
+    6: ['Name', 'HSL', 'RGB', 'Luminance', 'Black', 'White'],
+    7: ['Name', 'Hex', 'HSL', 'RGB', 'Luminance', 'Black', 'White'],
   };
 
   return new Set(dataColumnLookup[windowKey]);
@@ -188,7 +218,7 @@ export default function InfoTable() {
   window.onresize = setColumnsOnResize;
   const keysArray = [...colourMap.keys()];
   const lumSort = keysArray.reduce(sortByLuminance, []).flatMap((x) => x);
-  const tableMarkDown = getTable(lumSort, dataColumns, setDataColumns, showData, setShowData);
+  const tableMarkDown = getTable(lumSort, dataColumns, setDataColumns, showData, setShowData, colourMap);
   return (
     <section className="grid gap-4">
       <div className="mr-auto grid place-items-start">
