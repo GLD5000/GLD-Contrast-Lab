@@ -35,9 +35,9 @@ module.exports = {
         'bg-deco-dk': '#3d3d3d',
         'bg-outline-dk': '#636363',
         'brand-dk': '#2e69ff',
-        'bg-txt-lo-dk': '#bababa',
+        'bg-txt-lo-dk': '#d9d9d9',
         'bg-txt-dk': '#ffffff',
-                        
+                                
         'bg-txt-lt': '#000000',
         'bg-txt-lo-lt': '#3d3d3d',
         'brand-lt': '#2e69ff',
