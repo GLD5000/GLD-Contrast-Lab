@@ -44,7 +44,7 @@ function createColourBlockArrays(coloursArray: Set<string>) {
       <div
         key={`${backgroundColour}-${keyA}`}
         style={{ backgroundColor: backgroundColour }}
-        className=" grid gap-1 rounded border border-current p-1"
+        className=" grid gap-1 rounded-none  p-1"
       >
         <BlockVisibility hexId={keyA} />
         {rowArray}
@@ -58,8 +58,8 @@ function getColourBlocks(visibleColours: Set<string>) {
   return (
     <>
       <ShowButtons />
-      <div className="grid  w-full gap-2 overflow-auto rounded-none">
-        <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 gap-1 overflow-clip rounded">
+      <div className="grid w-full gap-2 overflow-auto rounded-none">
+        <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 overflow-clip rounded border-2 border-current">
           {returnArrays}
         </div>
       </div>

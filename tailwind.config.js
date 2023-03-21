@@ -30,23 +30,22 @@ module.exports = {
         borderLight: 'rgb(82, 82, 91)',
         backgroundDark: '#1B1B1B',
         backgroundLight: '#343434',
-        'bg-dk': '#0a0a0a',
+        'bg-dk': '#000000',
         'bg-var-dk': '#2b2b2b',
-        'bg-deco-dk': '#474747',
-        'bg-line-dk': '#5e5e5e',
+        'bg-deco-dk': '#3d3d3d',
+        'bg-outline-dk': '#636363',
         'brand-dk': '#2e69ff',
-        'bg-txt-lo-dk': '#d9d9d9',
-        'bg-txt-dk': '#f7f7f7',
-        'bgOutlineDk': '#ffffff',
-        
-        'bg-txt-lt': '#080808',
+        'bg-txt-lo-dk': '#bababa',
+        'bg-txt-dk': '#ffffff',
+                        
+        'bg-txt-lt': '#000000',
         'bg-txt-lo-lt': '#3d3d3d',
         'brand-lt': '#2e69ff',
-        'bg-outline-lt': '#919191',
+        'bg-outline-lt': '#8a8a8a',
         'bg-deco-lt': '#d1d1d1',
-        'bg-var-lt': '#fafafa',
+        'bg-var-lt': '#f5f5f5',
         'bg-lt': '#ffffff',
-        
+                
       },
       boxShadow: {
         bottom: '1px 3px 0px -2px rgba(0, 0, 0, 1)',
