@@ -78,7 +78,7 @@ export default function ColourBlock({
   const style: { [key: string]: string } = {
     // backgroundColor: backgroundColour,
     color: poorContrast && showPoor === false ? 'transparent' : textColour,
-    borderColor: autoColour || poorContrast ? 'transparent' : borderColour,
+    borderColor: autoColour || (!showPoor && poorContrast) ? 'transparent' : borderColour,
   };
   const colourString =
     autoColour && colourObject ? getColourString(colourObject, colourMode) : `Hex\r\n${backgroundColour.slice(1)}`;
@@ -89,7 +89,7 @@ export default function ColourBlock({
     autoColour,
     colourString || backgroundColour,
   );
-  const border = autoColour ? 'border-none' : 'border-2';
+  const border = poorContrast ? 'border' : 'border-2';
   return (
     <button
       type="button"

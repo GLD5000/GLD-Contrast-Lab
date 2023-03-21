@@ -20,7 +20,7 @@ function getBlockRow(backgroundColour: string, index: number, array: string[]) {
         key={`${keyA}-${keyB}`}
         backgroundColour={backgroundColour}
         textColour={bwText ? autoTextColourFromHex(backgroundColour) : textColourMod}
-        borderColour={textColourMod}
+        borderColour={textColour}
         autoColour={autoColour}
         contrastRating={contrastRating}
         contrastRatio={contrastRatio}
