@@ -88,7 +88,7 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
       <div className="flex h-12 w-full flex-row flex-wrap content-center gap-2 px-2">
         <label htmlFor="hsl-slider">
           <button
-            className="bg-bg-deco-lt py-2 px-4 text-xs hover:bg-bg-txt-lo-lt  hover:text-bg-var-lt hover:transition dark:bg-bg-deco-dk hover:dark:bg-bg-txt-lo-dk hover:dark:text-bg-var-dk"
+            className="w-16 bg-bg-deco-lt py-2 px-4 text-xs hover:bg-bg-txt-lo-lt hover:text-bg-var-lt hover:transition dark:bg-bg-deco-dk hover:dark:bg-bg-txt-dk hover:dark:text-bg-var-dk"
             type="button"
             onClick={handleTypeClick}
           >
@@ -128,19 +128,19 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
         <button
           type="button"
           id="randomise-colour"
-          className="active:bg-deco-lt mx-auto my-0  flex  w-full content-center gap-4 rounded bg-bg-deco-lt py-2 px-4 text-current hover:bg-bg-txt-lo-lt  hover:text-bg-var-lt hover:transition dark:bg-bg-deco-dk hover:dark:bg-bg-txt-lo-dk hover:dark:text-bg-var-dk"
+          className="active:bg-deco-lt mx-auto my-0  flex  w-full content-center gap-4 rounded bg-bg-deco-lt py-2 px-4 text-current hover:bg-bg-txt-lo-lt  hover:text-bg-var-lt hover:transition dark:bg-bg-deco-dk hover:dark:bg-bg-txt-dk hover:dark:text-bg-var-dk"
           onClick={handleClickRandom}
         >
-          <p className="m-auto ">Randomise</p>
+          <p className="m-auto text-sm">Randomise</p>
         </button>
 
         <button
           type="button"
           id="add-colour"
-          className="active:bg-deco-lt mx-auto my-0 flex  w-full content-center gap-4 rounded bg-bg-deco-lt py-2 px-4 text-current hover:bg-bg-txt-lo-lt  hover:text-bg-var-lt hover:transition dark:bg-bg-deco-dk hover:dark:bg-bg-txt-lo-dk hover:dark:text-bg-var-dk"
+          className="active:bg-deco-lt mx-auto my-0 flex  w-full content-center gap-4 rounded bg-bg-deco-lt py-2 px-4  text-current hover:bg-bg-txt-lo-lt  hover:text-bg-var-lt hover:transition dark:bg-bg-deco-dk hover:dark:bg-bg-txt-dk hover:dark:text-bg-var-dk"
           onClick={handleClickAdd}
         >
-          <p className="m-auto ">Submit</p>
+          <p className="m-auto text-sm">Submit</p>
         </button>
       </div>
     </div>

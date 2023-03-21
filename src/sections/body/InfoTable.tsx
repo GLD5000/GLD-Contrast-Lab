@@ -194,7 +194,7 @@ function getTable(
 }
 function setInitialColumns(): Set<string> {
   const windowWidth = window.innerWidth;
-  const windowKey = Math.min(6, Math.max(2, Math.floor(windowWidth / 200)));
+  const windowKey = Math.min(7, Math.max(2, Math.floor(windowWidth / 200)));
   const dataColumnLookup: { [key: number]: string[] } = {
     2: ['Name', 'Luminance'],
     3: ['Name', 'Luminance', 'Black'],

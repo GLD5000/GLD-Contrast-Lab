@@ -102,7 +102,7 @@ export default function ComboBox() {
             {recentColour !== undefined && textInput.length > 0 && (
               <button
                 id="clear-btn"
-                className="active:bg-deco-lt absolute right-2 top-2 w-16 bg-bg-deco-lt py-2 px-4 text-xs hover:bg-bg-txt-lo-lt  hover:text-bg-var-lt hover:transition dark:bg-bg-deco-dk hover:dark:bg-bg-txt-lo-dk hover:dark:text-bg-var-dk"
+                className="active:bg-deco-lt absolute right-2 top-2 w-16 bg-bg-deco-lt py-2 px-4  text-xs text-current  hover:bg-bg-txt-lo-lt hover:text-bg-var-lt hover:transition dark:bg-bg-deco-dk hover:dark:bg-bg-txt-dk hover:dark:text-bg-var-dk"
                 type="button"
                 onClick={handleClickClear}
               >
@@ -115,7 +115,7 @@ export default function ComboBox() {
               previousContrast !== '1' && (
                 <button
                   id="match-btn"
-                  className="active:bg-deco-lt absolute right-2 top-12 w-16 bg-bg-deco-lt py-2 px-4 text-xs hover:bg-bg-txt-lo-lt  hover:text-bg-var-lt hover:transition dark:bg-bg-deco-dk hover:dark:bg-bg-txt-lo-dk hover:dark:text-bg-var-dk"
+                  className="active:bg-deco-lt absolute right-2 top-12 w-16 bg-bg-deco-lt py-2 px-4  text-xs text-current  hover:bg-bg-txt-lo-lt hover:text-bg-var-lt hover:transition dark:bg-bg-deco-dk hover:dark:bg-bg-txt-dk hover:dark:text-bg-var-dk"
                   type="button"
                   onClick={handleClickMatch}
                 >
@@ -126,7 +126,7 @@ export default function ComboBox() {
             {recentColour !== undefined && textInput.length > 0 && (
               <button
                 id="colourspace-btn"
-                className="active:bg-deco-lt absolute right-2 bottom-2 w-16 bg-bg-deco-lt py-2 px-4 text-xs hover:bg-bg-txt-lo-lt  hover:text-bg-var-lt hover:transition dark:bg-bg-deco-dk hover:dark:bg-bg-txt-lo-dk hover:dark:text-bg-var-dk"
+                className="active:bg-deco-lt absolute right-2 bottom-2 w-16 bg-bg-deco-lt py-2 px-4  text-xs text-current  hover:bg-bg-txt-lo-lt hover:text-bg-var-lt hover:transition dark:bg-bg-deco-dk hover:dark:bg-bg-txt-dk hover:dark:text-bg-var-dk"
                 type="button"
                 onClick={handleClickMode}
               >

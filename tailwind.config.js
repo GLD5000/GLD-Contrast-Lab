@@ -16,7 +16,7 @@ module.exports = {
         body: '360px',
       },
       maxWidth: {
-        body: '1400px',
+        body: '1350px',
       },
       width: {
         body: 'calc(100vw - 4rem)',
