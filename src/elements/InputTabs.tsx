@@ -14,18 +14,18 @@ export default function InputTabs({ tab, setTab }: { tab: string; setTab: Dispat
   }
 
   return (
-    <div className="sticky top-16 z-50 w-full bg-white pt-2 dark:bg-neutral-800">
-      <div className="text:current  flex w-fit flex-row flex-wrap  gap-1 rounded-none text-base dark:bg-neutral-800">
+    <div className="sticky top-16 z-50 w-full bg-white pt-2 dark:bg-bg-var-dk">
+      <div className="text:current  flex w-fit flex-row flex-wrap  gap-1 rounded-none text-base dark:bg-bg-var-dk">
         <TabButton
           name="About"
           id="help"
           key="help"
           text="Help"
           clickFunction={handleClick}
-          className="   w-40 grow rounded-none bg-neutral-100 py-1 px-2 text-current  hover:transition active:bg-slate-300"
-          inactiveClasses="     dark:bg-neutral-900 dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
+          className="   w-40 grow rounded-none bg-bg-var-lt py-1 px-2 text-current  hover:transition active:bg-slate-300"
+          inactiveClasses="     dark:bg-bg-dk dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
           currentTab={tab}
-          activeClasses=" shadow-current shadow-bottom dark:bg-neutral-800 bg-neutral-50 dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
+          activeClasses=" shadow-current shadow-bottom dark:bg-bg-var-dk bg-neutral-50 dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
         />
 
         <TabButton
@@ -34,10 +34,10 @@ export default function InputTabs({ tab, setTab }: { tab: string; setTab: Dispat
           key="add-colours"
           text="Add"
           clickFunction={handleClick}
-          className=" w-40 grow rounded-none bg-neutral-100 py-1 px-2 text-current  hover:transition active:bg-slate-300"
-          inactiveClasses="  dark:bg-neutral-900 dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
+          className=" w-40 grow rounded-none bg-bg-var-lt py-1 px-2 text-current  hover:transition active:bg-slate-300"
+          inactiveClasses="  dark:bg-bg-dk dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
           currentTab={tab}
-          activeClasses=" shadow-current shadow-bottom dark:bg-neutral-800 bg-neutral-50 dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
+          activeClasses=" shadow-current shadow-bottom dark:bg-bg-var-dk bg-neutral-50 dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
         />
         <TabButton
           name="Comparison Matrix"
@@ -45,10 +45,10 @@ export default function InputTabs({ tab, setTab }: { tab: string; setTab: Dispat
           key="compare-matrix"
           text="Compare"
           clickFunction={handleClick}
-          className=" w-40 grow rounded-none bg-neutral-100 py-1 px-2 text-current  hover:transition active:bg-slate-300"
-          inactiveClasses="  dark:bg-neutral-900 dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
+          className=" w-40 grow rounded-none bg-bg-var-lt py-1 px-2 text-current  hover:transition active:bg-slate-300"
+          inactiveClasses="  dark:bg-bg-dk dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
           currentTab={tab}
-          activeClasses=" shadow-current shadow-bottom dark:bg-neutral-800 bg-neutral-50 dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
+          activeClasses=" shadow-current shadow-bottom dark:bg-bg-var-dk bg-neutral-50 dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
         />
         {/* <TabButton
         name="Colour Info"
@@ -56,10 +56,10 @@ export default function InputTabs({ tab, setTab }: { tab: string; setTab: Dispat
         key="colour-info"
         text="Colour Info"
         clickFunction={handleClick}
-        className=" w-40 grow rounded-none bg-neutral-100 py-1 px-2 text-current  hover:transition active:bg-slate-300"
-        inactiveClasses="  dark:bg-neutral-900 dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
+        className=" w-40 grow rounded-none bg-bg-var-lt py-1 px-2 text-current  hover:transition active:bg-slate-300"
+        inactiveClasses="  dark:bg-bg-dk dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
         currentTab={tab}
-        activeClasses=" shadow-current shadow-bottom dark:bg-neutral-800 bg-neutral-50 dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
+        activeClasses=" shadow-current shadow-bottom dark:bg-bg-var-dk bg-neutral-50 dark:hover:bg-white dark:hover:text-black hover:text-white hover:bg-neutral-900"
       /> */}
       </div>
     </div>

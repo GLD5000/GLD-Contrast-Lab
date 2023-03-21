@@ -41,9 +41,9 @@ export default function CodeBox({
   }
 
   return (
-    <code className="my-2 mx-4 block h-fit max-w-full overflow-x-auto whitespace-pre rounded border-solid border-neutral-500 font-mono text-green-400 placeholder:text-green-400 dark:bg-neutral-900">
+    <code className="my-2 mx-4 block h-fit max-w-full overflow-x-auto whitespace-pre rounded border-solid border-neutral-500 font-mono text-green-400 placeholder:text-green-400 dark:bg-bg-dk">
       {codeFileName && (
-        <h3 className="file-name rounded-none px-1 text-right text-neutral-300 dark:bg-neutral-900">{codeFileName}</h3>
+        <h3 className="file-name rounded-none px-1 text-right text-neutral-300 dark:bg-bg-dk">{codeFileName}</h3>
       )}
       <pre className="p-2">{`${codeBody}`}</pre>
       <SvgButton
@@ -55,7 +55,7 @@ export default function CodeBox({
         showText
         reverse={false}
         buttonClasses="border-transparent sticky left-0"
-        className=" sticky left-0 bottom-0 flex w-full items-center  justify-center rounded-none border-2 border-transparent text-neutral-200 hover:border-2 hover:border-current hover:transition active:bg-slate-600 dark:bg-neutral-900"
+        className=" sticky left-0 bottom-0 flex w-full items-center  justify-center rounded-none border-2 border-transparent text-neutral-200 hover:border-2 hover:border-current hover:transition active:bg-slate-600 dark:bg-bg-dk"
         // marginLeft='auto'
         svgClasses="stroke-1 fill-neutral-900 stroke-neutral-200"
         id=""

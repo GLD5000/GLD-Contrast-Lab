@@ -80,7 +80,7 @@ export default function ComboBox() {
               id="colour-input"
               placeholder="Enter colours here e.g.:    #fafafa   rgb(120, 120, 120)   hsl(200, 50%, 50%)  (submit with space or enter )"
               name="codeInput"
-              className="shrink grow resize-none overflow-auto bg-transparent px-2 pt-2 pb-1 text-base placeholder:text-gray-600 dark:placeholder:text-gray-300"
+              className="shrink grow resize-none overflow-auto bg-transparent px-2 pt-2 pb-1 text-base placeholder:text-bg-outline-dk dark:placeholder:text-gray-300"
               value={textInput}
               onInput={(e: FormEvent<HTMLTextAreaElement>): void => {
                 const { value: targetValue } = e.currentTarget;

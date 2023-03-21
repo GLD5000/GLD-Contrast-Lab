@@ -8,7 +8,7 @@ export default function Banner({ setShowBanner }: { setShowBanner: Dispatch<SetS
   }
 
   return (
-    <section className="flex flex-col items-center bg-neutral-100 dark:bg-neutral-800">
+    <section className="flex flex-col items-center bg-bg-var-lt dark:bg-bg-var-dk">
       <div className=" relative grid w-body min-w-body max-w-body content-center rounded-none bg-neutral-600 text-center  text-white dark:bg-neutral-400 dark:text-neutral-900 ">
         <h2 className=" mr-auto px-2 text-current">Hello! I am GLD, I make tools for developers!</h2>
         <Link

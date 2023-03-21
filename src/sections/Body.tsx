@@ -9,7 +9,7 @@ export default function Body() {
     <ColourInputProvider>
       <main id="body-container" className=" grid w-screen  flex-grow justify-items-center  pt-2  ">
         <section className="flex h-full w-body min-w-body max-w-body flex-col ">
-          <div className=" w-body min-w-body max-w-body grow bg-neutral-100 dark:bg-neutral-800">
+          <div className=" w-body min-w-body max-w-body grow bg-bg-var-lt dark:bg-bg-var-dk">
             <div className="mx-auto grid w-full max-w-body items-center self-center px-4 py-10 sm:px-8">
               <div className=" mx-auto mt-10 flex flex-row overflow-clip rounded-lg border-2 border-current ">
                 <h1 className=" rounded-none bg-white px-2  font-black text-black sm:text-6xl">CONTRAST</h1>{' '}
