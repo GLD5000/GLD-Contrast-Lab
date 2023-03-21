@@ -80,7 +80,7 @@ export default function ComboBox() {
               id="colour-input"
               placeholder="Enter colours here e.g.:    #fafafa   rgb(120, 120, 120)   hsl(200, 50%, 50%)  (submit with space or enter )"
               name="codeInput"
-              className="shrink grow resize-none overflow-auto bg-transparent px-2 pt-2 pb-1 text-base placeholder:text-bg-outline-dk dark:placeholder:text-gray-300"
+              className="shrink grow resize-none overflow-auto bg-transparent px-2 pt-2 pb-1 text-base placeholder:text-bg-txt-lo-lt dark:placeholder:text-bg-txt-lo-dk"
               value={textInput}
               onInput={(e: FormEvent<HTMLTextAreaElement>): void => {
                 const { value: targetValue } = e.currentTarget;
@@ -102,7 +102,7 @@ export default function ComboBox() {
             {recentColour !== undefined && textInput.length > 0 && (
               <button
                 id="clear-btn"
-                className="absolute right-2 top-2 w-16 bg-neutral-300 py-2 px-4 text-xs hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
+                className="active:bg-deco-lt absolute right-2 top-2 w-16 bg-bg-deco-lt py-2 px-4 text-xs hover:bg-bg-txt-lo-lt  hover:text-bg-var-lt hover:transition dark:bg-bg-deco-dk hover:dark:bg-bg-txt-lo-dk hover:dark:text-bg-var-dk"
                 type="button"
                 onClick={handleClickClear}
               >
@@ -115,7 +115,7 @@ export default function ComboBox() {
               previousContrast !== '1' && (
                 <button
                   id="match-btn"
-                  className="absolute right-2 top-12 w-16 bg-neutral-300 py-2 px-4 text-xs hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
+                  className="active:bg-deco-lt absolute right-2 top-12 w-16 bg-bg-deco-lt py-2 px-4 text-xs hover:bg-bg-txt-lo-lt  hover:text-bg-var-lt hover:transition dark:bg-bg-deco-dk hover:dark:bg-bg-txt-lo-dk hover:dark:text-bg-var-dk"
                   type="button"
                   onClick={handleClickMatch}
                 >
@@ -126,7 +126,7 @@ export default function ComboBox() {
             {recentColour !== undefined && textInput.length > 0 && (
               <button
                 id="colourspace-btn"
-                className="absolute right-2 bottom-2 w-16 bg-neutral-300 py-2 px-4 text-xs hover:bg-neutral-700 hover:text-white  hover:transition active:bg-slate-600 dark:bg-neutral-700 hover:dark:bg-white hover:dark:text-black"
+                className="active:bg-deco-lt absolute right-2 bottom-2 w-16 bg-bg-deco-lt py-2 px-4 text-xs hover:bg-bg-txt-lo-lt  hover:text-bg-var-lt hover:transition dark:bg-bg-deco-dk hover:dark:bg-bg-txt-lo-dk hover:dark:text-bg-var-dk"
                 type="button"
                 onClick={handleClickMode}
               >
