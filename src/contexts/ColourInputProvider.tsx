@@ -23,26 +23,32 @@ export interface ColourObj {
 }
 export type ColourMap = Map<string, ColourObj>;
 
-const initialiserA: {
+export interface ColourState {
   textInput: string;
   mode: string;
   type: string;
   recentColour: ColourObj | undefined;
   previousColour: StrNumObj | undefined;
   colourMap: ColourMap | undefined;
+}
+export type ColourPayload = Partial<{
+  number: number;
+  textInput: string;
+  mode: string;
+  type: string;
+  recentColour: ColourObj | undefined;
+  previousColour: StrNumObj | undefined;
+  colourMap: ColourMap | undefined;
+  tag: string;
+}>;
+export interface ColourContext extends ColourState {
   dispatchColourInput: Dispatch<{
     type: string;
-    payload: Partial<{
-      number: number;
-      textInput: string;
-      mode: string;
-      type: string;
-      recentColour: ColourObj | undefined;
-      previousColour: StrNumObj | undefined;
-      colourMap: ColourMap | undefined;
-    }>;
+    payload: ColourPayload;
   }>;
-} = {
+}
+
+const initialiserA: ColourContext = {
   textInput: '',
   mode: 'Hex',
   type: 'Lum',
@@ -52,14 +58,7 @@ const initialiserA: {
   dispatchColourInput: () => undefined,
 };
 
-const initialiserB: {
-  textInput: string;
-  mode: string;
-  type: string;
-  recentColour: ColourObj | undefined;
-  previousColour: StrNumObj | undefined;
-  colourMap: ColourMap | undefined;
-} = {
+const initialiserB: ColourState = {
   textInput: '',
   mode: 'Hex',
   type: 'Lum',
@@ -86,35 +85,12 @@ function useData() {
     dispatchColourInput,
   };
   function tagReducer(
-    state: {
-      textInput: string;
-      mode: string;
-      type: string;
-      recentColour: ColourObj | undefined;
-      previousColour: StrNumObj | undefined;
-      colourMap: ColourMap | undefined;
-    },
+    state: ColourState,
     action: {
       type: string;
-      payload: Partial<{
-        number: number;
-        textInput: string;
-        mode: string;
-        type: string;
-        recentColour: ColourObj | undefined;
-        previousColour: StrNumObj | undefined;
-        colourMap: ColourMap | undefined;
-        tag: string;
-      }>;
+      payload: ColourPayload;
     },
-  ): {
-    textInput: string;
-    mode: string;
-    type: string;
-    recentColour: ColourObj | undefined;
-    previousColour: StrNumObj | undefined;
-    colourMap: ColourMap | undefined;
-  } {
+  ): ColourState {
     switch (action.type) {
       case 'INIT': {
         // console.log('INIT');
@@ -139,7 +115,7 @@ function useData() {
 
         const newHex = getRandomColour();
         const currentMode = `${state.mode}` || 'Hex';
-        const newColourObject = makeColourObject(newHex, state);
+        const newColourObject = makeColourObject(newHex, state.colourMap, undefined);
         const returnValue = { ...state, mode: currentMode, recentColour: newColourObject };
         const previousValue = setPreviousContrast(returnValue);
         if (previousValue) returnValue.previousColour = previousValue;
@@ -154,7 +130,7 @@ function useData() {
         const newHex = action.payload.textInput;
         if (!newHex) return { ...state };
         const currentMode = `${state.mode}` || 'Hex';
-        const newColourObject = makeColourObject(newHex, state);
+        const newColourObject = makeColourObject(newHex, state.colourMap, state.recentColour?.Name);
         const returnValue = {
           ...state,
           mode: currentMode,
@@ -297,7 +273,7 @@ function useData() {
 
         if (typeof previousLuminance === 'number' && typeof newHex === 'string') {
           const { resultingHex } = setToTargetLuminance(newHex, previousLuminance);
-          const newObject = makeColourObject(resultingHex, state);
+          const newObject = makeColourObject(resultingHex, state.colourMap, state.recentColour?.Name);
           const modeOut = state.mode ? state.mode : 'Hex';
           const textOutput = newObject ? getRecentTextField(newObject, modeOut) : '';
           const returnValue = {
@@ -412,7 +388,7 @@ function submitRecentColour(stateIn: {
 }) {
   const recentState = stateIn.recentColour;
   if (!recentState) return null;
-  const newMap = stateIn.colourMap ? addToMap(recentState, stateIn.colourMap) : undefined;
+  const newMap = addColourObjectToStorage(recentState, stateIn.colourMap);
   const returnValue = {
     ...stateIn,
     textInput: getRecentTextField(recentState, stateIn.mode),
@@ -490,20 +466,10 @@ function processColourStringLong(stringIn: string) {
   if (stringIn.length < 7) return stringIn;
   return processColourString(stringIn);
 }
-function getRecentColour(
-  text: string,
-  state: {
-    textInput: string;
-    mode: string;
-    type: string;
-    recentColour: ColourObj | undefined;
-    previousColour: StrNumObj | undefined;
-    colourMap: ColourMap | undefined;
-  },
-) {
+function getRecentColour(text: string, state: ColourState) {
   const testedProcessedText = valueIsHex(text) ? text : processColourStringLong(text);
   const recentColour = valueIsHex(testedProcessedText)
-    ? makeColourObject(testedProcessedText, state)
+    ? makeColourObject(testedProcessedText, state.colourMap, state.recentColour?.Name)
     : state.recentColour;
   return recentColour;
 }
@@ -525,17 +491,7 @@ function hexReducer(acc: { processedTextArray: string[]; processedArray: string[
   return acc;
 }
 
-function processText(
-  text: string,
-  state: {
-    textInput: string;
-    mode: string;
-    type: string;
-    recentColour: ColourObj | undefined;
-    previousColour: StrNumObj | undefined;
-    colourMap: ColourMap | undefined;
-  },
-) {
+function processText(text: string, state: ColourState) {
   const isEmpty = text === '';
   if (isEmpty) {
     return emptyTextProcess(state);
@@ -561,7 +517,7 @@ function processText(
 }
 
 function multiProcess(text: string) {
-  console.log('multiProcess');
+  // console.log('multiProcess');
   const splitText = text.replaceAll(', ', ',').split(/\s/);
 
   const { processedTextArray, processedArray } = splitText.reduce(hexReducer, {
@@ -577,18 +533,8 @@ function multiProcess(text: string) {
   return { processedText, processedArray, recent: undefined };
 }
 
-function multiRecentProcess(
-  text: string,
-  state: {
-    textInput: string;
-    mode: string;
-    type: string;
-    recentColour: ColourObj | undefined;
-    previousColour: StrNumObj | undefined;
-    colourMap: ColourMap | undefined;
-  },
-) {
-  console.log('multiRecentProcess');
+function multiRecentProcess(text: string, state: ColourState) {
+  // console.log('multiRecentProcess');
 
   const { mode } = state;
   const splitText = text.replaceAll(', ', ',').split(/\s/);
@@ -611,17 +557,7 @@ function multiRecentProcess(
   return { processedText: textValue, processedArray, recent: recentValue };
 }
 
-function singleTextProcess(
-  text: string,
-  state: {
-    textInput: string;
-    mode: string;
-    type: string;
-    recentColour: ColourObj | undefined;
-    previousColour: StrNumObj | undefined;
-    colourMap: ColourMap | undefined;
-  },
-) {
+function singleTextProcess(text: string, state: ColourState) {
   // console.log('singleTextProcess');
   // if (state.recentColour){
   const recentValue = getRecentColour(text, state);
@@ -650,20 +586,10 @@ function emptyTextProcess(state: {
   return { processedText: '', processedArray: [], recent: state.recentColour };
 }
 
-function makeColourObject(
-  hexValue: string,
-  state: {
-    textInput: string;
-    mode: string;
-    type: string;
-    recentColour: ColourObj | undefined;
-    previousColour: StrNumObj | undefined;
-    colourMap: ColourMap | undefined;
-  },
-  name?: string | undefined,
-) {
+function makeColourObject(hexValue: string, mapIn: ColourMap | undefined, name: string | undefined) {
   const slicedNewName = name?.slice(0, 18) || undefined;
-  const existingMap = state.colourMap;
+  const existingMap = mapIn || new Map();
+  // console.log('existingMap.size:', existingMap?.size);
   const foundMap = existingMap && hexValue.length === 7 ? existingMap.get(hexValue) : undefined;
   if (foundMap !== undefined) {
     if (slicedNewName) foundMap.Name = slicedNewName;
@@ -689,10 +615,10 @@ function makeColourObject(
         ['Black', Black],
         ['White', White],
       ];
-  console.log('arrays:', arrays);
   const contrastRatios = new Map(arrays);
-  const stateName = state.recentColour?.Name;
-  const nonStaleHexName = stateName !== undefined && !valueIsHex(`${stateName}`) ? `${stateName}` : Hex;
+  // const stateName = state.recentColour?.Name;
+  // const nonStaleHexName = stateName !== undefined && !valueIsHex(`${stateName}`) ? `${stateName}` : Hex;
+  const nonStaleHexName = slicedNewName !== undefined && !valueIsHex(`${slicedNewName}`) ? `${slicedNewName}` : Hex;
 
   const Name = slicedNewName || nonStaleHexName;
   const returnObject = {
@@ -708,17 +634,7 @@ function makeColourObject(
   };
   return returnObject;
 }
-function makeColourObjectHsl(
-  hslValue: string,
-  state: {
-    textInput: string;
-    mode: string;
-    type: string;
-    recentColour: ColourObj | undefined;
-    previousColour: StrNumObj | undefined;
-    colourMap: ColourMap | undefined;
-  },
-) {
+function makeColourObjectHsl(hslValue: string, state: ColourState) {
   const Hex = colourSpace.convertHslStringToHex(hslValue);
   const HSL = hslValue;
   const RGB = colourSpace.convertHextoRgbString(Hex);
@@ -748,14 +664,7 @@ function makeColourObjectHsl(
 
 function createMap(
   hexArray: string[] | undefined,
-  state: {
-    textInput: string;
-    mode: string;
-    type: string;
-    recentColour: ColourObj | undefined;
-    previousColour: StrNumObj | undefined;
-    colourMap: ColourMap | undefined;
-  },
+  state: ColourState,
   processedText: string,
   oldMap: ColourMap | undefined,
 ) {
@@ -765,25 +674,75 @@ function createMap(
   const filteredArray = hexArray.filter(valueIsHex);
   const arrayLength = names.length;
   if (!filteredArray || filteredArray.length === 0) return { joinedMap: oldMap, stringOut: processedText };
+  let workingMap = oldMap || new Map();
   const getAtIndex = (index: number) => arrayLength - (filteredArray.length - index);
-  const buildArray: Iterable<readonly [string, ColourObj]> | null = filteredArray.map((hex, index) => {
+  filteredArray.forEach((hex, index) => {
     const atIndex = getAtIndex(index);
-    // console.log('atIndex:', atIndex);
-    // console.log('names[atIndex]:', names[atIndex]);
-    const colourObject = makeColourObject(hex, state, names[atIndex]);
+    const colourObject = makeColourObject(hex, workingMap, names[atIndex]);
+    workingMap = addColourObjectToMap(colourObject, workingMap);
     names[atIndex] = '';
-    return [hex, colourObject];
+    // console.log('workingMap.size:', workingMap.size);
+    // console.log(' colourObject.contrastRatios.size', colourObject.contrastRatios.size);
   });
-  if (buildArray === undefined) return { joinedMap: oldMap, stringOut: processedText };
-  const mapValue: ColourMap | undefined = buildArray ? new Map(buildArray) : undefined;
-  const joinedMap = oldMap && mapValue ? new Map([...oldMap, ...mapValue]) : mapValue;
-  if (joinedMap) setSessionStorageMap(joinedMap);
+  if (workingMap === undefined) return { joinedMap: oldMap, stringOut: processedText };
+  if (workingMap) setSessionStorageMap(workingMap);
+
   const stringOut = names.join('');
-  return { joinedMap, stringOut };
+  return { joinedMap: workingMap, stringOut };
+}
+// function createMap(
+//   hexArray: string[] | undefined,
+//   state: {
+//     textInput: string;
+//     mode: string;
+//     type: string;
+//     recentColour: ColourObj | undefined;
+//     previousColour: StrNumObj | undefined;
+//     colourMap: ColourMap | undefined;
+//   },
+//   processedText: string,
+//   oldMap: ColourMap | undefined,
+// ) {
+//   const names = processedText.split(' ');
+//   // console.log(names);
+//   if (!hexArray || !state) return { joinedMap: oldMap, stringOut: processedText };
+//   const filteredArray = hexArray.filter(valueIsHex);
+//   const arrayLength = names.length;
+//   if (!filteredArray || filteredArray.length === 0) return { joinedMap: oldMap, stringOut: processedText };
+//   const getAtIndex = (index: number) => arrayLength - (filteredArray.length - index);
+//   const buildArray: Iterable<readonly [string, ColourObj]> | null = filteredArray.map((hex, index) => {
+//     const atIndex = getAtIndex(index);
+//     // console.log('atIndex:', atIndex);
+//     // console.log('names[atIndex]:', names[atIndex]);
+//     const colourObject = makeColourObject(hex, state, names[atIndex]);
+//     names[atIndex] = '';
+//     return [hex, colourObject];
+//   });
+//   if (buildArray === undefined) return { joinedMap: oldMap, stringOut: processedText };
+//   const mapValue: ColourMap | undefined = buildArray ? new Map(buildArray) : undefined;
+//   const joinedMap = oldMap && mapValue ? new Map([...oldMap, ...mapValue]) : mapValue;
+//   if (joinedMap) setSessionStorageMap(joinedMap);
+//   const stringOut = names.join('');
+//   return { joinedMap, stringOut };
+// }
+
+function addColourObjectToMap(newObject: ColourObj, existingMap: ColourMap | undefined) {
+  const newMap = existingMap ? new Map([...existingMap]) : new Map();
+  const newContrastMap = newObject.contrastRatios;
+  const newHex = newObject.Hex;
+  newMap.forEach((object) => {
+    const currentHex = object.Hex;
+    const contrastRatio = newContrastMap.get(currentHex);
+    if (contrastRatio) object.contrastRatios.set(newHex, contrastRatio);
+  });
+  newMap.set(`${newObject.Hex}`, newObject);
+
+  return newMap;
 }
 
-function addToMap(newObject: ColourObj, existingMap: ColourMap) {
-  const newMap = new Map([...existingMap]);
+function addColourObjectToStorage(newObject: ColourObj, existingMap: ColourMap | undefined) {
+  const newMap = existingMap ? new Map([...existingMap]) : new Map();
+  // console.log('newMap:', newMap);
   const newContrastMap = newObject.contrastRatios;
   const newHex = newObject.Hex;
   newMap.forEach((object) => {
@@ -794,30 +753,12 @@ function addToMap(newObject: ColourObj, existingMap: ColourMap) {
   newMap.set(`${newObject.Hex}`, newObject);
 
   if (newMap) setSessionStorageMap(newMap);
-
   return newMap;
 }
 
-function handleRlumUpdate(
-  state: {
-    textInput: string;
-    mode: string;
-    type: string;
-    recentColour: ColourObj | undefined;
-    previousColour: StrNumObj | undefined;
-    colourMap: ColourMap | undefined;
-  },
-  payload: Partial<{
-    number: number;
-    textInput: string;
-    mode: string;
-    type: string;
-    recentColour: ColourObj | undefined;
-    previousColour: StrNumObj | undefined;
-    colourMap: ColourMap | undefined;
-    tag: string;
-  }>,
-) {
+// function deleteFromColourMap(keyToDelete: string, existingMap: ColourMap) {}
+
+function handleRlumUpdate(state: ColourState, payload: ColourPayload) {
   const textReceived = payload.textInput;
   const isSubmit = /\s/.test(textReceived?.replaceAll(/(, )|(: )/g, '')?.at(-1) || '');
   const textWithoutRLum = textReceived ? textReceived.replace('Relative Luminance:', '').replace(' ', '') : '';
@@ -877,7 +818,7 @@ function handleRlumUpdate(
 
     if (isInRange && isPercentage) {
       const { resultingHex: newHex } = setToTargetLuminance(currentHex, parsedFloat);
-      const newColourObject = makeColourObject(newHex, state);
+      const newColourObject = makeColourObject(newHex, state.colourMap, state.recentColour?.Name);
       const textValue = newColourObject
         ? getRecentTextField(newColourObject, 'RLum')
         : `Relative Luminance: ${textWithoutRLum}`;
