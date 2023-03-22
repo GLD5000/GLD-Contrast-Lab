@@ -80,7 +80,7 @@ export default function ColourBlocks() {
             <h3 className="m-auto  w-fit">{title}</h3>
           </div>
           <div className="p-8">
-            <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 overflow-clip rounded-[2.25rem] border-4 border-border bg-bg dark:bg-bg-dk ">
+            <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 overflow-clip rounded-[2.4rem] border-4 border-border bg-bg dark:bg-bg-dk ">
               {returnArrays}
             </div>
           </div>
