@@ -58,7 +58,7 @@ export default function ColourBlocks() {
   const { colourMap } = useColourInputContext();
   const { visibleSet, showPoor, showRatio } = useColourBlocksContext();
   if (!colourMap || colourMap.size < 2) return null;
-  const title = `${showPoor ? 'All' : 'Usable'} Contrast ${showRatio ? 'Ratios' : 'Ratings'}`;
+  const title = `${showPoor ? 'All' : 'Usable'} Contrast ${showRatio ? 'Ratios' : 'Ratings'} Matrix`;
   const returnArrays = createColourBlockArrays(visibleSet);
   return (
     <>
