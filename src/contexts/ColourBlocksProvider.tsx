@@ -22,7 +22,7 @@ const initialiserA: {
 } = {
   colourMode: 'Name',
   showRatio: false,
-  showPoor: false,
+  showPoor: true,
   limit: 'All Colours',
   visibleSet: new Set(''),
   dispatchColourBlocks: () => undefined,
@@ -38,7 +38,7 @@ const initialiserB: {
 } = {
   colourMode: 'Name',
   showRatio: false,
-  showPoor: false,
+  showPoor: true,
   limit: 'All Colours',
   visibleSet: new Set(''),
 };
