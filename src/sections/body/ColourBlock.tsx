@@ -1,5 +1,5 @@
 import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
-import { useColourInputContext } from '../../contexts/ColourInputProvider';
+import { useColourInputContext, ColourObj } from '../../contexts/ColourInputProvider';
 
 function breakName(input: string) {
   if (input.length < 10) return input;
@@ -11,7 +11,7 @@ function breakName(input: string) {
   return `${`${input}`.slice(0, 8)}-${`${input}`.slice(8)}`;
 }
 
-function getColourString(objectIn: { [key: string]: string | number }, mode: string) {
+function getColourString(objectIn: ColourObj, mode: string) {
   if (objectIn === undefined) return undefined;
   const { Hex, Luminance, Name, HSL, RGB } = objectIn;
   const breakableName = breakName(`${Name}`);

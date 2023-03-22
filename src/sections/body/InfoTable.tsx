@@ -1,5 +1,5 @@
 import { Dispatch, ReactElement, MouseEvent, SetStateAction, useState } from 'react';
-import { useColourInputContext } from '../../contexts/ColourInputProvider';
+import { useColourInputContext, ColourMap } from '../../contexts/ColourInputProvider';
 import SvgButton from '../../elements/SvgButton';
 import { autoTextColour } from '../../utilities/colour/autoTextColour';
 import { luminance } from '../../utilities/colour/luminance';
@@ -17,14 +17,7 @@ function tableReducer(
     jsx: ReactElement[][];
     dataColumns: Set<string>;
     showData: boolean;
-    colourMap:
-      | Map<
-          string,
-          {
-            [key: string]: string | number;
-          }
-        >
-      | undefined;
+    colourMap: ColourMap | undefined;
   },
   curr: string,
 ): {
@@ -33,14 +26,7 @@ function tableReducer(
   jsx: ReactElement[][];
   dataColumns: Set<string>;
   showData: boolean;
-  colourMap:
-    | Map<
-        string,
-        {
-          [key: string]: string | number;
-        }
-      >
-    | undefined;
+  colourMap: ColourMap | undefined;
 } {
   const classNames = 'block w-40 p-4 text-xs rounded-none';
   const currentObject = acc.colourMap?.get(curr);
@@ -141,14 +127,7 @@ function getTable(
   setDataColumns: Dispatch<SetStateAction<Set<string>>>,
   showData: boolean,
   setShowData: Dispatch<SetStateAction<boolean>>,
-  colourMap:
-    | Map<
-        string,
-        {
-          [key: string]: string | number;
-        }
-      >
-    | undefined,
+  colourMap: ColourMap | undefined,
 ) {
   const classNames = ' block w-40 p-2 text-sm rounded-none text-center my-auto';
   const jsxArray = [...dataColumns].map((key) => {

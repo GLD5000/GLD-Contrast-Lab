@@ -1,4 +1,20 @@
-export function setSessionStorageMap(map: Map<string, { [key: string]: string | number }>) {
+// interface StrNumObj {
+//   [key: string]: string | number;
+// }
+interface ColourObj {
+  luminanceFloat: number;
+  Hex: string;
+  HSL: string;
+  RGB: string;
+  Luminance: string;
+  Black: number;
+  White: number;
+  Name: string;
+  contrastRatios: Map<string, number>;
+}
+type ColourMap = Map<string, ColourObj>;
+
+export function setSessionStorageMap(map: ColourMap) {
   const newString = stringifyMap(map);
 
   if (newString.length > 0) sessionStorage.setItem('colourMap', newString);
@@ -13,7 +29,7 @@ export function getSessionStorageMap() {
 export function clearSessionStorageMap() {
   sessionStorage.removeItem('colourMap');
 }
-function stringifyMap(mapIn: Map<string, { [mapKey: string]: string | number }>) {
+function stringifyMap(mapIn: ColourMap) {
   const str = JSON.stringify(mapIn, replacer);
   return str;
 }
@@ -21,7 +37,7 @@ function parseStringToMap(jsonString: string) {
   const newValue = JSON.parse(jsonString, reviver);
   return newValue;
 }
-function replacer(key: undefined | string, value: Map<string, { [mapKey: string]: string | number }>) {
+function replacer(key: undefined | string, value: ColourMap) {
   if (value instanceof Map) {
     return {
       dataType: 'Map',

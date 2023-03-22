@@ -1,10 +1,10 @@
 import { FormEvent } from 'react';
-import { useColourInputContext } from '../../contexts/ColourInputProvider';
+import { useColourInputContext, ColourObj } from '../../contexts/ColourInputProvider';
 
 import ColourPicker from './ColourPicker';
 import InlineList from './InlineList';
 
-function getHexData(colourObject: { [key: string]: number | string }, mode: string, previousContrast: string) {
+function getHexData(colourObject: ColourObj, mode: string, previousContrast: string) {
   const { Hex, HSL, RGB, Luminance, Black, White, Name } = colourObject;
   const colourSpaceLookup: { [key: string]: string } = {
     Hex: `Relative Luminance: ${Luminance} \r\n${`${HSL}\r\n`}${`${RGB}\r\n`}`,
