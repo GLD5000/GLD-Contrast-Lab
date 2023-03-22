@@ -85,7 +85,7 @@ function getButtons(tailwind: string, csv: string, setShowData: Dispatch<SetStat
       clickFunction={handleVisibilityClick}
       id="custom-visibility-btn"
       name="Customise Data"
-      className=" flex h-9 justify-center gap-2 text-sm hover:bg-black hover:text-white hover:transition focus:text-white focus:transition active:bg-slate-600 hover:dark:bg-white hover:dark:text-black focus:dark:bg-white focus:dark:text-black"
+      className=" flex h-9 justify-center gap-2 text-sm hover:bg-black hover:text-white hover:transition focus:text-white focus:transition hover:dark:bg-white hover:dark:text-black focus:dark:bg-white focus:dark:text-black"
       type="preview"
       showText
       reverse={false}
@@ -97,7 +97,7 @@ function getButtons(tailwind: string, csv: string, setShowData: Dispatch<SetStat
   return (
     <div
       key="table-bottom-btns"
-      className="flex w-full flex-row gap-2 rounded-none border border-transparent border-t-current"
+      className="flex h-9 w-full flex-row gap-2 rounded-none border border-transparent border-t-current"
     >
       {visibilityButton} {csvButton} {twButton}
     </div>
