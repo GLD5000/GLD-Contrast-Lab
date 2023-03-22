@@ -5,6 +5,7 @@ import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
 import { luminance } from '../../utilities/colour/luminance';
 import ShowButtons from './ShowButtons';
 import BlockVisibility from './BlockVisibility';
+import { useColourInputContext } from '../../contexts/ColourInputProvider';
 
 function getBlockRow(backgroundColour: string, index: number, array: string[]) {
   const keyA = `${backgroundColour}-${index}`;
@@ -53,24 +54,26 @@ function createColourBlockArrays(coloursArray: Set<string>) {
   });
 }
 
-function getColourBlocks(visibleColours: Set<string>) {
+function getColourBlocks(visibleColours: Set<string>, title: string) {
   const returnArrays = createColourBlockArrays(visibleColours);
   return (
-    <>
-      <ShowButtons />
-      <div className="grid w-full gap-2 overflow-auto rounded-none">
-        <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 overflow-clip rounded border-2 border-current">
-          {returnArrays}
-        </div>
+    <div className="mx-auto grid h-fit w-fit overflow-x-auto rounded border border-current">
+      <div className="h-9 w-full  rounded-none border-b bg-bg-var dark:bg-bg-var-dk">
+        <h3 className="m-auto  w-fit">{title}</h3>
       </div>
-    </>
+      <div className="m-4 mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 overflow-clip rounded-xl bg-bg dark:bg-bg-dk ">
+        {returnArrays}
+      </div>
+      <ShowButtons />
+    </div>
   );
 }
 export default function ColourBlocks() {
-  const { visibleSet } = useColourBlocksContext();
-  if (visibleSet.size < 2) return null;
-
-  const colourBlocks = getColourBlocks(visibleSet);
+  const { colourMap } = useColourInputContext();
+  const { visibleSet, showPoor, showRatio } = useColourBlocksContext();
+  if (!colourMap || colourMap.size < 2) return null;
+  const title = `${showPoor ? 'All' : 'Usable'} Contrast ${showRatio ? 'Ratios' : 'Ratings'}`;
+  const colourBlocks = getColourBlocks(visibleSet, title);
   return (
     <>
       <section className="grid gap-4">
