@@ -50,21 +50,21 @@ export default function ShowButtons() {
         <button
           type="button"
           onClick={handleClickRatio}
-          className="shrink-0 grow basis-0 rounded-none bg-bg-var p-2 text-sm font-semibold text-current hover:bg-txt-low  hover:text-bg-var hover:transition dark:bg-bg-var-dk  hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
+          className="shrink-0 grow basis-0 rounded-none bg-bg-var p-2 text-sm font-semibold text-current hover:text-white hover:transition focus:text-white focus:transition dark:bg-bg-var-dk hover:dark:bg-white hover:dark:text-black focus:dark:bg-white focus:dark:text-black"
         >
           {ratioLabel}
         </button>
         <button
           type="button"
           onClick={handleClickPoor}
-          className="shrink-0 grow basis-0 rounded-none bg-bg-var p-2 text-sm text-current  hover:bg-txt-low  hover:text-bg-var hover:transition dark:bg-bg-var-dk  hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
+          className="shrink-0 grow basis-0 rounded-none bg-bg-var p-2 text-sm text-current hover:text-white  hover:transition focus:text-white focus:transition dark:bg-bg-var-dk hover:dark:bg-white hover:dark:text-black focus:dark:bg-white focus:dark:text-black"
         >
           {poorLabel}
         </button>
         <button
           type="button"
           onClick={handleClickColourMode}
-          className="shrink-0 grow basis-0 rounded-none bg-bg-var p-2 text-sm font-semibold text-current hover:bg-txt-low  hover:text-bg-var hover:transition dark:bg-bg-var-dk  hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
+          className="shrink-0 grow basis-0 rounded-none bg-bg-var p-2 text-sm font-semibold text-current hover:text-white hover:transition focus:text-white focus:transition dark:bg-bg-var-dk hover:dark:bg-white hover:dark:text-black focus:dark:bg-white focus:dark:text-black"
         >
           {colourModeLabel}
         </button>
@@ -72,7 +72,7 @@ export default function ShowButtons() {
         <button
           type="button"
           onClick={handleClickLimit}
-          className="shrink-0 grow basis-0 rounded-none bg-bg-var p-2 text-sm text-current  hover:bg-txt-low  hover:text-bg-var hover:transition dark:bg-bg-var-dk  hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
+          className="shrink-0 grow basis-0 rounded-none bg-bg-var p-2 text-sm text-current hover:text-white  hover:transition focus:text-white focus:transition dark:bg-bg-var-dk hover:dark:bg-white hover:dark:text-black focus:dark:bg-white focus:dark:text-black"
         >
           {limitLabel}
         </button>
