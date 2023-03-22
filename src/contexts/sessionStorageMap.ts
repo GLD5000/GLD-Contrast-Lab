@@ -21,10 +21,8 @@ export function setSessionStorageMap(map: ColourMap) {
 }
 export function getSessionStorageMap() {
   const savedString = sessionStorage.getItem('colourMap') ?? undefined;
-  console.log('savedString:', savedString);
   if (savedString === undefined) return undefined;
   const mapAgain = parseStringToMap(savedString);
-  console.log('mapAgain:', mapAgain);
   return mapAgain || undefined;
 }
 export function clearSessionStorageMap() {

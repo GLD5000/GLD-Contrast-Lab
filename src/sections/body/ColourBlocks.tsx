@@ -1,19 +1,19 @@
 import ColourBlock from './ColourBlock';
 import autoTextColourFromHex from '../../utilities/colour/autoTextColour';
-import { getContrastRatioFromHex, contrast } from '../../utilities/colour/contrastRatio';
+import { contrast } from '../../utilities/colour/contrastRatio';
 import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
 import { luminance } from '../../utilities/colour/luminance';
 import ShowButtons from './ShowButtons';
 import BlockVisibility from './BlockVisibility';
-import { useColourInputContext } from '../../contexts/ColourInputProvider';
+import { ColourMap, useColourInputContext } from '../../contexts/ColourInputProvider';
 
-function getBlockRow(backgroundColour: string, index: number, array: string[]) {
+function getBlockRow(backgroundColour: string, index: number, array: string[], referenceMap: ColourMap) {
   const keyA = `${backgroundColour}-${index}`;
   const rowArray = array.map((textColour, number) => {
     const keyB = `${textColour}-${number}`;
     const autoColour = textColour === backgroundColour;
     const textColourMod = autoColour ? autoTextColourFromHex(backgroundColour) : textColour;
-    const contrastRatio = Number(getContrastRatioFromHex(backgroundColour, textColourMod).toFixed(2));
+    const contrastRatio = autoColour ? 1 : referenceMap.get(textColour)?.contrastRatios.get(backgroundColour) || 0;
     const contrastRating = contrast.makeContrastRating(contrastRatio);
     const bwText = !autoColour && contrastRatio < 4.5;
     return (
@@ -37,10 +37,10 @@ function sortByLuminance(acc: Array<Array<string>>, curr: string) {
   return acc;
 }
 
-function createColourBlockArrays(coloursArray: Set<string>) {
-  const lumSort = [...coloursArray].reduce(sortByLuminance, []).flatMap((x) => x);
+function createColourBlockArrays(coloursSet: Set<string>, storedMap: ColourMap) {
+  const lumSort = [...coloursSet].reduce(sortByLuminance, []).flatMap((x) => x);
   return lumSort.map((backgroundColour, index, array) => {
-    const { keyA, rowArray } = getBlockRow(backgroundColour, index, array);
+    const { keyA, rowArray } = getBlockRow(backgroundColour, index, array, storedMap);
     return (
       <div
         key={`${backgroundColour}-${keyA}`}
@@ -56,11 +56,10 @@ function createColourBlockArrays(coloursArray: Set<string>) {
 
 export default function ColourBlocks() {
   const { colourMap } = useColourInputContext();
-  console.log('colourMap:', colourMap);
   const { visibleSet, showPoor, showRatio } = useColourBlocksContext();
   if (!colourMap || colourMap.size < 2) return null;
   const title = `${showPoor ? 'All' : 'Usable'} Contrast ${showRatio ? 'Ratios' : 'Ratings'} Matrix`;
-  const returnArrays = createColourBlockArrays(visibleSet);
+  const returnArrays = createColourBlockArrays(visibleSet, colourMap);
   return (
     <>
       <section className="grid gap-4">
