@@ -13,13 +13,14 @@ module.exports = {
         autoFr: 'auto 1fr',
       },
       minWidth: {
-        body: '360px',
+        body: '340px',
       },
       maxWidth: {
         body: '1250px',
       },
       width: {
         body: 'calc(100vw - 4rem)',
+        'body-sm': 'calc(100vw - 2rem)',
       },
       colors: {
         'bg-var-dk': '#000000',

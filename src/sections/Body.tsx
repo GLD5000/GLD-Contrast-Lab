@@ -7,10 +7,10 @@ import InfoTable from './body/InfoTable';
 export default function Body() {
   return (
     <ColourInputProvider>
-      <main id="body-container" className=" grid w-screen  flex-grow justify-items-center  pt-2  ">
+      <main id="body-container" className=" grid w-screen  flex-grow pt-2  sm:justify-items-center  ">
         <section className="flex h-full w-body min-w-body max-w-body flex-col ">
-          <div className=" w-body min-w-body max-w-body grow">
-            <div className="mx-auto grid w-full max-w-body items-center self-center px-4 py-10 sm:px-8">
+          <div className=" w-body-sm min-w-body max-w-body grow sm:w-body">
+            <div className="mx-auto grid w-screen max-w-body items-center self-center px-4 py-10 sm:w-full sm:px-8">
               <div className=" mx-auto mt-10 flex flex-row overflow-clip rounded-lg border-2 border-current ">
                 <h1 className=" rounded-none bg-white pt-1 pl-1 pr-2 font-black leading-6 text-black sm:text-6xl">
                   CONTRAST
