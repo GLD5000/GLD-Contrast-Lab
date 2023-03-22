@@ -784,7 +784,13 @@ function createMap(
 
 function addToMap(newObject: ColourObj, existingMap: ColourMap) {
   const newMap = new Map([...existingMap]);
-
+  const newContrastMap = newObject.contrastRatios;
+  const newHex = newObject.Hex;
+  newMap.forEach((object) => {
+    const currentHex = object.Hex;
+    const contrastRatio = newContrastMap.get(currentHex);
+    if (contrastRatio) object.contrastRatios.set(newHex, contrastRatio);
+  });
   newMap.set(`${newObject.Hex}`, newObject);
 
   if (newMap) setSessionStorageMap(newMap);
