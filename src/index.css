@@ -89,19 +89,19 @@ input[type='color'] {
   -webkit-appearance: none;
 }
 input[type='range']::-webkit-slider-thumb {
-  -webkit-appearance: none; /* Override default look */
+  -webkit-appearance: none;
   appearance: none;
-  width: 1rem; /* Set a specific slider handle width */
-  height: 1rem; /* Slider handle height */
-  background: currentColor; /* Green background */
-  cursor: inherit; /* Cursor on hover */
+  width: 1rem;
+  height: 1rem;
+  background: currentColor; 
+  cursor: inherit;
   border-radius: 100%;
 }
 
 input[type='range']::-moz-range-thumb {
-  width: 1rem; /* Set a specific slider handle width */
-  height: 1rem; /* Slider handle height */
-  background: currentColor; /* Green background */
-  cursor: inherit; /* Cursor on hover */
+  width: 1rem; 
+  height: 1rem;
+  background: currentColor; 
+  cursor: inherit; 
   border-radius: 100%;
 }
