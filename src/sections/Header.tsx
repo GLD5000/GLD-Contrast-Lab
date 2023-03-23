@@ -20,11 +20,11 @@ export default function Header({
           <div className="flex flex-row overflow-clip rounded-lg border-2 border-current">
             <h1
               className=" m-auto rounded-none bg-white
-            px-1 text-2xl font-black text-black"
+              p-[0.3rem] text-2xl font-black text-black"
             >
               CONTRAST
             </h1>
-            <h1 className=" m-auto rounded-none bg-black pl-1 pr-2 text-2xl font-black text-white">TOOL</h1>
+            <h1 className=" m-auto rounded-none bg-black p-[0.3rem] text-2xl font-black text-white">TOOL</h1>
           </div>
         </div>
         <div className="relative flex h-16 flex-wrap items-center justify-center gap-4 py-2">
