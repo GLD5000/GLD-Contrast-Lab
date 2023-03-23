@@ -27,17 +27,23 @@ export default function Header({
             <h1 className=" m-auto rounded-none bg-black p-[0.3rem] text-2xl font-black text-white">TOOL</h1>
           </div>
         </div>
-        <div className="relative flex h-16 flex-wrap items-center justify-center gap-4 py-2">
-          {/* <Button
-            backgroundColor=""
-            text={colourTheme === 'dark' ? 'Light Mode' : 'Dark Mode'}
-            clickFunction={toggleColourTheme}
-            id="colour-theme-button"
-            name="Dark Mode Button"
-            className="rounded text-xs"
-            activeClasses="dark:hover:bg-bg-var dark:hover:text-neutral-900 hover:text-neutral-50 hover:bg-neutral-800"
-            conditionalClasses=""
-          /> */}
+        <div className="relative flex h-16 flex-wrap items-center justify-center gap-8 py-2">
+          <a
+            className=" hidden  flex-row gap-2 text-txt-mid hover:text-txt-main hover:underline hover:decoration-current hover:underline-offset-2 hover:transition focus:text-txt-main focus:underline focus:decoration-current  focus:underline-offset-2 focus:transition dark:text-txt-mid-dk dark:hover:text-txt-main-dk dark:focus:text-txt-main-dk sm:flex"
+            href="https://gld-portfolio.vercel.app/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Portfolio
+          </a>
+          <a
+            className=" hidden  flex-row gap-2 text-txt-mid hover:text-txt-main hover:underline hover:decoration-current hover:underline-offset-2 hover:transition focus:text-txt-main focus:underline focus:decoration-current  focus:underline-offset-2 focus:transition dark:text-txt-mid-dk dark:hover:text-txt-main-dk dark:focus:text-txt-main-dk sm:flex"
+            href="https://github.com/GLD5000"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub
+          </a>
           <SvgButton
             svgWrapperClasses="pointer-events-none h-6 w-6"
             text={colourTheme ? 'Light' : 'Dark'}
