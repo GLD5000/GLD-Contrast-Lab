@@ -256,7 +256,7 @@ function useData() {
         const sliderValue = action.payload.hslSlider;
         const previousLuminance = state.hslLuminanceTarget;
 
-        console.log('sliderValue:', sliderValue);
+        // console.log('sliderValue:', sliderValue);
         const In = state.recentColour;
 
         if (In === undefined || sliderValue === undefined || newSliderType === undefined) return { ...state };
