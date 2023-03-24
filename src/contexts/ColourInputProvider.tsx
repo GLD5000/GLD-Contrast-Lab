@@ -114,7 +114,7 @@ function useData() {
         // console.log('RANDOMISE');
 
         const newHex = getRandomColour();
-        const currentMode = `${state.mode}` || 'Hex';
+        const currentMode = 'Hex';
         const newColourObject = makeColourObject(newHex, state.colourMap, undefined);
         const returnValue = { ...state, mode: currentMode, recentColour: newColourObject };
         const previousValue = setPreviousContrast(returnValue);
@@ -129,7 +129,7 @@ function useData() {
 
         const newHex = action.payload.textInput;
         if (!newHex) return { ...state };
-        const currentMode = `${state.mode}` || 'Hex';
+        const currentMode = 'Hex';
         const newColourObject = makeColourObject(newHex, state.colourMap, state.recentColour?.Name);
         const returnValue = {
           ...state,
@@ -245,17 +245,18 @@ function useData() {
         const newHsl = getHslValueFromSlider(sliderValue, sliderType, oldHsl);
 
         const newHex = colourSpace.convertHslStringToHex(newHsl);
-        const previousLuminance = state.previousColour?.luminance;
+        const previousLuminance = state.recentColour?.luminanceFloat;
         // console.log('newHsl:', newHsl);
         if (typeof previousLuminance === 'number' && typeof newHex === 'string' && sliderType !== 'Lum') {
           const { resultingHex } = setToTargetLuminance(newHex, previousLuminance);
           const newObject = makeColourObject(resultingHex, state.colourMap, state.recentColour?.Name);
-          const modeOut = state.mode ? state.mode : 'Hex';
+          const modeOut = 'HSL';
           const textOutput = newObject ? getRecentTextField(newObject, modeOut) : '';
           const returnValue = {
             ...state,
             textInput: textOutput,
             recentColour: newObject,
+            mode: modeOut,
           };
           const previousContrast = setPreviousContrast(returnValue);
           if (previousContrast !== undefined) returnValue.previousColour = previousContrast;
@@ -263,12 +264,13 @@ function useData() {
         }
 
         const recentColourValue: ColourObj | undefined = newHsl ? makeColourObjectHsl(newHsl, state) : undefined;
-        const modeOut = state.mode ? state.mode : 'Hex';
+        const modeOut = 'HSL';
         const textOutput = recentColourValue ? getRecentTextField(recentColourValue, modeOut) : '';
         const returnValue = {
           ...state,
           textInput: textOutput,
           recentColour: recentColourValue,
+          mode: modeOut,
         };
         const previousValue = setPreviousContrast(returnValue);
         if (previousValue) returnValue.previousColour = previousValue;
@@ -409,7 +411,7 @@ function submitRecentColour(stateIn: {
   const newMap = addColourObjectToStorage(recentState, stateIn.colourMap);
   const returnValue = {
     ...stateIn,
-    textInput: getRecentTextField(recentState, stateIn.mode),
+    textInput: getRecentTextField(recentState, 'Name'),
     previousColour: setPreviousLuminance(stateIn.recentColour),
     colourMap: newMap,
     mode: 'Name',
