@@ -23,8 +23,8 @@
   },
   "plugins": ["react", "@typescript-eslint", "prettier"],
   "rules": {
-    "no-irregular-whitespace":["off",{"skipTemplates": true }],
-    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
+    "no-irregular-whitespace": ["off", { "skipTemplates": true }],
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
     "no-use-before-define": ["error", { "functions": false }],
     "@typescript-eslint/no-use-before-define": ["error", { "functions": false }],
     "prettier/prettier": "error",
@@ -40,18 +40,15 @@
         "ts": "never",
         "tsx": "never"
       }
-   ],
-   "jsx-a11y/anchor-is-valid": [
-    2,
-    {"depth":1}
-   ],
-   "jsx-a11y/label-has-associated-control": [
-    2,
-    {
-      "controlComponents": ["InputSelect", "SectionTitle", "InputTitle", "InputText", "TextArea"],
-      "depth": 5
-    }
-  ],
-  "no-console": "off"
+    ],
+    "jsx-a11y/anchor-is-valid": [2, { "depth": 1 }],
+    "jsx-a11y/label-has-associated-control": [
+      2,
+      {
+        "controlComponents": ["InputSelect", "SectionTitle", "InputTitle", "InputText", "TextArea"],
+        "depth": 5
+      }
+    ],
+    "no-console": "off"
   }
 }

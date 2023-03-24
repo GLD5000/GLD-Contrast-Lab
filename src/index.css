@@ -93,15 +93,15 @@ input[type='range']::-webkit-slider-thumb {
   appearance: none;
   width: 1rem;
   height: 1rem;
-  background: currentColor; 
+  background: currentColor;
   cursor: inherit;
   border-radius: 100%;
 }
 
 input[type='range']::-moz-range-thumb {
-  width: 1rem; 
+  width: 1rem;
   height: 1rem;
-  background: currentColor; 
-  cursor: inherit; 
+  background: currentColor;
+  cursor: inherit;
   border-radius: 100%;
 }

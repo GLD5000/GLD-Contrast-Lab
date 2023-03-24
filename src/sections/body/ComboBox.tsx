@@ -4,7 +4,7 @@ import { useColourInputContext, ColourObj } from '../../contexts/ColourInputProv
 import ColourPicker from './ColourPicker';
 import InlineList from './InlineList';
 
-function getHexData(colourObject: ColourObj, mode: string, previousContrast: string) {
+function getHexData(colourObject: ColourObj, colourMode: string, previousContrast: string) {
   const { Hex, HSL, RGB, Luminance, Black, White, Name } = colourObject;
   const colourSpaceLookup: { [key: string]: string } = {
     Hex: `Relative Luminance: ${Luminance} \r\n${`${HSL}\r\n`}${`${RGB}\r\n`}`,
@@ -15,11 +15,13 @@ function getHexData(colourObject: ColourObj, mode: string, previousContrast: str
   };
   return `Name: ${
     Name || '-'
-  }\r\nContrast Previous: ${previousContrast}\r\nContrast Black/White: ${Black}/${White}\r\n${colourSpaceLookup[mode]}`;
+  }\r\nContrast Previous: ${previousContrast}\r\nContrast Black/White: ${Black}/${White}\r\n${
+    colourSpaceLookup[colourMode]
+  }`;
 }
 
 export default function ComboBox() {
-  const { textInput, colourMap, recentColour, previousColour, mode, type, dispatchColourInput } =
+  const { textInput, colourMap, recentColour, previousColour, colourMode, sliderType, dispatchColourInput } =
     useColourInputContext();
   const previousContrast = previousColour?.contrast ? `${previousColour?.contrast}` : '-';
   // const [hasFocus, setHasFocus] = useState(false);
@@ -36,7 +38,7 @@ export default function ComboBox() {
       // Black: string,
       // White: string,
     };
-    dispatchColourInput({ type: 'CHANGE_MODE', payload: { mode: nextModeLookup[mode] } });
+    dispatchColourInput({ type: 'CHANGE_COLOURSPACE', payload: { colourMode: nextModeLookup[colourMode] } });
   }
   function handleClickClear() {
     dispatchColourInput({ type: 'CLEAR_TEXT', payload: {} });
@@ -109,7 +111,7 @@ export default function ComboBox() {
                 Clear
               </button>
             )}
-            {type !== 'Lum' &&
+            {sliderType !== 'Lum' &&
               previousContrast !== undefined &&
               previousContrast !== '-' &&
               previousContrast !== '1' && (
@@ -130,13 +132,13 @@ export default function ComboBox() {
                 type="button"
                 onClick={handleClickMode}
               >
-                {mode}
+                {colourMode}
               </button>
             )}
 
             {recentColour !== undefined && textInput.length > 0 && (
               <pre className="absolute bottom-2 left-2 m-0 h-fit p-0 text-xs   text-green-900 dark:text-green-300">
-                {getHexData(recentColour, mode, previousContrast)}
+                {getHexData(recentColour, colourMode, previousContrast)}
               </pre>
             )}
           </div>

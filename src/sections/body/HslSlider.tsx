@@ -1,72 +1,8 @@
-import { MouseEvent, useEffect, useState } from 'react';
+import { MouseEvent } from 'react';
 import { useColourInputContext } from '../../contexts/ColourInputProvider';
 
-function convertHslToSlider(value: number, type: string) {
-  if (type !== 'Hue') return Math.round(value * 3.6);
-  return Math.round(value);
-}
-
-function parseHslStringToArray(stringIn: string) {
-  const arrayValue = stringIn
-    .toLowerCase()
-    .replaceAll(/[hsl( )%]/g, '')
-    .split(',')
-    .map((x) => parseInt(x, 10));
-  return arrayValue;
-}
-function getSliderValueHslString(hslString: string, type: string) {
-  const [Hue, Sat, Lum] = parseHslStringToArray(hslString);
-  const valueLookup: { [key: string]: number } = {
-    Hue,
-    Sat,
-    Lum,
-  };
-  const newValue = convertHslToSlider(valueLookup[type], type);
-  return newValue;
-}
-
-function useDebounce(value: number, time: number) {
-  const [debounceValue, setDebounceValue] = useState(0);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setDebounceValue(value);
-    }, time);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [value, time]);
-
-  return debounceValue;
-}
-
 export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => void }) {
-  const { recentColour, type, dispatchColourInput } = useColourInputContext();
-  const [sliderValue, setSliderValue] = useState(0);
-  const [hasFocus, setHasFocus] = useState(false);
-  const debouncedValue = useDebounce(sliderValue, 50);
-  console.log('hasFocus:', hasFocus);
-  // let sliderFocus = false;
-  useEffect(() => {
-    let run = true;
-    if (run && recentColour !== undefined) {
-      setSliderValue(getSliderValueHslString(`${recentColour.HSL}`, type));
-    }
-    return () => {
-      run = false;
-    };
-  }, [recentColour, type]);
-
-  useEffect(() => {
-    let run = true;
-    if (run && hasFocus) {
-      dispatchColourInput({ type: 'UPDATE_HSL', payload: { number: debouncedValue, type } });
-    }
-    return () => {
-      run = false;
-    };
-  }, [debouncedValue, dispatchColourInput, hasFocus, type]);
+  const { recentColour, hslSlider, sliderType, dispatchColourInput } = useColourInputContext();
 
   function handleTypeClick() {
     const typeLookup: { [key: string]: string } = {
@@ -74,13 +10,12 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
       Sat: 'Lum',
       Lum: 'Hue',
     };
-    const newType = typeLookup[type];
+    const newType = typeLookup[sliderType];
     dispatchColourInput({ type: 'SET_TYPE', payload: { textInput: newType } });
   }
   function handleSliderInput(e: MouseEvent<HTMLInputElement>) {
-    console.log(e.currentTarget.id);
-
-    setSliderValue(parseFloat(e.currentTarget.value));
+    console.log('e.currentTarget.value:', e.currentTarget.value);
+    dispatchColourInput({ type: 'UPDATE_HSL', payload: { hslSlider: Number(e.currentTarget.value), sliderType } });
   }
 
   function handleClickRandom() {
@@ -96,7 +31,7 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
             type="button"
             onClick={handleTypeClick}
           >
-            {type}
+            {sliderType}
           </button>
         </label>
         {recentColour !== undefined ? (
@@ -106,28 +41,8 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
             type="range"
             min={0}
             max={360}
-            value={sliderValue}
+            value={hslSlider}
             onInput={handleSliderInput}
-            onFocus={() => {
-              if (hasFocus === false) {
-                setHasFocus(true);
-              }
-            }}
-            onBlur={() => {
-              if (hasFocus === true) {
-                setHasFocus(false);
-              }
-            }}
-            onPointerDown={() => {
-              if (hasFocus === false) {
-                setHasFocus(true);
-              }
-            }}
-            onPointerUp={() => {
-              if (hasFocus === true) {
-                setHasFocus(false);
-              }
-            }}
           />
         ) : (
           <input
@@ -137,7 +52,7 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
             type="range"
             min={0}
             max={360}
-            value={sliderValue}
+            value={hslSlider}
             onInput={handleSliderInput}
           />
         )}
