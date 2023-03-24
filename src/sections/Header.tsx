@@ -1,5 +1,6 @@
 import SvgButton from '../elements/SvgButton';
 import GldSvg from '../icons/GldSvg';
+import HamburgerSvg from '../icons/HamburgerSvg';
 
 export default function Header({
   toggleColourTheme,
@@ -44,19 +45,23 @@ export default function Header({
           >
             GitHub
           </a>
-          <SvgButton
-            svgWrapperClasses="pointer-events-none h-6 w-6"
-            text={colourTheme ? 'Light' : 'Dark'}
-            clickFunction={toggleColourTheme}
-            type={colourTheme ? 'sun' : 'moon'}
-            showText
-            reverse={false}
-            id="colour-theme-button"
-            name="Dark Mode Button"
-            className="rounded text-xs"
-            buttonClasses="w-fit h-fit flex flex-col overflow-hidden hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black hover:transition py-1 px-2"
-            svgClasses="stroke-current fill-current stroke-2 dark:hover:fill-none"
-          />
+          <div className="flex flex-row gap-1">
+            <HamburgerSvg />
+
+            <SvgButton
+              svgWrapperClasses="pointer-events-none h-6 w-6"
+              text={colourTheme ? 'Light' : 'Dark'}
+              clickFunction={toggleColourTheme}
+              type={colourTheme ? 'sun' : 'moon'}
+              showText
+              reverse={false}
+              id="colour-theme-button"
+              name="Dark Mode Button"
+              className="rounded text-xs"
+              buttonClasses="w-fit h-fit flex flex-col overflow-hidden hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black hover:transition py-1 px-2"
+              svgClasses="stroke-current fill-current stroke-2 dark:hover:fill-none"
+            />
+          </div>
         </div>
       </nav>
     </header>
