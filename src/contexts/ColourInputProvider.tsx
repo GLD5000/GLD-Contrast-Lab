@@ -306,6 +306,8 @@ function useData() {
           ...state,
           sliderType: typeIn,
         };
+        if (state.recentColour?.HSL) returnValue.hslSlider = getSliderValueHslString(state.recentColour.HSL, typeIn);
+
         const stateLuminance = state.recentColour?.luminanceFloat;
         console.log('stateLuminance:', stateLuminance);
         if (typeIn === 'Hue' && typeof stateLuminance === 'number') returnValue.hslLuminanceTarget = stateLuminance;
@@ -348,8 +350,8 @@ function useData() {
         };
         return returnValue;
       }
-      case 'CHANGE_COLOURSPACE': {
-        // console.log('CHANGE_COLOURSPACE')
+      case 'CHANGE_COLOUR_MODE': {
+        // console.log('CHANGE_COLOUR_MODE')
         const newMode = `${action.payload.colourMode}` || 'Hex';
         const returnValue = { ...state, colourMode: newMode };
         const mostRecentColour = returnValue.recentColour;

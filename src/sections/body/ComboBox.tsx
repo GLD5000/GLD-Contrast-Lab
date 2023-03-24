@@ -38,7 +38,7 @@ export default function ComboBox() {
       // Black: string,
       // White: string,
     };
-    dispatchColourInput({ type: 'CHANGE_COLOURSPACE', payload: { colourMode: nextModeLookup[colourMode] } });
+    dispatchColourInput({ type: 'CHANGE_COLOUR_MODE', payload: { colourMode: nextModeLookup[colourMode] } });
   }
   function handleClickClear() {
     dispatchColourInput({ type: 'CLEAR_TEXT', payload: {} });
