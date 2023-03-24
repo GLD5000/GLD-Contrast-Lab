@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useReducer, Dispatch, useEffect } from 'react';
-import { setToTargetLuminance } from '../utilities/colour/autoContrast';
+import { setToTargetLuminance, setToTargetLuminanceHsl } from '../utilities/colour/autoContrast';
 import { colourSpace } from '../utilities/colour/colourSpace';
 import { contrast } from '../utilities/colour/contrastRatio';
 import { luminance } from '../utilities/colour/luminance';
@@ -231,25 +231,21 @@ function useData() {
       }
 
       case 'UPDATE_HSL': {
-        // console.log('UPDATE_HSL');
         const sliderType = action.payload.type;
         const sliderValue = action.payload.number;
-        // console.log(sliderType,sliderValue);
 
         const In = state.recentColour;
-        // console.log('hasRecentColour:', state.In!== undefined);
 
         if (In === undefined || sliderValue === undefined || sliderType === undefined) return { ...state };
         const oldHsl = `${In.HSL}`;
-        // console.log('oldHsl:', oldHsl);
         const newHsl = getHslValueFromSlider(sliderValue, sliderType, oldHsl);
-
+        const newHslArray = parseHslStringToArray(newHsl);
         const newHex = colourSpace.convertHslStringToHex(newHsl);
         const previousLuminance = state.recentColour?.luminanceFloat;
-        // console.log('newHsl:', newHsl);
         if (typeof previousLuminance === 'number' && typeof newHex === 'string' && sliderType !== 'Lum') {
-          const { resultingHex } = setToTargetLuminance(newHex, previousLuminance);
-          const newObject = makeColourObject(resultingHex, state.colourMap, state.recentColour?.Name);
+          const { resultingHsl } = setToTargetLuminanceHsl(newHslArray, previousLuminance);
+          const resultingHslString = stringifyHslArray(resultingHsl);
+          const newObject = makeColourObjectHsl(resultingHslString, state);
           const modeOut = 'HSL';
           const textOutput = newObject ? getRecentTextField(newObject, modeOut) : '';
           const returnValue = {
@@ -895,7 +891,7 @@ function convertSliderToHsl(value: number, type: string) {
 
 function stringifyHslArray(ArrayIn: number[]) {
   const [hue, sat, lum] = ArrayIn;
-  const stringValue = `HSL(${hue}, ${sat}%, ${lum}%)`;
+  const stringValue = `HSL(${Math.round(hue)}, ${Math.round(sat)}%, ${Math.round(lum)}%)`;
   return stringValue;
 }
 

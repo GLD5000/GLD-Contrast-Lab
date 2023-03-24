@@ -119,6 +119,9 @@ export const autoContrast = {
     const total = decimalArray.reduce((a: number, b: number) => a + b);
     return total > 0 && total < 3;
   },
+  hslIsWithinLimit(arrayIn: number[]) {
+    return arrayIn[2] > 0 && arrayIn[2] < 100;
+  },
   adjustLuminanceFine(
     targetContrast: number,
     originalLuminance: number,
@@ -169,9 +172,70 @@ export const autoContrast = {
     if (resultsAreGood) return { resultingContrastRatio, resultingHex };
     return { resultingContrastRatio, resultingHex, resultsAreGood };
   },
+  adjustLuminanceFineHsl(originalHsl: number[], targetLuminance: number) {
+    const originalLuminance = luminance.convertHslToLuminance(originalHsl);
+    const targetContrast = contrast.getContrastRatioFloat([targetLuminance, originalLuminance]);
+
+    const originalDirection = originalLuminance < targetLuminance ? 'up' : 'down';
+    let loopLimiter = 0;
+    const loopLimit = 25;
+    let currentHsl = originalHsl;
+    let currentLuminance = originalLuminance;
+    let currentContrast = contrast.getContrastRatio2Dp([originalLuminance, currentLuminance]);
+    let equal = false;
+
+    let directionUp = currentContrast < targetContrast;
+    const startIncrement = 10;
+    let changesOfDirection = 0;
+    let outOfBounds = 0;
+    let changesMultipier = 1;
+    let inRightDirection = false;
+
+    while (loopLimiter < loopLimit && equal === false && outOfBounds < 3) {
+      const increment = directionUp ? changesMultipier * startIncrement : changesMultipier * startIncrement * -1;
+      loopLimiter += 1;
+      currentHsl = autoContrast.incrementLuminanceHsl(currentHsl, increment);
+      currentLuminance = luminance.convertHslToLuminance(currentHsl);
+      currentContrast = contrast.getContrastRatio2Dp([originalLuminance, currentLuminance]);
+      inRightDirection =
+        originalDirection === 'up' ? currentLuminance > originalLuminance : currentLuminance < originalLuminance;
+      equal = inRightDirection && targetContrast === currentContrast;
+      if (directionUp !== currentLuminance < targetLuminance) {
+        directionUp = !directionUp;
+        changesOfDirection += 1;
+      }
+      changesMultipier = 1 / Math.max(1, 2 ** changesOfDirection);
+      const inBounds = autoContrast.hslIsWithinLimit(currentHsl);
+      if (inBounds) {
+        outOfBounds = 0;
+      }
+
+      if (!inBounds) {
+        outOfBounds += 1;
+      }
+    }
+    // if (loopLimiter === loopLimit) console.log('loopLimiter:', loopLimiter);
+    const resultingContrastRatio = contrast.getContrastRatio2Dp([
+      originalLuminance,
+      luminance.convertHslToLuminance(currentHsl),
+    ]);
+    const resultsAreGood = autoContrast.testResultsHsl(currentHsl, resultingContrastRatio, targetContrast);
+    if (resultsAreGood) return { resultingContrastRatio, resultingHsl: currentHsl, resultsAreGood };
+    return { resultingContrastRatio, resultingHsl: currentHsl, resultsAreGood };
+  },
   testResults(hex: string, contrastA: number, contrastB: number) {
     const boolean = hex === '#000000' || hex === '#ffffff' || contrastA === contrastB;
     return boolean;
+  },
+  testResultsHsl(hsl: number[], contrastA: number, contrastB: number) {
+    const boolean = hsl[2] === 0 || hsl[2] === 100 || contrastA === contrastB;
+    return boolean;
+  },
+
+  incrementLuminanceHsl(hslArray: Array<number>, increment: number) {
+    const copy = [...hslArray];
+    copy[2] = Math.max(0, Math.min(100, hslArray[2] + increment));
+    return copy;
   },
 };
 
@@ -215,4 +279,8 @@ export function setToTargetLuminance(
   const targetContrast = contrast.getContrastRatioFloat([targetLuminance, originalLuminance]);
   // const newDirection = originalLuminance < targetLuminance ? 'up' : 'down';
   return autoContrast.adjustLuminanceFine(targetContrast, originalLuminance, targetLuminance, originalSrgb);
+}
+
+export function setToTargetLuminanceHsl(originalHsl: number[], targetLuminance: number) {
+  return autoContrast.adjustLuminanceFineHsl(originalHsl, targetLuminance);
 }

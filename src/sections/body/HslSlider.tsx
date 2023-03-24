@@ -46,6 +46,8 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
   const [sliderValue, setSliderValue] = useState(0);
   const [hasFocus, setHasFocus] = useState(false);
   const debouncedValue = useDebounce(sliderValue, 50);
+  console.log('hasFocus:', hasFocus);
+  // let sliderFocus = false;
   useEffect(() => {
     let run = true;
     if (run && recentColour !== undefined) {
@@ -76,6 +78,8 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
     dispatchColourInput({ type: 'SET_TYPE', payload: { textInput: newType } });
   }
   function handleSliderInput(e: MouseEvent<HTMLInputElement>) {
+    console.log(e.currentTarget.id);
+
     setSliderValue(parseFloat(e.currentTarget.value));
   }
 
@@ -105,10 +109,24 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
             value={sliderValue}
             onInput={handleSliderInput}
             onFocus={() => {
-              setHasFocus(true);
+              if (hasFocus === false) {
+                setHasFocus(true);
+              }
             }}
             onBlur={() => {
-              setHasFocus(false);
+              if (hasFocus === true) {
+                setHasFocus(false);
+              }
+            }}
+            onPointerDown={() => {
+              if (hasFocus === false) {
+                setHasFocus(true);
+              }
+            }}
+            onPointerUp={() => {
+              if (hasFocus === true) {
+                setHasFocus(false);
+              }
             }}
           />
         ) : (

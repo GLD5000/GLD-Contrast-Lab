@@ -22,7 +22,10 @@ export const luminance = {
     const weightingRatio = currentValue / maxValue;
     return weightingRatio;
   },
-
+  convertHslToLuminance(hslIn: number[]) {
+    const srgbArray = colourSpace.convertHslArrayToSrgb(hslIn);
+    return luminance.convertSrgbToLuminance(srgbArray);
+  },
   convertSrgbToLuminance(args: Array<number>) {
     const [R, G, B] = args.map(luminance.modifyColourValue);
     const summed = luminance.sumColourValues([R, G, B]);
