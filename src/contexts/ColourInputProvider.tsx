@@ -243,7 +243,25 @@ function useData() {
         const oldHsl = `${In.HSL}`;
         // console.log('oldHsl:', oldHsl);
         const newHsl = getHslValueFromSlider(sliderValue, sliderType, oldHsl);
+
+        const newHex = colourSpace.convertHslStringToHex(newHsl);
+        const previousLuminance = state.previousColour?.luminance;
         // console.log('newHsl:', newHsl);
+        if (typeof previousLuminance === 'number' && typeof newHex === 'string' && sliderType !== 'Lum') {
+          const { resultingHex } = setToTargetLuminance(newHex, previousLuminance);
+          const newObject = makeColourObject(resultingHex, state.colourMap, state.recentColour?.Name);
+          const modeOut = state.mode ? state.mode : 'Hex';
+          const textOutput = newObject ? getRecentTextField(newObject, modeOut) : '';
+          const returnValue = {
+            ...state,
+            textInput: textOutput,
+            recentColour: newObject,
+          };
+          const previousContrast = setPreviousContrast(returnValue);
+          if (previousContrast !== undefined) returnValue.previousColour = previousContrast;
+          return returnValue;
+        }
+
         const recentColourValue: ColourObj | undefined = newHsl ? makeColourObjectHsl(newHsl, state) : undefined;
         const modeOut = state.mode ? state.mode : 'Hex';
         const textOutput = recentColourValue ? getRecentTextField(recentColourValue, modeOut) : '';
@@ -618,11 +636,12 @@ function makeColourObject(hexValue: string, mapIn: ColourMap | undefined, name: 
         ['White', White],
       ];
   const contrastRatios = new Map(arrays);
+  console.log(slicedNewName, valueIsHex(`${slicedNewName}`), Hex);
   // const stateName = state.recentColour?.Name;
   // const nonStaleHexName = stateName !== undefined && !valueIsHex(`${stateName}`) ? `${stateName}` : Hex;
   const nonStaleHexName = slicedNewName !== undefined && !valueIsHex(`${slicedNewName}`) ? `${slicedNewName}` : Hex;
 
-  const Name = slicedNewName || nonStaleHexName;
+  const Name = nonStaleHexName;
   const returnObject = {
     luminanceFloat,
     Hex,
