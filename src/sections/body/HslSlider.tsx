@@ -1,8 +1,26 @@
-import { MouseEvent } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { useColourInputContext } from '../../contexts/ColourInputProvider';
+
+let run = false;
 
 export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => void }) {
   const { recentColour, hslSlider, sliderType, dispatchColourInput } = useColourInputContext();
+  const [sendValue, setSendValue] = useState(hslSlider);
+  // console.log('run:', run);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (run) {
+        dispatchColourInput({ type: 'UPDATE_HSL', payload: { hslSlider: sendValue, sliderType } });
+        run = false;
+        // console.log('sendValue:', sendValue);
+      }
+    }, 125);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [sendValue, dispatchColourInput, sliderType]);
 
   function handleTypeClick() {
     const typeLookup: { [key: string]: string } = {
@@ -14,8 +32,11 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
     dispatchColourInput({ type: 'SET_TYPE', payload: { textInput: newType } });
   }
   function handleSliderInput(e: MouseEvent<HTMLInputElement>) {
-    console.log('e.currentTarget.value:', e.currentTarget.value);
-    dispatchColourInput({ type: 'UPDATE_HSL', payload: { hslSlider: Number(e.currentTarget.value), sliderType } });
+    const newValue = Number(e.currentTarget.value);
+    // dispatchColourInput({ type: 'UPDATE_HSL', payload: { hslSlider: newValue, sliderType } });
+    setSendValue(newValue);
+    // console.log('input', newValue);
+    run = true;
   }
 
   function handleClickRandom() {

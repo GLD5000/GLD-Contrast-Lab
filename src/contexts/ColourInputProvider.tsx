@@ -134,6 +134,7 @@ function useData() {
         if (previousValue) returnValue.previousColour = previousValue;
         if (newColourObject !== undefined) {
           returnValue.textInput = getRecentTextField(newColourObject, currentMode);
+          returnValue.hslSlider = getSliderValueHslString(newColourObject.HSL, state.sliderType);
         }
         return returnValue;
       }
@@ -157,7 +158,7 @@ function useData() {
         }
 
         const stateLuminance = previousObject?.luminance;
-        console.log('stateLuminance:', stateLuminance);
+        // console.log('stateLuminance:', stateLuminance);
         if (typeof stateLuminance === 'number') returnValue.hslLuminanceTarget = stateLuminance;
 
         return returnValue;
@@ -659,7 +660,7 @@ function makeColourObject(hexValue: string, mapIn: ColourMap | undefined, name: 
         ['White', White],
       ];
   const contrastRatios = new Map(arrays);
-  console.log(slicedNewName, valueIsHex(`${slicedNewName}`), Hex);
+  // console.log(slicedNewName, valueIsHex(`${slicedNewName}`), Hex);
   // const stateName = state.recentColour?.Name;
   // const nonStaleHexName = stateName !== undefined && !valueIsHex(`${stateName}`) ? `${stateName}` : Hex;
   const nonStaleHexName = slicedNewName !== undefined && !valueIsHex(`${slicedNewName}`) ? `${slicedNewName}` : Hex;
