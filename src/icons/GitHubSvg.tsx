@@ -1,6 +1,6 @@
 export default function GitHubSvg() {
   return (
-    <div className=" pointer-events-none aspect-square h-6 fill-current">
+    <div className=" pointer-events-none h-5 w-5 fill-current">
       <svg width="100%" height="100%" viewBox="0 0 98 96" xmlns="http://www.w3.org/2000/svg">
         <path
           fillRule="evenodd"
