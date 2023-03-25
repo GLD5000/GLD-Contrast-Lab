@@ -4,6 +4,10 @@ module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      screens: {
+        xs: '420px',
+        // => @media (min-width: 420px) { ... }
+      },
       gridTemplateColumns: {
         frAutoFr: '1fr auto 1fr',
         autoAuto: 'auto auto',
@@ -34,11 +38,10 @@ module.exports = {
         'txt-main': '#000000',
         'txt-mid': '#474747',
         'txt-low': '#636363',
-        'border': '#919191',
-        'deco': '#e0e0e0',
+        border: '#919191',
+        deco: '#e0e0e0',
         'bg-var': '#fafafa',
-        'bg': '#ffffff',
-                
+        bg: '#ffffff',
       },
       boxShadow: {
         bottom: '1px 3px 0px -2px rgba(0, 0, 0, 1)',

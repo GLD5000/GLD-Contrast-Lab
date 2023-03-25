@@ -5,3 +5,4 @@
 /build
 vite.config.ts
 lint-staged.config.js
+tailwind.config.js
