@@ -46,16 +46,22 @@ export default function NavBar({
       </a>
       <div className="flex flex-wrap gap-1">
         <SvgButtonNew
+          showTextIn={undefined}
           clickFunction={toggleColourTheme}
           reverse={false}
           id="colour-theme-button"
           name="Dark Mode Button"
-          className="rounded text-xs"
-          buttonClasses="w-fit h-14  flex-col hidden xs:flex overflow-hidden hover:transition hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black py-1 px-2"
-          textElement={<span className="absolute bottom-[0.3rem]">{colourTheme ? 'Light' : 'Dark'}</span>}
+          className="relative rounded text-xs"
+          buttonClasses="w-fit h-fit overflow-visible flex-col hidden xs:flex  hover:transition hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black pb-4 pt-1 mt-3 px-2"
+          textElement={
+            <span className="absolute bottom-0 w-full rounded-t-none text-inherit ">
+              {colourTheme ? 'Light' : 'Dark'}
+            </span>
+          }
           svg={getDarkToggleIcon(colourTheme)}
         />
         <SvgButtonNew
+          showTextIn={undefined}
           clickFunction={toggleMenu}
           reverse={false}
           id="colour-theme-button"

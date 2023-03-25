@@ -10,7 +10,7 @@ const className =
 // const className =
 //   "   flex-row gap-2 text-txt-main-dk hover:text-txt-main hover:underline hover:decoration-current hover:underline-offset-2 hover:transition focus:text-txt-main focus:underline focus:decoration-current  focus:underline-offset-2 focus:transition dark:text-txt-main dark:hover:text-txt-main-dk dark:focus:text-txt-main-dk sm:flex";
 function getDarkToggleIcon(isDark: boolean) {
-  const wrapper = <div className=" my-auto aspect-square h-6">{isDark ? <SunSvg /> : <MoonSvg />} </div>;
+  const wrapper = <div className=" aspect-square h-6">{isDark ? <SunSvg /> : <MoonSvg />} </div>;
   return wrapper;
 }
 
@@ -47,18 +47,17 @@ export default function HamburgerMenu({
         <GitHubSvg />
         <p className="m-0  md:inline">GitHub</p>
       </a>
-      <div className="flex flex-wrap gap-1">
-        <SvgButtonNew
-          clickFunction={toggleColourTheme}
-          reverse={false}
-          id="colour-theme-button"
-          name="Dark Mode Button"
-          className="rounded text-xs"
-          buttonClasses="w-fit h-12  flex-col xs:hidden  flex overflow- hover:transition hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black py-1 px-2"
-          textElement={<span className="absolute bottom-[0.475rem]">{colourTheme ? 'Light' : 'Dark'}</span>}
-          svg={getDarkToggleIcon(colourTheme)}
-        />
-      </div>
+      <SvgButtonNew
+        showTextIn
+        clickFunction={toggleColourTheme}
+        reverse={false}
+        id="colour-theme-button"
+        name="Dark Mode Button"
+        className="rounded text-xs"
+        buttonClasses="w-10 h-fit  flex-col xs:hidden  flex overflow-  text-txt-mid hover:text-txt-main hover:underline hover:decoration-current hover:underline-offset-2 hover:transition focus:text-txt-main focus:underline focus:decoration-current  focus:underline-offset-2 focus:transition dark:text-txt-mid-dk dark:hover:text-txt-main-dk dark:focus:text-txt-main-dk pb-1 px-2 self-start"
+        textElement={<span className="text inherit text-base">{colourTheme ? 'Light' : 'Dark'}</span>}
+        svg={getDarkToggleIcon(colourTheme)}
+      />
     </nav>
   );
 }

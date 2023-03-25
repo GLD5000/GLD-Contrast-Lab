@@ -18,6 +18,7 @@ export default function SvgButtonNew({
   clickFunction,
   id,
   name,
+  showTextIn,
   reverse = false,
   buttonClasses = `grid-cols-frAutoFr w-full h-full 
   `,
@@ -32,13 +33,14 @@ export default function SvgButtonNew({
   clickFunction: (e: MouseEvent<HTMLButtonElement>) => void | (() => void);
   id: string | undefined;
   name: string | undefined;
+  showTextIn: boolean | undefined;
   className: string | undefined;
   reverse: boolean;
   buttonClasses: string | undefined;
   svg: ReactElement;
   textElement: ReactElement | null;
 }) {
-  const [showText, setShowText] = useState(false);
+  const [showText, setShowText] = useState(showTextIn || false);
   const content = getContent(reverse, showText, textElement, svg);
 
   return (
@@ -50,16 +52,16 @@ export default function SvgButtonNew({
       className={`cursor-pointer items-center ${className.replaceAll(/[\s]+/g, ' ')} ${buttonClasses}`}
       aria-label={name}
       onFocus={() => {
-        setShowText(true);
+        if (!showTextIn) setShowText(true);
       }}
       onMouseEnter={() => {
-        setShowText(true);
+        if (!showTextIn) setShowText(true);
       }}
       onBlur={() => {
-        setShowText(false);
+        if (!showTextIn) setShowText(false);
       }}
       onMouseLeave={() => {
-        setShowText(false);
+        if (!showTextIn) setShowText(false);
       }}
     >
       {content}
