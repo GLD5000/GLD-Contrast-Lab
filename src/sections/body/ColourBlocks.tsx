@@ -64,7 +64,7 @@ export default function ColourBlocks() {
   const returnArrays = createColourBlockArrays(visibleSet, colourMap);
   return (
     <>
-      <section className="grid gap-4">
+      <section className="grid content-center gap-4">
         <div className="mr-auto grid place-items-start">
           <h2 className=" m-0 text-2xl font-bold">Compare Colours</h2>
           <p className="mt-2 mb-8 text-lg">Customise and Analyse</p>
@@ -77,11 +77,12 @@ export default function ColourBlocks() {
             </li>
           </ul>
         </div>
-        <div className="mx-auto grid h-fit w-fit overflow-x-auto rounded border border-current">
-          <div className="h-9 w-full  rounded-none border-b bg-bg-var dark:bg-bg-var-dk">
-            <h3 className="m-auto  w-fit">{title}</h3>
+        <div className="relative mx-auto grid h-fit w-full rounded border border-current">
+          <div className="sticky top-0 left-0 h-9 w-full rounded-none border-b bg-bg-var dark:bg-bg-var-dk">
+            <h3 className="m-auto w-fit">{title}</h3>
           </div>
-          <div className="p-8">
+
+          <div className="w-full overflow-x-auto p-8 ">
             <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 overflow-clip rounded-[2.4rem] border-4 border-border bg-bg dark:bg-bg-dk ">
               {returnArrays}
             </div>

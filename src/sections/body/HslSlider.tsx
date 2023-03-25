@@ -13,9 +13,9 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
       if (run) {
         dispatchColourInput({ type: 'UPDATE_HSL', payload: { hslSlider: sendValue, sliderType } });
         run = false;
-        // console.log('sendValue:', sendValue);
+        console.log('sendValue:', sendValue);
       }
-    }, 125);
+    }, 50);
 
     return () => {
       clearTimeout(timeoutId);

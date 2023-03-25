@@ -17,8 +17,11 @@ export default function Header({
   return (
     <header className="sticky top-0 left-0 right-0 z-[999] grid h-fit w-screen flex-shrink-0 flex-grow-0 grid-cols-frAutoFr content-center border-b bg-bg dark:bg-bg-dk">
       <div className=" col-start-2 ">
-        <div className=" flex w-body min-w-body max-w-body  flex-wrap items-center justify-between  ">
-          <div className="flex h-16 flex-wrap items-center gap-2 p-2">
+        <div
+          className=" flex w-body-sm min-w-body  max-w-body flex-wrap items-center justify-between
+sm:w-body "
+        >
+          <div className="flex h-16 flex-wrap items-center gap-2 py-2">
             <a href="https://gld-portfolio.vercel.app/" target="_blank" rel="noreferrer">
               {' '}
               <GldSvg />

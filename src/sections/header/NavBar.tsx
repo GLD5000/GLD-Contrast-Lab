@@ -46,17 +46,6 @@ export default function NavBar({
       </a>
       <div className="flex flex-wrap gap-1">
         <SvgButtonNew
-          clickFunction={toggleMenu}
-          reverse={false}
-          id="colour-theme-button"
-          name="Dark Mode Button"
-          className="rounded text-xs"
-          buttonClasses=" text-txt-mid hover:text-txt-main hover:underline hover:decoration-current hover:underline-offset-2 hover:transition focus:text-txt-main focus:underline focus:decoration-current  focus:underline-offset-2 focus:transition dark:text-txt-mid-dk dark:hover:text-txt-main-dk dark:focus:text-txt-main-dk "
-          textElement={null}
-          svg={<HamburgerSvg />}
-        />
-
-        <SvgButtonNew
           clickFunction={toggleColourTheme}
           reverse={false}
           id="colour-theme-button"
@@ -65,6 +54,16 @@ export default function NavBar({
           buttonClasses="w-fit h-12  flex-col hidden xs:flex overflow-hidden hover:transition hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black py-1 px-2"
           textElement={<span className="absolute bottom-[0.475rem]">{colourTheme ? 'Light' : 'Dark'}</span>}
           svg={getDarkToggleIcon(colourTheme)}
+        />
+        <SvgButtonNew
+          clickFunction={toggleMenu}
+          reverse={false}
+          id="colour-theme-button"
+          name="Dark Mode Button"
+          className="rounded text-xs"
+          buttonClasses=" text-txt-mid hover:text-txt-main hover:underline hover:decoration-current hover:underline-offset-2 hover:transition focus:text-txt-main focus:underline focus:decoration-current  focus:underline-offset-2 focus:transition dark:text-txt-mid-dk dark:hover:text-txt-main-dk dark:focus:text-txt-main-dk "
+          textElement={null}
+          svg={<HamburgerSvg />}
         />
       </div>
     </nav>
