@@ -46,7 +46,7 @@ export default function ShowButtons() {
 
   return (
     <div className="flex items-center ">
-      <div className="mx-auto flex w-full min-w-[24rem]  flex-row flex-wrap items-center justify-center rounded-none border-t ">
+      <div className="mx-auto flex w-full min-w-[24rem]  flex-row flex-wrap items-center justify-center overflow-clip rounded rounded-t-none border-t ">
         <button
           type="button"
           onClick={handleClickRatio}
