@@ -78,12 +78,12 @@ export default function ColourBlocks() {
           </ul>
         </div>
         <div className="relative mx-auto grid h-fit w-full rounded border border-current">
-          <div className="sticky top-0 left-0 h-9 w-full rounded-none border-b bg-bg-var dark:bg-bg-var-dk">
+          <div className="sticky top-0 left-0 h-9 w-full rounded rounded-b-none border-b bg-bg-var dark:bg-bg-var-dk">
             <h3 className="m-auto w-fit">{title}</h3>
           </div>
 
-          <div className="w-full overflow-x-auto p-8 ">
-            <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 overflow-clip rounded-[2.4rem] border-4 border-border bg-bg dark:bg-bg-dk ">
+          <div className="w-full overflow-x-auto bg-bg-var  p-8 dark:bg-bg-var-dk ">
+            <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 overflow-clip rounded-[2.4rem] border-4 border-border bg-bg-var dark:bg-bg-var-dk ">
               {returnArrays}
             </div>
           </div>
