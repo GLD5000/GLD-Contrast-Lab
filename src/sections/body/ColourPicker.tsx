@@ -36,7 +36,7 @@ export default function ColourPicker() {
   return (
     <div className="grid h-fit w-80 overflow-clip rounded border">
       <div
-        className="relative mx-auto flex h-12 w-full content-center overflow-clip rounded-b-none focus-within:outline focus-within:outline-offset-2 focus-within:outline-current"
+        className="relative mx-auto flex h-12 w-full content-center overflow-clip rounded-b-none focus-within:outline focus-within:outline-offset-2 focus-within:outline-current focus-within:transition hover:outline hover:outline-offset-2 hover:outline-current hover:transition"
         style={styles}
       >
         <label

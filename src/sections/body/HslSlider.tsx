@@ -58,7 +58,7 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
         {recentColour !== undefined ? (
           <input
             id="hsl-slider"
-            className="my-auto h-1 shrink-0 grow cursor-pointer appearance-none rounded bg-neutral-500 text-black dark:text-white"
+            className="my-auto h-1 shrink-0 grow cursor-pointer appearance-none rounded bg-neutral-500 text-black hover:bg-current hover:transition focus:bg-current focus:transition dark:text-white"
             type="range"
             min={0}
             max={360}
