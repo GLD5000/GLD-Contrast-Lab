@@ -25,7 +25,7 @@ export default function NavBar({
   colourTheme: boolean;
 }) {
   return (
-    <nav className="relative flex h-16 flex-wrap items-center justify-center gap-8 py-2">
+    <nav className="relative flex h-16 flex-wrap items-center justify-center gap-8 ">
       <a
         className=" hidden  flex-row gap-2 text-txt-mid hover:text-txt-main hover:underline hover:decoration-current hover:underline-offset-2 hover:transition focus:text-txt-main focus:underline focus:decoration-current  focus:underline-offset-2 focus:transition dark:text-txt-mid-dk dark:hover:text-txt-main-dk dark:focus:text-txt-main-dk sm:flex"
         href="https://gld-portfolio.vercel.app/"
@@ -51,8 +51,8 @@ export default function NavBar({
           id="colour-theme-button"
           name="Dark Mode Button"
           className="rounded text-xs"
-          buttonClasses="w-fit h-12  flex-col hidden xs:flex overflow-hidden hover:transition hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black py-1 px-2"
-          textElement={<span className="absolute bottom-[0.475rem]">{colourTheme ? 'Light' : 'Dark'}</span>}
+          buttonClasses="w-fit h-14  flex-col hidden xs:flex overflow-hidden hover:transition hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black py-1 px-2"
+          textElement={<span className="absolute bottom-[0.3rem]">{colourTheme ? 'Light' : 'Dark'}</span>}
           svg={getDarkToggleIcon(colourTheme)}
         />
         <SvgButtonNew
