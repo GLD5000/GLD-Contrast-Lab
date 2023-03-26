@@ -139,12 +139,14 @@ function useData() {
         return returnValue;
       }
       case 'EDIT': {
-        // console.log('EDIT');
+        console.log('EDIT');
 
         const newHex = action.payload.textInput;
+        console.log('newHex:', newHex);
         if (!newHex) return { ...state };
         const currentMode = 'Hex';
         const newColourObject = makeColourObject(newHex, state.colourMap, state.recentColour?.Name);
+        console.log('newColourObject.Name:', newColourObject.Name);
         const previousObject = setPreviousLuminance(newColourObject);
         const returnValue = {
           ...state,
@@ -232,10 +234,11 @@ function useData() {
         return returnValue;
       }
       case 'SUBMIT': {
-        // console.log('SUBMIT');
+        console.log(state.colourMap);
+        state.colourMap?.forEach((map) => console.log(map.Name));
+        state.colourMap?.forEach((map) => console.log(map.contrastRatios.size));
         const recentColourReturn = submitRecentColour(state);
         if (recentColourReturn !== null) return recentColourReturn;
-
         const newText = state.textInput ? `${state.textInput}\t` : action.payload.textInput || '';
         const { processedText, processedArray, recent } = processText(newText || action.payload.textInput || '', state);
         const returnedColours = state.colourMap ? state.colourMap : undefined;
@@ -631,7 +634,7 @@ function emptyTextProcess(state: {
 }
 
 function makeColourObject(hexValue: string, mapIn: ColourMap | undefined, name: string | undefined) {
-  const slicedNewName = name?.slice(0, 18) || undefined;
+  const slicedNewName = !name || valueIsHex(name) ? hexValue : name?.slice(0, 18);
   const existingMap = mapIn || new Map();
   // console.log('existingMap.size:', existingMap?.size);
   const foundMap = existingMap && hexValue.length === 7 ? existingMap.get(hexValue) : undefined;
@@ -660,12 +663,7 @@ function makeColourObject(hexValue: string, mapIn: ColourMap | undefined, name: 
         ['White', White],
       ];
   const contrastRatios = new Map(arrays);
-  // console.log(slicedNewName, valueIsHex(`${slicedNewName}`), Hex);
-  // const stateName = state.recentColour?.Name;
-  // const nonStaleHexName = stateName !== undefined && !valueIsHex(`${stateName}`) ? `${stateName}` : Hex;
-  const nonStaleHexName = slicedNewName !== undefined && !valueIsHex(`${slicedNewName}`) ? `${slicedNewName}` : Hex;
 
-  const Name = nonStaleHexName;
   const returnObject = {
     luminanceFloat,
     Hex,
@@ -674,7 +672,7 @@ function makeColourObject(hexValue: string, mapIn: ColourMap | undefined, name: 
     Luminance,
     Black,
     White,
-    Name,
+    Name: slicedNewName,
     contrastRatios,
   };
   return returnObject;
@@ -714,7 +712,7 @@ function createMap(
   oldMap: ColourMap | undefined,
 ) {
   const names = processedText.split(' ');
-  // console.log(names);
+  console.log('createMap');
   if (!hexArray || !state) return { joinedMap: oldMap, stringOut: processedText };
   const filteredArray = hexArray.filter(valueIsHex);
   const arrayLength = names.length;
@@ -750,13 +748,14 @@ function addColourObjectToMap(newObject: ColourObj, existingMap: ColourMap | und
 
 function addColourObjectToStorage(newObject: ColourObj, existingMap: ColourMap | undefined) {
   const newMap = existingMap ? new Map([...existingMap]) : new Map();
-  // console.log('newMap:', newMap);
+  // console.log('existingMap.size:', existingMap?.size);
   const newContrastMap = newObject.contrastRatios;
   const newHex = newObject.Hex;
   newMap.forEach((object) => {
     const currentHex = object.Hex;
     const contrastRatio = newContrastMap.get(currentHex);
     if (contrastRatio) object.contrastRatios.set(newHex, contrastRatio);
+    // console.log('object.contrastRatios.size:', object.contrastRatios.size);
   });
   newMap.set(`${newObject.Hex}`, newObject);
 

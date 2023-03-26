@@ -13,7 +13,6 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
       if (run) {
         dispatchColourInput({ type: 'UPDATE_HSL', payload: { hslSlider: sendValue, sliderType } });
         run = false;
-        console.log('sendValue:', sendValue);
       }
     }, 30);
 

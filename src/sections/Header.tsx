@@ -23,7 +23,6 @@ sm:w-body "
         >
           <div className="flex h-16 flex-wrap items-center gap-2 py-2">
             <a href="https://gld-portfolio.vercel.app/" target="_blank" rel="noreferrer">
-              {' '}
               <GldSvg />
             </a>
 

@@ -13,6 +13,7 @@ function getBlockRow(backgroundColour: string, index: number, array: string[], r
     const keyB = `${textColour}-${number}`;
     const autoColour = textColour === backgroundColour;
     const textColourMod = autoColour ? autoTextColourFromHex(backgroundColour) : textColour;
+    // console.log('referenceMap.get(textColour).contrastRatios:', referenceMap?.get(textColour)?.contrastRatios);
     const contrastRatio = autoColour
       ? 21.0
       : referenceMap.get(textColour)?.contrastRatios.get(backgroundColour) || 21.0;
