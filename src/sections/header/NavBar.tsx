@@ -11,7 +11,7 @@ const className =
 // const className =
 //   "hidden   flex-row gap-2 text-txt-main-dk hover:text-txt-main hover:underline hover:decoration-current hover:underline-offset-2 hover:transition focus:text-txt-main focus:underline focus:decoration-current  focus:underline-offset-2 focus:transition dark:text-txt-main dark:hover:text-txt-main-dk dark:focus:text-txt-main-dk sm:flex";
 function getDarkToggleIcon(isDark: boolean) {
-  const wrapper = <div className=" my-auto aspect-square h-6">{isDark ? <SunSvg /> : <MoonSvg />} </div>;
+  const wrapper = <div className=" text:inherit my-auto aspect-square h-6">{isDark ? <SunSvg /> : <MoonSvg />} </div>;
   return wrapper;
 }
 
@@ -52,7 +52,7 @@ export default function NavBar({
           id="colour-theme-button"
           name="Dark Mode Button"
           className="relative rounded text-xs"
-          buttonClasses="w-fit h-fit overflow-visible flex-col hidden xs:flex  hover:transition hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black pb-4 pt-1 mt-3 px-2"
+          buttonClasses="w-fit h-fit overflow-visible flex-col hidden xs:flex  text-txt-mid hover:text-txt-main    hover:transition focus:text-txt-main  focus:transition dark:text-txt-mid-dk dark:hover:text-txt-main-dk dark:focus:text-txt-main-dk pb-4 pt-1 mt-3 px-2"
           textElement={
             <span className="absolute bottom-0 w-full rounded-t-none bg-transparent text-inherit ">
               {colourTheme ? 'Light' : 'Dark'}
