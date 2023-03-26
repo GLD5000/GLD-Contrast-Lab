@@ -15,7 +15,7 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
         run = false;
         console.log('sendValue:', sendValue);
       }
-    }, 50);
+    }, 30);
 
     return () => {
       clearTimeout(timeoutId);
