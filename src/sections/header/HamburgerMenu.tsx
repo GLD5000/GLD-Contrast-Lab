@@ -25,7 +25,7 @@ export default function HamburgerMenu({
 }) {
   return (
     <nav
-      className={`relative ${!show && 'hidden'} ${
+      className={`relative ${!show && 'hidden'} sm:hidden ${
         show && 'flex'
       } h-16 flex-wrap items-center justify-center gap-8 py-2`}
     >
@@ -54,8 +54,8 @@ export default function HamburgerMenu({
         id="colour-theme-button"
         name="Dark Mode Button"
         className="rounded text-xs"
-        buttonClasses="w-10 h-fit  flex-col xs:hidden  flex overflow-  text-txt-mid hover:text-txt-main hover:underline hover:decoration-current hover:underline-offset-2 hover:transition focus:text-txt-main focus:underline focus:decoration-current  focus:underline-offset-2 focus:transition dark:text-txt-mid-dk dark:hover:text-txt-main-dk dark:focus:text-txt-main-dk pb-1 px-2 self-start"
-        textElement={<span className="text inherit text-base">{colourTheme ? 'Light' : 'Dark'}</span>}
+        buttonClasses="w-10 h-12 text-base xs:hidden text-txt-mid hover:text-txt-main hover:underline hover:decoration-current hover:underline-offset-2 hover:transition focus:text-txt-main focus:underline focus:decoration-current  focus:underline-offset-2 focus:transition dark:text-txt-mid-dk dark:hover:text-txt-main-dk dark:focus:text-txt-main-dk self-start"
+        textElement={<div className="text-base">{colourTheme ? 'Light' : 'Dark'}</div>}
         svg={getDarkToggleIcon(colourTheme)}
       />
     </nav>

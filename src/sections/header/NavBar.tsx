@@ -54,7 +54,7 @@ export default function NavBar({
           className="relative rounded text-xs"
           buttonClasses="w-fit h-fit overflow-visible flex-col hidden xs:flex  hover:transition hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black pb-4 pt-1 mt-3 px-2"
           textElement={
-            <span className="absolute bottom-0 w-full rounded-t-none text-inherit ">
+            <span className="absolute bottom-0 w-full rounded-t-none bg-transparent text-inherit ">
               {colourTheme ? 'Light' : 'Dark'}
             </span>
           }
