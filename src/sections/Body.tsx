@@ -11,7 +11,7 @@ export default function Body() {
         <section className="col-start-2 flex h-full w-body-sm min-w-body max-w-body flex-col sm:w-body ">
           <div className="col-start-2 mx-auto grid w-full shrink-0 grow grid-rows-autoFr items-center py-10 ">
             <div className="mx-auto grid">
-              <div className=" mx-auto mt-10 flex flex-row overflow-clip rounded-lg border-2 border-current ">
+              <div className=" mx-auto mt-24 flex flex-row overflow-clip rounded-lg border-2 border-current ">
                 <h1 className=" rounded-none bg-white p-3 font-black  leading-6 text-black sm:p-[0.95rem] sm:text-6xl">
                   CONTRAST
                 </h1>

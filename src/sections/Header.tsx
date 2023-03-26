@@ -15,7 +15,7 @@ export default function Header({
     setShowMenu((state) => !state);
   }
   return (
-    <header className="sticky top-0 left-0 right-0 z-[999] grid h-fit w-screen flex-shrink-0 flex-grow-0 grid-cols-frAutoFr content-center border-b bg-bg dark:bg-bg-dk">
+    <header className="absolute top-0 left-0 right-0 z-[999] grid h-fit w-screen flex-shrink-0 flex-grow-0 grid-cols-frAutoFr content-center border-b bg-bg dark:bg-bg-dk">
       <div className=" col-start-2 ">
         <div
           className=" flex w-body-sm min-w-body  max-w-body flex-wrap items-center justify-between
