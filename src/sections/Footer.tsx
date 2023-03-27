@@ -10,7 +10,7 @@ export default function Footer() {
         content={[
           <GLDNegSvg key="svg" />,
           <p key="text" className="m-0 ">
-            GLD5000 on GitHub
+            Part of the GLD Portfolio
           </p>,
         ]}
       />
