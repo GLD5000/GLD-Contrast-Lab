@@ -61,11 +61,11 @@ export default function ColourBlocks() {
   const { colourMap } = useColourInputContext();
   const { visibleSet, showPoor, showRatio } = useColourBlocksContext();
   if (!colourMap || colourMap.size < 2) return null;
-  const title = `${showPoor ? 'All' : 'Usable'} Contrast ${showRatio ? 'Ratios' : 'Ratings'} Matrix`;
+  const title = `Combinations Matrix (${showPoor ? 'All' : 'Usable'} Contrast ${showRatio ? 'Ratios' : 'Ratings'})`;
   const returnArrays = createColourBlockArrays(visibleSet, colourMap);
   return (
     <>
-      <section className="grid content-center gap-4">
+      <section className="grid content-center gap-4 ">
         <div className="mr-auto grid place-items-start">
           <h2 className=" m-0 text-2xl font-bold">Compare Colours</h2>
           <p className="mt-2 mb-8 text-lg">Customise and Analyse</p>
@@ -78,17 +78,20 @@ export default function ColourBlocks() {
             </li>
           </ul>
         </div>
-        <div className="relative mx-auto grid h-fit w-full rounded border border-inherit">
-          <div className="sticky top-0 left-0 h-9 w-full rounded rounded-b-none border-b bg-bg-var dark:bg-bg-var-dk">
-            <h3 className="m-auto w-fit">{title}</h3>
+        <div
+          className="relative mx-auto grid h-fit w-full gap-4 rounded border-none border-inherit 
+        "
+        >
+          <div className="sticky top-0 left-0 grid h-9 w-full rounded rounded-b-none border-none">
+            <h2 className="m-auto w-fit">{title}</h2>
           </div>
+          <ShowButtons />
 
-          <div className="w-full overflow-x-auto bg-bg-var  p-8 dark:bg-bg-var-dk ">
-            <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 overflow-clip rounded-[2.4rem] border-4 border-border bg-bg-var dark:bg-bg-var-dk ">
+          <div className="w-full overflow-x-auto bg-inherit  p-8">
+            <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 overflow-clip rounded-[2.4rem] border border-border  bg-inherit">
               {returnArrays}
             </div>
           </div>
-          <ShowButtons />
         </div>
       </section>
       <hr className="my-8" />

@@ -10,7 +10,7 @@ export default function BlockVisibility({ hexId }: { hexId: string }) {
   function handleClickVisibility() {
     const present = visibleSet.has(hex);
     const newSet = new Set(visibleSet);
-    if (present) newSet.delete(hex);
+    if (present && visibleSet.size > 1) newSet.delete(hex);
     if (!present) newSet.add(hex);
     dispatchColourBlocks({ visibleSet: newSet });
   }

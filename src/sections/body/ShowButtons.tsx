@@ -45,26 +45,13 @@ export default function ShowButtons() {
   }
 
   return (
-    <div className="flex items-center ">
-      <div className="mx-auto flex w-full min-w-[24rem]  flex-row flex-wrap items-center justify-center overflow-clip rounded rounded-t-none border-t ">
-        <button
-          type="button"
-          onClick={handleClickRatio}
-          className="shrink-0 grow basis-0 rounded-none bg-bg-var p-2 text-sm font-semibold text-current hover:text-white hover:transition focus:text-white focus:transition dark:bg-bg-var-dk hover:dark:bg-white hover:dark:text-black focus:dark:bg-white focus:dark:text-black"
-        >
-          {ratioLabel}
-        </button>
-        <button
-          type="button"
-          onClick={handleClickPoor}
-          className="shrink-0 grow basis-0 rounded-none bg-bg-var p-2 text-sm text-current hover:text-white  hover:transition focus:text-white focus:transition dark:bg-bg-var-dk hover:dark:bg-white hover:dark:text-black focus:dark:bg-white focus:dark:text-black"
-        >
-          {poorLabel}
-        </button>
+    <div className="mx-auto flex flex-row flex-wrap items-center justify-center gap-2 overflow-clip rounded rounded-t-none ">
+      <div className="grid w-60 grid-cols-2">
         <button
           type="button"
           onClick={handleClickColourMode}
-          className="shrink-0 grow basis-0 rounded-none bg-bg-var p-2 text-sm font-semibold text-current hover:text-white hover:transition focus:text-white focus:transition dark:bg-bg-var-dk hover:dark:bg-white hover:dark:text-black focus:dark:bg-white focus:dark:text-black"
+          className="shrink-0 grow basis-0 rounded-full rounded-r-none  border bg-deco p-2  py-2  px-4  text-sm font-semibold text-current hover:bg-txt-low hover:text-bg-var
+          hover:transition focus:bg-txt-low  focus:text-bg-var focus:transition  dark:bg-deco-dk hover:dark:bg-txt-main-dk  hover:dark:text-bg-var-dk focus:dark:bg-txt-main-dk focus:dark:text-bg-var-dk"
         >
           {colourModeLabel}
         </button>
@@ -72,9 +59,30 @@ export default function ShowButtons() {
         <button
           type="button"
           onClick={handleClickLimit}
-          className="shrink-0 grow basis-0 rounded-none bg-bg-var p-2 text-sm text-current hover:text-white  hover:transition focus:text-white focus:transition dark:bg-bg-var-dk hover:dark:bg-white hover:dark:text-black focus:dark:bg-white focus:dark:text-black"
+          className="shrink-0 grow basis-0 rounded-full rounded-l-none  border bg-deco  p-2  py-2  px-4 text-sm text-current hover:bg-txt-low hover:text-bg-var
+          hover:transition focus:bg-txt-low  focus:text-bg-var focus:transition  dark:bg-deco-dk hover:dark:bg-txt-main-dk  hover:dark:text-bg-var-dk focus:dark:bg-txt-main-dk focus:dark:text-bg-var-dk"
         >
           {limitLabel}
+        </button>
+      </div>
+      <div className="grid w-60 grid-cols-2">
+        <button
+          type="button"
+          onClick={handleClickRatio}
+          className="shrink-0 grow basis-0 rounded-full rounded-r-none  border bg-deco p-2 
+  py-2  px-4  text-sm font-semibold text-current hover:bg-txt-low hover:text-bg-var
+   hover:transition focus:bg-txt-low  focus:text-bg-var focus:transition  dark:bg-deco-dk hover:dark:bg-txt-main-dk  hover:dark:text-bg-var-dk focus:dark:bg-txt-main-dk focus:dark:text-bg-var-dk
+  "
+        >
+          {ratioLabel}
+        </button>
+        <button
+          type="button"
+          onClick={handleClickPoor}
+          className="shrink-0 grow basis-0 rounded-full rounded-l-none border bg-deco p-2  py-2  px-4 text-sm text-current hover:bg-txt-low hover:text-bg-var
+  hover:transition focus:bg-txt-low  focus:text-bg-var focus:transition  dark:bg-deco-dk hover:dark:bg-txt-main-dk  hover:dark:text-bg-var-dk focus:dark:bg-txt-main-dk focus:dark:text-bg-var-dk"
+        >
+          {poorLabel}
         </button>
       </div>
     </div>
