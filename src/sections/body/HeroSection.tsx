@@ -9,8 +9,8 @@ export default function HeroSection() {
       </div>
       <b className="mx-auto mt-2 mb-20 w-fit text-center text-xl">Create Accessible Colour Combinations</b>
       <p>
-        Quickly compare any number of colours and ensure that they meet current standards for visual Contrast Ratios and
-        accessibility (WCAG 2.1).
+        Quickly compare any number of colours and ensure that they meet current standards for visual Contrast Ratios
+        outlined in the Web Content Accessibility Guidelines (WCAG) 2.1.
       </p>
       <a className=" underline" href="https://glddevtips.web.app/?title=WCAG%202.1%20Contrast%20Guidance">
         Read a brief summary of the Contrast Ratio Guidance on GLD DevTips
