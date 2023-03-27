@@ -59,9 +59,10 @@ function createColourBlockArrays(coloursSet: Set<string>, storedMap: ColourMap) 
 
 export default function ColourBlocks() {
   const { colourMap } = useColourInputContext();
-  const { visibleSet, showPoor, showRatio } = useColourBlocksContext();
+  const { visibleSet } = useColourBlocksContext();
   if (!colourMap || colourMap.size < 2) return null;
-  const title = `Combinations Matrix (${showPoor ? 'All' : 'Usable'} Contrast ${showRatio ? 'Ratios' : 'Ratings'})`;
+  const title = `Comparison Matrix`;
+  const subheading = `(${visibleSet.size ** 2 - visibleSet.size} combinations)`;
   const returnArrays = createColourBlockArrays(visibleSet, colourMap);
   return (
     <>
@@ -79,15 +80,14 @@ export default function ColourBlocks() {
           </ul>
         </div>
         <div
-          className="relative mx-auto grid h-fit w-full gap-4 rounded border-none border-inherit 
+          className="relative mx-auto grid h-fit w-full rounded border-none border-inherit 
         "
         >
-          <div className="sticky top-0 left-0 grid h-9 w-full rounded rounded-b-none border-none">
-            <h2 className="m-auto w-fit">{title}</h2>
-          </div>
+          <h2 className="mx-auto mb-0 w-fit text-2xl font-bold">{title}</h2>
+          <h3 className="mx-auto mt-2 mb-8 text-lg">{subheading}</h3>
           <ShowButtons />
 
-          <div className="w-full overflow-x-auto bg-inherit  p-8">
+          <div className="w-full overflow-x-auto bg-inherit  p-4">
             <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 overflow-clip rounded-[2.4rem] border border-border  bg-inherit">
               {returnArrays}
             </div>
