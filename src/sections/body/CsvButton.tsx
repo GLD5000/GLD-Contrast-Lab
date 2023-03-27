@@ -21,6 +21,7 @@ export default function CsvButton({ data, messageIn }: { data: string; messageIn
       text={copyButtonMessage}
       clickFunction={() => {
         navigator.clipboard.writeText(data);
+        console.log('data:', data);
         setCopyButtonMessage('Copied!');
       }}
       showText

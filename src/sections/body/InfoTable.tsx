@@ -13,20 +13,18 @@ function sortByLuminance(acc: Array<Array<string>>, curr: string) {
 }
 function tableReducer(
   acc: {
-    tailwind: string;
     csv: string;
     jsx: ReactElement[][];
     dataColumns: Set<string>;
-    showData: boolean;
+    showData: string;
     colourMap: ColourMap | undefined;
   },
   curr: string,
 ): {
-  tailwind: string;
   csv: string;
   jsx: ReactElement[][];
   dataColumns: Set<string>;
-  showData: boolean;
+  showData: string;
   colourMap: ColourMap | undefined;
 } {
   const classNames = 'block w-40 p-4 text-xs rounded-none';
@@ -42,10 +40,9 @@ function tableReducer(
     Black: `${Black}`,
     White: `${White}`,
   };
-  acc.tailwind += `'${Name}': '${Hex}',\r\n`;
   const newerRow = Object.values(valuesObject).reduce(titleRowReducer, '\r\n');
   acc.csv += newerRow;
-  if (acc.showData) {
+  if (acc.showData === 'data') {
     const newJsxRow = [...acc.dataColumns].map((key) => (
       <span key={`${curr}-${key}`} className={`${classNames}`}>
         {valuesObject[key]}
@@ -59,11 +56,57 @@ function titleRowReducer(previousValue: string, currentValue: string, currentInd
   const returnValue = previousValue + (currentIndex < array.length - 1 ? `${currentValue}\t` : `${currentValue}`);
   return returnValue;
 }
-function getButtons(tailwind: string, csv: string, setShowData: Dispatch<SetStateAction<boolean>>) {
-  const csvButton = <CsvButton key="csv-copy-btn" data={csv} messageIn="Copy TSV" />;
-  const twButton = <CsvButton key="tw-copy-btn" data={tailwind} messageIn="Copy TW" />;
+
+function getCopyButtons(csv: string, colourMapIn: ColourMap | undefined) {
+  if (!colourMapIn) return [];
+  let css = '';
+  let scss = '';
+  let sass = '';
+  let tailwind = '';
+  colourMapIn.forEach((colour) => {
+    const nameNoHash = colour.Name.replace('#', 'hex').toLowerCase();
+    const hex = colour.Hex;
+    css += `--${nameNoHash}: ${hex};\r\n`;
+    scss += `$${nameNoHash}: ${hex};\r\n`;
+    sass += `$${nameNoHash}: ${hex}\r\n`;
+    tailwind += `'${nameNoHash}': '${hex}',\r\n`;
+  });
+
+  const twButton = <CsvButton key="tw-copy-btn" data={tailwind} messageIn="Tailwind Custom Colours" />;
+  const cssButton = <CsvButton key="css-copy-btn" data={css} messageIn="CSS Custom Properties" />;
+  const scssButton = <CsvButton key="scss-copy-btn" data={scss} messageIn="SCSS Property Declarations" />;
+  const sassButton = <CsvButton key="sass-copy-btn" data={sass} messageIn="Sass Property Declarations" />;
+  const csvButton = <CsvButton key="csv-copy-btn" data={csv} messageIn="TSV (Tab Separated Values) All Data" />;
+  return [twButton, cssButton, scssButton, sassButton, csvButton];
+}
+function getButtons(setShowData: Dispatch<SetStateAction<string>>) {
+  function handleCopyButtonClick() {
+    setShowData((state) => {
+      if (state !== 'copy') return 'copy';
+      return 'data';
+    });
+  }
+  const copyButton = (
+    <SvgButton
+      key="copy-data-btn"
+      text="Copy..."
+      clickFunction={handleCopyButtonClick}
+      id="copy-data-btn"
+      name="Copy Data"
+      className=" flex h-9 justify-center gap-2 text-sm hover:bg-black hover:text-white hover:transition focus:text-white focus:transition hover:dark:bg-white hover:dark:text-black focus:dark:bg-white focus:dark:text-black"
+      type="duplicate"
+      showText
+      reverse={false}
+      buttonClasses={undefined}
+      svgWrapperClasses="w-6 h-6"
+      svgClasses="stroke fill-none stroke-current self-center"
+    />
+  );
   function handleVisibilityClick() {
-    setShowData((state) => !state);
+    setShowData((state) => {
+      if (state !== 'vis') return 'vis';
+      return 'data';
+    });
   }
   const visibilityButton = (
     <SvgButton
@@ -84,9 +127,9 @@ function getButtons(tailwind: string, csv: string, setShowData: Dispatch<SetStat
   return (
     <div
       key="table-bottom-btns"
-      className="flex h-9 w-full flex-row gap-2 rounded-none border border-transparent border-t-current"
+      className="flex h-9 w-full shrink-0 flex-row gap-2 rounded-none border border-transparent border-t-current"
     >
-      {visibilityButton} {csvButton} {twButton}
+      {visibilityButton} {copyButton}
     </div>
   );
 }
@@ -126,8 +169,8 @@ function getTable(
   colourArray: string[],
   dataColumns: Set<string>,
   setDataColumns: Dispatch<SetStateAction<Set<string>>>,
-  showData: boolean,
-  setShowData: Dispatch<SetStateAction<boolean>>,
+  showData: string,
+  setShowData: Dispatch<SetStateAction<string>>,
   colourMap: ColourMap | undefined,
 ) {
   const classNames = ' block w-40 p-2 text-sm rounded-none text-center my-auto';
@@ -140,14 +183,13 @@ function getTable(
     );
   });
   const tableAccumulator = {
-    tailwind: '',
     csv: 'Name\tHex\tHSL\tRGB\tLuminance\tBlack\tWhite',
     jsx: [[...jsxArray]],
     dataColumns,
     showData,
     colourMap,
   };
-  const { tailwind, csv, jsx } = colourArray.reduce(tableReducer, tableAccumulator);
+  const { csv, jsx } = colourArray.reduce(tableReducer, tableAccumulator);
   const flexBoxes = jsx.map((x, i) => {
     const curr = x[0].key?.toString().split('-')[0] || '#000000';
     const style = i === 0 ? undefined : { backgroundColor: curr, color: autoTextColour.autoTextColourFromHex(curr) };
@@ -164,11 +206,16 @@ function getTable(
       </div>
     );
   });
-  const buttonArray = getButtons(tailwind, csv, setShowData);
-  if (showData === false) {
+  const buttonArray = getButtons(setShowData);
+  if (showData === 'vis') {
     const visibilityButtonsArray = getVisibiltyButtons(dataColumns, setDataColumns);
     flexBoxes.push(...visibilityButtonsArray);
   }
+  if (showData === 'copy') {
+    const copyButtonsArray = getCopyButtons(csv, colourMap);
+    flexBoxes.push(...copyButtonsArray);
+  }
+
   flexBoxes.push(buttonArray);
   return flexBoxes;
 }
@@ -195,7 +242,7 @@ const listStrings = [
 export default function InfoTable() {
   const { colourMap } = useColourInputContext();
   const [dataColumns, setDataColumns] = useState(setInitialColumns());
-  const [showData, setShowData] = useState(true);
+  const [showData, setShowData] = useState('data');
   if (!colourMap || colourMap.size === 0) return null;
   function setColumnsOnResize() {
     setDataColumns(setInitialColumns());
