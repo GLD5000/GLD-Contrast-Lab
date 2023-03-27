@@ -45,6 +45,13 @@ export default function ComboBox() {
     document.getElementById('colour-input')?.focus();
     // dispatchColourInput({ type: 'CLEAR_TEXT', payload: {} });
   }
+  async function handleClickPaste() {
+    const textPaste = await navigator.clipboard.readText();
+    console.log(textPaste);
+    if (textPaste) dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: textPaste } });
+    console.log('window.navigator.userAgent:', window.navigator.userAgent);
+  }
+
   function handleClickMatch() {
     // console.log('MATCH_LUMINANCE');
     if (recentColour?.Hex !== undefined)
@@ -133,6 +140,16 @@ export default function ComboBox() {
                 onClick={handleClickMode}
               >
                 {colourMode}
+              </button>
+            )}
+            {recentColour === undefined && textInput.length === 0 && (
+              <button
+                id="colourspace-btn"
+                className="active:deco absolute left-2 bottom-2 w-16 bg-deco p-2  text-center text-xs text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
+                type="button"
+                onClick={handleClickPaste}
+              >
+                Paste
               </button>
             )}
 
