@@ -387,8 +387,10 @@ export default function ColourInputProvider({ children }: { children: ReactNode 
   return <ColourInput.Provider value={data}>{children}</ColourInput.Provider>;
 }
 
-function valueIsHex(input: string) {
-  const returnBoolean = input.length === 7 && input.search(/#[0-9a-fA-F]{6}/) > -1;
+function valueIsHex(input: string | undefined) {
+  if (!input) return false;
+  const noSpaces = input.replaceAll(/\s/g, '');
+  const returnBoolean = noSpaces.length === 7 && noSpaces.search(/#[0-9a-fA-F]{6}/) > -1;
   return returnBoolean;
 }
 function getRecentTextField(recentColourObject: ColourObj, modeString: string): string {
@@ -632,17 +634,35 @@ function emptyTextProcess(state: {
 
   return { processedText: '', processedArray: [], recent: state.recentColour };
 }
-
-function makeColourObject(hexValue: string, mapIn: ColourMap | undefined, name: string | undefined) {
-  const slicedNewName = !name || valueIsHex(name) ? hexValue : name?.slice(0, 18);
-  const existingMap = mapIn || new Map();
-  // console.log('existingMap.size:', existingMap?.size);
-  const foundMap = existingMap && hexValue.length === 7 ? existingMap.get(hexValue) : undefined;
+function findObjectInColourMap(searchValue: string, mapToSearch: ColourMap, nameToAdd: string | undefined) {
+  const existingMap = mapToSearch || new Map();
+  const foundMap = existingMap && searchValue.length === 7 ? existingMap.get(searchValue) : undefined;
   if (foundMap !== undefined) {
-    if (slicedNewName) foundMap.Name = slicedNewName;
+    if (nameToAdd) foundMap.Name = nameToAdd;
     return foundMap;
   }
 
+  return undefined;
+}
+
+function getSlicedName(hexIn: string, unslicedName: string | undefined) {
+  const shouldReturnHex = !unslicedName || valueIsHex(unslicedName);
+  const slicedName = shouldReturnHex ? hexIn : unslicedName?.slice(0, 18);
+  return slicedName;
+}
+
+function makeColourObject(hexValue: string, mapIn: ColourMap | undefined, name: string | undefined) {
+  const slicedNewName = getSlicedName(hexValue, name);
+  const existingMap = mapIn || new Map();
+  // console.log('existingMap.size:', existingMap?.size);
+  if (existingMap.size > 0) {
+    const foundObject = findObjectInColourMap(hexValue, existingMap, slicedNewName);
+    if (foundObject) return foundObject;
+  } // extract below
+  const returnObject = createColourObject(hexValue, existingMap, slicedNewName);
+  return returnObject;
+}
+function createColourObject(hexValue: string, existingMap: ColourMap, slicedNewName: string) {
   const luminanceFloat = luminance.convertHexToLuminance(hexValue);
   const Hex = hexValue;
   const HSL = colourSpace.convertHexToHslString(hexValue);
@@ -650,6 +670,7 @@ function makeColourObject(hexValue: string, mapIn: ColourMap | undefined, name: 
   const Luminance = luminance.convertHexToLuminancePercent(hexValue);
   const Black = contrast.getContrastRatio2Dp([0, luminanceFloat]);
   const White = contrast.getContrastRatio2Dp([1, luminanceFloat]);
+  const Name = slicedNewName;
   const otherColourRatios: undefined | Array<[string, number]> = existingMap
     ? [...existingMap.keys()].map((key) => {
         const otherLuminance = luminance.convertHexToLuminance(key);
@@ -672,37 +693,20 @@ function makeColourObject(hexValue: string, mapIn: ColourMap | undefined, name: 
     Luminance,
     Black,
     White,
-    Name: slicedNewName,
+    Name,
     contrastRatios,
   };
   return returnObject;
 }
-function makeColourObjectHsl(hslValue: string, state: ColourState) {
-  const Hex = colourSpace.convertHslStringToHex(hslValue);
-  const HSL = hslValue;
-  const RGB = colourSpace.convertHextoRgbString(Hex);
-  const Luminance = luminance.convertHexToLuminancePercent(Hex);
-  const luminanceFloat = luminance.convertHexToLuminance(Hex);
-  const Black = contrast.getContrastRatio2Dp([0, luminanceFloat]);
-  const White = contrast.getContrastRatio2Dp([1, luminanceFloat]);
-  const contrastRatios = new Map([
-    ['Black', Black],
-    ['White', White],
-  ]);
 
+function makeColourObjectHsl(hslValue: string, state: ColourState) {
+  const hex = colourSpace.convertHslStringToHex(hslValue);
   const stateName = state.recentColour?.Name;
-  const Name = stateName !== undefined && !valueIsHex(`${stateName}`) ? `${stateName}` : Hex;
-  return {
-    luminanceFloat,
-    Hex,
-    HSL,
-    RGB,
-    Luminance,
-    Black,
-    White,
-    Name,
-    contrastRatios,
-  };
+  const slicedNewName = getSlicedName(hex, stateName);
+  const existingMap = state?.colourMap || new Map();
+
+  const returnObject = createColourObject(hex, existingMap, slicedNewName);
+  return returnObject;
 }
 
 function createMap(
