@@ -1,6 +1,7 @@
 import { Dispatch, ReactElement, MouseEvent, SetStateAction, useState } from 'react';
 import { useColourInputContext, ColourMap } from '../../contexts/ColourInputProvider';
 import SvgButton from '../../elements/SvgButton';
+import TextUl from '../../elements/TextUl';
 import { autoTextColour } from '../../utilities/colour/autoTextColour';
 import { luminance } from '../../utilities/colour/luminance';
 import CsvButton from './CsvButton';
@@ -186,6 +187,11 @@ function setInitialColumns(): Set<string> {
   return new Set(dataColumnLookup[windowKey]);
 }
 
+const listStrings = [
+  'See the Relative Luminance of each colour and find its Contrast Ratio against white or black.',
+  `Use 'customise' to choose the data on screen or 'Copy All' to export all data in a spreadsheet format (TSV - Tab Separated Values).`,
+];
+
 export default function InfoTable() {
   const { colourMap } = useColourInputContext();
   const [dataColumns, setDataColumns] = useState(setInitialColumns());
@@ -203,16 +209,7 @@ export default function InfoTable() {
       <div className="mr-auto grid place-items-start">
         <h2 className=" m-0 text-2xl font-bold">Colour Data</h2>
         <p className="mt-2 mb-8 text-lg">View and Export</p>
-
-        <ul className=" list-inside list-disc">
-          <li key="info-list-a" id="info-list-a" className="m-0 mb-1">
-            See the Relative Luminance of each colour and find its Contrast Ratio against white or black.
-          </li>
-          <li key="info-list-b" id="info-list-b" className="m-0 mb-1">
-            Use &apos;customise&apos; to choose the data on screen or &apos;Copy All&apos; to export all data in a
-            spreadsheet format (TSV - Tab Separated Values).
-          </li>
-        </ul>
+        <TextUl textArray={listStrings} />
       </div>
       <div className="relative grid w-full overflow-x-auto">
         <div className="mx-auto flex w-fit grow  flex-col gap-0 overflow-clip rounded border border-txt-main bg-bg text-center text-txt-main dark:border-txt-main-dk dark:bg-bg-var-dk dark:text-txt-main-dk">
