@@ -6,11 +6,15 @@
 
 [Read a brief summary of the Contrast Ratio Guidance on GLD DevTips](https://glddevtips.web.app/?title=WCAG%202.1%20Contrast%20Guidance).
 
+### Add Colours
+
 - Add existing colours in any common format (RGB, Hexadecimal or HSL)
 - Batch import colours (with names) from your favourite IDE or a spreasheet
 - Experiment with different combinations using the Colour Picker, HSL sliders or Text Box to easily modify or create new colours
 - Use the 'Match' button to match the relative luminance of two different colours
 - Adjust the hue or saturation of a colour and the luminance will be automatically adjust to keep the brightness stable
+
+### Analyse and Compare
 
 For each colour you add you can see:
 
@@ -18,6 +22,8 @@ For each colour you add you can see:
 - Relative Luminance (a definitive measure of brightness used to calculate contrast ratios)
 - Contrast Ratios with every other colour added.
 - Colour Space conversions in HSL, RGB and Hexadecimal.
+
+### Export Colour Scheme and Data
 
 When you are happy with your modified colour scheme, you can export it with the click of a button to the following formats:
 
