@@ -78,7 +78,7 @@ export default function ColourBlocks() {
             </li>
           </ul>
         </div>
-        <div className="relative mx-auto grid h-fit w-full rounded border border-current">
+        <div className="relative mx-auto grid h-fit w-full rounded border border-inherit">
           <div className="sticky top-0 left-0 h-9 w-full rounded rounded-b-none border-b bg-bg-var dark:bg-bg-var-dk">
             <h3 className="m-auto w-fit">{title}</h3>
           </div>

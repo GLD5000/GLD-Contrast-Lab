@@ -79,7 +79,7 @@ function getCopyButtons(csv: string, colourMapIn: ColourMap | undefined) {
   const csvButton = <CsvButton key="csv-copy-btn" data={csv} messageIn="TSV (Tab Separated Values) All Data" />;
   return [twButton, cssButton, scssButton, sassButton, csvButton];
 }
-function getButtons(setShowData: Dispatch<SetStateAction<string>>) {
+function getBottomButtons(setShowData: Dispatch<SetStateAction<string>>) {
   function handleCopyButtonClick() {
     setShowData((state) => {
       if (state !== 'copy') return 'copy';
@@ -111,11 +111,11 @@ function getButtons(setShowData: Dispatch<SetStateAction<string>>) {
   const visibilityButton = (
     <SvgButton
       key="custom-visibility-btn"
-      text="Customise..."
+      text="View..."
       clickFunction={handleVisibilityClick}
       id="custom-visibility-btn"
-      name="Customise Data"
-      className=" flex h-9 justify-center gap-2 text-sm hover:bg-black hover:text-white hover:transition focus:text-white focus:transition hover:dark:bg-white hover:dark:text-black focus:dark:bg-white focus:dark:text-black"
+      name="View Data"
+      className=" flex h-9 justify-center gap-2 rounded-none text-sm hover:bg-black hover:text-white hover:transition focus:text-white focus:transition hover:dark:bg-white hover:dark:text-black focus:dark:bg-white focus:dark:text-black"
       type="preview"
       showText
       reverse={false}
@@ -127,7 +127,7 @@ function getButtons(setShowData: Dispatch<SetStateAction<string>>) {
   return (
     <div
       key="table-bottom-btns"
-      className="flex h-9 w-full shrink-0 flex-row gap-2 rounded-none border border-transparent border-t-current"
+      className="flex h-9 w-full shrink-0 flex-row rounded-none border border-transparent border-t-inherit"
     >
       {visibilityButton} {copyButton}
     </div>
@@ -195,7 +195,7 @@ function getTable(
     const style = i === 0 ? undefined : { backgroundColor: curr, color: autoTextColour.autoTextColourFromHex(curr) };
 
     const key = `${i}row`;
-    const border = i === 0 ? ' border-b-current' : undefined;
+    const border = i === 0 ? ' border-b-inherit' : undefined;
     return (
       <div
         key={key}
@@ -206,7 +206,7 @@ function getTable(
       </div>
     );
   });
-  const buttonArray = getButtons(setShowData);
+  const buttonArray = getBottomButtons(setShowData);
   if (showData === 'vis') {
     const visibilityButtonsArray = getVisibiltyButtons(dataColumns, setDataColumns);
     flexBoxes.push(...visibilityButtonsArray);
@@ -236,7 +236,7 @@ function setInitialColumns(): Set<string> {
 
 const listStrings = [
   'See the Relative Luminance of each colour and find its Contrast Ratio against white or black.',
-  `Use 'customise' to choose the data on screen or 'Copy All' to export all data in a spreadsheet format (TSV - Tab Separated Values).`,
+  `Use 'View...' to choose the data on screen or 'Copy...' to export to a text editor or spreadsheet.`,
 ];
 
 export default function InfoTable() {
@@ -259,7 +259,7 @@ export default function InfoTable() {
         <TextUl textArray={listStrings} />
       </div>
       <div className="relative grid w-full overflow-x-auto">
-        <div className="mx-auto flex w-fit grow  flex-col gap-0 overflow-clip rounded border border-txt-main bg-bg text-center text-txt-main dark:border-txt-main-dk dark:bg-bg-var-dk dark:text-txt-main-dk">
+        <div className="mx-auto flex w-fit grow  flex-col gap-0 overflow-clip rounded border border-border bg-bg text-center text-txt-main dark:border-border-dk  dark:bg-bg-var-dk dark:text-txt-main-dk">
           {tableMarkDown}
         </div>
       </div>
