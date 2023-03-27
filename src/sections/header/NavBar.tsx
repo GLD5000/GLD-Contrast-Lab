@@ -24,7 +24,6 @@ export default function NavBar({
   return (
     <nav className="relative flex h-16 flex-wrap items-center justify-center gap-8 ">
       <ExternalLink
-        layoutClasses={undefined}
         mediaVisibility="hidden sm:flex"
         link="https://gld-portfolio.vercel.app/"
         content={[
@@ -35,7 +34,6 @@ export default function NavBar({
         ]}
       />
       <ExternalLink
-        layoutClasses={undefined}
         mediaVisibility="hidden sm:flex"
         link="https://gld-portfolio.vercel.app/"
         content={[
@@ -46,7 +44,6 @@ export default function NavBar({
         ]}
       />
       <ExternalLink
-        layoutClasses={undefined}
         mediaVisibility="hidden sm:flex"
         link="https://gld-portfolio.vercel.app/"
         content={[

@@ -11,8 +11,8 @@ export default function ExternalLink({
 }: {
   content: ReactNode;
   link: string;
-  mediaVisibility: string | undefined;
-  layoutClasses: string | undefined;
+  mediaVisibility?: string | undefined;
+  layoutClasses?: string | undefined;
 }) {
   return (
     <a className={`${mediaVisibility} ${layoutClasses} ${colourClasses}`} href={link} target="_blank" rel="noreferrer">
@@ -20,3 +20,8 @@ export default function ExternalLink({
     </a>
   );
 }
+
+ExternalLink.defaultProps = {
+  mediaVisibility: 'flex',
+  layoutClasses: 'flex-row gap-2',
+};

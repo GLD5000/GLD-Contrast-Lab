@@ -27,7 +27,6 @@ export default function HamburgerMenu({
       } h-16 flex-wrap items-center justify-center gap-6 py-2`}
     >
       <ExternalLink
-        mediaVisibility={undefined}
         layoutClasses="text-center flex flex-col w-16"
         link="https://gld-portfolio.vercel.app/"
         content={[
@@ -38,7 +37,6 @@ export default function HamburgerMenu({
         ]}
       />
       <ExternalLink
-        mediaVisibility={undefined}
         layoutClasses="text-center flex flex-col w-16"
         link="https://www.linkedin.com/in/garethlouisdevlin/"
         content={[
@@ -49,7 +47,6 @@ export default function HamburgerMenu({
         ]}
       />
       <ExternalLink
-        mediaVisibility={undefined}
         layoutClasses="text-center flex flex-col w-16"
         link="https://github.com/GLD5000"
         content={[
