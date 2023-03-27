@@ -4,7 +4,7 @@
 
 ### Quickly compare any number of colours and ensure that they meet current standards for visual Contrast Ratios and accessibility (WCAG 2.1).
 
-Find a brief summary on [GLD DevTips](https://glddevtips.web.app/?title=WCAG%202.1%20Contrast%20Guidance).
+[Read a brief summary of the Contrast Ratio Guidance on GLD DevTips](https://glddevtips.web.app/?title=WCAG%202.1%20Contrast%20Guidance).
 
 - Add existing colours in any common format (RGB, Hexadecimal or HSL)
 - Batch import colours (with names) from your favourite IDE or a spreasheet
