@@ -8,7 +8,7 @@ import InfoTable from './body/InfoTable';
 export default function Body() {
   return (
     <ColourInputProvider>
-      <main id="body-container" className=" grid w-screen grow grid-cols-frAutoFr content-between">
+      <main id="main-content" className=" grid w-screen grow grid-cols-frAutoFr content-between">
         <section className="col-start-2 flex h-full w-body-sm min-w-body max-w-body flex-col sm:w-body ">
           <div className="col-start-2 mx-auto grid w-full shrink-0 grow grid-rows-autoFr items-center py-10 ">
             <HeroSection />

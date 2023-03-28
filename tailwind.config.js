@@ -6,7 +6,6 @@ module.exports = {
     extend: {
       screens: {
         xs: '420px',
-        // => @media (min-width: 420px) { ... }
       },
       gridTemplateColumns: {
         frAutoFr: '1fr auto 1fr',
