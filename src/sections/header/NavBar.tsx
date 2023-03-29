@@ -35,7 +35,7 @@ export default function NavBar({
       />
       <ExternalLink
         mediaVisibility="hidden sm:flex"
-        link="https://gld-portfolio.vercel.app/"
+        link="https://www.linkedin.com/in/garethlouisdevlin/"
         content={[
           <LinkedInSvg key="svg" />,
           <p key="text" className="m-0 hidden md:inline">
@@ -45,7 +45,7 @@ export default function NavBar({
       />
       <ExternalLink
         mediaVisibility="hidden sm:flex"
-        link="https://gld-portfolio.vercel.app/"
+        link="https://github.com/GLD5000"
         content={[
           <GitHubSvg key="svg" />,
           <p key="text" className="m-0 hidden md:inline">

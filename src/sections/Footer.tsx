@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer id="footer" className=" flex flex-shrink-0 flex-grow-0 flex-col flex-wrap items-center gap-2 py-1 text-sm">
       <ExternalLink
-        link="https://github.com/GLD5000"
+        link="https://gld-portfolio.vercel.app/"
         content={[
           <GLDNegSvg key="svg" />,
           <p key="text" className="m-0 ">
