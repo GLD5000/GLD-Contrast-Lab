@@ -61,7 +61,7 @@ export default function HamburgerMenu({
         showTextIn
         clickFunction={toggleColourTheme}
         reverse={false}
-        id="colour-theme-button"
+        id="colour-theme-button-secondary"
         name="Dark Mode Button"
         className="rounded text-xs"
         buttonClasses="flex flex-col w-12 h-12 text-base xs:hidden text-txt-mid hover:text-txt-main hover:underline hover:decoration-current hover:underline-offset-2 hover:transition focus:text-txt-main focus:underline focus:decoration-current  focus:underline-offset-2 focus:transition dark:text-txt-mid-dk dark:hover:text-txt-main-dk dark:focus:text-txt-main-dk self-start"
