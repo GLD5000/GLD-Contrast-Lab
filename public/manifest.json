@@ -1,12 +1,12 @@
 {
   "manifest_version": "3",
   "version": "0.1",
-  "short_name": "GLD",
+  "short_name": "Contrast Tool",
   "name": "GLD Contrast Tool",
   "description": "Compare your colours for guaranteed accessibility.",
   "icons": [
     {
-      "src": "GLD144.png", 
+      "src": "GLD144.png",
       "sizes": "144x144",
       "purpose": "any"
     }
