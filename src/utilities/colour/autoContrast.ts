@@ -178,13 +178,14 @@ export const autoContrast = {
 
     const originalDirection = originalLuminance < targetLuminance ? 'up' : 'down';
     let loopLimiter = 0;
-    const loopLimit = 25;
+    const loopLimit = 20;
     let currentHsl = originalHsl;
     let currentLuminance = originalLuminance;
     let currentContrast = contrast.getContrastRatio2Dp([originalLuminance, currentLuminance]);
     let equal = false;
 
     let directionUp = currentContrast < targetContrast;
+    const targetContrast2dp = Math.floor(targetContrast * 100) / 100;
     const startIncrement = 10;
     let changesOfDirection = 0;
     let outOfBounds = 0;
@@ -199,7 +200,8 @@ export const autoContrast = {
       currentContrast = contrast.getContrastRatio2Dp([originalLuminance, currentLuminance]);
       inRightDirection =
         originalDirection === 'up' ? currentLuminance > originalLuminance : currentLuminance < originalLuminance;
-      equal = inRightDirection && targetContrast === currentContrast;
+      equal = inRightDirection && currentContrast === targetContrast2dp;
+      // if (equal === true) console.log(inRightDirection, currentContrast, targetContrast2dp);
       if (directionUp !== currentLuminance < targetLuminance) {
         directionUp = !directionUp;
         changesOfDirection += 1;
@@ -214,11 +216,12 @@ export const autoContrast = {
         outOfBounds += 1;
       }
     }
-    // if (loopLimiter === loopLimit) console.log('loopLimiter:', loopLimiter);
     const resultingContrastRatio = contrast.getContrastRatio2Dp([
       originalLuminance,
       luminance.convertHslToLuminance(currentHsl),
     ]);
+    if (loopLimiter === loopLimit)
+      console.log('loopLimiter:', loopLimiter, resultingContrastRatio, targetContrast2dp, inRightDirection, equal);
     const resultsAreGood = autoContrast.testResultsHsl(currentHsl, resultingContrastRatio, targetContrast);
     if (resultsAreGood) return { resultingContrastRatio, resultingHsl: currentHsl, resultsAreGood };
     return { resultingContrastRatio, resultingHsl: currentHsl, resultsAreGood };

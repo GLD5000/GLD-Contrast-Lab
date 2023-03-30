@@ -25,7 +25,7 @@ export default function ComboBox() {
     useColourInputContext();
   const previousContrast = previousColour?.contrast ? `${previousColour?.contrast}` : '-';
   // const [hasFocus, setHasFocus] = useState(false);
-  console.log('recentColour:', recentColour);
+  // console.log('recentColour:', recentColour);
   function handleClickMode() {
     const nextModeLookup: { [key: string]: string } = {
       Hex: 'HSL',
