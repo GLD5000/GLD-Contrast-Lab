@@ -14,6 +14,9 @@ export interface ColourObj {
   luminanceFloat: number;
   Hex: string;
   HSL: string;
+  Hue: number;
+  Sat: number;
+  Lum: number;
   RGB: string;
   Luminance: string;
   Black: number;
@@ -260,18 +263,18 @@ function useData() {
         const previousLuminance = state.hslLuminanceTarget;
 
         // console.log('sliderValue:', sliderValue);
-        const In = state.recentColour;
+        const recentIn = state.recentColour;
 
-        if (In === undefined || sliderValue === undefined || newSliderType === undefined) return { ...state };
-        const oldHsl = `${In.HSL}`;
-        const newHsl = getHslValueFromSlider(sliderValue, newSliderType, oldHsl);
-        const newHslArray = parseHslStringToArray(newHsl);
-        const newHex = colourSpace.convertHslStringToHex(newHsl);
+        if (recentIn === undefined || sliderValue === undefined || newSliderType === undefined) return { ...state };
+        const { Hue, Sat, Lum } = recentIn;
+        const newHslArray = getHslArrayFromSlider(sliderValue, newSliderType, [Hue, Sat, Lum]);
+        const newHex = colourSpace.convertHslArrayToHex(newHslArray);
         // const previousLuminance = state.recentColour?.luminanceFloat || state.previousColour?.luminance;
-        if (typeof previousLuminance === 'number' && typeof newHex === 'string' && newSliderType !== 'Lum') {
+        const shouldMatchLuminance =
+          typeof previousLuminance === 'number' && typeof newHex === 'string' && newSliderType !== 'Lum';
+        if (shouldMatchLuminance) {
           const { resultingHsl } = setToTargetLuminanceHsl(newHslArray, previousLuminance);
-          const resultingHslString = stringifyHslArray(resultingHsl);
-          const newObject = makeColourObjectHsl(resultingHslString, state);
+          const newObject = makeColourObjectHsl(state, resultingHsl);
           const modeOut = 'HSL';
           const textOutput = newObject ? getRecentTextField(newObject, modeOut) : '';
 
@@ -287,7 +290,9 @@ function useData() {
           return returnValue;
         }
 
-        const recentColourValue: ColourObj | undefined = newHsl ? makeColourObjectHsl(newHsl, state) : undefined;
+        const recentColourValue: ColourObj | undefined = newHslArray
+          ? makeColourObjectHsl(state, newHslArray)
+          : undefined;
         const modeOut = 'HSL';
         const textOutput = recentColourValue ? getRecentTextField(recentColourValue, modeOut) : '';
         const returnValue = {
@@ -320,11 +325,13 @@ function useData() {
       case 'MATCH_LUMINANCE': {
         // //console.log('MATCH_LUMINANCE');
         const previousLuminance = state.previousColour?.luminance;
-        const newHex = action.payload.textInput;
+        const recentIn = state.recentColour;
 
-        if (typeof previousLuminance === 'number' && typeof newHex === 'string') {
-          const { resultingHex } = setToTargetLuminance(newHex, previousLuminance);
-          const newObject = makeColourObject(resultingHex, state.colourMap, state.recentColour?.Name);
+        if (typeof previousLuminance === 'number' && recentIn) {
+          const { Hue, Sat, Lum } = recentIn;
+          const { resultingHsl } = setToTargetLuminanceHsl([Hue, Sat, Lum], previousLuminance);
+          const newObject = makeColourObjectHsl(state, resultingHsl);
+
           const modeOut = state.colourMode ? state.colourMode : 'Hex';
           const textOutput = newObject ? getRecentTextField(newObject, modeOut) : '';
           const returnValue = {
@@ -671,9 +678,15 @@ function makeColourObject(hexValue: string, mapIn: ColourMap | undefined, name: 
   const returnObject = createColourObject(hexValue, existingMap, slicedNewName);
   return returnObject;
 }
-function createColourObject(hexValue: string, existingMap: ColourMap, slicedNewName: string | undefined) {
+function createColourObject(
+  hexValue: string,
+  existingMap: ColourMap,
+  slicedNewName: string | undefined,
+  hslArray?: number[] | undefined,
+) {
   const luminanceFloat = luminance.convertHexToLuminance(hexValue);
   const Hex = hexValue.replaceAll(' ', '');
+  const [Hue, Sat, Lum] = hslArray || colourSpace.convertHexToHslArray(hexValue);
   const HSL = colourSpace.convertHexToHslString(hexValue);
   const RGB = colourSpace.convertHextoRgbString(hexValue);
   const Luminance = luminance.convertHexToLuminancePercent(hexValue);
@@ -704,17 +717,20 @@ function createColourObject(hexValue: string, existingMap: ColourMap, slicedNewN
     White,
     Name,
     contrastRatios,
+    Hue,
+    Sat,
+    Lum,
   };
   return returnObject;
 }
 
-function makeColourObjectHsl(hslValue: string, state: ColourState) {
-  const hex = colourSpace.convertHslStringToHex(hslValue);
+function makeColourObjectHsl(state: ColourState, hslResults: number[]) {
+  const hex = colourSpace.convertHslArrayToHex(hslResults);
   const stateName = state.recentColour?.Name;
   const slicedNewName = getSlicedName(hex, stateName);
   const existingMap = state?.colourMap || new Map();
 
-  const returnObject = createColourObject(hex, existingMap, slicedNewName);
+  const returnObject = createColourObject(hex, existingMap, slicedNewName, hslResults);
   return returnObject;
 }
 
@@ -854,26 +870,26 @@ function setPreviousContrast(state: {
 }
 
 function convertSliderToHsl(value: number, sliderType: string) {
-  if (sliderType !== 'Hue') return Math.round(value / 3.6);
-  return Math.round(value);
+  if (sliderType !== 'Hue') return value / 3.6;
+  return value;
 }
 
-function stringifyHslArray(ArrayIn: number[]) {
-  const [hue, sat, lum] = ArrayIn;
-  const stringValue = `HSL(${Math.round(hue)}, ${Math.round(sat)}%, ${Math.round(lum)}%)`;
-  return stringValue;
-}
+// function stringifyHslArray(ArrayIn: number[]) {
+//   const [hue, sat, lum] = ArrayIn;
+//   const stringValue = `HSL(${Math.round(hue)}, ${Math.round(sat)}%, ${Math.round(lum)}%)`;
+//   return stringValue;
+// }
 
-function getHslValueFromSlider(value: number, sliderType: string, hslString: string) {
+function getHslArrayFromSlider(value: number, sliderType: string, hslArray: number[]) {
   const convertedSliderValue = convertSliderToHsl(value, sliderType);
-  const [Hue, Sat, Lum] = parseHslStringToArray(hslString);
+  const [Hue, Sat, Lum] = hslArray;
   const hslLookUp: { [key: string]: number[] } = {
     Hue: [convertedSliderValue, Sat, Lum],
     Sat: [Hue, convertedSliderValue, Lum],
     Lum: [Hue, Sat, convertedSliderValue],
   };
   // //console.log(hslLookUp[sliderType]);
-  return stringifyHslArray(hslLookUp[sliderType]);
+  return hslLookUp[sliderType];
 }
 function parseHslStringToArray(stringIn: string) {
   const arrayValue = stringIn

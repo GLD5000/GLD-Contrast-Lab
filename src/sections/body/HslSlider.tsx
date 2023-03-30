@@ -60,6 +60,7 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
             className="my-auto h-1 shrink-0 grow cursor-pointer appearance-none rounded bg-neutral-500 text-black hover:bg-current hover:transition focus:bg-current focus:transition dark:text-white"
             type="range"
             min={0}
+            step={0.1}
             max={360}
             value={hslSlider}
             onInput={handleSliderInput}
