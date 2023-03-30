@@ -1,5 +1,5 @@
 export default function HamburgerSvg({
-  wrapperClasses = ' pointer-events-none h-8 w-6 block sm:hidden fill-current my-auto',
+  wrapperClasses = ' pointer-events-none h-8 w-6 block fill-current my-auto',
   classes = ' fill-current stroke-none ',
 }) {
   return (
