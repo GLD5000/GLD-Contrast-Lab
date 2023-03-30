@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useReducer, Dispatch, useEffect } from 'react';
-import { setToTargetLuminance, setToTargetLuminanceHsl } from '../utilities/colour/autoContrast';
+import { setToTargetLuminanceHsl } from '../utilities/colour/autoContrast';
 import { colourSpace } from '../utilities/colour/colourSpace';
 import { contrast } from '../utilities/colour/contrastRatio';
 import { luminance } from '../utilities/colour/luminance';
@@ -815,14 +815,16 @@ function handleRlumUpdate(state: ColourState, payload: ColourPayload) {
   }
 
   if (!isSubmit && recentColourState && textReceived) {
-    const currentHex = `${recentColourState.Hex}`;
+    const recentIn = state.recentColour;
     const isPercentage = textWithoutRLum.includes('%');
     const parsedFloat = Math.trunc(parseFloat(textWithoutRLum) * 10) * 0.001;
     const isInRange = parsedFloat >= 0 && parsedFloat <= 1;
 
-    if (isInRange && isPercentage) {
-      const { resultingHex: newHex } = setToTargetLuminance(currentHex, parsedFloat);
-      const newColourObject = makeColourObject(newHex, state.colourMap, state.recentColour?.Name);
+    if (isInRange && isPercentage && recentIn) {
+      const { Hue, Sat, Lum } = recentIn;
+      const { resultingHsl } = setToTargetLuminanceHsl([Hue, Sat, Lum], parsedFloat);
+      const newColourObject = makeColourObjectHsl(state, resultingHsl);
+
       const textValue = newColourObject
         ? getRecentTextField(newColourObject, 'RLum')
         : `Relative Luminance: ${textWithoutRLum}`;
