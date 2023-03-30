@@ -1,7 +1,7 @@
 export default function HeroSection() {
   return (
-    <div className="mx-auto grid">
-      <div className=" mx-auto mt-24 flex flex-row overflow-clip rounded-lg border-2 border-current ">
+    <div className="mx-auto my-24 grid">
+      <div className=" mx-auto  flex flex-row overflow-clip rounded-lg border-2 border-current ">
         <h1 className=" rounded-none bg-white p-3 font-black  leading-6 text-black sm:p-[0.95rem] sm:text-6xl">
           CONTRAST
         </h1>
