@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useReducer, Dispatch, useEffect } from 'react';
 import { useColourInputContext } from './ColourInputProvider';
 
-interface ColourCombo {
+export interface ColourCombo {
   colours: string[];
   ratio: number;
   rating: string;
