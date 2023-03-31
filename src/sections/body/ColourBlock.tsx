@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
 import { useColourInputContext, ColourObj } from '../../contexts/ColourInputProvider';
 
@@ -50,10 +51,28 @@ export default function ColourBlock({
   contrastRatio: number;
   borderColour: string;
 }) {
-  const { showRatio, showPoor, colourMode, dispatchColourBlocks } = useColourBlocksContext();
+  const { showRatio, contrastRatioLimit, colourMode, dispatchColourBlocks } = useColourBlocksContext();
   const { colourMap } = useColourInputContext();
   const poorContrast = contrastRatio < 3;
+
+  useEffect(() => {
+    let mounted = true;
+
+    if (mounted && backgroundColour !== borderColour) {
+      const coloursArray = [backgroundColour, borderColour].sort();
+      dispatchColourBlocks({
+        type: 'ADD_COMBO',
+        key: coloursArray.join('/'),
+        value: { colours: coloursArray, ratio: contrastRatio, rating: contrastRating },
+      });
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [backgroundColour, dispatchColourBlocks, borderColour, contrastRatio, contrastRating]);
+
   if (!backgroundColour || !textColour) return null;
+
   const colourObject = colourMap?.get(backgroundColour);
   function handleClickColourMode() {
     const nextMode: { [key: string]: string } = {
@@ -70,15 +89,17 @@ export default function ColourBlock({
   function handleClick() {
     if (autoColour) {
       handleClickColourMode();
-      return;
     }
-    const dispatchObject = poorContrast ? { showPoor: !showPoor } : { showRatio: !showRatio };
-    dispatchColourBlocks(dispatchObject);
+    // const dispatchObject = poorContrast ? { contrastRatioLimit: !contrastRatioLimit } : { showRatio: !showRatio };
+    // dispatchColourBlocks(dispatchObject);
   }
+
+  const hidePoorColour = contrastRatio < contrastRatioLimit && !autoColour;
+  const hideBorder = contrastRatio < 3 || contrastRatio < contrastRatioLimit;
   const style: { [key: string]: string } = {
     // backgroundColor: backgroundColour,
-    color: poorContrast && showPoor === false ? 'transparent' : textColour,
-    borderColor: autoColour || (!showPoor && poorContrast) ? 'transparent' : borderColour,
+    color: hidePoorColour ? 'transparent' : textColour,
+    borderColor: hideBorder ? 'transparent' : borderColour,
   };
   const colourString =
     autoColour && colourObject ? getColourString(colourObject, colourMode) : `Hex\r\n${backgroundColour.slice(1)}`;

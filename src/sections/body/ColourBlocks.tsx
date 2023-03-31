@@ -1,36 +1,41 @@
 import ColourBlock from './ColourBlock';
-import autoTextColourFromHex from '../../utilities/colour/autoTextColour';
 import { contrast } from '../../utilities/colour/contrastRatio';
-import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
+import { ColourCombo, useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
 import { luminance } from '../../utilities/colour/luminance';
 import ShowButtons from './ShowButtons';
 import BlockVisibility from './BlockVisibility';
 import { ColourMap, useColourInputContext } from '../../contexts/ColourInputProvider';
 
+const textColourLookup: { [key: string]: string } = {
+  Black: '#000000',
+  White: '#ffffff',
+};
+
 function getBlockRow(backgroundColour: string, index: number, array: string[], referenceMap: ColourMap) {
   const keyA = `${backgroundColour}-${index}`;
-  const rowArray = array.map((textColour, number) => {
-    const keyB = `${textColour}-${number}`;
-    const autoColour = textColour === backgroundColour;
-    const textColourMod = autoColour ? autoTextColourFromHex(backgroundColour) : textColour;
-    // console.log('referenceMap.get(textColour).contrastRatios:', referenceMap?.get(textColour)?.contrastRatios);
-    const contrastRatio = autoColour
-      ? 21.0
-      : referenceMap.get(textColour)?.contrastRatios.get(backgroundColour) || 21.0;
+  const colourObject = referenceMap.get(backgroundColour);
+  const contrastRatios = colourObject?.contrastRatios;
+  const autoColourOut = colourObject?.Autocolour;
+  const autoTextColour = autoColourOut ? textColourLookup[autoColourOut] : '#ffffff';
+  function blockRowMapper(borderColour: string, number: number) {
+    const keyB = `${borderColour}-${number}`;
+    const autoColour = borderColour === backgroundColour;
+    const contrastRatio = contrastRatios ? contrastRatios.get(borderColour) || 1 : 1;
+    const textColour = autoColour || contrastRatio < 4.5 ? autoTextColour : borderColour;
     const contrastRating = contrast.makeContrastRating(contrastRatio);
-    const bwText = !autoColour && contrastRatio < 4.5;
     return (
       <ColourBlock
         key={`${keyA}-${keyB}`}
         backgroundColour={backgroundColour}
-        textColour={bwText ? autoTextColourFromHex(backgroundColour) : textColourMod}
-        borderColour={textColour}
+        textColour={textColour}
+        borderColour={borderColour}
         autoColour={autoColour}
         contrastRating={contrastRating}
         contrastRatio={contrastRatio}
       />
     );
-  });
+  }
+  const rowArray = array.map(blockRowMapper);
   return { keyA, rowArray };
 }
 
@@ -57,12 +62,34 @@ function createColourBlockArrays(coloursSet: Set<string>, storedMap: ColourMap) 
   });
 }
 
+function getComboMetaData(combos: Map<string, ColourCombo>) {
+  const total = combos.size;
+  let border = 0;
+  let largeText = 0;
+  let smallText = 0;
+  combos.forEach((object) => {
+    const { ratio } = object;
+    if (ratio >= 3) border += 1;
+    if (ratio >= 4.5) largeText += 1;
+    if (ratio >= 7) smallText += 1;
+  });
+  return {
+    total,
+    border,
+    largeText,
+    smallText,
+  };
+}
+
 export default function ColourBlocks() {
   const { colourMap } = useColourInputContext();
-  const { visibleSet } = useColourBlocksContext();
+  const { visibleSet, combos } = useColourBlocksContext();
   if (!colourMap || colourMap.size < 2) return null;
+
+  const { total, border, largeText, smallText } = getComboMetaData(combos);
   const title = `Comparison Matrix`;
-  const subheading = `(${(visibleSet.size ** 2 - visibleSet.size) * 0.5} combinations)`;
+  const subheading = `${total} combinations: 
+${border} non-text, ${largeText} AA+ combinations, ${smallText} AAA+ combinations`;
   const returnArrays = createColourBlockArrays(visibleSet, colourMap);
   return (
     <>

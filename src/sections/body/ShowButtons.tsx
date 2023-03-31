@@ -1,12 +1,20 @@
 import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
 import { useColourInputContext } from '../../contexts/ColourInputProvider';
 
+const lookupRatingLabel: { [key: number]: string } = {
+  1: 'All',
+  3: 'Non-Text+',
+  4.5: 'AA+',
+  7: 'AAA+',
+};
+
 export default function ShowButtons() {
-  const { showRatio, showPoor, limit, colourMode, visibleSet, dispatchColourBlocks } = useColourBlocksContext();
+  const { showRatio, contrastRatioLimit, limit, colourMode, visibleSet, dispatchColourBlocks } =
+    useColourBlocksContext();
   const { colourMap } = useColourInputContext();
   const colourModeLabel = `${colourMode}:`;
   const ratioLabel = showRatio ? 'Ratios:' : 'Ratings:';
-  const poorLabel = showPoor ? `All` : `Safe`;
+  const poorLabel = showRatio ? `${contrastRatioLimit}+` : lookupRatingLabel[contrastRatioLimit];
   const limitLabel = limit;
 
   function handleClickColourMode() {
@@ -25,7 +33,14 @@ export default function ShowButtons() {
     dispatchColourBlocks({ showRatio: !showRatio });
   }
   function handleClickPoor() {
-    dispatchColourBlocks({ showPoor: !showPoor });
+    const nextLimit: { [key: number]: number } = {
+      1: 3,
+      3: 4.5,
+      4.5: 7,
+      7: 1,
+    };
+
+    dispatchColourBlocks({ contrastRatioLimit: nextLimit[contrastRatioLimit] });
   }
   function handleClickLimit() {
     const limitLookup: { [key: string]: string } = {

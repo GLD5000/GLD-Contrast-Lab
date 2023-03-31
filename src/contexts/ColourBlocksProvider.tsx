@@ -10,7 +10,7 @@ export interface ColourCombo {
 export interface BlocksState {
   colourMode: string;
   showRatio: boolean;
-  showPoor: boolean;
+  contrastRatioLimit: number;
   combos: Map<string, ColourCombo>;
   limit: string;
   visibleSet: Set<string>;
@@ -31,7 +31,7 @@ export interface BlocksContext extends BlocksState {
 const initialiserContext: BlocksContext = {
   colourMode: 'Name',
   showRatio: false,
-  showPoor: true,
+  contrastRatioLimit: 1,
   limit: 'All',
   visibleSet: new Set(),
   combos: new Map(),
@@ -41,7 +41,7 @@ const initialiserContext: BlocksContext = {
 const initialiserState: BlocksState = {
   colourMode: 'Name',
   showRatio: false,
-  showPoor: true,
+  contrastRatioLimit: 1,
   limit: 'All',
   visibleSet: new Set(),
   combos: new Map(),
@@ -67,7 +67,7 @@ function colourBlocksReducer(state: BlocksState, action: BlocksPayload) {
 
 function useData() {
   const { colourMap } = useColourInputContext();
-  const [{ colourMode, showRatio, showPoor, limit, visibleSet, combos }, dispatchColourBlocks] = useReducer(
+  const [{ colourMode, showRatio, contrastRatioLimit, limit, visibleSet, combos }, dispatchColourBlocks] = useReducer(
     colourBlocksReducer,
     initialiserState,
   );
@@ -86,7 +86,7 @@ function useData() {
   return {
     colourMode,
     showRatio,
-    showPoor,
+    contrastRatioLimit,
     limit,
     visibleSet,
     combos,
