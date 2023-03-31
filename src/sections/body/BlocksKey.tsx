@@ -40,14 +40,14 @@ function getBodyRows(showRatioBoolean: boolean) {
     });
 }
 
-export default function BlocksLegend() {
+export default function BlocksKey() {
   const { showRatio } = useColourBlocksContext();
   const headerArray = getCells([`${showRatio ? 'Ratio' : 'Rating'}`, ...content.header]);
   const bodyRows = getBodyRows(showRatio);
 
   return (
     <section className=" my-3 grid h-fit w-full justify-center overflow-x-auto">
-      <h2 className="mx-auto">Legend</h2>
+      <h2 className="mx-auto">Key</h2>
       <table className="border-collapse border-2 p-2 text-center dark:border-neutral-400 dark:text-neutral-200">
         <thead className=" text-sm dark:bg-neutral-600">
           <tr key="header">{headerArray}</tr>
