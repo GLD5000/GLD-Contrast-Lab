@@ -49,7 +49,7 @@ export interface ColourContext extends ColourState {
   }>;
 }
 
-const initialiserA: ColourContext = {
+const initialiserContext: ColourContext = {
   hslLuminanceTarget: 17.7,
   hslSlider: 0,
   textInput: '',
@@ -61,7 +61,7 @@ const initialiserA: ColourContext = {
   dispatchColourInput: () => undefined,
 };
 
-const initialiserB: ColourState = {
+const initialiserState: ColourState = {
   hslLuminanceTarget: 17.7,
   hslSlider: 0,
 
@@ -77,7 +77,7 @@ function useData() {
   const [
     { hslLuminanceTarget, hslSlider, textInput, colourMode, sliderType, recentColour, previousColour, colourMap },
     dispatchColourInput,
-  ] = useReducer(tagReducer, initialiserB);
+  ] = useReducer(tagReducer, initialiserState);
   useEffect(() => {
     dispatchColourInput({ type: 'INIT', payload: {} });
   }, []);
@@ -385,7 +385,7 @@ function useData() {
   }
 }
 
-const ColourInput = createContext(initialiserA);
+const ColourInput = createContext(initialiserContext);
 export const useColourInputContext = () => useContext(ColourInput);
 
 export default function ColourInputProvider({ children }: { children: ReactNode }) {

@@ -27,7 +27,7 @@ export interface BlocksContext extends BlocksState {
   dispatchColourBlocks: Dispatch<BlocksPayload>;
 }
 
-const initialiserA: BlocksContext = {
+const initialiserContext: BlocksContext = {
   colourMode: 'Name',
   showRatio: false,
   showPoor: true,
@@ -37,7 +37,7 @@ const initialiserA: BlocksContext = {
   dispatchColourBlocks: () => undefined,
 };
 
-const initialiserB: BlocksState = {
+const initialiserState: BlocksState = {
   colourMode: 'Name',
   showRatio: false,
   showPoor: true,
@@ -61,7 +61,7 @@ function useData() {
   const { colourMap } = useColourInputContext();
   const [{ colourMode, showRatio, showPoor, limit, visibleSet, combos }, dispatchColourBlocks] = useReducer(
     colourBlocksReducer,
-    initialiserB,
+    initialiserState,
   );
 
   useEffect(() => {
@@ -86,7 +86,7 @@ function useData() {
   };
 }
 
-const ColourBlocks = createContext(initialiserA);
+const ColourBlocks = createContext(initialiserContext);
 export const useColourBlocksContext = () => useContext(ColourBlocks);
 export default function ColourBlocksProvider({ children }: { children: ReactNode }) {
   const data = useData();
