@@ -5,6 +5,7 @@ import { luminance } from '../../utilities/colour/luminance';
 import ShowButtons from './ShowButtons';
 import BlockVisibility from './BlockVisibility';
 import { ColourMap, useColourInputContext } from '../../contexts/ColourInputProvider';
+import BlocksLegend from './BlocksLegend';
 
 const textColourLookup: { [key: string]: string } = {
   Black: '#000000',
@@ -113,13 +114,13 @@ ${border} non-text, ${largeText} AA+ combinations, ${smallText} AAA+ combination
           <h2 className="mx-auto mb-0 w-fit text-2xl font-bold">{title}</h2>
           <h3 className="mx-auto mt-2 mb-8 text-lg">{subheading}</h3>
           <ShowButtons />
-
           <div className="w-full overflow-x-auto bg-inherit  p-4">
             <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 overflow-clip rounded-[2.4rem] border border-border  bg-inherit">
               {returnArrays}
             </div>
           </div>
         </div>
+        <BlocksLegend />
       </section>
       <hr className="my-8" />
     </>
