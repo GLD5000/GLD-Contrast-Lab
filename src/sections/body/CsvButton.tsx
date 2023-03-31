@@ -1,7 +1,15 @@
 import { useState, useEffect } from 'react';
 import SvgButton from '../../elements/SvgButton';
 
-export default function CsvButton({ data, messageIn }: { data: string; messageIn: string }) {
+export default function CsvButton({
+  data,
+  messageIn,
+  customClasses,
+}: {
+  data: string;
+  messageIn: string;
+  customClasses?: string | undefined;
+}) {
   const [copyButtonMessage, setCopyButtonMessage] = useState(messageIn);
 
   useEffect(() => {
@@ -27,7 +35,7 @@ export default function CsvButton({ data, messageIn }: { data: string; messageIn
       showText
       reverse={false}
       buttonClasses={undefined}
-      className="flex h-9 justify-center gap-2 text-sm hover:bg-black hover:text-white hover:transition focus:text-white focus:transition hover:dark:bg-white hover:dark:text-black focus:dark:bg-white focus:dark:text-black"
+      className={`flex h-9 justify-center gap-2 text-sm hover:bg-black hover:text-white hover:transition focus:text-white focus:transition hover:dark:bg-white hover:dark:text-black focus:dark:bg-white focus:dark:text-black ${customClasses}`}
       svgClasses="stroke-1 fill-none stroke-current"
       id="copy-table"
       name="Copy SVG Info"
@@ -35,3 +43,7 @@ export default function CsvButton({ data, messageIn }: { data: string; messageIn
     />
   );
 }
+
+CsvButton.defaultProps = {
+  customClasses: 'py-0',
+};

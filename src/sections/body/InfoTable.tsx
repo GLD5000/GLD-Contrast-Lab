@@ -72,11 +72,19 @@ function getCopyButtons(csv: string, colourMapIn: ColourMap | undefined) {
     tailwind += `'${nameNoHash}': '${hex}',\r\n`;
   });
 
-  const twButton = <CsvButton key="tw-copy-btn" data={tailwind} messageIn="Tailwind Custom Colours" />;
-  const cssButton = <CsvButton key="css-copy-btn" data={css} messageIn="CSS Custom Properties" />;
-  const scssButton = <CsvButton key="scss-copy-btn" data={scss} messageIn="SCSS Property Declarations" />;
-  const sassButton = <CsvButton key="sass-copy-btn" data={sass} messageIn="Sass Property Declarations" />;
-  const csvButton = <CsvButton key="csv-copy-btn" data={csv} messageIn="TSV (Tab Separated Values) All Data" />;
+  const twButton = (
+    <CsvButton customClasses="py-4" key="tw-copy-btn" data={tailwind} messageIn="Tailwind Custom Colours" />
+  );
+  const cssButton = <CsvButton customClasses="py-4" key="css-copy-btn" data={css} messageIn="CSS Custom Properties" />;
+  const scssButton = (
+    <CsvButton customClasses="py-4" key="scss-copy-btn" data={scss} messageIn="SCSS Property Declarations" />
+  );
+  const sassButton = (
+    <CsvButton customClasses="py-4" key="sass-copy-btn" data={sass} messageIn="Sass Property Declarations" />
+  );
+  const csvButton = (
+    <CsvButton customClasses="py-4" key="csv-copy-btn" data={csv} messageIn="TSV (Tab Separated Values) All Data" />
+  );
   return [twButton, cssButton, scssButton, sassButton, csvButton];
 }
 function getBottomButtons(setShowData: Dispatch<SetStateAction<string>>) {
@@ -154,7 +162,7 @@ function getVisibiltyButtons(dataColumns: Set<string>, setDataColumns: Dispatch<
       clickFunction={handleVisibilityClick}
       id={`${key}-custom-visibility-btn`}
       name={`${key} Visibility`}
-      className=" flex justify-start gap-2 pl-16 text-sm hover:bg-black hover:text-white hover:transition focus:text-white focus:transition hover:dark:bg-white hover:dark:text-black focus:dark:bg-white focus:dark:text-black"
+      className=" flex justify-center gap-2 py-4 pl-16 text-sm hover:bg-black hover:text-white hover:transition focus:text-white focus:transition hover:dark:bg-white hover:dark:text-black focus:dark:bg-white focus:dark:text-black"
       type={dataColumns.has(key) ? 'preview' : 'delete'}
       showText
       reverse={false}
