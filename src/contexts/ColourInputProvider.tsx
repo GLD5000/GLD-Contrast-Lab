@@ -21,6 +21,7 @@ export interface ColourObj {
   Luminance: string;
   Black: number;
   White: number;
+  Autocolour: string;
   Name: string;
   contrastRatios: Map<string, number>;
 }
@@ -691,6 +692,7 @@ function createColourObject(
   const Luminance = luminance.convertHexToLuminancePercent(hexValue);
   const Black = contrast.getContrastRatio2Dp([0, luminanceFloat]);
   const White = contrast.getContrastRatio2Dp([1, luminanceFloat]);
+  const Autocolour = Black > White ? 'Black' : 'White';
   const Name = slicedNewName || Hex;
   const otherColourRatios: undefined | Array<[string, number]> = existingMap
     ? [...existingMap.keys()].map((key) => {
@@ -714,6 +716,7 @@ function createColourObject(
     Luminance,
     Black,
     White,
+    Autocolour,
     Name,
     contrastRatios,
     Hue,
