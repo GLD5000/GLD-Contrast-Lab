@@ -5,7 +5,6 @@ interface ColourCombo {
   colours: string[];
   ratio: number;
   rating: string;
-  suitability: string;
 }
 
 export interface BlocksState {
@@ -19,6 +18,8 @@ export interface BlocksState {
 
 export interface BlockPayloadOptions extends BlocksState {
   type: string;
+  key: string;
+  value: ColourCombo;
 }
 
 export type BlocksPayload = Partial<BlockPayloadOptions>;
@@ -49,9 +50,13 @@ const initialiserState: BlocksState = {
 function colourBlocksReducer(state: BlocksState, action: BlocksPayload) {
   const switchString = action.type ? action.type : 'default';
   switch (switchString) {
-    case 'ADD_COMBO':
-      return { ...state, ...action };
-
+    case 'ADD_COMBO': {
+      const mapCopy = new Map([...state.combos]);
+      const keyIn = action.key;
+      const valueIn = action.value;
+      if (keyIn && valueIn) mapCopy.set(keyIn, valueIn);
+      return { ...state, combos: mapCopy };
+    }
     default:
       return { ...state, ...action };
   }
