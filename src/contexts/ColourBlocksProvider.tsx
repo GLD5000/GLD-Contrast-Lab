@@ -54,8 +54,11 @@ function colourBlocksReducer(state: BlocksState, action: BlocksPayload) {
       const mapCopy = new Map([...state.combos]);
       const keyIn = action.key;
       const valueIn = action.value;
-      if (keyIn && valueIn) mapCopy.set(keyIn, valueIn);
-      return { ...state, combos: mapCopy };
+      if (keyIn && valueIn && !mapCopy.has(keyIn)) {
+        mapCopy.set(keyIn, valueIn);
+        return { ...state, combos: mapCopy };
+      }
+      return { ...state };
     }
     default:
       return { ...state, ...action };
