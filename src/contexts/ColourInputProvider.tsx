@@ -36,18 +36,12 @@ export interface ColourState {
   previousColour: StrNumObj | undefined;
   colourMap: ColourMap | undefined;
 }
-export type ColourPayload = Partial<{
-  hslLuminanceTarget: number;
-  hslSlider: number;
+
+interface PayloadOptions extends ColourState {
   number: number;
-  textInput: string;
-  colourMode: string;
-  sliderType: string;
-  recentColour: ColourObj | undefined;
-  previousColour: StrNumObj | undefined;
-  colourMap: ColourMap | undefined;
   tag: string;
-}>;
+}
+export type ColourPayload = Partial<PayloadOptions>;
 export interface ColourContext extends ColourState {
   dispatchColourInput: Dispatch<{
     type: string;

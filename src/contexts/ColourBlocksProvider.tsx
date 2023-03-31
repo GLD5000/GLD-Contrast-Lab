@@ -1,25 +1,22 @@
 import { createContext, ReactNode, useContext, useReducer, Dispatch, useEffect } from 'react';
 import { useColourInputContext } from './ColourInputProvider';
 
-const initialiserA: {
+export interface BlocksState {
   colourMode: string;
   showRatio: boolean;
   showPoor: boolean;
 
   limit: string;
   visibleSet: Set<string>;
+}
 
-  dispatchColourBlocks: Dispatch<
-    Partial<{
-      colourMode: string;
-      showRatio: boolean;
-      showPoor: boolean;
+export type BlocksPayload = Partial<BlocksState>;
 
-      limit: string;
-      visibleSet: Set<string>;
-    }>
-  >;
-} = {
+export interface BlocksContext extends BlocksState {
+  dispatchColourBlocks: Dispatch<BlocksPayload>;
+}
+
+const initialiserA: BlocksContext = {
   colourMode: 'Name',
   showRatio: false,
   showPoor: true,
@@ -28,14 +25,7 @@ const initialiserA: {
   dispatchColourBlocks: () => undefined,
 };
 
-const initialiserB: {
-  colourMode: string;
-  showRatio: boolean;
-  showPoor: boolean;
-
-  limit: string;
-  visibleSet: Set<string>;
-} = {
+const initialiserB: BlocksState = {
   colourMode: 'Name',
   showRatio: false,
   showPoor: true,
@@ -46,24 +36,7 @@ const initialiserB: {
 function useData() {
   const { colourMap } = useColourInputContext();
   const [{ colourMode, showRatio, showPoor, limit, visibleSet }, dispatchColourBlocks] = useReducer(
-    (
-      state: {
-        colourMode: string;
-        showRatio: boolean;
-        showPoor: boolean;
-
-        limit: string;
-        visibleSet: Set<string>;
-      },
-      action: Partial<{
-        colourMode: string;
-        showRatio: boolean;
-        showPoor: boolean;
-
-        limit: string;
-        visibleSet: Set<string>;
-      }>,
-    ) => ({ ...state, ...action }),
+    (state: BlocksState, action: BlocksPayload) => ({ ...state, ...action }),
     initialiserB,
   );
 
