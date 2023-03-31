@@ -330,18 +330,23 @@ function useData() {
         if (typeof previousLuminance === 'number' && recentIn) {
           const { Hue, Sat, Lum } = recentIn;
           const { resultingHsl } = setToTargetLuminanceHsl([Hue, Sat, Lum], previousLuminance);
-          const newObject = makeColourObjectHsl(state, resultingHsl);
+          const newColourObject = makeColourObjectHsl(state, resultingHsl);
 
           const modeOut = state.colourMode ? state.colourMode : 'Hex';
-          const textOutput = newObject ? getRecentTextField(newObject, modeOut) : '';
+          const textOutput = newColourObject ? getRecentTextField(newColourObject, modeOut) : '';
           const returnValue = {
             ...state,
             textInput: textOutput,
-            recentColour: newObject,
+            recentColour: newColourObject,
             hslLuminanceTarget: previousLuminance,
           };
           const previousContrast = setPreviousContrast(returnValue);
           if (previousContrast !== undefined) returnValue.previousColour = previousContrast;
+          const sliderTypeCurrent = state.sliderType;
+          if (sliderTypeCurrent === 'Lum' && newColourObject !== undefined) {
+            returnValue.hslSlider = getSliderValueHslString(newColourObject.HSL, sliderTypeCurrent);
+          }
+
           return returnValue;
         }
         return { ...state };

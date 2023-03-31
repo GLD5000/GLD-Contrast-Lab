@@ -21,7 +21,7 @@ function getHexData(colourObject: ColourObj, colourMode: string, previousContras
 }
 
 export default function ComboBox() {
-  const { textInput, colourMap, recentColour, previousColour, colourMode, sliderType, dispatchColourInput } =
+  const { textInput, colourMap, recentColour, previousColour, colourMode, dispatchColourInput } =
     useColourInputContext();
   const previousContrast = previousColour?.contrast ? `${previousColour?.contrast}` : '-';
   // const [hasFocus, setHasFocus] = useState(false);
@@ -117,19 +117,16 @@ export default function ComboBox() {
                 Clear
               </button>
             )}
-            {sliderType !== 'Lum' &&
-              previousContrast !== undefined &&
-              previousContrast !== '-' &&
-              previousContrast !== '1' && (
-                <button
-                  id="match-btn"
-                  className="active:deco absolute right-2 top-12 w-16 bg-deco p-2  text-xs text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
-                  type="button"
-                  onClick={handleClickMatch}
-                >
-                  Match
-                </button>
-              )}
+            {previousContrast !== undefined && previousContrast !== '-' && previousContrast !== '1' && (
+              <button
+                id="match-btn"
+                className="active:deco absolute right-2 top-12 w-16 bg-deco p-2  text-xs text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
+                type="button"
+                onClick={handleClickMatch}
+              >
+                Match
+              </button>
+            )}
 
             {recentColour !== undefined && textInput.length > 0 && (
               <button
