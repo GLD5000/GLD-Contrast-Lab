@@ -62,7 +62,7 @@ export default function ColourBlocks() {
   const { visibleSet } = useColourBlocksContext();
   if (!colourMap || colourMap.size < 2) return null;
   const title = `Comparison Matrix`;
-  const subheading = `(${visibleSet.size ** 2 - visibleSet.size} combinations)`;
+  const subheading = `(${(visibleSet.size ** 2 - visibleSet.size) * 0.5} combinations)`;
   const returnArrays = createColourBlockArrays(visibleSet, colourMap);
   return (
     <>
