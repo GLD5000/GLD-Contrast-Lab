@@ -150,7 +150,7 @@ export default function ComboBox() {
             )}
 
             {recentColour !== undefined && textInput.length > 0 && (
-              <pre className="absolute bottom-2 left-2 m-0 h-fit p-0 text-xs   text-green-900 dark:text-green-300">
+              <pre className="absolute bottom-2 left-2 m-0 h-fit p-0 font-code text-xs  text-green-900 dark:text-green-300">
                 {getHexData(recentColour, colourMode, previousContrast)}
               </pre>
             )}

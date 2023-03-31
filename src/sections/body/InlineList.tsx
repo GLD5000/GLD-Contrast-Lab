@@ -1,11 +1,11 @@
 import { MouseEvent, Dispatch } from 'react';
-import { useColourInputContext } from '../../contexts/ColourInputProvider';
+import { ColourObj, useColourInputContext } from '../../contexts/ColourInputProvider';
 import SpicyLi from '../../elements/SpicyLi';
 import Ul from '../../elements/Ul';
 import autoTextColourFromHex from '../../utilities/colour/autoTextColour';
 
 function getContent(
-  listArray: string[],
+  listArray: Array<ColourObj>,
   dispatchColourInput: Dispatch<{
     type: string;
     payload: Partial<{
@@ -30,27 +30,29 @@ function getContent(
     </button>
   );
 
-  const itemArray = listArray.map((name, index) => {
-    const uniqueKey = `${name}-${index}`;
+  function closeHandler(e: MouseEvent<HTMLButtonElement>) {
+    const hex = e.currentTarget.id.split('-')[0];
+    dispatchColourInput({ type: 'CLOSE_TAG', payload: { tag: hex } });
+  }
+  function tagHandler(e: MouseEvent<HTMLButtonElement>) {
+    const hex = e.currentTarget.id.split('-')[0];
+    if (hex) {
+      dispatchColourInput({ type: 'EDIT', payload: { textInput: hex } });
+      document.getElementById('colour-input')?.focus();
+    }
+  }
+  const itemArray = listArray.map((object, index) => {
+    const newHex = object.Hex;
+    const name = object.Name.slice(0, 12);
+    const uniqueKey = `${newHex}-${index}`;
     // add clickHandler
-    function closeHandler(e: MouseEvent<HTMLButtonElement>) {
-      const hex = e.currentTarget.id.split('-')[0];
-      dispatchColourInput({ type: 'CLOSE_TAG', payload: { tag: hex } });
-    }
-    function tagHandler(e: MouseEvent<HTMLButtonElement>) {
-      const hex = e.currentTarget.id.split('-')[0];
-      if (hex) {
-        dispatchColourInput({ type: 'EDIT', payload: { textInput: hex } });
-        document.getElementById('colour-input')?.focus();
-      }
-    }
     return (
       <SpicyLi
         key={uniqueKey}
         id={uniqueKey}
         content={name}
-        className="flex  h-8 w-28 flex-row items-center justify-between rounded-full border border-txt-main p-1 text-center text-sm hover:scale-110 hover:transition dark:border-neutral-300"
-        style={{ backgroundColor: name, color: autoTextColourFromHex(name) }}
+        className="flex h-8 w-36 flex-row items-center justify-between rounded-full border border-txt-main text-center font-code text-sm hover:transition dark:border-neutral-300"
+        style={{ backgroundColor: newHex, color: autoTextColourFromHex(newHex) }}
         closeFunction={closeHandler}
         tagFunction={tagHandler}
       />
@@ -64,8 +66,8 @@ export default function InlineList() {
   const { colourMap, dispatchColourInput } = useColourInputContext();
 
   if (!colourMap) return null;
-  const keysArray = [...colourMap.keys()];
-  const content = getContent(keysArray, dispatchColourInput);
+  const mapArray = [...colourMap.values()];
+  const content = getContent(mapArray, dispatchColourInput);
   const className = 'list-none flex flex-row flex-wrap gap-2 mx-auto justify-center p-2';
   return <Ul content={content} className={className} />;
 }

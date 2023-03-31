@@ -18,7 +18,12 @@ export default function SpicyLi({
 }) {
   return (
     <li id={id} className={className} style={style}>
-      <button type="button" id={`${id}-tag-btn`} onClick={tagFunction} className="mx-auto p-1">
+      <button
+        type="button"
+        id={`${id}-tag-btn`}
+        onClick={tagFunction}
+        className="m-0 h-full w-full rounded-r-none p-1 hover:bg-[#767676] hover:text-white focus:bg-[#767676] focus:text-white"
+      >
         {content}
       </button>
       <SvgButton
@@ -31,7 +36,7 @@ export default function SpicyLi({
         type="delete"
         showText={false}
         reverse={false}
-        buttonClasses="  h-6 rounded-full hover:transition aspect-square hover:bg-[#767676] hover:text-white text-current items-center"
+        buttonClasses="  h-full rounded-full rounded-l-none m-0 hover:transition aspect-square hover:bg-[#767676] hover:text-white focus:bg-[#767676] focus:text-white text-current items-center"
         svgClasses="stroke-current fill-none stroke-2 h-full w-full"
       />
     </li>

@@ -3,6 +3,11 @@ module.exports = {
   darkMode: 'class',
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
+    fontFamily: {
+      body: ['Poppins', 'sans-serif'],
+      code: ['source-code-pro', 'Menlo', 'Monaco', 'Consolas', `'Courier New'`, 'monospace'],
+      mono: ['ui-monospace', 'SFMono-Regular', 'monospace'],
+    },
     extend: {
       screens: {
         xs: '420px',
