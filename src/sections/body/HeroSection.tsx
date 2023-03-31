@@ -12,7 +12,12 @@ export default function HeroSection() {
         Quickly compare any number of colours and ensure that they meet current standards for visual Contrast Ratios
         outlined in the Web Content Accessibility Guidelines (WCAG) 2.1.
       </p>
-      <a className=" underline" href="https://glddevtips.web.app/?title=WCAG%202.1%20Contrast%20Guidance">
+      <a
+        className=" underline"
+        href="https://glddevtips.web.app/?title=WCAG%202.1%20Contrast%20Guidance"
+        target="blank"
+        referrerPolicy="no-referrer"
+      >
         Read a brief summary of the Contrast Ratio Guidance on GLD DevTips
       </a>
     </div>
