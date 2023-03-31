@@ -43,7 +43,7 @@ function getContent(
   }
   const itemArray = listArray.map((object, index) => {
     const newHex = object.Hex;
-    const name = object.Name.slice(0, 12);
+    const name = object.Name;
     const uniqueKey = `${newHex}-${index}`;
     // add clickHandler
     return (
@@ -51,7 +51,7 @@ function getContent(
         key={uniqueKey}
         id={uniqueKey}
         content={name}
-        className="flex h-8 w-36 flex-row items-center justify-between rounded-full border border-txt-main text-center font-code text-sm hover:transition dark:border-neutral-300"
+        className="flex h-8 w-36 min-w-fit flex-row items-center justify-between rounded-full border border-txt-main text-center text-sm hover:transition dark:border-neutral-300"
         style={{ backgroundColor: newHex, color: autoTextColourFromHex(newHex) }}
         closeFunction={closeHandler}
         tagFunction={tagHandler}

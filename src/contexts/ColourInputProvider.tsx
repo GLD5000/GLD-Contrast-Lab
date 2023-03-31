@@ -197,7 +197,7 @@ function useData() {
         }
         if (isNameMode) {
           const textWithoutName = textReceived
-            ? textReceived.replace('Name:', '').replaceAll(/[\s]/g, '').slice(0, 18)
+            ? textReceived.replace('Name:', '').replaceAll(/[\s]/g, '').slice(0, 16)
             : '';
           const returnObject = { ...state, textInput: textWithoutName ? `Name: ${textWithoutName}` : 'Name: ' };
 
