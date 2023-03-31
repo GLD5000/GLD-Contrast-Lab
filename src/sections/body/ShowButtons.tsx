@@ -3,7 +3,7 @@ import { useColourInputContext } from '../../contexts/ColourInputProvider';
 
 const lookupRatingLabel: { [key: number]: string } = {
   1: 'All',
-  3: 'Non-Text+',
+  3: 'Low+',
   4.5: 'AA+',
   7: 'AAA+',
 };
