@@ -89,6 +89,7 @@ export default function ColourBlock({
   function handleClick() {
     if (autoColour) {
       handleClickColourMode();
+      return;
     }
     const dispatchObject = [backgroundColour, borderColour].sort().join('/');
     dispatchColourBlocks({ currentCombo: dispatchObject });

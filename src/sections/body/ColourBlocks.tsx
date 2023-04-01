@@ -6,7 +6,7 @@ import ShowButtons from './ShowButtons';
 import BlockVisibility from './BlockVisibility';
 import { ColourMap, useColourInputContext } from '../../contexts/ColourInputProvider';
 // import BlocksKey from './BlocksKey';
-import Inspector from './Inspector';
+import Inspector from './inspector/Inspector';
 
 const textColourLookup: { [key: string]: string } = {
   Black: '#000000',
@@ -108,6 +108,8 @@ ${border} non-text, ${largeText} AA+ combinations, ${smallText} AAA+ combination
             </li>
           </ul>
         </div>
+        <Inspector />
+
         <div
           className="relative mx-auto grid h-fit w-full rounded border-none border-inherit 
         "
@@ -121,7 +123,6 @@ ${border} non-text, ${largeText} AA+ combinations, ${smallText} AAA+ combination
             </div>
           </div>
         </div>
-        <Inspector />
         {/* <BlocksKey /> */}
       </section>
       <hr className="my-8" />
