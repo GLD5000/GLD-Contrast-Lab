@@ -5,7 +5,8 @@ import { luminance } from '../../utilities/colour/luminance';
 import ShowButtons from './ShowButtons';
 import BlockVisibility from './BlockVisibility';
 import { ColourMap, useColourInputContext } from '../../contexts/ColourInputProvider';
-import BlocksKey from './BlocksKey';
+// import BlocksKey from './BlocksKey';
+import Inspector from './Inspector';
 
 const textColourLookup: { [key: string]: string } = {
   Black: '#000000',
@@ -120,7 +121,8 @@ ${border} non-text, ${largeText} AA+ combinations, ${smallText} AAA+ combination
             </div>
           </div>
         </div>
-        <BlocksKey />
+        <Inspector />
+        {/* <BlocksKey /> */}
       </section>
       <hr className="my-8" />
     </>
