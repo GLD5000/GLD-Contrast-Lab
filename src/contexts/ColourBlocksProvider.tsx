@@ -12,6 +12,7 @@ export interface BlocksState {
   showRatio: boolean;
   contrastRatioLimit: number;
   combos: Map<string, ColourCombo>;
+  currentCombo: string;
   limit: string;
   visibleSet: Set<string>;
 }
@@ -35,6 +36,7 @@ const initialiserContext: BlocksContext = {
   limit: 'All',
   visibleSet: new Set(),
   combos: new Map(),
+  currentCombo: '',
   dispatchColourBlocks: () => undefined,
 };
 
@@ -45,6 +47,7 @@ const initialiserState: BlocksState = {
   limit: 'All',
   visibleSet: new Set(),
   combos: new Map(),
+  currentCombo: '',
 };
 
 function colourBlocksReducer(state: BlocksState, action: BlocksPayload) {
@@ -61,16 +64,15 @@ function colourBlocksReducer(state: BlocksState, action: BlocksPayload) {
       return { ...state };
     }
     default:
+      console.log('action:', action);
       return { ...state, ...action };
   }
 }
 
 function useData() {
   const { colourMap } = useColourInputContext();
-  const [{ colourMode, showRatio, contrastRatioLimit, limit, visibleSet, combos }, dispatchColourBlocks] = useReducer(
-    colourBlocksReducer,
-    initialiserState,
-  );
+  const [{ colourMode, showRatio, contrastRatioLimit, limit, visibleSet, combos, currentCombo }, dispatchColourBlocks] =
+    useReducer(colourBlocksReducer, initialiserState);
 
   useEffect(() => {
     let mounted = true;
@@ -90,6 +92,7 @@ function useData() {
     limit,
     visibleSet,
     combos,
+    currentCombo,
     dispatchColourBlocks,
   };
 }

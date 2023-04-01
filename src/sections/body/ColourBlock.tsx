@@ -90,8 +90,8 @@ export default function ColourBlock({
     if (autoColour) {
       handleClickColourMode();
     }
-    // const dispatchObject = poorContrast ? { contrastRatioLimit: !contrastRatioLimit } : { showRatio: !showRatio };
-    // dispatchColourBlocks(dispatchObject);
+    const dispatchObject = [backgroundColour, borderColour].sort().join('/');
+    dispatchColourBlocks({ currentCombo: dispatchObject });
   }
 
   const hidePoorColour = contrastRatio < contrastRatioLimit && !autoColour;
