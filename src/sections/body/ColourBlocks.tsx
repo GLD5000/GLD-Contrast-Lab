@@ -108,7 +108,6 @@ ${border} non-text, ${largeText} AA+ combinations, ${smallText} AAA+ combination
             </li>
           </ul>
         </div>
-        <Inspector />
 
         <div
           className="relative mx-auto grid h-fit w-full rounded border-none border-inherit 
@@ -123,6 +122,8 @@ ${border} non-text, ${largeText} AA+ combinations, ${smallText} AAA+ combination
             </div>
           </div>
         </div>
+        <Inspector />
+
         {/* <BlocksKey /> */}
       </section>
       <hr className="my-8" />
