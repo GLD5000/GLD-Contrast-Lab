@@ -52,7 +52,7 @@ export default function ColourBlock({
   borderColour: string;
 }) {
   const { showRatio, contrastRatioLimit, colourMode, dispatchColourBlocks } = useColourBlocksContext();
-  const { colourMap } = useColourInputContext();
+  const { colourMap, dispatchColourInput } = useColourInputContext();
   const poorContrast = contrastRatio < 3;
 
   useEffect(() => {
@@ -91,8 +91,10 @@ export default function ColourBlock({
       handleClickColourMode();
       return;
     }
-    const dispatchObject = [backgroundColour, borderColour].sort().join('/');
-    dispatchColourBlocks({ currentCombo: dispatchObject });
+    // const dispatchObject = [backgroundColour, borderColour].sort().join('/');
+    // dispatchColourBlocks({ currentCombo: dispatchObject });
+
+    dispatchColourInput({ type: 'ASSIGN_COMBO_COLOURS', payload: { tag: backgroundColour, tagB: borderColour } });
   }
 
   const hidePoorColour = contrastRatio < contrastRatioLimit && !autoColour;

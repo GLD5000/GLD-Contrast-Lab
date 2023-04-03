@@ -82,20 +82,15 @@ function getElementColours(
 //   return `Relative Luminance: ${Luminance}`;
 // }
 
-export default function ColourDemo({
-  backgroundObject,
-  foregroundObject,
-  contrastNumberIn,
-}: {
-  backgroundObject: ColourObj;
-  foregroundObject: ColourObj;
-  contrastNumberIn: number;
-}) {
-  const [swap, setSwap] = useState(false);
+export default function ColourDemo() {
   const [editing, setEditing] = useState(false);
+  const [editHex, setEditHex] = useState('');
   const [grey, setGrey] = useState(false);
   const { colourMode, dispatchColourBlocks } = useColourBlocksContext();
-  const { dispatchColourInput } = useColourInputContext();
+  const { dispatchColourInput, recentColour, previousColour } = useColourInputContext();
+
+  console.log(recentColour, previousColour);
+  const contrastNumberIn = previousColour?.contrast || 1;
   const rating = contrast.makeContrastRating(contrastNumberIn);
   function handleClickColourMode() {
     const nextMode: { [key: string]: string } = {
@@ -108,7 +103,7 @@ export default function ColourDemo({
 
     dispatchColourBlocks({ colourMode: nextMode[colourMode] });
   }
-
+  if (!recentColour || !previousColour) return null;
   const {
     largeTextBackground,
     smallTextBackground,
@@ -118,9 +113,12 @@ export default function ColourDemo({
     backgroundName,
     foregroundName,
     autoTextBackground,
-  } = swap
-    ? getElementColours(foregroundObject, backgroundObject, contrastNumberIn, colourMode, grey)
-    : getElementColours(backgroundObject, foregroundObject, contrastNumberIn, colourMode, grey);
+  } = getElementColours(recentColour, previousColour, contrastNumberIn, colourMode, grey);
+  function handleEdit() {
+    dispatchColourInput({ type: 'EDIT_COMBO', payload: { textInput: backgroundHex } });
+    if (!editing) setEditHex(backgroundHex);
+    setEditing((value) => !value);
+  }
 
   return (
     <div
@@ -178,13 +176,9 @@ export default function ColourDemo({
         </b>
       </button>
 
-      <div style={{ color: autoTextBackground }} className="grid w-full grid-cols-3 flex-row items-center px-4">
+      <div style={{ color: autoTextBackground }} className="grid w-full grid-cols-3 flex-row items-center gap-2 px-4">
         <SvgButtonNew
-          clickFunction={() => {
-            dispatchColourInput({ type: 'EDIT', payload: { textInput: backgroundHex } });
-
-            setEditing((value) => !value);
-          }}
+          clickFunction={handleEdit}
           id="edit-bg-colour"
           name="Edit Background Colour"
           showTextIn
@@ -209,20 +203,25 @@ export default function ColourDemo({
           Grey
         </button>
 
-        {!editing && (
-          <button
-            id="swap-btn"
-            className="active:deco my-auto w-full rounded border-2 border-transparent px-2 py-1   hover:border-current hover:transition focus:border-current focus:transition"
-            type="button"
-            onClick={() => {
-              setSwap((value) => !value);
-            }}
-          >
-            Swap
-          </button>
-        )}
+        <button
+          id="swap-btn"
+          className="active:deco my-auto w-full rounded border-2 border-transparent px-2 py-1   hover:border-current hover:transition focus:border-current focus:transition"
+          type="button"
+          onClick={() => {
+            dispatchColourInput({ type: 'SWAP_COMBO_COLOURS', payload: { textInput: '' } });
+          }}
+        >
+          Swap
+        </button>
       </div>
-      {editing && <EditSlider />}
+      {editing && (
+        <EditSlider
+          cancelHex={editHex}
+          cancelEdit={() => {
+            setEditing(false);
+          }}
+        />
+      )}
     </div>
   );
 }

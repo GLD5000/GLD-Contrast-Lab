@@ -3,7 +3,7 @@ import { useColourInputContext } from '../../../contexts/ColourInputProvider';
 
 let run = false;
 
-export default function EditSlider() {
+export default function EditSlider({ cancelHex, cancelEdit }: { cancelHex: string; cancelEdit: () => void }) {
   const { recentColour, hslSlider, sliderType, dispatchColourInput } = useColourInputContext();
   const [sendValue, setSendValue] = useState(hslSlider);
   // console.log('run:', run);
@@ -11,19 +11,12 @@ export default function EditSlider() {
     'hover:transition focus:transition text-txt-main-dk bg-deco-dk hover:bg-txt-main-dk hover:text-bg-var-dk focus:bg-txt-main-dk focus:text-bg-var-dk';
   const darkClasses =
     'text-txt-main bg-deco hover:bg-txt-low hover:text-bg-var hover:transition focus:bg-txt-low focus:text-bg-var focus:transition';
-  const [classes, setClasses] = useState('');
   const autoColour = recentColour?.Autocolour;
-  useEffect(() => {
-    let mounted = true;
-    if (mounted && autoColour) {
-      if (autoColour === 'Black') setClasses(lightClasses);
-      if (autoColour === 'White') setClasses(darkClasses);
-    }
 
-    return () => {
-      mounted = false;
-    };
-  }, [autoColour]);
+  const lightClassesSlider =
+    'hover:transition focus:transition text-txt-mid bg-txt-low hover:bg-txt-main hover:text-txt-mid focus:bg-txt-main focus:text-txt-mid';
+  const darkClassesSlider =
+    'text-txt-main-dk bg-border-dk hover:bg-txt-low-dk hover:text-txt-main-dk hover:transition focus:bg-txt-low-dk focus:text-txt-main-dk focus:transition';
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -39,7 +32,7 @@ export default function EditSlider() {
   }, [sendValue, dispatchColourInput, sliderType]);
 
   function handleClickAdd() {
-    dispatchColourInput({ type: 'SUBMIT', payload: { textInput: `` } });
+    dispatchColourInput({ type: 'SUBMIT_COMBO', payload: { textInput: `` } });
   }
 
   function handleTypeClick() {
@@ -59,23 +52,30 @@ export default function EditSlider() {
     run = true;
   }
 
-  function handleClickRandom() {
-    dispatchColourInput({ type: 'RANDOMISE', payload: {} });
+  function handleClickCancel() {
+    dispatchColourInput({ type: 'ASSIGN_COMBO_COLOURS', payload: { tag: cancelHex } });
+    cancelEdit();
   }
 
   return (
-    <div className="mb-2 grid w-72 text-txt-main dark:text-txt-main-dk">
+    <div className="mb-2 grid w-72 ">
       <div className="flex h-12  flex-row flex-wrap content-center gap-2">
         <label htmlFor="hsl-slider">
           <div className="w-full rounded">
-            <button className={`w-16 rounded  py-2 px-4 text-xs ${classes} `} type="button" onClick={handleTypeClick}>
+            <button
+              className={`w-16 rounded  py-2 px-4 text-xs ${autoColour === 'Black' ? lightClasses : darkClasses} `}
+              type="button"
+              onClick={handleTypeClick}
+            >
               {sliderType}
             </button>
           </div>
         </label>
         <input
           id="hsl-slider"
-          className="my-auto h-1 shrink-0 grow cursor-pointer appearance-none rounded bg-neutral-500 text-inherit hover:bg-current hover:transition focus:bg-current focus:transition"
+          className={`my-auto h-1 shrink-0 grow cursor-pointer appearance-none rounded ${
+            autoColour === 'Black' ? lightClassesSlider : darkClassesSlider
+          }`}
           type="range"
           min={0}
           step={0.1}
@@ -89,8 +89,10 @@ export default function EditSlider() {
           <button
             type="button"
             id="randomise-colour"
-            className={`h-full w-full rounded py-2 px-4 text-xs ${classes} `}
-            onClick={handleClickRandom}
+            className={`h-full w-full rounded py-2 px-4 text-xs ${
+              autoColour === 'Black' ? lightClasses : darkClasses
+            } `}
+            onClick={handleClickCancel}
           >
             <p className="m-auto text-sm">Cancel</p>
           </button>
@@ -100,7 +102,9 @@ export default function EditSlider() {
           <button
             type="button"
             id="add-colour"
-            className={`h-full w-full rounded py-2 px-4 text-xs ${classes} `}
+            className={`h-full w-full rounded py-2 px-4 text-xs ${
+              autoColour === 'Black' ? lightClasses : darkClasses
+            } `}
             onClick={handleClickAdd}
           >
             <p className="m-auto text-sm">Submit</p>

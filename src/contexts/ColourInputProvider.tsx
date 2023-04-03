@@ -25,6 +25,10 @@ export interface ColourObj {
   Name: string;
   contrastRatios: Map<string, number>;
 }
+export interface PreviousColourObj extends ColourObj {
+  contrast: number;
+}
+
 export type ColourMap = Map<string, ColourObj>;
 
 export interface ColourState {
@@ -34,13 +38,14 @@ export interface ColourState {
   colourMode: string;
   sliderType: string;
   recentColour: ColourObj | undefined;
-  previousColour: StrNumObj | undefined;
+  previousColour: PreviousColourObj | undefined;
   colourMap: ColourMap | undefined;
 }
 
 interface PayloadOptions extends ColourState {
   number: number;
   tag: string;
+  tagB: string;
 }
 export type ColourPayload = Partial<PayloadOptions>;
 export interface ColourContext extends ColourState {
@@ -136,6 +141,52 @@ function useData() {
         }
         return returnValue;
       }
+      case 'SWAP_COMBO_COLOURS': {
+        const recentObject = state.recentColour;
+        const previousObject = state.previousColour;
+
+        if (!recentObject || !previousObject) return { ...state };
+        const returnValue = {
+          ...state,
+          recentColour: { ...previousObject },
+          previousColour: { ...recentObject, contrast: previousObject.contrast },
+          hslSlider: getSliderValueHslString(previousObject.HSL, state.sliderType),
+        };
+
+        return returnValue;
+      }
+
+      case 'ASSIGN_COMBO_COLOURS': {
+        const backgroundHex = action.payload.tag;
+        const foregroundHex = action.payload.tagB;
+        const currentMap = state.colourMap;
+        const returnValue = { ...state };
+        if (!currentMap) return returnValue;
+
+        if (backgroundHex) {
+          const backgroundObj = findObjectInColourMap(backgroundHex, currentMap, undefined);
+          if (backgroundObj) returnValue.recentColour = { ...backgroundObj };
+        }
+
+        if (foregroundHex) {
+          const foregroundObj = findObjectInColourMap(foregroundHex, currentMap, undefined);
+          if (foregroundObj) returnValue.previousColour = { ...foregroundObj, contrast: 1 };
+        }
+
+        const currentRecentObj = returnValue.recentColour;
+        const currentPreviousObj = returnValue.previousColour;
+
+        if (currentRecentObj && currentPreviousObj) {
+          const ratio = contrast.getContrastRatio2Dp([
+            currentRecentObj.luminanceFloat,
+            currentPreviousObj.luminanceFloat,
+          ]);
+          if (ratio) currentPreviousObj.contrast = ratio;
+        }
+
+        return returnValue;
+      }
+
       case 'EDIT': {
         // console.log('EDIT');
 
@@ -157,12 +208,36 @@ function useData() {
           returnValue.textInput = getRecentTextField(newColourObject, currentMode);
         }
 
-        const stateLuminance = previousObject?.luminance;
+        const stateLuminance = previousObject?.luminanceFloat;
         // //console.log('stateLuminance:', stateLuminance);
         if (typeof stateLuminance === 'number') returnValue.hslLuminanceTarget = stateLuminance;
 
         return returnValue;
       }
+
+      case 'EDIT_COMBO': {
+        const newHex = action.payload.textInput;
+        if (!newHex) return { ...state };
+        const currentMode = 'Hex';
+        const newColourObject = makeColourObject(newHex, state.colourMap, undefined);
+        // console.log('newColourObject.Name:', newColourObject.Name);
+        const returnValue = {
+          ...state,
+          colourMode: currentMode,
+          recentColour: newColourObject,
+          hslSlider: getSliderValueHslString(newColourObject.HSL, state.sliderType),
+        };
+        if (newColourObject !== undefined) {
+          returnValue.textInput = getRecentTextField(newColourObject, currentMode);
+        }
+
+        const stateLuminance = state.previousColour?.luminanceFloat;
+        // //console.log('stateLuminance:', stateLuminance);
+        if (typeof stateLuminance === 'number') returnValue.hslLuminanceTarget = stateLuminance;
+
+        return returnValue;
+      }
+
       case 'CLEAR_TEXT': {
         // //console.log('CLEAR_TEXT');
         const returnValue = {
@@ -252,6 +327,12 @@ function useData() {
           colourMode: 'Name',
         };
         return returnValue;
+      }
+      case 'SUBMIT_COMBO': {
+        const recentColourReturn = submitRecentColourCombo(state);
+        if (recentColourReturn !== null) return recentColourReturn;
+
+        return { ...state };
       }
 
       case 'UPDATE_HSL': {
@@ -454,6 +535,18 @@ function submitRecentColour(stateIn: ColourState) {
   };
   return returnValue;
 }
+function submitRecentColourCombo(stateIn: ColourState) {
+  const recentState = stateIn.recentColour;
+  if (!recentState) return null;
+  const newMap = addColourObjectToStorage(recentState, stateIn.colourMap);
+  const returnValue = {
+    ...stateIn,
+    textInput: getRecentTextField(recentState, 'Name'),
+    colourMap: newMap,
+    colourMode: 'Name',
+  };
+  return returnValue;
+}
 
 function processHexString(value: string) {
   const isHex = /^#[0-9a-fA-F]{1,6}$/.test(value);
@@ -636,7 +729,7 @@ function emptyTextProcess(state: {
   colourMode: string;
   sliderType: string;
   recentColour: ColourObj | undefined;
-  previousColour: StrNumObj | undefined;
+  previousColour: PreviousColourObj | undefined;
   colourMap: ColourMap | undefined;
 }) {
   // //console.log('empty', state.recentColour);
@@ -847,10 +940,10 @@ function handleRlumUpdate(state: ColourState, payload: ColourPayload) {
   return returnValue;
 }
 function setPreviousLuminance(colourObject: ColourObj | undefined) {
-  const recentLuminance = colourObject?.luminanceFloat;
-  if (typeof recentLuminance === 'number') {
+  // const recentLuminance = colourObject?.luminanceFloat;
+  if (colourObject) {
     return {
-      luminance: recentLuminance,
+      ...colourObject,
       contrast: 1,
     };
   }
@@ -863,14 +956,16 @@ function setPreviousContrast(state: {
   colourMode: string;
   sliderType: string;
   recentColour: ColourObj | undefined;
-  previousColour: StrNumObj | undefined;
+  previousColour: PreviousColourObj | undefined;
   colourMap: ColourMap | undefined;
 }) {
   const recentLuminance = state.recentColour?.luminanceFloat;
-  const previousLuminance = state.previousColour?.luminance;
-  if (typeof recentLuminance === 'number' && typeof previousLuminance === 'number') {
+
+  const { previousColour } = state;
+  const previousLuminance = state.previousColour?.luminanceFloat;
+  if (previousColour && typeof recentLuminance === 'number' && typeof previousLuminance === 'number') {
     const ratio = contrast.getContrastRatio2Dp([recentLuminance, previousLuminance]);
-    return { luminance: previousLuminance, contrast: ratio };
+    return { ...previousColour, luminanceFloat: previousLuminance, contrast: ratio };
   }
   return undefined;
 }
