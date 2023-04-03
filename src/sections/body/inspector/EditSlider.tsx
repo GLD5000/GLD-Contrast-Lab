@@ -7,9 +7,9 @@ export default function EditSlider() {
   const { recentColour, hslSlider, sliderType, dispatchColourInput } = useColourInputContext();
   const [sendValue, setSendValue] = useState(hslSlider);
   // console.log('run:', run);
-  const darkClasses =
-    'hover:transition focus:transition text-txt-main-dk bg-deco-dk hover:bg-txt-main-dk hover:text-bg-var-dk focus:bg-txt-main-dk focus:text-bg-var-dk';
   const lightClasses =
+    'hover:transition focus:transition text-txt-main-dk bg-deco-dk hover:bg-txt-main-dk hover:text-bg-var-dk focus:bg-txt-main-dk focus:text-bg-var-dk';
+  const darkClasses =
     'text-txt-main bg-deco hover:bg-txt-low hover:text-bg-var hover:transition focus:bg-txt-low focus:text-bg-var focus:transition';
   const [classes, setClasses] = useState('');
   const autoColour = recentColour?.Autocolour;
