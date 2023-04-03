@@ -114,9 +114,13 @@ export default function ColourDemo() {
     autoTextBackground,
   } = getElementColours(recentColour, previousColour, contrastNumberIn, colourMode, grey);
   function handleEdit() {
-    dispatchColourInput({ type: 'EDIT_COMBO', payload: { textInput: backgroundHex } });
-    if (!editing) setEditHex(backgroundHex);
+    if (!editing) {
+      setEditHex(backgroundHex);
+      dispatchColourInput({ type: 'EDIT_COMBO', payload: { textInput: backgroundHex } });
+    }
+    if (editing) dispatchColourInput({ type: 'ASSIGN_COMBO_COLOURS', payload: { tag: editHex } });
     setEditing((value) => !value);
+    setGrey(false);
   }
 
   return (
@@ -201,17 +205,18 @@ export default function ColourDemo() {
         >
           Grey
         </button>
-
-        <button
-          id="swap-btn"
-          className="active:deco my-auto w-full rounded border-2 border-transparent px-2 py-1   hover:border-current hover:transition focus:border-current focus:transition"
-          type="button"
-          onClick={() => {
-            dispatchColourInput({ type: 'SWAP_COMBO_COLOURS', payload: { textInput: '' } });
-          }}
-        >
-          Swap
-        </button>
+        {!editing && (
+          <button
+            id="swap-btn"
+            className="active:deco my-auto w-full rounded border-2 border-transparent px-2 py-1   hover:border-current hover:transition focus:border-current focus:transition"
+            type="button"
+            onClick={() => {
+              dispatchColourInput({ type: 'SWAP_COMBO_COLOURS', payload: { textInput: '' } });
+            }}
+          >
+            Swap
+          </button>
+        )}
       </div>
       {editing && (
         <EditSlider
