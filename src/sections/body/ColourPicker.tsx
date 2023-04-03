@@ -29,10 +29,6 @@ export default function ColourPicker() {
     }
   }
 
-  function handleClickAdd() {
-    dispatchColourInput({ type: 'SUBMIT', payload: { textInput: `${currentValue}` } });
-  }
-
   return (
     <div className="grid h-fit w-80 overflow-clip rounded border">
       <div
@@ -61,7 +57,7 @@ export default function ColourPicker() {
           value={currentValue}
         />
       </div>
-      <HslSlider handleClickAdd={handleClickAdd} />
+      <HslSlider />
     </div>
   );
 }

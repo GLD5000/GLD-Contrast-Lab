@@ -64,7 +64,6 @@ function colourBlocksReducer(state: BlocksState, action: BlocksPayload) {
       return { ...state };
     }
     default:
-      console.log('action:', action);
       return { ...state, ...action };
   }
 }

@@ -237,7 +237,9 @@ function useData() {
         // state.colourMap?.forEach((map) => console.log(map.contrastRatios.size));
         const recentColourReturn = submitRecentColour(state);
         if (recentColourReturn !== null) return recentColourReturn;
-        const newText = state.textInput ? `${state.textInput}\t` : action.payload.textInput || '';
+
+        const newText = state.textInput ? `${state.textInput}\t` : `${action.payload.textInput}\t` || '';
+        if (newText === '') return { ...state };
         const { processedText, processedArray, recent } = processText(newText || action.payload.textInput || '', state);
         const returnedColours = state.colourMap ? state.colourMap : undefined;
         const { joinedMap: newMap, stringOut } =

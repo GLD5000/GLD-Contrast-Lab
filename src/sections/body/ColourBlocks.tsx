@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import ColourBlock from './ColourBlock';
 import { contrast } from '../../utilities/colour/contrastRatio';
 import { ColourCombo, useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
@@ -85,7 +86,16 @@ function getComboMetaData(combos: Map<string, ColourCombo>) {
 
 export default function ColourBlocks() {
   const { colourMap } = useColourInputContext();
-  const { visibleSet, combos } = useColourBlocksContext();
+  const { visibleSet, combos, currentCombo, dispatchColourBlocks } = useColourBlocksContext();
+  useEffect(() => {
+    let mounted = true;
+    if (mounted && colourMap && colourMap.size === 2 && currentCombo === '')
+      dispatchColourBlocks({ currentCombo: [...colourMap.keys()].sort().join('/') });
+
+    return () => {
+      mounted = false;
+    };
+  }, [colourMap, currentCombo, dispatchColourBlocks]);
   if (!colourMap || colourMap.size < 2) return null;
 
   const { total, border, largeText, smallText } = getComboMetaData(combos);

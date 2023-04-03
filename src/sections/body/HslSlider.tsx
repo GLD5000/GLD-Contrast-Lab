@@ -3,7 +3,7 @@ import { useColourInputContext } from '../../contexts/ColourInputProvider';
 
 let run = false;
 
-export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => void }) {
+export default function HslSlider() {
   const { recentColour, hslSlider, sliderType, dispatchColourInput } = useColourInputContext();
   const [sendValue, setSendValue] = useState(hslSlider);
   // console.log('run:', run);
@@ -20,6 +20,10 @@ export default function HslSlider({ handleClickAdd }: { handleClickAdd: () => vo
       clearTimeout(timeoutId);
     };
   }, [sendValue, dispatchColourInput, sliderType]);
+
+  function handleClickAdd() {
+    dispatchColourInput({ type: 'SUBMIT', payload: { textInput: `` } });
+  }
 
   function handleTypeClick() {
     const typeLookup: { [key: string]: string } = {
