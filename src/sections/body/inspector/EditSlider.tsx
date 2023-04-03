@@ -3,7 +3,15 @@ import { useColourInputContext } from '../../../contexts/ColourInputProvider';
 
 let run = false;
 
-export default function EditSlider({ cancelHex, cancelEdit }: { cancelHex: string; cancelEdit: () => void }) {
+export default function EditSlider({
+  cancelHex,
+  cancelEdit,
+  updateCancelHex,
+}: {
+  cancelHex: string;
+  cancelEdit: () => void;
+  updateCancelHex: () => void;
+}) {
   const { recentColour, hslSlider, sliderType, dispatchColourInput } = useColourInputContext();
   const [sendValue, setSendValue] = useState(hslSlider);
   // console.log('run:', run);
@@ -33,6 +41,8 @@ export default function EditSlider({ cancelHex, cancelEdit }: { cancelHex: strin
 
   function handleClickAdd() {
     dispatchColourInput({ type: 'SUBMIT_COMBO', payload: { textInput: `` } });
+
+    updateCancelHex();
   }
 
   function handleTypeClick() {

@@ -122,7 +122,10 @@ export default function ColourDemo() {
     setEditing((value) => !value);
     setGrey(false);
   }
-
+  function handleSubmit() {
+    if (recentColour?.Hex) setEditHex(recentColour.Hex);
+    setEditing(false);
+  }
   return (
     <div
       style={{ backgroundColor: backgroundHex, color: smallTextBackground }}
@@ -224,6 +227,7 @@ export default function ColourDemo() {
           cancelEdit={() => {
             setEditing(false);
           }}
+          updateCancelHex={handleSubmit}
         />
       )}
     </div>
