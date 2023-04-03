@@ -111,7 +111,7 @@ function useData() {
 
         const savedMap = getSessionStorageMap();
         // const recentColourValue = makeColourObjectHsl(randomColour.makeRandomHslString(), state);
-        const returnValue = {
+        const returnValue: ColourState = {
           // textInput: `${recentColourValue.Hex}`,
           hslLuminanceTarget: 17.7,
           hslSlider: 0,
@@ -123,6 +123,24 @@ function useData() {
           previousColour: undefined,
           colourMap: savedMap,
         };
+        if (savedMap) {
+          const colourObjects = [...savedMap.entries()];
+          const entryOne = colourObjects[0][1];
+          const entryTwo = colourObjects[1][1];
+          if (entryOne) returnValue.recentColour = entryOne;
+          if (entryTwo) returnValue.previousColour = entryTwo;
+
+          const currentRecentObj = returnValue.recentColour;
+          const currentPreviousObj = returnValue.previousColour;
+
+          if (currentRecentObj && currentPreviousObj) {
+            const ratio = contrast.getContrastRatio2Dp([
+              currentRecentObj.luminanceFloat,
+              currentPreviousObj.luminanceFloat,
+            ]);
+            if (ratio) currentPreviousObj.contrast = ratio;
+          }
+        }
 
         return returnValue;
       }

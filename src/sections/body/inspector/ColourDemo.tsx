@@ -89,7 +89,6 @@ export default function ColourDemo() {
   const { colourMode, dispatchColourBlocks } = useColourBlocksContext();
   const { dispatchColourInput, recentColour, previousColour } = useColourInputContext();
 
-  console.log(recentColour, previousColour);
   const contrastNumberIn = previousColour?.contrast || 1;
   const rating = contrast.makeContrastRating(contrastNumberIn);
   function handleClickColourMode() {
