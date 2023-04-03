@@ -178,7 +178,7 @@ export default function ColourDemo({
         </b>
       </button>
 
-      <div style={{ color: autoTextBackground }} className="flex w-full flex-row justify-between px-4">
+      <div style={{ color: autoTextBackground }} className="grid w-full grid-cols-3 flex-row items-center px-4">
         <SvgButtonNew
           clickFunction={() => {
             dispatchColourInput({ type: 'EDIT', payload: { textInput: backgroundHex } });
@@ -188,19 +188,19 @@ export default function ColourDemo({
           id="edit-bg-colour"
           name="Edit Background Colour"
           showTextIn
-          className=" my-auto flex w-20 gap-2 whitespace-pre-wrap rounded border-2 border-transparent px-2 py-1   hover:border-current hover:transition focus:border-current focus:transition"
+          className=" my-auto flex w-full grow-0 gap-2 whitespace-pre-wrap rounded border-2 border-transparent px-2 py-1   hover:border-current hover:transition focus:border-current focus:transition"
           reverse={false}
           buttonClasses={undefined}
           svg={
-            <div className="aspect-square h-6 rounded-none p-0 text-xs">
+            <div className="aspect-square h-6 grow-0 rounded-none p-0 text-xs">
               <PencilSvg />
             </div>
           }
-          textElement={<span className="m-0 p-0">Edit</span>}
+          textElement={<span className="m-0 grow-0 p-0">Edit</span>}
         />
         <button
           id="swap-btn"
-          className="active:deco my-auto w-20 rounded border-2 border-transparent px-2 py-1   hover:border-current hover:transition focus:border-current focus:transition"
+          className="active:deco my-auto w-full rounded border-2 border-transparent px-2 py-1   hover:border-current hover:transition focus:border-current focus:transition"
           type="button"
           onClick={() => {
             setGrey((value) => !value);
@@ -212,7 +212,7 @@ export default function ColourDemo({
         {!editing && (
           <button
             id="swap-btn"
-            className="active:deco my-auto w-20 rounded border-2 border-transparent px-2 py-1   hover:border-current hover:transition focus:border-current focus:transition"
+            className="active:deco my-auto w-full rounded border-2 border-transparent px-2 py-1   hover:border-current hover:transition focus:border-current focus:transition"
             type="button"
             onClick={() => {
               setSwap((value) => !value);
