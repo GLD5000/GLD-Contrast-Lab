@@ -147,10 +147,6 @@ export default function ColourDemo() {
           <RatingTable ratingString={rating} />
         </div>
       </div>
-      {/* <div style={{ borderColor: borderBackground, color: smallTextBackground }} className='flex gap-2 rounded overflow-clip border-4 w-72 mx-auto mt-2 p-2'>
-      <button   className='rounded-none text-sm'>Small Text Rating:</button>
-      <b style={{ backgroundColor: backgroundHex }} className='bg-transparent mx-auto'>AAA+</b>
-      </div > */}
 
       <button
         type="button"
