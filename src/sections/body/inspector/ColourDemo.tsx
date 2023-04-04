@@ -89,7 +89,6 @@ export default function ColourDemo() {
   const { colourMode, dispatchColourBlocks } = useColourBlocksContext();
   const { dispatchColourInput, comboBackground, comboForeground } = useColourInputContext();
   const contrastNumberIn = comboBackground?.contrastRatios.get(comboForeground?.Hex || '#000000') || 1;
-  console.log('contrastNumberIn:', contrastNumberIn);
   const rating = contrast.makeContrastRating(contrastNumberIn);
   function handleClickColourMode() {
     const nextMode: { [key: string]: string } = {

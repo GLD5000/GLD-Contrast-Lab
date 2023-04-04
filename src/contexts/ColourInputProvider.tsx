@@ -1034,10 +1034,10 @@ function handleRlumUpdate(state: ColourState, payload: ColourPayload) {
   return returnValue;
 }
 function setPreviousLuminance(colourObject: ColourObj | undefined) {
-  // const recentLuminance = colourObject?.luminanceFloat;
-  if (colourObject) {
+  const recentLuminance = colourObject?.luminanceFloat;
+  if (colourObject && recentLuminance) {
     return {
-      ...colourObject,
+      luminanceFloat: recentLuminance,
       contrast: 1,
     };
   }
@@ -1059,7 +1059,7 @@ function setPreviousContrast(state: {
   const previousLuminance = state.previousColour?.luminanceFloat;
   if (previousColour && typeof recentLuminance === 'number' && typeof previousLuminance === 'number') {
     const ratio = contrast.getContrastRatio2Dp([recentLuminance, previousLuminance]);
-    return { ...previousColour, luminanceFloat: previousLuminance, contrast: ratio };
+    return { luminanceFloat: previousLuminance, contrast: ratio };
   }
   return undefined;
 }
