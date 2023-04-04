@@ -87,24 +87,7 @@ function createColourBlockArrays(coloursSet: Set<string>, storedMap: ColourMap) 
 export default function ColourBlocks() {
   const { colourMap } = useColourInputContext();
   const { visibleSet } = useColourBlocksContext();
-  // useEffect(() => {
-  //   let mounted = true;
-  //   if (mounted && colourMap !== undefined && colourMap.size === 2 && (!comboBackground || !comboForeground)) {
-  //     console.log('comboBackground:', comboBackground);
-  //     console.log('comboForeground:', comboForeground);
-  //     const backgroundHex = comboBackground? comboBackground.Hex : undefined;
-  //     const foregroundHex = comboForeground? comboForeground.Hex : undefined;
-  //     const allKeys = [...colourMap.keys()].filter(x => x !== backgroundHex && x !== foregroundHex).slice(0,2);
-  //     const tags = [backgroundHex,foregroundHex];
-  //     allKeys.forEach((key, index) => {
-  //      if (tags[index] === undefined) tags[index] =key;
-  //     });
-  //     dispatchColourInput({ type: 'ASSIGN_COMBO_COLOURS', payload: { tag: tags[0], tagB: tags[1] } });
-  //   }
-  //   return () => {
-  //     mounted = false;
-  //   };
-  // }, [colourMap, comboBackground, comboForeground, dispatchColourInput]);
+
   if (!colourMap || colourMap.size < 2) return null;
 
   // const { total, border, largeText, smallText } = getComboMetaData(combos);
@@ -113,7 +96,7 @@ export default function ColourBlocks() {
   const returnArrays = createColourBlockArrays(visibleSet, colourMap);
   return (
     <>
-      <section className="grid content-center gap-4 ">
+      <section id="Compare-Colours" className="grid scroll-my-24 content-center gap-4 ">
         <div className="mr-auto grid place-items-start">
           <h2 className=" m-0 text-2xl font-bold">Compare Colours</h2>
           <p className="mt-2 mb-8 text-lg">Customise and Analyse</p>

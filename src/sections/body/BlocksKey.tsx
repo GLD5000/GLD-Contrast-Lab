@@ -43,7 +43,7 @@ export default function BlocksKey() {
   const bodyRows = getBodyRows();
 
   return (
-    <section className=" my-3 grid h-fit w-full justify-center overflow-x-auto">
+    <div className=" my-3 grid h-fit w-full justify-center overflow-x-auto">
       <h2 className="mx-auto">Contrast Ratings for Elements</h2>
       <table className="border-collapse border-2 p-2 text-center dark:border-neutral-400 dark:text-neutral-200">
         <thead className=" text-sm dark:bg-neutral-600">
@@ -51,6 +51,6 @@ export default function BlocksKey() {
         </thead>
         <tbody className=" text-xs dark:bg-neutral-900">{bodyRows}</tbody>
       </table>
-    </section>
+    </div>
   );
 }

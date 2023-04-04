@@ -38,14 +38,14 @@ function Table({
   if (parse) data = removeParagraphs(data);
   const tableArray = parseDataToArray(data);
   return (
-    <section className=" my-3 flex h-fit w-full justify-center overflow-x-auto">
+    <div className=" my-3 flex h-fit w-full justify-center overflow-x-auto">
       <table className="border-collapse border-2 p-2 text-center dark:border-neutral-400 dark:text-neutral-200">
         <thead className=" text-lg dark:bg-neutral-600">
           <Tr key="0" row={tableArray[0]} rowIndex={0} />
         </thead>
         <tbody className=" dark:bg-neutral-900">{tableArray.map((row, rowIndex) => rowHandler(row, rowIndex))}</tbody>
       </table>
-    </section>
+    </div>
   );
 }
 

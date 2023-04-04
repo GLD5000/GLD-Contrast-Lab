@@ -21,10 +21,10 @@ module.exports = {
         autoFr: 'auto 1fr',
       },
       minWidth: {
-        body: '340px',
+        body: '320px',
       },
       maxWidth: {
-        body: '1250px',
+        body: '1180px',
       },
       width: {
         body: 'calc(100vw - 4rem)',
