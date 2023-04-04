@@ -128,7 +128,7 @@ export default function ColourDemo() {
   return (
     <div
       style={{ backgroundColor: backgroundHex, color: smallTextBackground }}
-      className={`relative mx-auto my-4 flex h-max w-80 shrink-0 grow-0 flex-col items-center gap-2 overflow-clip rounded-[2.4rem] border border-border bg-inherit p-0 py-4 ${
+      className={`relative mx-auto flex h-max w-80 shrink-0 grow-0 flex-col items-center gap-2 overflow-clip rounded-[2.4rem] border border-border bg-inherit p-0 py-4 ${
         grey && ' grayscale'
       }`}
     >

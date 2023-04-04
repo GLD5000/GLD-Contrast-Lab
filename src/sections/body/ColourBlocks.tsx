@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import ColourBlock from './ColourBlock';
 import { contrast } from '../../utilities/colour/contrastRatio';
-import { ColourCombo, useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
+import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
 import { luminance } from '../../utilities/colour/luminance';
 import ShowButtons from './ShowButtons';
 import BlockVisibility from './BlockVisibility';
@@ -65,28 +65,28 @@ function createColourBlockArrays(coloursSet: Set<string>, storedMap: ColourMap) 
   });
 }
 
-function getComboMetaData(combos: Map<string, ColourCombo>) {
-  const total = combos.size;
-  let border = 0;
-  let largeText = 0;
-  let smallText = 0;
-  combos.forEach((object) => {
-    const { ratio } = object;
-    if (ratio >= 3) border += 1;
-    if (ratio >= 4.5) largeText += 1;
-    if (ratio >= 7) smallText += 1;
-  });
-  return {
-    total,
-    border,
-    largeText,
-    smallText,
-  };
-}
+// function getComboMetaData(combos: Map<string, ColourCombo>) {
+//   const total = combos.size;
+//   let border = 0;
+//   let largeText = 0;
+//   let smallText = 0;
+//   combos.forEach((object) => {
+//     const { ratio } = object;
+//     if (ratio >= 3) border += 1;
+//     if (ratio >= 4.5) largeText += 1;
+//     if (ratio >= 7) smallText += 1;
+//   });
+//   return {
+//     total,
+//     border,
+//     largeText,
+//     smallText,
+//   };
+// }
 
 export default function ColourBlocks() {
   const { colourMap } = useColourInputContext();
-  const { visibleSet, combos, currentCombo, dispatchColourBlocks } = useColourBlocksContext();
+  const { visibleSet, currentCombo, dispatchColourBlocks } = useColourBlocksContext();
   useEffect(() => {
     let mounted = true;
     if (mounted && colourMap && colourMap.size === 2 && currentCombo === '')
@@ -98,10 +98,9 @@ export default function ColourBlocks() {
   }, [colourMap, currentCombo, dispatchColourBlocks]);
   if (!colourMap || colourMap.size < 2) return null;
 
-  const { total, border, largeText, smallText } = getComboMetaData(combos);
-  const title = `Comparison Matrix`;
-  const subheading = `${total} combinations: 
-${border} non-text, ${largeText} AA+ combinations, ${smallText} AAA+ combinations`;
+  // const { total, border, largeText, smallText } = getComboMetaData(combos);
+  //   const subheading = `${total} combinations:
+  // ${border} non-text, ${largeText} AA+ combinations, ${smallText} AAA+ combinations`;
   const returnArrays = createColourBlockArrays(visibleSet, colourMap);
   return (
     <>
@@ -118,23 +117,24 @@ ${border} non-text, ${largeText} AA+ combinations, ${smallText} AAA+ combination
             </li>
           </ul>
         </div>
-        <ColourDemo />
         <div
-          className="relative mx-auto grid h-fit w-full rounded border-none border-inherit 
-        "
+          className="relative mx-auto flex h-fit w-full flex-row flex-wrap gap-2 rounded border-none border-inherit 
+          "
         >
-          <h2 className="mx-auto mb-0 w-fit text-2xl font-bold">{title}</h2>
-          <h3 className="mx-auto mt-2 mb-8 text-lg">{subheading}</h3>
-          <ShowButtons />
-          <div className="w-full overflow-x-auto bg-inherit  p-4">
-            <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 overflow-clip rounded-[2.4rem] border border-border  bg-inherit">
-              {returnArrays}
+          {/* <h2 className="mx-auto mb-0 w-fit text-2xl font-bold">Combinations</h2> */}
+          {/* <h3 className="mx-auto mt-2 mb-8 text-lg">{subheading}</h3> */}
+          <div className="mx-auto mt-12">
+            <ColourDemo />
+          </div>
+          <div className="mx-auto grid  grow-0 gap-2">
+            <ShowButtons />
+            <div className="mx-auto h-fit w-fit max-w-full overflow-x-auto rounded-[2.4rem] border border-border  bg-inherit ">
+              <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 overflow-clip rounded-none ">
+                {returnArrays}
+              </div>
             </div>
           </div>
         </div>
-        {/* <Inspector /> */}
-
-        {/* <BlocksKey /> */}
       </section>
       <hr className="my-8" />
     </>

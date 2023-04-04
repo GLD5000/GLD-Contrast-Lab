@@ -61,7 +61,7 @@ export default function ShowButtons() {
 
   return (
     <div className="mx-auto flex flex-row flex-wrap items-center justify-center gap-2 overflow-clip rounded rounded-t-none ">
-      <div className="grid w-60 grid-cols-2">
+      <div className="grid h-10 w-60 grid-cols-2">
         <button
           type="button"
           onClick={handleClickColourMode}
@@ -80,7 +80,7 @@ export default function ShowButtons() {
           {limitLabel}
         </button>
       </div>
-      <div className="grid w-60 grid-cols-2">
+      <div className="grid h-10 w-60 grid-cols-2">
         <button
           type="button"
           onClick={handleClickRatio}
