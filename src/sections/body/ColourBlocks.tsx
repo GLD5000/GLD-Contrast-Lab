@@ -126,7 +126,7 @@ export default function ColourBlocks() {
           <div className="mx-auto mt-12">
             <ColourDemo />
           </div>
-          <div className="mx-auto grid  grow-0 gap-2">
+          <div className="mx-auto grid h-min grow-0 gap-2">
             <ShowButtons />
             <div className="mx-auto h-fit w-fit max-w-full overflow-x-auto rounded-[2.4rem] border border-border  bg-inherit ">
               <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 overflow-clip rounded-none ">

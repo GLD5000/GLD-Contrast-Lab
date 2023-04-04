@@ -12,7 +12,7 @@ export default function EditSlider({
   cancelEdit: () => void;
   updateCancelHex: () => void;
 }) {
-  const { comboBackground, hslSliderCombo, sliderType, dispatchColourInput } = useColourInputContext();
+  const { comboBackground, hslSliderCombo, sliderTypeCombo, dispatchColourInput } = useColourInputContext();
   const [sendValue, setSendValue] = useState(hslSliderCombo);
   // console.log('run:', run);
   const lightClasses =
@@ -29,7 +29,7 @@ export default function EditSlider({
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (run) {
-        dispatchColourInput({ type: 'UPDATE_HSL_COMBO', payload: { hslSliderCombo: sendValue, sliderType } });
+        dispatchColourInput({ type: 'UPDATE_HSL_COMBO', payload: { hslSliderCombo: sendValue, sliderTypeCombo } });
         run = false;
       }
     }, 30);
@@ -37,7 +37,7 @@ export default function EditSlider({
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [sendValue, dispatchColourInput, sliderType]);
+  }, [sendValue, dispatchColourInput, sliderTypeCombo]);
 
   function handleClickAdd() {
     dispatchColourInput({ type: 'SUBMIT_COMBO', payload: { textInput: `` } });
@@ -51,12 +51,12 @@ export default function EditSlider({
       Sat: 'Lum',
       Lum: 'Hue',
     };
-    const newType = typeLookup[sliderType];
-    dispatchColourInput({ type: 'SET_TYPE', payload: { textInput: newType } });
+    const newType = typeLookup[sliderTypeCombo];
+    dispatchColourInput({ type: 'SET_TYPE_COMBO', payload: { textInput: newType } });
   }
   function handleSliderInput(e: MouseEvent<HTMLInputElement>) {
     const newValue = Number(e.currentTarget.value);
-    // dispatchColourInput({ type: 'UPDATE_HSL', payload: { hslSliderCombo: newValue, sliderType } });
+    // dispatchColourInput({ type: 'UPDATE_HSL', payload: { hslSliderCombo: newValue, sliderTypeCombo } });
     setSendValue(newValue);
     // console.log('input', newValue);
     run = true;
@@ -77,7 +77,7 @@ export default function EditSlider({
               type="button"
               onClick={handleTypeClick}
             >
-              {sliderType}
+              {sliderTypeCombo}
             </button>
           </div>
         </label>

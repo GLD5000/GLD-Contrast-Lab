@@ -40,6 +40,7 @@ export interface ColourState {
   textInput: string;
   colourMode: string;
   sliderType: string;
+  sliderTypeCombo: string;
   comboBackground: ColourObj | undefined;
   comboForeground: ColourObj | undefined;
   recentColour: ColourObj | undefined;
@@ -68,6 +69,7 @@ const initialiserContext: ColourContext = {
   textInput: '',
   colourMode: 'Hex',
   sliderType: 'Lum',
+  sliderTypeCombo: 'Lum',
   comboBackground: undefined,
   comboForeground: undefined,
   recentColour: undefined,
@@ -85,6 +87,7 @@ const initialiserState: ColourState = {
   textInput: '',
   colourMode: 'Hex',
   sliderType: 'Lum',
+  sliderTypeCombo: 'Lum',
   comboBackground: undefined,
   comboForeground: undefined,
   recentColour: undefined,
@@ -102,6 +105,7 @@ function useData() {
       textInput,
       colourMode,
       sliderType,
+      sliderTypeCombo,
       comboBackground,
       comboForeground,
       recentColour,
@@ -121,6 +125,7 @@ function useData() {
     textInput,
     colourMode,
     sliderType,
+    sliderTypeCombo,
     colourMap,
     comboBackground,
     comboForeground,
@@ -150,6 +155,7 @@ function useData() {
           textInput: '',
           colourMode: 'Hex',
           sliderType: 'Lum',
+          sliderTypeCombo: 'Lum',
           // recentColour: recentColourValue,
           comboBackground: undefined,
           comboForeground: undefined,
@@ -433,9 +439,9 @@ function useData() {
         return returnValue;
       }
       case 'UPDATE_HSL_COMBO': {
-        const { sliderType: newSliderType } = action.payload;
+        const { sliderTypeCombo: newSliderType } = action.payload;
         const sliderValue = action.payload.hslSliderCombo;
-        const previousLuminance = state.hslLuminanceTarget;
+        const previousLuminance = state.hslLuminanceTargetCombo;
 
         // console.log('sliderValue:', sliderValue);
         const comboBackgroundIn = state.comboBackground;
@@ -451,12 +457,10 @@ function useData() {
         if (shouldMatchLuminance) {
           const { resultingHsl } = setToTargetLuminanceHsl(newHslArray, previousLuminance);
           const newObject = makeColourObjectHsl(state, resultingHsl);
-          const modeOut = 'HSL';
 
           const returnValue = {
             ...state,
             comboBackground: newObject,
-            colourMode: modeOut,
             hslSliderCombo: sliderValue,
           };
           const previousContrast = setPreviousContrast(returnValue);
@@ -467,11 +471,9 @@ function useData() {
         const recentColourValue: ColourObj | undefined = newHslArray
           ? makeColourObjectHsl(state, newHslArray)
           : undefined;
-        const modeOut = 'HSL';
         const returnValue = {
           ...state,
           comboBackground: recentColourValue,
-          colourMode: modeOut,
           hslSliderCombo: sliderValue,
           hslLuminanceTargetCombo: recentColourValue?.luminanceFloat || 17.7,
         };
@@ -492,6 +494,23 @@ function useData() {
         const stateLuminance = state.recentColour?.luminanceFloat;
         // console.log('stateLuminance:', stateLuminance);
         if (typeIn === 'Hue' && typeof stateLuminance === 'number') returnValue.hslLuminanceTarget = stateLuminance;
+        return returnValue;
+      }
+      case 'SET_TYPE_COMBO': {
+        // //console.log('SET_TYPE');
+
+        const typeIn = action.payload.textInput || 'Lum';
+        const returnValue = {
+          ...state,
+          sliderTypeCombo: typeIn,
+        };
+        if (state.comboBackground?.HSL)
+          returnValue.hslSliderCombo = getSliderValueHslString(state.comboBackground.HSL, typeIn);
+
+        const stateLuminance = state.comboBackground?.luminanceFloat;
+        // console.log('stateLuminance:', stateLuminance);
+        if (typeIn === 'Hue' && typeof stateLuminance === 'number')
+          returnValue.hslLuminanceTargetCombo = stateLuminance;
         return returnValue;
       }
       case 'MATCH_LUMINANCE': {
