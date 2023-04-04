@@ -21,10 +21,13 @@ export default function Header({
           className=" flex w-body-sm min-w-body  max-w-body flex-wrap items-center justify-between
 sm:w-body "
         >
-          <div className="flex h-16 flex-wrap items-center gap-2 py-2">
-            <a href="https://gld-portfolio.vercel.app/" target="_blank" rel="noreferrer">
-              <GldSvg />
-            </a>
+          <a
+            className="flex h-16 flex-wrap items-center gap-2 py-2"
+            href="https://contrast-tool.vercel.app/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <GldSvg />
 
             <div className="flex flex-row overflow-clip rounded-lg border-2 border-current">
               <h1
@@ -35,7 +38,7 @@ sm:w-body "
               </h1>
               <h1 className=" m-auto rounded-none bg-black p-[0.3rem] text-2xl font-black text-white">TOOL</h1>
             </div>
-          </div>
+          </a>
           <NavBar toggleColourTheme={toggleColourTheme} colourTheme={colourTheme} toggleMenu={toggleShowMenu} />
         </div>
         <HamburgerMenu toggleColourTheme={toggleColourTheme} colourTheme={colourTheme} show={showMenu} />
