@@ -12,14 +12,14 @@ export default function EditSlider({
   cancelEdit: () => void;
   updateCancelHex: () => void;
 }) {
-  const { recentColour, hslSlider, sliderType, dispatchColourInput } = useColourInputContext();
-  const [sendValue, setSendValue] = useState(hslSlider);
+  const { comboBackground, hslSliderCombo, sliderType, dispatchColourInput } = useColourInputContext();
+  const [sendValue, setSendValue] = useState(hslSliderCombo);
   // console.log('run:', run);
   const lightClasses =
     'hover:transition focus:transition text-txt-main-dk bg-deco-dk hover:bg-txt-main-dk hover:text-bg-var-dk focus:bg-txt-main-dk focus:text-bg-var-dk';
   const darkClasses =
     'text-txt-main bg-deco hover:bg-txt-low hover:text-bg-var hover:transition focus:bg-txt-low focus:text-bg-var focus:transition';
-  const autoColour = recentColour?.Autocolour;
+  const autoColour = comboBackground?.Autocolour;
 
   const lightClassesSlider =
     'hover:transition focus:transition text-txt-mid bg-txt-low hover:bg-txt-main hover:text-txt-mid focus:bg-txt-main focus:text-txt-mid';
@@ -29,7 +29,7 @@ export default function EditSlider({
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (run) {
-        dispatchColourInput({ type: 'UPDATE_HSL', payload: { hslSlider: sendValue, sliderType } });
+        dispatchColourInput({ type: 'UPDATE_HSL_COMBO', payload: { hslSliderCombo: sendValue, sliderType } });
         run = false;
       }
     }, 30);
@@ -56,7 +56,7 @@ export default function EditSlider({
   }
   function handleSliderInput(e: MouseEvent<HTMLInputElement>) {
     const newValue = Number(e.currentTarget.value);
-    // dispatchColourInput({ type: 'UPDATE_HSL', payload: { hslSlider: newValue, sliderType } });
+    // dispatchColourInput({ type: 'UPDATE_HSL', payload: { hslSliderCombo: newValue, sliderType } });
     setSendValue(newValue);
     // console.log('input', newValue);
     run = true;
@@ -90,7 +90,7 @@ export default function EditSlider({
           min={0}
           step={0.1}
           max={360}
-          value={hslSlider}
+          value={hslSliderCombo}
           onInput={handleSliderInput}
         />
       </div>

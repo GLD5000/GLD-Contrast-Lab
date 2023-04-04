@@ -25,7 +25,8 @@ export interface ColourObj {
   Name: string;
   contrastRatios: Map<string, number>;
 }
-export interface PreviousColourObj extends ColourObj {
+export interface PreviousColourObj {
+  luminanceFloat: number;
   contrast: number;
 }
 
@@ -33,10 +34,14 @@ export type ColourMap = Map<string, ColourObj>;
 
 export interface ColourState {
   hslLuminanceTarget: number;
+  hslLuminanceTargetCombo: number;
   hslSlider: number;
+  hslSliderCombo: number;
   textInput: string;
   colourMode: string;
   sliderType: string;
+  comboBackground: ColourObj | undefined;
+  comboForeground: ColourObj | undefined;
   recentColour: ColourObj | undefined;
   previousColour: PreviousColourObj | undefined;
   colourMap: ColourMap | undefined;
@@ -57,10 +62,14 @@ export interface ColourContext extends ColourState {
 
 const initialiserContext: ColourContext = {
   hslLuminanceTarget: 17.7,
+  hslLuminanceTargetCombo: 17.7,
   hslSlider: 0,
+  hslSliderCombo: 0,
   textInput: '',
   colourMode: 'Hex',
   sliderType: 'Lum',
+  comboBackground: undefined,
+  comboForeground: undefined,
   recentColour: undefined,
   previousColour: undefined,
   colourMap: undefined,
@@ -69,11 +78,15 @@ const initialiserContext: ColourContext = {
 
 const initialiserState: ColourState = {
   hslLuminanceTarget: 17.7,
+  hslLuminanceTargetCombo: 17.7,
   hslSlider: 0,
+  hslSliderCombo: 0,
 
   textInput: '',
   colourMode: 'Hex',
   sliderType: 'Lum',
+  comboBackground: undefined,
+  comboForeground: undefined,
   recentColour: undefined,
   previousColour: undefined,
   colourMap: undefined,
@@ -81,7 +94,20 @@ const initialiserState: ColourState = {
 
 function useData() {
   const [
-    { hslLuminanceTarget, hslSlider, textInput, colourMode, sliderType, recentColour, previousColour, colourMap },
+    {
+      hslLuminanceTarget,
+      hslLuminanceTargetCombo,
+      hslSlider,
+      hslSliderCombo,
+      textInput,
+      colourMode,
+      sliderType,
+      comboBackground,
+      comboForeground,
+      recentColour,
+      previousColour,
+      colourMap,
+    },
     dispatchColourInput,
   ] = useReducer(tagReducer, initialiserState);
   useEffect(() => {
@@ -89,11 +115,15 @@ function useData() {
   }, []);
   return {
     hslLuminanceTarget,
+    hslLuminanceTargetCombo,
     hslSlider,
+    hslSliderCombo,
     textInput,
     colourMode,
     sliderType,
     colourMap,
+    comboBackground,
+    comboForeground,
     recentColour,
     previousColour,
     dispatchColourInput,
@@ -114,11 +144,15 @@ function useData() {
         const returnValue: ColourState = {
           // textInput: `${recentColourValue.Hex}`,
           hslLuminanceTarget: 17.7,
+          hslLuminanceTargetCombo: 17.7,
           hslSlider: 0,
+          hslSliderCombo: 0,
           textInput: '',
           colourMode: 'Hex',
           sliderType: 'Lum',
           // recentColour: recentColourValue,
+          comboBackground: undefined,
+          comboForeground: undefined,
           recentColour: undefined,
           previousColour: undefined,
           colourMap: savedMap,
@@ -127,11 +161,11 @@ function useData() {
           const colourObjects = [...savedMap.entries()];
           const entryOne = colourObjects[0][1];
           const entryTwo = colourObjects[1][1];
-          if (entryOne) returnValue.recentColour = entryOne;
-          if (entryTwo) returnValue.previousColour = entryTwo;
+          if (entryOne) returnValue.comboBackground = entryOne;
+          if (entryTwo) returnValue.comboForeground = entryTwo;
 
-          const currentRecentObj = returnValue.recentColour;
-          const currentPreviousObj = returnValue.previousColour;
+          const currentRecentObj = returnValue.comboBackground;
+          const currentPreviousObj = returnValue.comboForeground;
 
           if (currentRecentObj && currentPreviousObj) {
             const ratio = contrast.getContrastRatio2Dp([
@@ -160,15 +194,15 @@ function useData() {
         return returnValue;
       }
       case 'SWAP_COMBO_COLOURS': {
-        const recentObject = state.recentColour;
-        const previousObject = state.previousColour;
+        const backgroundObject = state.comboBackground;
+        const foregroundObject = state.comboForeground;
 
-        if (!recentObject || !previousObject) return { ...state };
+        if (!backgroundObject || !foregroundObject) return { ...state };
         const returnValue = {
           ...state,
-          recentColour: { ...previousObject },
-          previousColour: { ...recentObject, contrast: previousObject.contrast },
-          hslSlider: getSliderValueHslString(previousObject.HSL, state.sliderType),
+          comboBackground: { ...foregroundObject },
+          comboForeground: { ...backgroundObject },
+          hslSliderCombo: getSliderValueHslString(foregroundObject.HSL, state.sliderType),
         };
 
         return returnValue;
@@ -183,16 +217,16 @@ function useData() {
 
         if (backgroundHex) {
           const backgroundObj = findObjectInColourMap(backgroundHex, currentMap, undefined);
-          if (backgroundObj) returnValue.recentColour = { ...backgroundObj };
+          if (backgroundObj) returnValue.comboBackground = { ...backgroundObj };
         }
 
         if (foregroundHex) {
           const foregroundObj = findObjectInColourMap(foregroundHex, currentMap, undefined);
-          if (foregroundObj) returnValue.previousColour = { ...foregroundObj, contrast: 1 };
+          if (foregroundObj) returnValue.comboForeground = { ...foregroundObj, contrast: 1 };
         }
 
-        const currentRecentObj = returnValue.recentColour;
-        const currentPreviousObj = returnValue.previousColour;
+        const currentRecentObj = returnValue.comboBackground;
+        const currentPreviousObj = returnValue.comboForeground;
 
         if (currentRecentObj && currentPreviousObj) {
           const ratio = contrast.getContrastRatio2Dp([
@@ -236,20 +270,15 @@ function useData() {
       case 'EDIT_COMBO': {
         const newHex = action.payload.textInput;
         if (!newHex) return { ...state };
-        const currentMode = 'Hex';
+        const currentMode = 'Name';
         const newColourObject = makeColourObject(newHex, state.colourMap, undefined);
-        // console.log('newColourObject.Name:', newColourObject.Name);
+        const newSliderValue = getSliderValueHslString(newColourObject.HSL, state.sliderType);
         const returnValue = {
           ...state,
           colourMode: currentMode,
-          recentColour: newColourObject,
-          hslSlider: getSliderValueHslString(newColourObject.HSL, state.sliderType),
+          hslSliderCombo: newSliderValue,
         };
-        if (newColourObject !== undefined) {
-          returnValue.textInput = getRecentTextField(newColourObject, currentMode);
-        }
-
-        const stateLuminance = state.previousColour?.luminanceFloat;
+        const stateLuminance = newColourObject?.luminanceFloat;
         // //console.log('stateLuminance:', stateLuminance);
         if (typeof stateLuminance === 'number') returnValue.hslLuminanceTarget = stateLuminance;
 
@@ -403,6 +432,53 @@ function useData() {
         if (previousValue) returnValue.previousColour = previousValue;
         return returnValue;
       }
+      case 'UPDATE_HSL_COMBO': {
+        const { sliderType: newSliderType } = action.payload;
+        const sliderValue = action.payload.hslSliderCombo;
+        const previousLuminance = state.hslLuminanceTarget;
+
+        // console.log('sliderValue:', sliderValue);
+        const comboBackgroundIn = state.comboBackground;
+
+        if (comboBackgroundIn === undefined || sliderValue === undefined || newSliderType === undefined)
+          return { ...state };
+        const { Hue, Sat, Lum } = comboBackgroundIn;
+        const newHslArray = getHslArrayFromSlider(sliderValue, newSliderType, [Hue, Sat, Lum]);
+        const newHex = colourSpace.convertHslArrayToHex(newHslArray);
+        // const previousLuminance = state.comboBackground?.luminanceFloat || state.previousColour?.luminance;
+        const shouldMatchLuminance =
+          typeof previousLuminance === 'number' && typeof newHex === 'string' && newSliderType !== 'Lum';
+        if (shouldMatchLuminance) {
+          const { resultingHsl } = setToTargetLuminanceHsl(newHslArray, previousLuminance);
+          const newObject = makeColourObjectHsl(state, resultingHsl);
+          const modeOut = 'HSL';
+
+          const returnValue = {
+            ...state,
+            comboBackground: newObject,
+            colourMode: modeOut,
+            hslSliderCombo: sliderValue,
+          };
+          const previousContrast = setPreviousContrast(returnValue);
+          if (previousContrast !== undefined) returnValue.previousColour = previousContrast;
+          return returnValue;
+        }
+
+        const recentColourValue: ColourObj | undefined = newHslArray
+          ? makeColourObjectHsl(state, newHslArray)
+          : undefined;
+        const modeOut = 'HSL';
+        const returnValue = {
+          ...state,
+          comboBackground: recentColourValue,
+          colourMode: modeOut,
+          hslSliderCombo: sliderValue,
+          hslLuminanceTargetCombo: recentColourValue?.luminanceFloat || 17.7,
+        };
+        const previousValue = setPreviousContrast(returnValue);
+        if (previousValue) returnValue.previousColour = previousValue;
+        return returnValue;
+      }
       case 'SET_TYPE': {
         // //console.log('SET_TYPE');
 
@@ -420,7 +496,7 @@ function useData() {
       }
       case 'MATCH_LUMINANCE': {
         // //console.log('MATCH_LUMINANCE');
-        const previousLuminance = state.previousColour?.luminance;
+        const previousLuminance = state.previousColour?.luminanceFloat;
         const recentIn = state.recentColour;
 
         if (typeof previousLuminance === 'number' && recentIn) {
@@ -554,7 +630,7 @@ function submitRecentColour(stateIn: ColourState) {
   return returnValue;
 }
 function submitRecentColourCombo(stateIn: ColourState) {
-  const recentState = stateIn.recentColour;
+  const recentState = stateIn.comboBackground;
   if (!recentState) return null;
   const newMap = addColourObjectToStorage(recentState, stateIn.colourMap);
   const returnValue = {

@@ -87,9 +87,9 @@ export default function ColourDemo() {
   const [editHex, setEditHex] = useState('');
   const [grey, setGrey] = useState(false);
   const { colourMode, dispatchColourBlocks } = useColourBlocksContext();
-  const { dispatchColourInput, recentColour, previousColour } = useColourInputContext();
-
-  const contrastNumberIn = previousColour?.contrast || 1;
+  const { dispatchColourInput, comboBackground, comboForeground } = useColourInputContext();
+  const contrastNumberIn = comboBackground?.contrastRatios.get(comboForeground?.Hex || '#000000') || 1;
+  console.log('contrastNumberIn:', contrastNumberIn);
   const rating = contrast.makeContrastRating(contrastNumberIn);
   function handleClickColourMode() {
     const nextMode: { [key: string]: string } = {
@@ -102,7 +102,7 @@ export default function ColourDemo() {
 
     dispatchColourBlocks({ colourMode: nextMode[colourMode] });
   }
-  if (!recentColour || !previousColour) return null;
+  if (!comboBackground || !comboForeground) return null;
   const {
     largeTextBackground,
     smallTextBackground,
@@ -112,7 +112,7 @@ export default function ColourDemo() {
     backgroundName,
     foregroundName,
     autoTextBackground,
-  } = getElementColours(recentColour, previousColour, contrastNumberIn, colourMode, grey);
+  } = getElementColours(comboBackground, comboForeground, contrastNumberIn, colourMode, grey);
   function handleEdit() {
     if (!editing) {
       setEditHex(backgroundHex);
@@ -123,7 +123,7 @@ export default function ColourDemo() {
     setGrey(false);
   }
   function handleSubmit() {
-    if (recentColour?.Hex) setEditHex(recentColour.Hex);
+    if (comboBackground?.Hex) setEditHex(comboBackground.Hex);
     setEditing(false);
   }
   return (
