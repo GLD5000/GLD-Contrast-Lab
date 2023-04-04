@@ -54,7 +54,6 @@ export default function ColourBlock({
   const { showRatio, contrastRatioLimit, colourMode, dispatchColourBlocks } = useColourBlocksContext();
   const { colourMap, dispatchColourInput } = useColourInputContext();
   const poorContrast = contrastRatio < 3;
-
   useEffect(() => {
     let mounted = true;
 

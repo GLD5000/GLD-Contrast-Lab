@@ -164,9 +164,9 @@ function useData() {
           colourMap: savedMap,
         };
         if (savedMap) {
-          const colourObjects = [...savedMap.entries()];
-          const entryOne = colourObjects[0][1];
-          const entryTwo = colourObjects[1][1];
+          const colourObjects = [...savedMap.values()];
+          const entryOne = colourObjects[0];
+          const entryTwo = colourObjects[1];
           if (entryOne) returnValue.comboBackground = entryOne;
           if (entryTwo) returnValue.comboForeground = entryTwo;
 
@@ -312,12 +312,16 @@ function useData() {
         const isNameMode = modeState === 'Name';
         const textReceived = action.payload.textInput;
         const isSubmit = /\s/.test(textReceived?.replaceAll(/(, )|(: )/g, '')?.at(-1) || '');
+
+        const recentColourState = state.recentColour;
         if (isRelativeLuminanceMode) return handleRlumUpdate(state, action.payload);
 
-        if (textReceived && isSubmit) {
+        const shouldSubmitRecentColour = textReceived && isSubmit && recentColourState;
+        if (shouldSubmitRecentColour) {
           const recentColourReturn = submitRecentColour(state);
           if (recentColourReturn !== null) return recentColourReturn;
         }
+
         if (isNameMode) {
           const textWithoutName = textReceived
             ? textReceived.replace('Name:', '').replaceAll(/[\s]/g, '').slice(0, 16)
@@ -346,16 +350,48 @@ function useData() {
           const previousValue = setPreviousContrast(returnValue);
           if (previousValue) returnValue.previousColour = previousValue;
 
+          if (!returnValue.comboBackground) {
+            returnValue.comboBackground = undefined;
+            if (newMap) {
+              const filteredMap = [...newMap.values()].filter((x) => x.Hex !== returnValue.comboForeground?.Hex)[0];
+
+              returnValue.comboBackground = filteredMap || undefined;
+            }
+          }
+          if (!returnValue.comboForeground) {
+            returnValue.comboForeground = undefined;
+            if (newMap) {
+              const filteredMap = [...newMap.values()].filter((x) => x.Hex !== returnValue.comboBackground?.Hex)[0];
+              returnValue.comboForeground = filteredMap || undefined;
+            }
+          }
+
           return returnValue;
         }
         const returnValue = {
           ...state,
-          textInput: isSubmit ? `${stringOut} ` : stringOut || '',
+          textInput: isSubmit && stringOut ? `${stringOut} ` : stringOut || '',
           recentColour: recent,
           colourMap: newMap,
         };
         const previousValue = setPreviousContrast(returnValue);
         if (previousValue) returnValue.previousColour = previousValue;
+
+        if (!returnValue.comboBackground) {
+          returnValue.comboBackground = undefined;
+          if (newMap) {
+            const filteredMap = [...newMap.values()].filter((x) => x.Hex !== returnValue.comboForeground?.Hex)[0];
+
+            returnValue.comboBackground = filteredMap || undefined;
+          }
+        }
+        if (!returnValue.comboForeground) {
+          returnValue.comboForeground = undefined;
+          if (newMap) {
+            const filteredMap = [...newMap.values()].filter((x) => x.Hex !== returnValue.comboBackground?.Hex)[0];
+            returnValue.comboForeground = filteredMap || undefined;
+          }
+        }
 
         return returnValue;
       }
@@ -554,6 +590,8 @@ function useData() {
           colourMode: 'Hex',
           sliderType: 'Lum',
           recentColour: undefined,
+          comboBackground: undefined,
+          comboForeground: undefined,
         };
         return returnValue;
       }
@@ -576,6 +614,22 @@ function useData() {
         if (typeof tag === 'string' && newMap.has(tag)) newMap.delete(tag);
         setSessionStorageMap(newMap);
         const returnValue = { ...state, colourMap: newMap };
+        if (returnValue.comboBackground?.Hex === tag) {
+          returnValue.comboBackground = undefined;
+          if (newMap) {
+            const filteredMap = [...newMap.values()].filter((x) => x.Hex !== returnValue.comboForeground?.Hex)[0];
+
+            returnValue.comboBackground = filteredMap || undefined;
+          }
+        }
+        if (returnValue.comboForeground?.Hex === tag) {
+          returnValue.comboForeground = undefined;
+          if (newMap) {
+            const filteredMap = [...newMap.values()].filter((x) => x.Hex !== returnValue.comboBackground?.Hex)[0];
+            returnValue.comboForeground = filteredMap || undefined;
+          }
+        }
+
         return returnValue;
       }
     }
@@ -646,6 +700,14 @@ function submitRecentColour(stateIn: ColourState) {
     colourMap: newMap,
     colourMode: 'Name',
   };
+
+  if (!returnValue.comboBackground) {
+    returnValue.comboBackground = recentState;
+  }
+  if (returnValue.comboBackground && !returnValue.comboForeground) {
+    returnValue.comboForeground = recentState;
+  }
+
   return returnValue;
 }
 function submitRecentColourCombo(stateIn: ColourState) {

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import ColourBlock from './ColourBlock';
 import { contrast } from '../../utilities/colour/contrastRatio';
 import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
@@ -86,16 +86,25 @@ function createColourBlockArrays(coloursSet: Set<string>, storedMap: ColourMap) 
 
 export default function ColourBlocks() {
   const { colourMap } = useColourInputContext();
-  const { visibleSet, currentCombo, dispatchColourBlocks } = useColourBlocksContext();
-  useEffect(() => {
-    let mounted = true;
-    if (mounted && colourMap && colourMap.size === 2 && currentCombo === '')
-      dispatchColourBlocks({ currentCombo: [...colourMap.keys()].sort().join('/') });
-
-    return () => {
-      mounted = false;
-    };
-  }, [colourMap, currentCombo, dispatchColourBlocks]);
+  const { visibleSet } = useColourBlocksContext();
+  // useEffect(() => {
+  //   let mounted = true;
+  //   if (mounted && colourMap !== undefined && colourMap.size === 2 && (!comboBackground || !comboForeground)) {
+  //     console.log('comboBackground:', comboBackground);
+  //     console.log('comboForeground:', comboForeground);
+  //     const backgroundHex = comboBackground? comboBackground.Hex : undefined;
+  //     const foregroundHex = comboForeground? comboForeground.Hex : undefined;
+  //     const allKeys = [...colourMap.keys()].filter(x => x !== backgroundHex && x !== foregroundHex).slice(0,2);
+  //     const tags = [backgroundHex,foregroundHex];
+  //     allKeys.forEach((key, index) => {
+  //      if (tags[index] === undefined) tags[index] =key;
+  //     });
+  //     dispatchColourInput({ type: 'ASSIGN_COMBO_COLOURS', payload: { tag: tags[0], tagB: tags[1] } });
+  //   }
+  //   return () => {
+  //     mounted = false;
+  //   };
+  // }, [colourMap, comboBackground, comboForeground, dispatchColourInput]);
   if (!colourMap || colourMap.size < 2) return null;
 
   // const { total, border, largeText, smallText } = getComboMetaData(combos);
