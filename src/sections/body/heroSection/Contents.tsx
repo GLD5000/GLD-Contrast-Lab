@@ -8,7 +8,7 @@ export default function Contents() {
     <div id="contents" className="mx-auto my-10 grid 2xl:absolute 2xl:left-10 2xl:top-20">
       <h3>On This Page:</h3>
       {contentsArray.map((x) => (
-        <a className={`${colourClasses}`} key={x} href={`#${x}`}>
+        <a className={`${colourClasses}`} id={`contents-${x}`} key={x} href={`#${x}`}>
           {x}
         </a>
       ))}

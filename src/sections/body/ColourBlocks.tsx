@@ -8,6 +8,7 @@ import BlockVisibility from './BlockVisibility';
 import { ColourMap, useColourInputContext } from '../../contexts/ColourInputProvider';
 // import BlocksKey from './BlocksKey';
 import ColourDemo from './inspector/ColourDemo';
+import NoData from './NoData';
 
 const textColourLookup: { [key: string]: string } = {
   Black: '#000000',
@@ -88,12 +89,10 @@ export default function ColourBlocks() {
   const { colourMap } = useColourInputContext();
   const { visibleSet } = useColourBlocksContext();
 
-  if (!colourMap || colourMap.size < 2) return null;
-
   // const { total, border, largeText, smallText } = getComboMetaData(combos);
   //   const subheading = `${total} combinations:
   // ${border} non-text, ${largeText} AA+ combinations, ${smallText} AAA+ combinations`;
-  const returnArrays = createColourBlockArrays(visibleSet, colourMap);
+  const returnArrays = colourMap ? createColourBlockArrays(visibleSet, colourMap) : [];
   return (
     <>
       <section id="Compare-Colours" className="grid scroll-my-24 content-center gap-4 ">
@@ -109,24 +108,29 @@ export default function ColourBlocks() {
             </li>
           </ul>
         </div>
-        <div
-          className="relative mx-auto flex h-fit w-full flex-row flex-wrap gap-2 rounded border-none border-inherit 
+        {!colourMap || colourMap.size === 0 ? (
+          <NoData />
+        ) : (
+          <div
+            className="relative mx-auto flex h-fit w-full flex-row flex-wrap gap-2 rounded border-none border-inherit 
           "
-        >
-          {/* <h2 className="mx-auto mb-0 w-fit text-2xl font-bold">Combinations</h2> */}
-          {/* <h3 className="mx-auto mt-2 mb-8 text-lg">{subheading}</h3> */}
-          <div className="mx-auto mt-12">
-            <ColourDemo />
-          </div>
-          <div className="mx-auto grid h-min grow-0 gap-2">
-            <ShowButtons />
-            <div className="mx-auto h-fit w-fit max-w-full overflow-x-auto rounded-[2.4rem] border border-border  bg-inherit ">
-              <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 overflow-clip rounded-none ">
-                {returnArrays}
+          >
+            {/* <h2 className="mx-auto mb-0 w-fit text-2xl font-bold">Combinations</h2> */}
+            {/* <h3 className="mx-auto mt-2 mb-8 text-lg">{subheading}</h3> */}
+
+            <div className="mx-auto mt-12">
+              <ColourDemo />
+            </div>
+            <div className="mx-auto grid h-min grow-0 gap-2">
+              <ShowButtons />
+              <div className="mx-auto h-fit w-fit max-w-full overflow-x-auto rounded-[2.4rem] border border-border  bg-inherit ">
+                <div className="mx-auto grid w-fit auto-cols-min grid-flow-col grid-rows-1 overflow-clip rounded-none ">
+                  {returnArrays}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </section>
       <hr className="my-8" />
     </>

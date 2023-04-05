@@ -5,6 +5,7 @@ import TextUl from '../../elements/TextUl';
 import { autoTextColour } from '../../utilities/colour/autoTextColour';
 import { luminance } from '../../utilities/colour/luminance';
 import CsvButton from './CsvButton';
+import NoData from './NoData';
 
 function sortByLuminance(acc: Array<Array<string>>, curr: string) {
   const luminanceInteger = Math.round(1000 * luminance.convertHexToLuminance(curr));
@@ -251,12 +252,11 @@ export default function InfoTable() {
   const { colourMap } = useColourInputContext();
   const [dataColumns, setDataColumns] = useState(setInitialColumns());
   const [showData, setShowData] = useState('data');
-  if (!colourMap || colourMap.size === 0) return null;
   function setColumnsOnResize() {
     setDataColumns(setInitialColumns());
   }
   window.onresize = setColumnsOnResize;
-  const keysArray = [...colourMap.keys()];
+  const keysArray = colourMap ? [...colourMap.keys()] : [];
   const lumSort = keysArray.reduce(sortByLuminance, []).flatMap((x) => x);
   const tableMarkDown = getTable(lumSort, dataColumns, setDataColumns, showData, setShowData, colourMap);
   return (
@@ -266,11 +266,15 @@ export default function InfoTable() {
         <p className="mt-2 mb-8 text-lg">View and Export</p>
         <TextUl textArray={listStrings} />
       </div>
-      <div className="relative grid w-full overflow-x-auto">
-        <div className="mx-auto flex w-fit grow  flex-col gap-0 overflow-clip rounded border border-border bg-bg text-center text-txt-main dark:border-border-dk  dark:bg-bg-var-dk dark:text-txt-main-dk">
-          {tableMarkDown}
+      {!colourMap || colourMap.size === 0 ? (
+        <NoData />
+      ) : (
+        <div className="relative grid w-full overflow-x-auto">
+          <div className="mx-auto flex w-fit grow  flex-col gap-0 overflow-clip rounded border border-border bg-bg text-center text-txt-main dark:border-border-dk  dark:bg-bg-var-dk dark:text-txt-main-dk">
+            {tableMarkDown}
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }
