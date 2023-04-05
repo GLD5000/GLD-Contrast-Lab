@@ -1,10 +1,10 @@
 import ColourBlocksProvider from '../contexts/ColourBlocksProvider';
 import ColourInputProvider from '../contexts/ColourInputProvider';
-import ColourBlocks from './body/ColourBlocks';
-import ComboBox from './body/ComboBox';
-import HeroSection from './body/HeroSection';
-import InfoTable from './body/InfoTable';
-import Contents from './body/heroSection/Contents';
+import CompareColoursSection from './body/compareColours/CompareColoursSection';
+import AddColoursSection from './body/AddColours/AddColoursSection';
+import HeroSection from './body/hero/HeroSection';
+import ExportDataSection from './body/exportData/ExportDataSection';
+import Contents from './body/hero/Contents';
 
 export default function Body() {
   return (
@@ -15,10 +15,10 @@ export default function Body() {
             <HeroSection />
             <Contents />
             <div>
-              <ComboBox />
+              <AddColoursSection />
               <ColourBlocksProvider>
-                <ColourBlocks />
-                <InfoTable />
+                <CompareColoursSection />
+                <ExportDataSection />
               </ColourBlocksProvider>
             </div>
           </div>

@@ -1,6 +1,3 @@
-import ExclamationSvg from '../../../icons/ExclamationSvg';
-import TickSvg from '../../../icons/TickSvg';
-
 // const content: { [key: string]: string[] } = {
 //   header: ['Decorative', 'Non-Text', 'Large Text', 'Small Text'],
 //   Poor: ['Pass', 'Fail', 'Fail', 'Fail'],
@@ -9,6 +6,10 @@ import TickSvg from '../../../icons/TickSvg';
 //   AAA: ['Pass', 'Pass', 'Pass', 'Pass'],
 //   'AA+': ['Pass', 'Pass', 'Pass', 'Pass'],
 //   'AAA+': ['Pass', 'Pass', 'Pass', 'Pass'],
+
+import ExclamationSvg from '../../../../icons/ExclamationSvg';
+import TickSvg from '../../../../icons/TickSvg';
+
 // };
 const content: { [key: string]: string[] } = {
   header: ['Non-Text', 'Large Text', 'Small Text'],

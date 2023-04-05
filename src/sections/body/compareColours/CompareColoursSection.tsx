@@ -1,14 +1,14 @@
 // import { useEffect } from 'react';
-import ColourBlock from './ColourBlock';
-import { contrast } from '../../utilities/colour/contrastRatio';
-import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
-import { luminance } from '../../utilities/colour/luminance';
-import ShowButtons from './ShowButtons';
-import BlockVisibility from './BlockVisibility';
-import { ColourMap, useColourInputContext } from '../../contexts/ColourInputProvider';
+import ColourBlock from '../ColourBlock';
+import { contrast } from '../../../utilities/colour/contrastRatio';
+import { useColourBlocksContext } from '../../../contexts/ColourBlocksProvider';
+import { luminance } from '../../../utilities/colour/luminance';
+import ShowButtons from '../ShowButtons';
+import BlockVisibility from '../BlockVisibility';
+import { ColourMap, useColourInputContext } from '../../../contexts/ColourInputProvider';
 // import BlocksKey from './BlocksKey';
+import NoData from '../NoData';
 import ColourDemo from './inspector/ColourDemo';
-import NoData from './NoData';
 
 const textColourLookup: { [key: string]: string } = {
   Black: '#000000',
@@ -85,7 +85,7 @@ function createColourBlockArrays(coloursSet: Set<string>, storedMap: ColourMap) 
 //   };
 // }
 
-export default function ColourBlocks() {
+export default function CompareColoursSection() {
   const { colourMap } = useColourInputContext();
   const { visibleSet } = useColourBlocksContext();
 

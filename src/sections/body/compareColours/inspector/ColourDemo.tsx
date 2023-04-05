@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { ColourObj, useColourInputContext } from '../../../contexts/ColourInputProvider';
 import RatingTable from './RatingTable';
-import { contrast } from '../../../utilities/colour/contrastRatio';
-import { useColourBlocksContext } from '../../../contexts/ColourBlocksProvider';
 import EditSlider from './EditSlider';
-import SvgButtonNew from '../../../elements/SvgButtonNew';
-import PencilSvg from '../../../icons/PencilSvg';
+import { useColourBlocksContext } from '../../../../contexts/ColourBlocksProvider';
+import { ColourObj, useColourInputContext } from '../../../../contexts/ColourInputProvider';
+import SvgButtonNew from '../../../../elements/SvgButtonNew';
+import PencilSvg from '../../../../icons/PencilSvg';
+import { contrast } from '../../../../utilities/colour/contrastRatio';
 
 function getElementColours(
   backgroundObject: ColourObj,

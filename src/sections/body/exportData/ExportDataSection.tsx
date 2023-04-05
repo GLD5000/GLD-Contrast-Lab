@@ -1,11 +1,11 @@
 import { Dispatch, ReactElement, MouseEvent, SetStateAction, useState } from 'react';
-import { useColourInputContext, ColourMap } from '../../contexts/ColourInputProvider';
-import SvgButton from '../../elements/SvgButton';
-import TextUl from '../../elements/TextUl';
-import { autoTextColour } from '../../utilities/colour/autoTextColour';
-import { luminance } from '../../utilities/colour/luminance';
-import CsvButton from './CsvButton';
-import NoData from './NoData';
+import { useColourInputContext, ColourMap } from '../../../contexts/ColourInputProvider';
+import SvgButton from '../../../elements/SvgButton';
+import TextUl from '../../../elements/TextUl';
+import { autoTextColour } from '../../../utilities/colour/autoTextColour';
+import { luminance } from '../../../utilities/colour/luminance';
+import CsvButton from '../CsvButton';
+import NoData from '../NoData';
 
 function sortByLuminance(acc: Array<Array<string>>, curr: string) {
   const luminanceInteger = Math.round(1000 * luminance.convertHexToLuminance(curr));
@@ -209,7 +209,7 @@ function getTable(
       <div
         key={key}
         style={style}
-        className={`flex w-fit  grow flex-row gap-2 rounded-none border border-transparent ${!!border && border} `}
+        className={`flex w-fit flex-row gap-2 rounded-none border border-transparent ${!!border && border} `}
       >
         {x}
       </div>
@@ -248,7 +248,7 @@ const listStrings = [
   `Use 'View...' to choose the data on screen or 'Copy...' to export to a text editor or spreadsheet.`,
 ];
 
-export default function InfoTable() {
+export default function ExportDataSection() {
   const { colourMap } = useColourInputContext();
   const [dataColumns, setDataColumns] = useState(setInitialColumns());
   const [showData, setShowData] = useState('data');
@@ -260,7 +260,7 @@ export default function InfoTable() {
   const lumSort = keysArray.reduce(sortByLuminance, []).flatMap((x) => x);
   const tableMarkDown = getTable(lumSort, dataColumns, setDataColumns, showData, setShowData, colourMap);
   return (
-    <section id="Export-Data" className="grid scroll-my-24 gap-4">
+    <section id="Export-Data" className="grid min-h-[75vh] scroll-my-24 gap-4">
       <div className="mr-auto grid place-items-start">
         <h2 className=" m-0 text-2xl font-bold">Export Data</h2>
         <p className="mt-2 mb-8 text-lg">View and Export</p>
@@ -270,7 +270,7 @@ export default function InfoTable() {
         <NoData />
       ) : (
         <div className="relative grid w-full overflow-x-auto">
-          <div className="mx-auto flex w-fit grow  flex-col gap-0 overflow-clip rounded border border-border bg-bg text-center text-txt-main dark:border-border-dk  dark:bg-bg-var-dk dark:text-txt-main-dk">
+          <div className="mx-auto flex h-fit w-fit flex-col gap-0 overflow-clip rounded border border-border bg-bg text-center text-txt-main dark:border-border-dk  dark:bg-bg-var-dk dark:text-txt-main-dk">
             {tableMarkDown}
           </div>
         </div>

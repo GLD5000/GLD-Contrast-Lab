@@ -8,13 +8,13 @@ export default function NoData() {
   const { dispatchColourInput } = useColourInputContext();
 
   function handleClickAutoScheme() {
-    const newValue = `txt-main	#000000
-    txt-mid	#474747
-    txt-low	#636363
-    border	#8a8a8a
-    deco	#e0e0e0
-    bg-var	#f0f0f0
-    bg	#ffffff`;
+    const newValue = `bg-txt-lt	#000000
+    bg-txt-lo-lt	#3d3d3d
+    brand-lt	#2e69ff
+    bg-outline-lt	#919191
+    bg-deco-lt	#d1d1d1
+    bg-var-lt	#f5f5f5
+    bg-lt	#ffffff`;
     dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: newValue } });
   }
 

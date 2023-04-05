@@ -1,8 +1,8 @@
 import { FormEvent } from 'react';
-import { useColourInputContext, ColourObj } from '../../contexts/ColourInputProvider';
+import { useColourInputContext, ColourObj } from '../../../contexts/ColourInputProvider';
 
-import ColourPicker from './ColourPicker';
-import InlineList from './InlineList';
+import ColourPicker from '../ColourPicker';
+import InlineList from '../InlineList';
 
 function getHexData(colourObject: ColourObj, colourMode: string, previousContrast: string) {
   const { Hex, HSL, RGB, Luminance, Black, White, Name } = colourObject;
@@ -20,7 +20,7 @@ function getHexData(colourObject: ColourObj, colourMode: string, previousContras
   }`;
 }
 
-export default function ComboBox() {
+export default function AddColoursSection() {
   const { textInput, colourMap, recentColour, previousColour, colourMode, dispatchColourInput } =
     useColourInputContext();
   const previousContrast = previousColour?.contrast ? `${previousColour?.contrast}` : '-';
