@@ -10,13 +10,16 @@ export default function Body() {
   return (
     <ColourInputProvider>
       <main id="main-content" className="relative grid w-screen grow grid-cols-frAutoFr content-between">
-        <div id="contents-left" className=" sticky top-20 col-start-1 my-10 ml-auto mr-8 hidden h-fit w-fit xl:grid">
+        <div
+          id="contents-left"
+          className=" sticky top-24 col-start-1 my-[34rem] ml-auto mr-12 hidden h-fit w-fit xl:grid"
+        >
           <Contents />
         </div>
         <div className="col-start-2 flex h-full w-body-sm min-w-body max-w-body-sm flex-col sm:w-body 2xl:max-w-body ">
           <div className=" col-start-2 mx-auto grid w-full shrink-0 grow grid-rows-autoFr items-center py-10 ">
             <HeroSection />
-            <div id="contents-mid" className=" top-20 col-start-1 mx-auto my-10 grid h-fit w-fit xl:hidden">
+            <div id="contents-mid" className=" top-20 col-start-1 my-10 ml-auto grid h-fit w-fit xl:hidden">
               <Contents />
             </div>
 
