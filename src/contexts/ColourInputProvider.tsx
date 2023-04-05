@@ -1116,7 +1116,7 @@ function handleRlumUpdate(state: ColourState, payload: ColourPayload) {
 }
 function setPreviousLuminance(colourObject: ColourObj | undefined) {
   const recentLuminance = colourObject?.luminanceFloat;
-  if (colourObject && recentLuminance) {
+  if (colourObject && recentLuminance !== undefined) {
     return {
       luminanceFloat: recentLuminance,
       contrast: 1,
