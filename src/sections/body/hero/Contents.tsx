@@ -8,13 +8,13 @@ export default function Contents() {
   console.log(document.getElementById('contents'));
 
   return (
-    <div id="contents" className="mx-auto my-10 grid 2xl:absolute 2xl:left-10 2xl:top-20">
+    <>
       <p className=" mb-2 text-txt-low dark:text-txt-low-dk">On this page:</p>
       {contentsArray.map((x) => (
         <a className={`${colourClasses}`} id={`contents-${x}`} key={x} href={`#${x}`}>
           {x}
         </a>
       ))}
-    </div>
+    </>
   );
 }
