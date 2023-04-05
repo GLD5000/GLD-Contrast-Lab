@@ -1,5 +1,5 @@
-import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
-import { useColourInputContext } from '../../contexts/ColourInputProvider';
+import { useColourBlocksContext } from '../../../contexts/ColourBlocksProvider';
+import { useColourInputContext } from '../../../contexts/ColourInputProvider';
 
 const lookupRatingLabel: { [key: number]: string } = {
   1: 'All',

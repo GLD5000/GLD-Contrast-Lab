@@ -4,7 +4,7 @@ import SvgButton from '../../../elements/SvgButton';
 import TextUl from '../../../elements/TextUl';
 import { autoTextColour } from '../../../utilities/colour/autoTextColour';
 import { luminance } from '../../../utilities/colour/luminance';
-import CsvButton from '../CsvButton';
+import CsvButton from './CsvButton';
 import NoData from '../NoData';
 
 function sortByLuminance(acc: Array<Array<string>>, curr: string) {

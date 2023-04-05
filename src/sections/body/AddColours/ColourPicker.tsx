@@ -1,6 +1,6 @@
 import { MouseEvent, useState, useEffect } from 'react';
-import { useColourInputContext } from '../../contexts/ColourInputProvider';
-import autoTextColourFromHex from '../../utilities/colour/autoTextColour';
+import { useColourInputContext } from '../../../contexts/ColourInputProvider';
+import autoTextColourFromHex from '../../../utilities/colour/autoTextColour';
 import HslSlider from './HslSlider';
 
 export default function ColourPicker() {

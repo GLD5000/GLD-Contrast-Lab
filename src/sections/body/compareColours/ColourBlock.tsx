@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
-import { useColourInputContext, ColourObj } from '../../contexts/ColourInputProvider';
+import { useColourBlocksContext } from '../../../contexts/ColourBlocksProvider';
+import { useColourInputContext, ColourObj } from '../../../contexts/ColourInputProvider';
 
 function breakName(input: string) {
   if (input.length < 10) return input;

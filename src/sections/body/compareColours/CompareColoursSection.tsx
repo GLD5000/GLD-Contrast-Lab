@@ -1,10 +1,10 @@
 // import { useEffect } from 'react';
-import ColourBlock from '../ColourBlock';
+import ColourBlock from './ColourBlock';
 import { contrast } from '../../../utilities/colour/contrastRatio';
 import { useColourBlocksContext } from '../../../contexts/ColourBlocksProvider';
 import { luminance } from '../../../utilities/colour/luminance';
-import ShowButtons from '../ShowButtons';
-import BlockVisibility from '../BlockVisibility';
+import ShowButtons from './ShowButtons';
+import BlockVisibility from './BlockVisibility';
 import { ColourMap, useColourInputContext } from '../../../contexts/ColourInputProvider';
 // import BlocksKey from './BlocksKey';
 import NoData from '../NoData';

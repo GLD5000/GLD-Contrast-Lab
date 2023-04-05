@@ -1,6 +1,6 @@
-import { useColourBlocksContext } from '../../contexts/ColourBlocksProvider';
-import DeleteSvg from '../../icons/DeleteSvg';
-import { autoTextColour } from '../../utilities/colour/autoTextColour';
+import { useColourBlocksContext } from '../../../contexts/ColourBlocksProvider';
+import DeleteSvg from '../../../icons/DeleteSvg';
+import { autoTextColour } from '../../../utilities/colour/autoTextColour';
 
 export default function BlockVisibility({ hexId }: { hexId: string }) {
   const { limit, visibleSet, dispatchColourBlocks } = useColourBlocksContext();

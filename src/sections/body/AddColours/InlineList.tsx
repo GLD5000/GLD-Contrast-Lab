@@ -1,8 +1,8 @@
 import { MouseEvent, Dispatch } from 'react';
-import { ColourObj, useColourInputContext } from '../../contexts/ColourInputProvider';
-import SpicyLi from '../../elements/SpicyLi';
-import Ul from '../../elements/Ul';
-import autoTextColourFromHex from '../../utilities/colour/autoTextColour';
+import { ColourObj, useColourInputContext } from '../../../contexts/ColourInputProvider';
+import SpicyLi from '../../../elements/SpicyLi';
+import Ul from '../../../elements/Ul';
+import autoTextColourFromHex from '../../../utilities/colour/autoTextColour';
 
 function getContent(
   listArray: Array<ColourObj>,

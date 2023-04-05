@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import RatingTable from './RatingTable';
+import RatingTable from '../RatingTable';
 import EditSlider from './EditSlider';
 import { useColourBlocksContext } from '../../../../contexts/ColourBlocksProvider';
 import { ColourObj, useColourInputContext } from '../../../../contexts/ColourInputProvider';

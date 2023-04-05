@@ -1,5 +1,5 @@
-import ExclamationSvg from '../../icons/ExclamationSvg';
-import TickSvg from '../../icons/TickSvg';
+import ExclamationSvg from '../../../icons/ExclamationSvg';
+import TickSvg from '../../../icons/TickSvg';
 
 const content = {
   header: ['Decorative', 'Non-Text', 'Large Text', 'Small Text'],

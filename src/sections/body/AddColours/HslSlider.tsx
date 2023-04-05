@@ -1,5 +1,5 @@
 import { MouseEvent, useEffect, useState } from 'react';
-import { useColourInputContext } from '../../contexts/ColourInputProvider';
+import { useColourInputContext } from '../../../contexts/ColourInputProvider';
 
 let run = false;
 

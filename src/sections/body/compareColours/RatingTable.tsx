@@ -7,8 +7,8 @@
 //   'AA+': ['Pass', 'Pass', 'Pass', 'Pass'],
 //   'AAA+': ['Pass', 'Pass', 'Pass', 'Pass'],
 
-import ExclamationSvg from '../../../../icons/ExclamationSvg';
-import TickSvg from '../../../../icons/TickSvg';
+import ExclamationSvg from '../../../icons/ExclamationSvg';
+import TickSvg from '../../../icons/TickSvg';
 
 // };
 const content: { [key: string]: string[] } = {
