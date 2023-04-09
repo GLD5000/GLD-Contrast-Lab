@@ -83,10 +83,9 @@ function getElementColours(
 // }
 
 export default function ColourDemo() {
-  const [editing, setEditing] = useState(false);
   const [editHex, setEditHex] = useState('');
   const [grey, setGrey] = useState(false);
-  const { colourMode, dispatchColourBlocks } = useColourBlocksContext();
+  const { colourMode, dispatchColourBlocks, comboEdit } = useColourBlocksContext();
   const { dispatchColourInput, comboBackground, comboForeground } = useColourInputContext();
   const contrastNumberIn = comboBackground?.contrastRatios.get(comboForeground?.Hex || '#000000') || 1;
   const rating = contrast.makeContrastRating(contrastNumberIn);
@@ -113,17 +112,17 @@ export default function ColourDemo() {
     autoTextBackground,
   } = getElementColours(comboBackground, comboForeground, contrastNumberIn, colourMode, grey);
   function handleEdit() {
-    if (!editing) {
+    if (!comboEdit) {
       setEditHex(backgroundHex);
       dispatchColourInput({ type: 'EDIT_COMBO', payload: { textInput: backgroundHex } });
     }
-    if (editing) dispatchColourInput({ type: 'ASSIGN_COMBO_COLOURS', payload: { tag: editHex } });
-    setEditing((value) => !value);
+    if (comboEdit) dispatchColourInput({ type: 'ASSIGN_COMBO_COLOURS', payload: { tag: editHex } });
+    dispatchColourBlocks({ comboEdit: !comboEdit });
     setGrey(false);
   }
   function handleSubmit() {
     if (comboBackground?.Hex) setEditHex(comboBackground.Hex);
-    setEditing(false);
+    dispatchColourBlocks({ comboEdit: false });
   }
   return (
     <div
@@ -203,7 +202,7 @@ export default function ColourDemo() {
         >
           Grey
         </button>
-        {!editing && (
+        {!comboEdit && (
           <button
             id="swap-btn"
             className="active:deco my-auto w-full rounded border-2 border-transparent px-2 py-1   hover:border-current hover:transition focus:border-current focus:transition"
@@ -216,11 +215,11 @@ export default function ColourDemo() {
           </button>
         )}
       </div>
-      {editing && (
+      {comboEdit && (
         <EditSlider
           cancelHex={editHex}
           cancelEdit={() => {
-            setEditing(false);
+            dispatchColourBlocks({ comboEdit: false });
           }}
           updateCancelHex={handleSubmit}
         />

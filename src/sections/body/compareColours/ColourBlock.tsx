@@ -90,10 +90,8 @@ export default function ColourBlock({
       handleClickColourMode();
       return;
     }
-    // const dispatchObject = [backgroundColour, borderColour].sort().join('/');
-    // dispatchColourBlocks({ currentCombo: dispatchObject });
-
     dispatchColourInput({ type: 'ASSIGN_COMBO_COLOURS', payload: { tag: backgroundColour, tagB: borderColour } });
+    dispatchColourBlocks({ comboEdit: false });
   }
 
   const hidePoorColour = contrastRatio < contrastRatioLimit && !autoColour;
