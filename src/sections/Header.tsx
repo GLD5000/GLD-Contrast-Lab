@@ -26,7 +26,7 @@ sm:w-body "
         >
           <a
             className="flex h-16 flex-wrap items-center gap-2 py-2"
-            href="https://contrast-tool.vercel.app/"
+            href="https://contrast-lab.vercel.app/"
             target="_blank"
             rel="noreferrer"
           >
@@ -39,7 +39,7 @@ sm:w-body "
               >
                 CONTRAST
               </h1>
-              <h1 className=" m-auto rounded-none bg-black p-[0.3rem] text-2xl font-black text-white">TOOL</h1>
+              <h1 className=" m-auto rounded-none bg-black p-[0.3rem] text-2xl font-black text-white">LAB</h1>
             </div>
           </a>
           <NavBar toggleColourTheme={toggleColourTheme} colourTheme={colourTheme} toggleMenu={toggleShowMenu} />

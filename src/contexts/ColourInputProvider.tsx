@@ -28,6 +28,7 @@ export interface ColourObj {
 export interface PreviousColourObj {
   luminanceFloat: number;
   contrast: number;
+  Name: string;
 }
 
 export type ColourMap = Map<string, ColourObj>;
@@ -1120,6 +1121,7 @@ function setPreviousLuminance(colourObject: ColourObj | undefined) {
     return {
       luminanceFloat: recentLuminance,
       contrast: 1,
+      Name: colourObject.Name,
     };
   }
 
@@ -1140,7 +1142,7 @@ function setPreviousContrast(state: {
   const previousLuminance = state.previousColour?.luminanceFloat;
   if (previousColour && typeof recentLuminance === 'number' && typeof previousLuminance === 'number') {
     const ratio = contrast.getContrastRatio2Dp([recentLuminance, previousLuminance]);
-    return { luminanceFloat: previousLuminance, contrast: ratio };
+    return { luminanceFloat: previousLuminance, contrast: ratio, Name: previousColour.Name };
   }
   return undefined;
 }

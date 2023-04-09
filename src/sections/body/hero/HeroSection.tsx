@@ -5,7 +5,7 @@ export default function HeroSection() {
         <h1 className=" rounded-none bg-white p-3 font-black  leading-6 text-black sm:p-[0.95rem] sm:text-6xl">
           CONTRAST
         </h1>
-        <h1 className="  rounded-none bg-black p-3 font-black leading-6 text-white sm:p-[0.95rem] sm:text-6xl">TOOL</h1>
+        <h1 className="  rounded-none bg-black p-3 font-black leading-6 text-white sm:p-[0.95rem] sm:text-6xl">LAB</h1>
       </div>
       <b className="mx-auto mt-2 mb-20 w-fit text-center text-xl">Create Accessible Colour Combinations</b>
       <p>
