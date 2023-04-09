@@ -1,10 +1,10 @@
 import { FormEvent } from 'react';
-import { useColourInputContext, ColourObj } from '../../../contexts/ColourInputProvider';
+import { useColourInputContext, ColourObj, PreviousColourObj } from '../../../contexts/ColourInputProvider';
 
 import ColourPicker from './ColourPicker';
 import InlineList from './InlineList';
 
-function getHexData(colourObject: ColourObj, colourMode: string, previousContrast: string) {
+function getHexData(colourObject: ColourObj, colourMode: string, previousObject: PreviousColourObj | undefined) {
   const { Hex, HSL, RGB, Luminance, Black, White, Name } = colourObject;
   const colourSpaceLookup: { [key: string]: string } = {
     Hex: `Relative Luminance: ${Luminance} \r\n${`${HSL}\r\n`}${`${RGB}\r\n`}`,
@@ -13,17 +13,14 @@ function getHexData(colourObject: ColourObj, colourMode: string, previousContras
     RLum: `${`${Hex}\r\n`}${`${HSL}\r\n`}${`${RGB}\r\n`}`,
     Name: `Relative Luminance: ${Luminance} \r\n${`${Hex}\r\n`}${`${HSL}\r\n`}`,
   };
-  return `Name: ${
-    Name || '-'
-  }\r\nContrast Previous: ${previousContrast}\r\nContrast Black/White: ${Black}/${White}\r\n${
-    colourSpaceLookup[colourMode]
-  }`;
+  return `Name: ${Name || '-'}\r\nContrast ${previousObject?.Name ?? 'Previous'}: ${
+    previousObject?.contrast ?? '-'
+  }\r\nContrast Black/White: ${Black}/${White}\r\n${colourSpaceLookup[colourMode]}`;
 }
 
 export default function AddColoursSection() {
   const { textInput, colourMap, recentColour, previousColour, colourMode, dispatchColourInput } =
     useColourInputContext();
-  const previousContrast = previousColour?.contrast ? `${previousColour?.contrast}` : '-';
   // const [hasFocus, setHasFocus] = useState(false);
   // console.log('recentColour:', recentColour);
   function handleClickMode() {
@@ -117,7 +114,7 @@ export default function AddColoursSection() {
                 Clear
               </button>
             )}
-            {previousContrast !== undefined && previousContrast !== '-' && previousContrast !== '1' && (
+            {previousColour !== undefined && previousColour.contrast !== undefined && previousColour.contrast !== 1 && (
               <button
                 id="match-btn"
                 className="active:deco absolute right-2 top-12 w-16 bg-deco p-2  text-xs text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
@@ -151,7 +148,7 @@ export default function AddColoursSection() {
 
             {recentColour !== undefined && textInput.length > 0 && (
               <pre className="absolute bottom-2 left-2 m-0 h-fit p-0 font-code text-xs  text-green-900 dark:text-green-300">
-                {getHexData(recentColour, colourMode, previousContrast)}
+                {getHexData(recentColour, colourMode, previousColour)}
               </pre>
             )}
           </div>
