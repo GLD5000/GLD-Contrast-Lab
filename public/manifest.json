@@ -1,8 +1,8 @@
 {
   "manifest_version": "3",
   "version": "0.1",
-  "short_name": "Contrast Tool",
-  "name": "GLD Contrast Tool",
+  "short_name": "Contrast Lab",
+  "name": "GLD Contrast Lab",
   "description": "Compare your colours for guaranteed accessibility.",
   "icons": [
     {
