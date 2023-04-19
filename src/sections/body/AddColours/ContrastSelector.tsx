@@ -13,7 +13,7 @@ export default function ContrastSelector() {
   `;
 
   function handleClickSelector() {
-    dispatchColourInput({ type: 'CYCLE_PREVIOUS_COLOUR', payload: { tag: previousColour?.Name || '' } });
+    dispatchColourInput({ type: 'CYCLE_PREVIOUS_COLOUR', payload: { tag: previousColour?.Hex || '' } });
   }
   return (
     <button

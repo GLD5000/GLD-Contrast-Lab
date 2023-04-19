@@ -121,16 +121,19 @@ export default function AddColoursSection() {
                   Clear
                 </button>
               )}
-            {previousColour !== undefined && previousColour.contrast !== undefined && previousColour.contrast !== 1 && (
-              <button
-                id="match-btn"
-                className="active:deco absolute right-1 top-12 w-16 bg-deco p-2  text-xs text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
-                type="button"
-                onClick={handleClickMatch}
-              >
-                Match
-              </button>
-            )}
+            {colourMode !== 'CR' &&
+              previousColour !== undefined &&
+              previousColour.contrast !== undefined &&
+              previousColour.contrast !== 1 && (
+                <button
+                  id="match-btn"
+                  className="active:deco absolute right-1 top-12 w-16 bg-deco p-2  text-xs text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
+                  type="button"
+                  onClick={handleClickMatch}
+                >
+                  Match
+                </button>
+              )}
             {recentColour !== undefined && textInput.length > 0 && <ColourDataButtons />}
             {recentColour !== undefined && textInput.length > 0 && (
               <button

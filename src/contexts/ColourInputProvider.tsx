@@ -29,6 +29,7 @@ export interface PreviousColourObj {
   luminanceFloat: number;
   contrast: number;
   Name: string;
+  Hex: string;
 }
 
 export type ColourMap = Map<string, ColourObj>;
@@ -603,10 +604,33 @@ function useData() {
         return returnValue;
       }
       case 'CYCLE_PREVIOUS_COLOUR': {
+        const returnState = { ...state };
+        const { recentColour: mostRecentColour, colourMap: colourMapCurrent } = state;
+        const colourMapKeys = colourMapCurrent && [...colourMapCurrent.keys()];
         const currentKey = action.payload.tag;
-        console.log('currentKey:', currentKey);
-        // const colourMapKeys = state.colourMap?.keys();
-        return { ...state };
+        const isBlackWhite = currentKey === '' || currentKey === undefined;
+        const hasColourMap = colourMapKeys !== undefined && colourMapKeys.length > 0;
+        const recentLum = mostRecentColour?.luminanceFloat;
+        if (isBlackWhite && hasColourMap) {
+          const firstColour = colourMapCurrent?.get(colourMapKeys[0]);
+          const previousColourReturn = setPreviousLuminance(firstColour, recentLum);
+          if (previousColourReturn) returnState.previousColour = previousColourReturn;
+        }
+
+        if (!isBlackWhite && hasColourMap && currentKey) {
+          const currentIndex = colourMapKeys.indexOf(currentKey);
+          const isLast = currentIndex === colourMapKeys.length - 1;
+          if (isLast || currentIndex === -1) {
+            returnState.previousColour = undefined;
+            return returnState;
+          }
+          if (!isLast) {
+            const nextColour = colourMapCurrent?.get(colourMapKeys[currentIndex + 1]);
+            const previousColourReturn = setPreviousLuminance(nextColour, recentLum);
+            if (previousColourReturn) returnState.previousColour = previousColourReturn;
+          }
+        }
+        return returnState;
       }
       case 'CHANGE_COLOUR_MODE': {
         const newMode = `${action.payload.colourMode}` || 'Hex';
@@ -1134,13 +1158,18 @@ function handleRlumUpdate(state: ColourState, payload: ColourPayload) {
   return returnValue;
 }
 
-function setPreviousLuminance(colourObject: ColourObj | undefined) {
-  const recentLuminance = colourObject?.luminanceFloat;
-  if (colourObject && recentLuminance !== undefined) {
+function setPreviousLuminance(colourObject: ColourObj | undefined, recentLuminance?: number | undefined) {
+  const previousLuminance = colourObject?.luminanceFloat;
+  if (colourObject && previousLuminance !== undefined) {
+    const returnContrast =
+      recentLuminance === undefined || previousLuminance === recentLuminance
+        ? 1
+        : contrast.getContrastRatio2Dp([recentLuminance, previousLuminance]);
     return {
-      luminanceFloat: recentLuminance,
-      contrast: 1,
+      luminanceFloat: previousLuminance,
+      contrast: returnContrast,
       Name: colourObject.Name,
+      Hex: colourObject.Hex,
     };
   }
 
@@ -1161,7 +1190,7 @@ function setPreviousContrast(state: {
   const previousLuminance = state.previousColour?.luminanceFloat;
   if (previousColour && typeof recentLuminance === 'number' && typeof previousLuminance === 'number') {
     const ratio = contrast.getContrastRatio2Dp([recentLuminance, previousLuminance]);
-    return { luminanceFloat: previousLuminance, contrast: ratio, Name: previousColour.Name };
+    return { luminanceFloat: previousLuminance, contrast: ratio, Name: previousColour.Name, Hex: previousColour.Hex };
   }
   return undefined;
 }
