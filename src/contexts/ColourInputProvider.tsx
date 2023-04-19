@@ -144,7 +144,7 @@ function useData() {
   ): ColourState {
     switch (action.type) {
       case 'INIT': {
-        // //console.log('INIT');
+        console.log('INIT');
 
         const savedMap = getSessionStorageMap();
         // const recentColourValue = makeColourObjectHsl(randomColour.makeRandomHslString(), state);
@@ -187,7 +187,7 @@ function useData() {
         return returnValue;
       }
       case 'RANDOMISE': {
-        // //console.log('RANDOMISE');
+        console.log('RANDOMISE');
 
         const newHex = getRandomColour();
         const currentMode = 'Hex';
@@ -202,6 +202,7 @@ function useData() {
         return returnValue;
       }
       case 'SWAP_COMBO_COLOURS': {
+        console.log('SWAP_COMBO_COLOURS');
         const backgroundObject = state.comboBackground;
         const foregroundObject = state.comboForeground;
 
@@ -217,6 +218,8 @@ function useData() {
       }
 
       case 'ASSIGN_COMBO_COLOURS': {
+        console.log('ASSIGN_COMBO_COLOURS');
+
         const backgroundHex = action.payload.tag;
         const foregroundHex = action.payload.tagB;
         const currentMap = state.colourMap;
@@ -248,7 +251,7 @@ function useData() {
       }
 
       case 'EDIT': {
-        // console.log('EDIT');
+        console.log('EDIT');
 
         const newHex = action.payload.textInput;
         // console.log('newHex:', newHex);
@@ -260,7 +263,7 @@ function useData() {
         const returnValue = {
           ...state,
           colourMode: currentMode,
-          recentColour: newColourObject,
+          recentColour: { ...newColourObject },
           previousColour: previousObject,
           hslSlider: getSliderValueHslString(newColourObject.HSL, state.sliderType),
         };
@@ -290,6 +293,7 @@ function useData() {
       }
 
       case 'EDIT_COMBO': {
+        console.log('EDIT_COMBO');
         const newHex = action.payload.textInput;
         if (!newHex) return { ...state };
         const currentMode = 'Name';
@@ -308,7 +312,7 @@ function useData() {
       }
 
       case 'CLEAR_TEXT': {
-        // //console.log('CLEAR_TEXT');
+        console.log('CLEAR_TEXT');
         const returnValue = {
           ...state,
           colourMode: 'Hex',
@@ -320,7 +324,7 @@ function useData() {
         return returnValue;
       }
       case 'UPDATE_TEXT': {
-        // //console.log('UPDATE_TEXT');
+        console.log('UPDATE_TEXT');
         const { colourMode: modeState } = state;
         const isContrastRatioMode = modeState === 'CR';
         if (isContrastRatioMode) return { ...state };
@@ -345,12 +349,10 @@ function useData() {
             ? textReceived.replace('Name:', '').replaceAll(/[\s]/g, '').slice(0, 16)
             : '';
           const returnObject = { ...state, textInput: textWithoutName ? `Name: ${textWithoutName}` : 'Name: ' };
-
           if (returnObject.recentColour) returnObject.recentColour.Name = textWithoutName || '';
 
           return returnObject;
         }
-
         const { processedText, processedArray, recent } = processText(textReceived || '', state);
         const returnedColours = state.colourMap ? state.colourMap : undefined;
         const { joinedMap: newMap, stringOut } =
@@ -414,6 +416,7 @@ function useData() {
         return returnValue;
       }
       case 'SUBMIT': {
+        console.log('SUBMIT');
         // console.log(state.colourMap);
         // state.colourMap?.forEach((map) => console.log(map.Name));
         // state.colourMap?.forEach((map) => console.log(map.contrastRatios.size));
@@ -440,6 +443,7 @@ function useData() {
         return returnValue;
       }
       case 'SUBMIT_COMBO': {
+        console.log('SUBMIT_COMBO');
         const recentColourReturn = submitRecentColourCombo(state);
         if (recentColourReturn !== null) return recentColourReturn;
 
@@ -447,6 +451,7 @@ function useData() {
       }
 
       case 'UPDATE_HSL': {
+        console.log('UPDATE_HSL');
         const { sliderType: newSliderType } = action.payload;
         const sliderValue = action.payload.hslSlider;
         const previousLuminance = state.hslLuminanceTarget;
@@ -497,6 +502,7 @@ function useData() {
         return returnValue;
       }
       case 'UPDATE_HSL_COMBO': {
+        console.log('UPDATE_HSL_COMBO');
         const { sliderTypeCombo: newSliderType } = action.payload;
         const sliderValue = action.payload.hslSliderCombo;
         const previousLuminance = state.hslLuminanceTargetCombo;
@@ -540,7 +546,7 @@ function useData() {
         return returnValue;
       }
       case 'SET_TYPE': {
-        // //console.log('SET_TYPE');
+        console.log('SET_TYPE');
 
         const typeIn = action.payload.textInput || 'Lum';
         const returnValue = {
@@ -555,7 +561,7 @@ function useData() {
         return returnValue;
       }
       case 'SET_TYPE_COMBO': {
-        // //console.log('SET_TYPE');
+        console.log('SET_TYPE');
 
         const typeIn = action.payload.textInput || 'Lum';
         const returnValue = {
@@ -572,7 +578,7 @@ function useData() {
         return returnValue;
       }
       case 'MATCH_LUMINANCE': {
-        // //console.log('MATCH_LUMINANCE');
+        console.log('MATCH_LUMINANCE');
         const previousLuminance = state.previousColour?.luminanceFloat;
         const recentIn = state.recentColour;
 
@@ -601,7 +607,7 @@ function useData() {
         return { ...state };
       }
       case 'CLEAR_TAGS': {
-        // //console.log('CLEAR_TAGS');
+        console.log('CLEAR_TAGS');
         const newMap = new Map(state.colourMap);
         newMap.clear();
         clearSessionStorageMap();
@@ -618,6 +624,7 @@ function useData() {
         return returnValue;
       }
       case 'CYCLE_PREVIOUS_COLOUR': {
+        console.log('CYCLE_PREVIOUS_COLOUR');
         const returnState = { ...state };
         const { recentColour: mostRecentColour, colourMap: colourMapCurrent } = state;
         const colourMapKeys = colourMapCurrent && [...colourMapCurrent.keys()];
@@ -647,6 +654,7 @@ function useData() {
         return returnState;
       }
       case 'CHANGE_COLOUR_MODE': {
+        console.log('CHANGE_COLOUR_MODE');
         const newMode = `${action.payload.colourMode}` || 'Hex';
         const returnValue = { ...state, colourMode: newMode };
         const mostRecentColour = returnValue.recentColour;
@@ -662,7 +670,7 @@ function useData() {
       }
       case 'CLOSE_TAG':
       default: {
-        // //console.log('CLOSE_TAG');
+        console.log('CLOSE_TAG');
 
         const { tag } = action.payload;
         const newMap = new Map(state.colourMap);
@@ -749,7 +757,7 @@ function getModePreset(modeString: string) {
 function submitRecentColour(stateIn: ColourState) {
   const recentState = stateIn.recentColour;
   if (!recentState) return null;
-  const newMap = addColourObjectToStorage(recentState, stateIn.colourMap);
+  const newMap = addColourObjectToStorage({ ...recentState }, stateIn.colourMap);
   const returnValue = {
     ...stateIn,
     textInput: getRecentTextField(recentState, 'Name'),
@@ -770,7 +778,7 @@ function submitRecentColour(stateIn: ColourState) {
 function submitRecentColourCombo(stateIn: ColourState) {
   const recentState = stateIn.comboBackground;
   if (!recentState) return null;
-  const newMap = addColourObjectToStorage(recentState, stateIn.colourMap);
+  const newMap = addColourObjectToStorage({ ...recentState }, stateIn.colourMap);
   const returnValue = {
     ...stateIn,
     textInput: getRecentTextField(recentState, 'Name'),
