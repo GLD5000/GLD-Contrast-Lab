@@ -53,8 +53,8 @@ export default function ColourDataButtons() {
     document.getElementById('colour-input')?.focus();
   }
   function handleClickColourspace() {
-    if (colourMode !== 'RLum' && colourMode !== 'Name') changeColourSpace();
-    if (colourMode === 'RLum' || colourMode === 'Name') changeColourMode(colourSpace);
+    if (colourMode !== 'RLum' && colourMode !== 'Name' && colourMode !== 'CR') changeColourSpace();
+    if (colourMode === 'RLum' || colourMode === 'Name' || colourMode === 'CR') changeColourMode(colourSpace);
     document.getElementById('colour-input')?.focus();
   }
   const contrastString = `Contrast ${previousColour?.Name ?? 'Black/White'}: ${
