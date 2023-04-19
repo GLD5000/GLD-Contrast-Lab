@@ -45,6 +45,8 @@ export default function ColourDataButtons() {
 
   function handleClickContrast() {
     if (colourMode !== 'CR') changeColourMode('CR');
+    if (colourMode === 'CR')
+      dispatchColourInput({ type: 'CYCLE_PREVIOUS_COLOUR', payload: { tag: previousColour?.Hex || '' } });
   }
   function handleClickRLum() {
     changeColourMode('RLum');
