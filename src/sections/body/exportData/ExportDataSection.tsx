@@ -229,8 +229,8 @@ function getTable(
   return flexBoxes;
 }
 function setInitialColumns(): Set<string> {
-  const windowWidth = window.innerWidth;
-  const windowKey = Math.min(7, Math.max(2, Math.floor(windowWidth / 500)));
+  const sectionWidth = document.getElementById('Export-Data')?.clientWidth;
+  const windowKey = sectionWidth !== undefined ? Math.min(7, Math.max(2, Math.floor(sectionWidth / 200))) : 2;
   const dataColumnLookup: { [key: number]: string[] } = {
     2: ['Name', 'Luminance'],
     3: ['Name', 'Luminance', 'Black'],
