@@ -1,6 +1,21 @@
 import { useState } from 'react';
-import { useColourInputContext } from '../../../contexts/ColourInputProvider';
+import { ColourObj, useColourInputContext } from '../../../contexts/ColourInputProvider';
 import ContrastSelector from './ContrastSelector';
+
+function getColourModeString(colourObject: ColourObj, mode: string) {
+  if (mode === 'Hex') return `Hex: ${colourObject.Hex.slice(1)}`;
+  if (mode === 'HSL') {
+    const hsl = colourObject.HSL;
+    const [hue, sat, lum] = hsl.slice(4, hsl.length - 1).split(',');
+    return `Hue: ${hue} Sat: ${sat} Lum: ${lum}`;
+  }
+  if (mode === 'RGB') {
+    const rgb = colourObject.RGB;
+    const [red, green, blue] = rgb.slice(4, rgb.length - 1).split(',');
+    return `Red: ${red} Green: ${green} Blue: ${blue}`;
+  }
+  return '';
+}
 
 export default function ColourDataButtons() {
   const { recentColour, previousColour, colourMode, dispatchColourInput } = useColourInputContext();
@@ -44,6 +59,11 @@ export default function ColourDataButtons() {
     previousColour?.contrast ?? `${Black}/${White}`
   }
  `;
+
+  const colourModeString = getColourModeString(
+    recentColour,
+    colourMode === 'Hex' || colourMode === 'HSL' || colourMode === 'RGB' ? colourMode : colourSpace,
+  );
   return (
     <>
       <ContrastSelector />
@@ -82,9 +102,7 @@ export default function ColourDataButtons() {
           key="colourspace-button"
           onClick={handleClickColourspace}
         >
-          {colourMode === 'Hex' || colourMode === 'HSL' || colourMode === 'RGB'
-            ? recentColour[colourMode]
-            : recentColour[colourSpace]}
+          {colourModeString}
         </button>
       </div>
     </>
