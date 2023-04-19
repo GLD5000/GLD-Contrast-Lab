@@ -3,9 +3,6 @@ const colourClasses =
 
 export default function Contents() {
   const contentsArray = ['Add-Colours', 'Compare-Colours', 'Export-Data'];
-  console.log('document:', document);
-  console.log(document.getElementById('Add-Colours'));
-  console.log(document.getElementById('contents'));
 
   return (
     <>

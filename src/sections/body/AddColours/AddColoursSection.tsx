@@ -1,26 +1,26 @@
 import { FormEvent } from 'react';
-import { useColourInputContext, ColourObj, PreviousColourObj } from '../../../contexts/ColourInputProvider';
+import { useColourInputContext } from '../../../contexts/ColourInputProvider';
 
 import ColourPicker from './ColourPicker';
 import InlineList from './InlineList';
+import ColourDataButtons from './ColourDataButtons';
 
-function getHexData(colourObject: ColourObj, colourMode: string, previousObject: PreviousColourObj | undefined) {
-  const { Hex, HSL, RGB, Luminance, Black, White, Name } = colourObject;
-  const colourSpaceLookup: { [key: string]: string } = {
-    Hex: `Relative Luminance: ${Luminance} \r\n${`${HSL}\r\n`}${`${RGB}\r\n`}`,
-    HSL: `Relative Luminance: ${Luminance} \r\n${`${Hex}\r\n`}${`${RGB}\r\n`}`,
-    RGB: `Relative Luminance: ${Luminance} \r\n${`${Hex}\r\n`}${`${HSL}\r\n`}`,
-    RLum: `${`${Hex}\r\n`}${`${HSL}\r\n`}${`${RGB}\r\n`}`,
-    Name: `Relative Luminance: ${Luminance} \r\n${`${Hex}\r\n`}${`${HSL}\r\n`}`,
-  };
-  return `Name: ${Name || '-'}\r\nContrast ${previousObject?.Name ?? 'Previous'}: ${
-    previousObject?.contrast ?? '-'
-  }\r\nContrast Black/White: ${Black}/${White}\r\n${colourSpaceLookup[colourMode]}`;
-}
+// function getHexData(colourObject: ColourObj, colourMode: string, previousObject: PreviousColourObj | undefined) {
+//   const { Hex, HSL, RGB, Luminance, Black, White, Name } = colourObject;
+//   const colourSpaceLookup: { [key: string]: string } = {
+//     Hex: `Relative Luminance: ${Luminance} \r\n${`${HSL}\r\n`}${`${RGB}\r\n`}`,
+//     HSL: `Relative Luminance: ${Luminance} \r\n${`${Hex}\r\n`}${`${RGB}\r\n`}`,
+//     RGB: `Relative Luminance: ${Luminance} \r\n${`${Hex}\r\n`}${`${HSL}\r\n`}`,
+//     RLum: `${`${Hex}\r\n`}${`${HSL}\r\n`}${`${RGB}\r\n`}`,
+//     Name: `Relative Luminance: ${Luminance} \r\n${`${Hex}\r\n`}${`${HSL}\r\n`}`,
+//   };
+//   return `Name: ${Name || '-'}\r\nContrast ${previousObject?.Name ?? 'Previous'}: ${
+//     previousObject?.contrast ?? '-'
+//   }\r\nContrast Black/White: ${Black}/${White}\r\n${colourSpaceLookup[colourMode]}`;
+// }
 
 export default function AddColoursSection() {
-  const { textInput, colourMap, recentColour, previousColour, colourMode, dispatchColourInput } =
-    useColourInputContext();
+  const { textInput, recentColour, previousColour, colourMode, dispatchColourInput } = useColourInputContext();
   // const [hasFocus, setHasFocus] = useState(false);
   // console.log('recentColour:', recentColour);
   function handleClickMode() {
@@ -28,7 +28,8 @@ export default function AddColoursSection() {
       Hex: 'HSL',
       HSL: 'RGB',
       RGB: 'RLum',
-      RLum: 'Name',
+      RLum: 'CR',
+      CR: 'Name',
       Name: 'Hex',
 
       // Luminance: string,
@@ -79,56 +80,62 @@ export default function AddColoursSection() {
         </div>
 
         <div className="flex flex-row flex-wrap justify-center gap-2">
-          <div className="relative flex min-h-[9rem] w-80 flex-col gap-1 rounded border bg-inherit">
-            <textarea
-              rows={1}
-              id="colour-input"
-              placeholder="Enter colours here e.g.:    #fafafa   rgb(120, 120, 120)   hsl(200, 50%, 50%)  (submit with space or enter )"
-              name="codeInput"
-              className="shrink grow resize-none overflow-auto bg-bg-var px-2 pt-2 pb-1 text-base placeholder:text-txt-low dark:bg-bg-var-dk dark:placeholder:text-txt-low-dk"
-              value={textInput}
-              onInput={(e: FormEvent<HTMLTextAreaElement>): void => {
-                const { value: targetValue } = e.currentTarget;
-                dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: targetValue } });
-              }}
-              onFocus={(e: FormEvent<HTMLTextAreaElement>): void => {
-                const element = e.currentTarget;
-                element.select();
-                // setHasFocus(true);
-              }}
-              // onBlur={() => {
-              //   setHasFocus(false);
-              // }}
+          <div className="relative flex min-h-[9rem] w-80 flex-col gap-1 rounded border bg-bg-var dark:bg-bg-var-dk">
+            {colourMode !== 'CRB' && colourMode !== 'CRW' && colourMode !== 'CR' ? (
+              <textarea
+                rows={1}
+                id="colour-input"
+                placeholder="Enter colours here e.g.:    #fafafa   rgb(120, 120, 120)   hsl(200, 50%, 50%)  (submit with space or enter )"
+                name="codeInput"
+                className="shrink grow resize-none overflow-auto bg-bg-var px-2 pt-2 pb-1 text-base placeholder:text-txt-low dark:bg-bg-var-dk dark:placeholder:text-txt-low-dk"
+                value={textInput}
+                onInput={(e: FormEvent<HTMLTextAreaElement>): void => {
+                  const { value: targetValue } = e.currentTarget;
+                  dispatchColourInput({ type: 'UPDATE_TEXT', payload: { textInput: targetValue } });
+                }}
+                onFocus={(e: FormEvent<HTMLTextAreaElement>): void => {
+                  const element = e.currentTarget;
+                  element.select();
+                  // setHasFocus(true);
+                }}
+                // onBlur={() => {
+                //   setHasFocus(false);
+                // }}
 
-              wrap="hard"
-              autoComplete="off"
-              autoCorrect="off"
-            />
-            {recentColour !== undefined && textInput.length > 0 && (
-              <button
-                id="clear-btn"
-                className="active:deco absolute right-2 top-2 w-16 bg-deco p-2  text-xs text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
-                type="button"
-                onClick={handleClickClear}
-              >
-                Clear
-              </button>
-            )}
+                wrap="hard"
+                autoComplete="off"
+                autoCorrect="off"
+              />
+            ) : null}{' '}
+            {colourMode !== 'CRB' &&
+              colourMode !== 'CRW' &&
+              colourMode !== 'CR' &&
+              recentColour !== undefined &&
+              textInput.length > 0 && (
+                <button
+                  id="clear-btn"
+                  className="active:deco absolute right-1 top-1 w-16 bg-deco p-2  text-xs text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
+                  type="button"
+                  onClick={handleClickClear}
+                >
+                  Clear
+                </button>
+              )}
             {previousColour !== undefined && previousColour.contrast !== undefined && previousColour.contrast !== 1 && (
               <button
                 id="match-btn"
-                className="active:deco absolute right-2 top-12 w-16 bg-deco p-2  text-xs text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
+                className="active:deco absolute right-1 top-12 w-16 bg-deco p-2  text-xs text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
                 type="button"
                 onClick={handleClickMatch}
               >
                 Match
               </button>
             )}
-
+            {recentColour !== undefined && textInput.length > 0 && <ColourDataButtons />}
             {recentColour !== undefined && textInput.length > 0 && (
               <button
                 id="colourspace-btn"
-                className="active:deco absolute right-2 bottom-2 w-16 bg-deco p-2  text-center text-xs text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
+                className="active:deco absolute right-1 bottom-1 w-16 bg-deco p-2  text-center text-xs text-current  hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
                 type="button"
                 onClick={handleClickMode}
               >
@@ -145,18 +152,12 @@ export default function AddColoursSection() {
                 Paste
               </button>
             )}
-
-            {recentColour !== undefined && textInput.length > 0 && (
-              <pre className="absolute bottom-2 left-2 m-0 h-fit p-0 font-code text-xs  text-green-900 dark:text-green-300">
-                {getHexData(recentColour, colourMode, previousColour)}
-              </pre>
-            )}
           </div>
           <ColourPicker />
         </div>
         <InlineList />
       </section>
-      {colourMap && <hr className="my-8" />}
+      <hr className="my-8" />
     </>
   );
 }

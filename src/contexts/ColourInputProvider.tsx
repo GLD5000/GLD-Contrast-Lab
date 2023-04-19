@@ -307,6 +307,8 @@ function useData() {
       case 'UPDATE_TEXT': {
         // //console.log('UPDATE_TEXT');
         const { colourMode: modeState } = state;
+        const isContrastRatioMode = modeState === 'CR';
+        if (isContrastRatioMode) return { ...state };
         const hasRecentColour = state.recentColour !== undefined;
         // //console.log('hasRecentColour:', hasRecentColour);
         const isRelativeLuminanceMode = modeState === 'RLum';
@@ -400,6 +402,10 @@ function useData() {
         // console.log(state.colourMap);
         // state.colourMap?.forEach((map) => console.log(map.Name));
         // state.colourMap?.forEach((map) => console.log(map.contrastRatios.size));
+        const { colourMode: modeState } = state;
+        const isContrastRatioMode = modeState === 'CR';
+        if (isContrastRatioMode) return { ...state };
+
         const recentColourReturn = submitRecentColour(state);
         if (recentColourReturn !== null) return recentColourReturn;
 
@@ -596,13 +602,23 @@ function useData() {
         };
         return returnValue;
       }
+      case 'CYCLE_PREVIOUS_COLOUR': {
+        const currentKey = action.payload.tag;
+        console.log('currentKey:', currentKey);
+        // const colourMapKeys = state.colourMap?.keys();
+        return { ...state };
+      }
       case 'CHANGE_COLOUR_MODE': {
-        // //console.log('CHANGE_COLOUR_MODE')
         const newMode = `${action.payload.colourMode}` || 'Hex';
         const returnValue = { ...state, colourMode: newMode };
         const mostRecentColour = returnValue.recentColour;
-        if (mostRecentColour !== undefined) {
+        if (mostRecentColour !== undefined && newMode !== 'CR') {
           returnValue.textInput = getRecentTextField(mostRecentColour, newMode);
+        }
+
+        const previousColourCurrent = state.previousColour;
+        if (previousColourCurrent !== undefined && newMode === 'CR') {
+          returnValue.textInput = `Contrast ${previousColourCurrent?.Name}: ${previousColourCurrent?.contrast}`;
         }
         return returnValue;
       }
@@ -653,7 +669,7 @@ function valueIsHex(input: string | undefined) {
 }
 function getRecentTextField(recentColourObject: ColourObj, modeString: string): string {
   const modeKey = getModeKey(modeString);
-  const preset = getModePreset(modeString);
+  const preset = getModePreset(modeKey);
   const modeIsColour = modeString === 'HSL' || modeString === 'RGB' || modeString === 'Hex';
   const returnString = recentColourObject[modeKey] ? `${recentColourObject[modeKey]}` : '';
   const returnValue = modeIsColour
@@ -670,6 +686,7 @@ function getModeKey(modeString: string) {
     RLum: 'Luminance',
     CRB: 'Black',
     CRW: 'White',
+    CR: 'CR',
     Name: 'Name',
   };
   const modeKey = lookupKey[modeString];
@@ -684,6 +701,7 @@ function getModePreset(modeString: string) {
     RLum: 'Relative Luminance: ',
     Black: 'Contrast Black: ',
     White: 'Contrast White: ',
+    CR: 'Contrast: ',
     Name: 'Name: ',
   };
   const preset = presetLookup[modeString] || '';
@@ -1115,6 +1133,7 @@ function handleRlumUpdate(state: ColourState, payload: ColourPayload) {
   };
   return returnValue;
 }
+
 function setPreviousLuminance(colourObject: ColourObj | undefined) {
   const recentLuminance = colourObject?.luminanceFloat;
   if (colourObject && recentLuminance !== undefined) {

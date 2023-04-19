@@ -48,7 +48,7 @@ export default function HslSlider() {
 
   return (
     <div className="grid ">
-      <div className="flex h-12 w-full flex-row flex-wrap content-center gap-2 px-2">
+      <div className="flex h-12 w-full flex-row flex-wrap content-center gap-2 px-1">
         <label htmlFor="hsl-slider">
           <button
             className="w-16 bg-deco py-2 px-4 text-xs hover:bg-txt-low hover:text-bg-var hover:transition dark:bg-deco-dk hover:dark:bg-txt-main-dk hover:dark:text-bg-var-dk"
@@ -82,7 +82,7 @@ export default function HslSlider() {
           />
         )}
       </div>
-      <div className="flex h-12 flex-row gap-1 p-1">
+      <div className="flex h-12 flex-row gap-1 px-1 pb-1">
         <button
           type="button"
           id="randomise-colour"
