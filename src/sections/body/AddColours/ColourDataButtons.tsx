@@ -69,9 +69,9 @@ export default function ColourDataButtons() {
   return (
     <>
       <ContrastSelector />
-      <div className="absolute left-1 bottom-1 grid w-fit bg-transparent">
+      <div className="absolute left-1 bottom-1 grid w-fit gap-1 bg-transparent">
         <button
-          className=" w-full text-left font-code text-xs  text-green-900 dark:text-green-300"
+          className=" w-full text-left font-code text-xs  text-green-900 hover:text-black hover:transition focus:text-black focus:hover:text-white dark:text-green-300 dark:hover:text-white"
           type="button"
           id="name-button"
           key="name-button"
@@ -80,7 +80,7 @@ export default function ColourDataButtons() {
           {`Name: ${Name || '-'}`}
         </button>
         <button
-          className=" w-full text-left font-code text-xs  text-green-900 dark:text-green-300"
+          className=" w-full text-left font-code text-xs  text-green-900 hover:text-black hover:transition focus:text-black focus:hover:text-white dark:text-green-300 dark:hover:text-white"
           type="button"
           id="contrast-button"
           key="contrast-button"
@@ -89,7 +89,7 @@ export default function ColourDataButtons() {
           {contrastString}
         </button>
         <button
-          className=" w-full text-left font-code text-xs  text-green-900 dark:text-green-300"
+          className=" w-full text-left font-code text-xs  text-green-900 hover:text-black hover:transition focus:text-black focus:hover:text-white dark:text-green-300 dark:hover:text-white"
           type="button"
           id="rlum-button"
           key="rlum-button"
@@ -98,7 +98,7 @@ export default function ColourDataButtons() {
           {`Relative Luminance: ${Luminance}`}
         </button>
         <button
-          className=" w-full text-left font-code text-xs  text-green-900 dark:text-green-300"
+          className=" w-full text-left font-code text-xs  text-green-900 hover:text-black hover:transition focus:text-black focus:hover:text-white dark:text-green-300 dark:hover:text-white"
           type="button"
           id="colourspace-button"
           key="colourspace-button"
