@@ -274,6 +274,20 @@ function useData() {
 
         return returnValue;
       }
+      case 'PICK_PREVIOUS': {
+        const returnState = { ...state };
+        const { recentColour: mostRecentColour, colourMap: colourMapCurrent } = state;
+        const currentKey = action.payload.tag;
+
+        if (currentKey === undefined) return returnState;
+
+        const recentLum = mostRecentColour?.luminanceFloat;
+
+        const nextColour = colourMapCurrent?.get(currentKey);
+        const previousColourReturn = setPreviousLuminance(nextColour, recentLum);
+        if (previousColourReturn) returnState.previousColour = previousColourReturn;
+        return returnState;
+      }
 
       case 'EDIT_COMBO': {
         const newHex = action.payload.textInput;

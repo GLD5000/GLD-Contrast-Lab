@@ -22,7 +22,7 @@ export default function SpicyLi({
         type="button"
         id={`${id}-tag-btn`}
         onClick={tagFunction}
-        className="m-0 h-full w-full rounded-r-none p-1 hover:bg-[#767676] hover:text-white focus:bg-[#767676] focus:text-white"
+        className="m-0 h-full w-full cursor-grab rounded-r-none p-1 hover:bg-[#767676] hover:text-white focus:bg-[#767676] focus:text-white"
       >
         {content}
       </button>

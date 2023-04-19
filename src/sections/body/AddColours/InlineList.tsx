@@ -14,6 +14,7 @@ function getContent(
       tag: string;
     }>;
   }>,
+  colourMode: string,
 ) {
   function handleClickClearTags() {
     dispatchColourInput({ type: 'CLEAR_TAGS', payload: {} });
@@ -36,6 +37,10 @@ function getContent(
   }
   function tagHandler(e: MouseEvent<HTMLButtonElement>) {
     const hex = e.currentTarget.id.split('-')[0];
+    if (colourMode === 'CR') {
+      dispatchColourInput({ type: 'PICK_PREVIOUS', payload: { tag: hex } });
+      return;
+    }
     if (hex) {
       dispatchColourInput({ type: 'EDIT', payload: { textInput: hex } });
       document.getElementById('colour-input')?.focus();
@@ -63,11 +68,11 @@ function getContent(
 }
 
 export default function InlineList() {
-  const { colourMap, dispatchColourInput } = useColourInputContext();
+  const { colourMap, dispatchColourInput, colourMode } = useColourInputContext();
 
   if (!colourMap) return null;
   const mapArray = [...colourMap.values()];
-  const content = getContent(mapArray, dispatchColourInput);
+  const content = getContent(mapArray, dispatchColourInput, colourMode);
   const className = 'list-none flex flex-row flex-wrap gap-2 mx-auto justify-center p-2';
   return <Ul content={content} className={className} />;
 }
