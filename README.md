@@ -37,4 +37,3 @@ When you are happy with your modified colour scheme, you can export it with the 
 ## [License](https://github.com/GLD5000/parsing-multi/blob/74e8ce1ec6bd1f25aab2c5100f5caea8346737f9/LICENSE.MD)
 
 GLD Contrast Tool Copyright (C) 2023 Gareth L Devlin
-This program comes with ABSOLUTELY NO WARRANTY;
