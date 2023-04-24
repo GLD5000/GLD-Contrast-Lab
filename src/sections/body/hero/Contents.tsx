@@ -9,7 +9,7 @@ export default function Contents() {
       <p className=" mb-2 text-txt-low dark:text-txt-low-dk">On this page:</p>
       {contentsArray.map((x) => (
         <a className={`${colourClasses}`} id={`contents-${x}`} key={x} href={`#${x}`}>
-          {x}
+          {x.split('-')[0]}
         </a>
       ))}
     </>

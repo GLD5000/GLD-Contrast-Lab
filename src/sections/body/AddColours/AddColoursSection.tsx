@@ -60,7 +60,7 @@ export default function AddColoursSection() {
       <section id="Add-Colours" className="m-0 flex scroll-my-24 flex-col gap-4">
         <div className="mr-auto grid place-items-start">
           <label htmlFor="colour-input m-0 p-0">
-            <h2 className="m-0 p-0 text-2xl font-bold">Add Colours</h2>
+            <h2 className="m-0 p-0 text-2xl font-bold">Add</h2>
           </label>
           <p className="mt-2 mb-8 text-lg">Add, Edit and Delete</p>
           <ul className=" list-inside list-disc">

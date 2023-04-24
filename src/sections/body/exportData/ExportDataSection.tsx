@@ -262,7 +262,7 @@ export default function ExportDataSection() {
   return (
     <section id="Export-Data" className="grid min-h-[75vh] scroll-my-24 gap-4">
       <div className="mr-auto grid place-items-start">
-        <h2 className=" m-0 text-2xl font-bold">Export Data</h2>
+        <h2 className=" m-0 text-2xl font-bold">Export</h2>
         <p className="mt-2 mb-8 text-lg">View and Export</p>
         <TextUl textArray={listStrings} />
       </div>

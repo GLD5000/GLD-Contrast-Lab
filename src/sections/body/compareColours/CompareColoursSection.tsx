@@ -97,7 +97,7 @@ export default function CompareColoursSection() {
     <>
       <section id="Compare-Colours" className="grid scroll-my-24 content-center gap-4 ">
         <div className="mr-auto grid place-items-start">
-          <h2 className=" m-0 text-2xl font-bold">Compare Colours</h2>
+          <h2 className=" m-0 text-2xl font-bold">Compare</h2>
           <p className="mt-2 mb-8 text-lg">Customise and Analyse</p>
           <ul className=" list-inside list-disc">
             <li key="blocks-list-a" id="blocks-list-a" className="m-0 mb-1">
