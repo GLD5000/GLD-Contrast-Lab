@@ -14,11 +14,16 @@
     "test:ui": "vitest --coverage --ui",
     "test": "vitest --coverage",
     "test:once": "vitest --run"
-
   },
   "lint-staged": {
-    "*.tsx": ["prettier --write", "eslint --fix"],
-    "*.ts": ["prettier --write", "eslint --fix"]
+    "*.tsx": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.ts": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   },
   "dependencies": {
     "react": "^18.2.0",
