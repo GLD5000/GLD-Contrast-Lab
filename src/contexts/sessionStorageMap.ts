@@ -47,6 +47,7 @@ function parseUrlNameHexPairs(str: string) {
     urlObject[name] = hex;
   }
   console.log('urlObject:', urlObject);
+  addQueryParams(urlObject);
 }
 
 function parseStringToMap(jsonString: string) {
@@ -80,4 +81,20 @@ function reviver(
     }
   }
   return value;
+}
+
+function addQueryParams(paramsObject: { [key: string]: string }) {
+  // Create a URLSearchParams object with the current search parameters
+  const searchParams = new URLSearchParams(window.location.search);
+
+  // Add or update a query parameter
+  Object.entries(paramsObject).forEach((entry) => {
+    searchParams.set(entry[0], entry[1]);
+  });
+
+  // Construct the new URL
+  const newUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}?${searchParams}`;
+
+  // Replace the current history entry with the new URL
+  window.history.replaceState({}, '', newUrl);
 }
