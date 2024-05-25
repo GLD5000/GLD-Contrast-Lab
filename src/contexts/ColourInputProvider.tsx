@@ -146,9 +146,11 @@ function useData() {
       case 'INIT': {
         // console.log('INIT');
 
-        const savedMapReturn = getSessionStorageMap();
-        console.log('savedMapReturn:', savedMapReturn);
-        const savedMap = Array.isArray(savedMapReturn) ? convertColourArrayToMap(savedMapReturn) : savedMapReturn;
+        const savedMap = getSessionStorageMap();
+        // console.log('savedMapReturn:', savedMap);
+        if (Array.isArray(savedMap)) {
+          return convertColourArrayToMap(savedMap);
+        }
         // const recentColourValue = makeColourObjectHsl(randomColour.makeRandomHslString(), state);
         const returnValue: ColourState = {
           // textInput: `${recentColourValue.Hex}`,
@@ -1080,7 +1082,7 @@ function createMap(
   oldMap: ColourMap | undefined,
 ) {
   const names = processedText.split(' ');
-  // // console.log('createMap');
+  // console.log('createMap');
   if (!hexArray || !state) return { joinedMap: oldMap, stringOut: processedText };
   const filteredArray = hexArray.filter(valueIsHex);
   const arrayLength = names.length;
@@ -1266,12 +1268,36 @@ function getSliderValueHslString(hslString: string, sliderType: string) {
 }
 
 function convertColourArrayToMap(arrayIn: string[][]) {
-  const returnMap = new Map<string, ColourObj>([]);
-  console.log('arrayIn:', arrayIn);
-  arrayIn.forEach((entry) => {
-    const object = makeColourObject(entry[1], returnMap, entry[0]);
-    returnMap.set(entry[0], object);
-  });
-  console.log('returnMap:', returnMap);
-  return returnMap;
+  const newString = `${arrayIn.map((lineArray) => lineArray.join('\t')).join('\n')}\t`;
+  const dummyState = {
+    // textInput: `${recentColourValue.Hex}`,
+    hslLuminanceTarget: 17.7,
+    hslLuminanceTargetCombo: 17.7,
+    hslSlider: 0,
+    hslSliderCombo: 0,
+    textInput: '',
+    colourMode: 'Hex',
+    sliderType: 'Lum',
+    sliderTypeCombo: 'Lum',
+    // recentColour: recentColourValue,
+    comboBackground: undefined,
+    comboForeground: undefined,
+    recentColour: undefined,
+    previousColour: undefined,
+    colourMap: undefined,
+  };
+  const { processedText, processedArray, recent } = processText(newString, dummyState);
+  const returnedColours = dummyState.colourMap ? dummyState.colourMap : undefined;
+
+  const { joinedMap: newMap, stringOut } =
+    createMap(processedArray, dummyState, processedText, returnedColours) || undefined;
+
+  const returnValue = {
+    ...dummyState,
+    textInput: stringOut || '',
+    recentColour: recent,
+    colourMap: newMap,
+    colourMode: 'Name',
+  };
+  return returnValue;
 }
