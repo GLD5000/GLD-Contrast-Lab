@@ -27,7 +27,7 @@ export function getSessionStorageMap() {
   const searchParams = new URLSearchParams(window.location.search);
   const searchArray = Array.from(searchParams);
   const returnValue = searchArray.length > 0 ? searchArray : undefined;
-  // console.log('returnValue:', returnValue);
+  console.log('returnValue:', returnValue);
   return returnValue;
   // }
   // const mapAgain = parseStringToMap(savedString);
