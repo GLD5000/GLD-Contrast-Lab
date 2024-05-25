@@ -167,26 +167,26 @@ function useData() {
           comboForeground: undefined,
           recentColour: undefined,
           previousColour: undefined,
-          colourMap: savedMap,
+          colourMap: undefined,
         };
-        if (savedMap) {
-          const colourObjects = [...savedMap.values()];
-          const entryOne = colourObjects[0];
-          const entryTwo = colourObjects[1];
-          if (entryOne) returnValue.comboBackground = entryOne;
-          if (entryTwo) returnValue.comboForeground = entryTwo;
+        // if (savedMap) {
+        //   const colourObjects = [...savedMap.values()];
+        //   const entryOne = colourObjects[0];
+        //   const entryTwo = colourObjects[1];
+        //   if (entryOne) returnValue.comboBackground = entryOne;
+        //   if (entryTwo) returnValue.comboForeground = entryTwo;
 
-          const currentRecentObj = returnValue.comboBackground;
-          const currentPreviousObj = returnValue.comboForeground;
+        //   const currentRecentObj = returnValue.comboBackground;
+        //   const currentPreviousObj = returnValue.comboForeground;
 
-          if (currentRecentObj && currentPreviousObj) {
-            const ratio = contrast.getContrastRatio2Dp([
-              currentRecentObj.luminanceFloat,
-              currentPreviousObj.luminanceFloat,
-            ]);
-            if (ratio) currentPreviousObj.contrast = ratio;
-          }
-        }
+        //   if (currentRecentObj && currentPreviousObj) {
+        //     const ratio = contrast.getContrastRatio2Dp([
+        //       currentRecentObj.luminanceFloat,
+        //       currentPreviousObj.luminanceFloat,
+        //     ]);
+        //     if (ratio) currentPreviousObj.contrast = ratio;
+        //   }
+        // }
 
         return returnValue;
       }

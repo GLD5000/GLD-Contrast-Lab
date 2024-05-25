@@ -15,22 +15,26 @@ interface ColourObj {
 type ColourMap = Map<string, ColourObj>;
 
 export function setSessionStorageMap(map: ColourMap) {
-  const newString = stringifyMap(map);
+  // const newString = stringifyMap(map);
+  stringifyMap(map);
 
-  if (newString.length > 0) sessionStorage.setItem('colourMap', newString);
+  // if (newString.length > 0) sessionStorage.setItem('colourMap', newString);
 }
 export function getSessionStorageMap() {
-  const savedString = sessionStorage.getItem('colourMap') ?? undefined;
-  if (savedString === undefined) {
-    const searchParams = new URLSearchParams(window.location.search);
-    console.log('searchParams:', Array.from(searchParams));
-    return Array.from(searchParams);
-  }
-  const mapAgain = parseStringToMap(savedString);
-  return mapAgain || undefined;
+  // const savedString = sessionStorage.getItem('colourMap') ?? undefined;
+  // if (savedString === undefined) {
+  const searchParams = new URLSearchParams(window.location.search);
+  const searchArray = Array.from(searchParams);
+  const returnValue = searchArray.length > 0 ? searchArray : undefined;
+  console.log('returnValue:', returnValue);
+  return returnValue;
+  // }
+  // const mapAgain = parseStringToMap(savedString);
+  // return mapAgain || undefined;
 }
 export function clearSessionStorageMap() {
-  sessionStorage.removeItem('colourMap');
+  clearQueryParams();
+  // sessionStorage.removeItem('colourMap');
 }
 function stringifyMap(mapIn: ColourMap) {
   const str = JSON.stringify(mapIn, replacer);
@@ -54,10 +58,10 @@ function parseUrlNameHexPairs(str: string) {
   addQueryParams(urlObject);
 }
 
-function parseStringToMap(jsonString: string) {
-  const newValue = JSON.parse(jsonString, reviver);
-  return newValue;
-}
+// function parseStringToMap(jsonString: string) {
+//   const newValue = JSON.parse(jsonString, reviver);
+//   return newValue;
+// }
 function replacer(key: undefined | string, value: ColourMap) {
   if (value instanceof Map) {
     return {
@@ -67,25 +71,25 @@ function replacer(key: undefined | string, value: ColourMap) {
   }
   return value;
 }
-function reviver(
-  key: undefined | string,
-  value: {
-    dataType: string;
-    value: [
-      string,
-      {
-        [key: string]: string | number;
-      },
-    ][];
-  },
-) {
-  if (typeof value === 'object' && value !== null) {
-    if (value.dataType === 'Map') {
-      return new Map(value.value);
-    }
-  }
-  return value;
-}
+// function reviver(
+//   key: undefined | string,
+//   value: {
+//     dataType: string;
+//     value: [
+//       string,
+//       {
+//         [key: string]: string | number;
+//       },
+//     ][];
+//   },
+// ) {
+//   if (typeof value === 'object' && value !== null) {
+//     if (value.dataType === 'Map') {
+//       return new Map(value.value);
+//     }
+//   }
+//   return value;
+// }
 
 function addQueryParams(paramsObject: { [key: string]: string }) {
   // Create a URLSearchParams object with the current search parameters
@@ -98,6 +102,14 @@ function addQueryParams(paramsObject: { [key: string]: string }) {
 
   // Construct the new URL
   const newUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}?${searchParams}`;
+
+  // Replace the current history entry with the new URL
+  window.history.replaceState({}, '', newUrl);
+}
+
+function clearQueryParams() {
+  // Construct the new URL
+  const newUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
 
   // Replace the current history entry with the new URL
   window.history.replaceState({}, '', newUrl);
