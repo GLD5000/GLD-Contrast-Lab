@@ -30,9 +30,11 @@ export function clearSessionStorageMap() {
 }
 function stringifyMap(mapIn: ColourMap) {
   const str = JSON.stringify(mapIn, replacer);
-  console.log('str:', str);
+  parseUrlNameHexPairs(str);
+  return str;
+}
+function parseUrlNameHexPairs(str: string) {
   const names = Array.from(str.matchAll(/("Name":"|"Hex":")[^"]+/g)).map((entry) => entry[0]);
-  console.log('names:', names);
   const urlObject: { [key: string]: string } = {};
   for (let i = 0; i < names.length; i += 2) {
     const [objectA, objectB] = [
@@ -42,12 +44,11 @@ function stringifyMap(mapIn: ColourMap) {
     const nameIsFirst = objectA.indexOf('#') === -1;
     const name = nameIsFirst ? objectA : objectB;
     const hex = nameIsFirst ? objectB : objectA;
-    console.log('name:', name);
     urlObject[name] = hex;
   }
   console.log('urlObject:', urlObject);
-  return str;
 }
+
 function parseStringToMap(jsonString: string) {
   const newValue = JSON.parse(jsonString, reviver);
   return newValue;
