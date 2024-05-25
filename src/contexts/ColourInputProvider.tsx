@@ -146,7 +146,9 @@ function useData() {
       case 'INIT': {
         // console.log('INIT');
 
-        const savedMap = getSessionStorageMap();
+        const savedMapReturn = getSessionStorageMap();
+        console.log('savedMapReturn:', savedMapReturn);
+        const savedMap = Array.isArray(savedMapReturn) ? convertColourArrayToMap(savedMapReturn) : savedMapReturn;
         // const recentColourValue = makeColourObjectHsl(randomColour.makeRandomHslString(), state);
         const returnValue: ColourState = {
           // textInput: `${recentColourValue.Hex}`,
@@ -1002,7 +1004,7 @@ function getSlicedName(hexIn: string, unslicedName: string | undefined) {
   return slicedName;
 }
 
-function makeColourObject(hexValue: string, mapIn: ColourMap | undefined, name: string | undefined) {
+export function makeColourObject(hexValue: string, mapIn: ColourMap | undefined, name: string | undefined) {
   const slicedNewName = getSlicedName(hexValue, name);
   const existingMap = mapIn || new Map();
   // //// console.log('existingMap.size:', existingMap?.size);
@@ -1261,4 +1263,15 @@ function getSliderValueHslString(hslString: string, sliderType: string) {
   };
   const newValue = convertHslToSlider(valueLookup[sliderType], sliderType);
   return newValue;
+}
+
+function convertColourArrayToMap(arrayIn: string[][]) {
+  const returnMap = new Map<string, ColourObj>([]);
+  console.log('arrayIn:', arrayIn);
+  arrayIn.forEach((entry) => {
+    const object = makeColourObject(entry[1], returnMap, entry[0]);
+    returnMap.set(entry[0], object);
+  });
+  console.log('returnMap:', returnMap);
+  return returnMap;
 }

@@ -21,7 +21,11 @@ export function setSessionStorageMap(map: ColourMap) {
 }
 export function getSessionStorageMap() {
   const savedString = sessionStorage.getItem('colourMap') ?? undefined;
-  if (savedString === undefined) return undefined;
+  if (savedString === undefined) {
+    const searchParams = new URLSearchParams(window.location.search);
+    console.log('searchParams:', Array.from(searchParams));
+    return Array.from(searchParams);
+  }
   const mapAgain = parseStringToMap(savedString);
   return mapAgain || undefined;
 }
