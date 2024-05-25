@@ -13,8 +13,9 @@ export default function InfoTable() {
     setDataColumns(setInitialColumns());
   }
   window.onresize = setColumnsOnResize;
-  const initialColumns = setInitialColumns();
-  console.log('initialColumns:', initialColumns);
+  // const initialColumns = setInitialColumns();
+  // console.log('initialColumns:', initialColumns);
+  setInitialColumns();
   const keysArray = colourMap ? [...colourMap.keys()] : [];
   const lumSort = keysArray.reduce(sortByLuminance, []).flatMap((x) => x);
 
