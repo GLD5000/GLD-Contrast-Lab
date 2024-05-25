@@ -15,6 +15,7 @@ interface ColourObj {
 type ColourMap = Map<string, ColourObj>;
 
 export function setSessionStorageMap(map: ColourMap) {
+  console.log('map:', map);
   // const newString = stringifyMap(map);
   stringifyMap(map);
 
@@ -93,13 +94,13 @@ function replacer(key: undefined | string, value: ColourMap) {
 
 function addQueryParams(paramsObject: { [key: string]: string }) {
   // Create a URLSearchParams object with the current search parameters
-  const searchParams = new URLSearchParams(window.location.search);
+  const searchParams = new URLSearchParams();
 
   // Add or update a query parameter
   Object.entries(paramsObject).forEach((entry) => {
     searchParams.set(entry[0], entry[1]);
   });
-
+  console.log('searchParams:', searchParams);
   // Construct the new URL
   const newUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}?${searchParams}`;
 
